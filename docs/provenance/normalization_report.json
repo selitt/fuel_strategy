@@ -25,7 +25,7 @@
   ],
   "source_lock": {
     "before_sha256": "6c1f8086d107d88d952b00137e98ba2d97c99df33230c1bca3fff63c95b7a191",
-    "after_sha256": "8c7c4dbace67f54550eae4a473f8e21b071b1d5765d847e14722bb5b927364f2",
+    "after_sha256": "e37921eb42af1d7f17b5044ea84dc9b5ec60d70bc3706770d9fa33f129d5a79e",
     "original_manifest_copy": "docs/provenance/pre_normalization_sources.lock.json",
     "updated_records": {
       "docs/00_FUEL_CASE_BRIEF.md": {
@@ -54,24 +54,24 @@
       "path": "docs/00_FUEL_CASE_BRIEF.md",
       "before_sha256": "8a9911ef80094c30993c23ee6026f7741bcff4fc39e5ad824295b30e13624e79",
       "before_bytes": 29056,
-      "after_sha256": "c52e90576267e9b719597fad7830bcd878b788ac1fcce3350ae3b7f4d0fdf27b",
-      "after_bytes": 29373,
+      "after_sha256": "03833bcc6c08930097a76b1f6e94f510d92f39319bd30278b41ba193d5762fbc",
+      "after_bytes": 29598,
       "kind": "prior_team_note"
     },
     {
       "path": "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md",
       "before_sha256": "142582b7a53f336325df565be29e0a13a270d3ad645240ded41bf683f4926beb",
       "before_bytes": 27250,
-      "after_sha256": "12f6c87de323b07720d5a254e9ba91b45c7ae1233fc02227ac348487826f452c",
-      "after_bytes": 27542,
+      "after_sha256": "0dd7a0703e6b419cd6e6c5f7d4d3986a5afd6f077a78049aef292fd0bb3bb34d",
+      "after_bytes": 27556,
       "kind": "prior_team_note"
     },
     {
       "path": "docs/Топливный_кейс_разбор_материалов.md",
       "before_sha256": "49915313e6ed6006c6842822e942636d733fab41d31f17197ce70a457c32d230",
       "before_bytes": 45098,
-      "after_sha256": "411852ab54243a4d36a979d2a2766e9154b2644bbeea1bde68b7ec21c25594d9",
-      "after_bytes": 45436,
+      "after_sha256": "8e20dc9c179349509a0df67df4b05c770e51bfc2b4f30dc755da7e23532a203a",
+      "after_bytes": 45779,
       "kind": "prior_team_note"
     }
   ],
@@ -113,5 +113,14 @@
       "result": "NOT_RUN",
       "reason": "application_implemented=false; this step normalizes preparation documents only"
     }
+  },
+  "integration": {
+    "remote_base": "3abe27b",
+    "remote_commits_preserved": [
+      "13cbf4f",
+      "3abe27b"
+    ],
+    "local_commit_rebased_as": "95171a0",
+    "scope": "remote additions preserved; only prior_team_note lock records refreshed after conflict resolution"
   }
 }
