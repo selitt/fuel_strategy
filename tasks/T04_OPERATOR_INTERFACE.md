@@ -16,8 +16,8 @@
 
 [Постановка](../docs/Task/Постановка_кейса_—_Топливный_космоконтур_2035_КосмоХакатон_2026.pdf) — с. 8, 9, 10.
 - [README.md](../fuel-hackathon/test_oil/README.md)
-- [schemas/export.schema.json](../fuel-hackathon/test_oil/schemas/export.schema.json)
-- [examples/empty_plan.json](../fuel-hackathon/test_oil/examples/empty_plan.json)
+- [schemas/export.schema.json](../data/schemas/export.schema.json)
+- [examples/empty_plan.json](../data/examples/empty_plan.json)
 
 [Общий контракт](../contracts/README.md) · [Контрольные правила](../docs/regulation/RULES.md) · [Открытые вопросы](../docs/OPEN_QUESTIONS.md)
 

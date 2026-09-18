@@ -26,10 +26,10 @@
           "SQL database"
         ]
       },
-      "rationale": "Выбор пользователя: Python + React; рабочий вариант и границы зафиксированы в WORK_ORDER.md.",
+      "rationale": "Выбор команды: Python + React; рабочий вариант и границы зафиксированы в plans/README.md и START_HERE.md.",
       "approved_by": "team",
       "evidence": [
-        "WORK_ORDER.md",
+        "plans/README.md",
         "plans/README.md",
         "START_HERE.md"
       ]
@@ -48,7 +48,7 @@
       "rationale": "Форма выбрана вместе со стеком; UI не дублирует расчётные формулы.",
       "approved_by": "team",
       "evidence": [
-        "WORK_ORDER.md",
+        "plans/README.md",
         "plans/README.md",
         "docs/PRODUCT.md"
       ]

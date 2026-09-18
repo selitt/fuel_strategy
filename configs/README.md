@@ -5,6 +5,6 @@
 Стек/архитектурные решения: [decisions.json](../docs/decisions.json).
 Бизнес-допущения оформлять отдельно с именем, значением, единицей, основанием и областью действия.
 
-BASE и mandatory stress находятся в [неизменяемом справочнике](../fuel-hackathon/test_oil/scenarios/README.md).
+BASE и mandatory stress находятся в рабочем наборе [data/scenarios](../data/scenarios/); оригинал сохранён в `fuel-hackathon/test_oil/scenarios/`.
 Не копировать их под теми же ID с другими числами.
 Исследования — отдельные TEAM_* сценарии на копии входов с явным списком изменений.

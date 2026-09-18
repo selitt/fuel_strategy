@@ -292,7 +292,8 @@ function Sync-ProjectIfReady {
         }
         else { Write-Blocked "npm ci failed" }
     }
-    $Compose = Join-Path $Root "compose.yaml"
+    $Compose = Join-Path $Root "docker\compose.yaml"
+    if (-not (Test-Path $Compose)) { $Compose = Join-Path $Root "compose.yaml" }
     if (-not (Test-Path $Compose)) { $Compose = Join-Path $Root "docker-compose.yml" }
     if (Test-Path $Compose) {
         if (Test-Command "docker") {

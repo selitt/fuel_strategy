@@ -7,25 +7,25 @@
 | P3 | [Дополнительно](Task/Дополнительно.pdf) | ссылки на test_oil и литературу |
 | R | [README test_oil](../fuel-hackathon/test_oil/README.md) | смысловой расчётный путь и пояснения |
 
-**Обязательный стресс — графический блок на с. 10 P1.** Текстовый extractor может его пропустить; сверять с [mandatory_stress.yaml](../fuel-hackathon/test_oil/scenarios/mandatory_stress.yaml). Оригинальные PDF сохранены. Для текстового поиска доступны [постановка по страницам](Task/text/fuel_case.pages.txt) и [критерии](Task/text/fuel_criteria.pages.txt); они не заменяют изображения.
+**Обязательный стресс — графический блок на с. 10 P1.** Текстовый extractor может его пропустить; сверять с [mandatory_stress.yaml](../data/scenarios/mandatory_stress.yaml). Оригинальные PDF сохранены.
 
 ## Конкретные файлы репозитория
 
 | Что выяснить | Файлы |
 |---|---|
 | Условия/решения/допущения | [CASE_RULES](../fuel-hackathon/test_oil/docs/CASE_RULES.md), [FAQ](../fuel-hackathon/test_oil/docs/FAQ.md) |
-| Смысл CSV и единицы | [data/README](../fuel-hackathon/test_oil/data/README.md), [DATA_DICTIONARY](../fuel-hackathon/test_oil/docs/DATA_DICTIONARY.md) |
+| Смысл CSV и единицы | [рабочая data](../data/README.md), [DATA_DICTIONARY](../fuel-hackathon/test_oil/docs/DATA_DICTIONARY.md) |
 | Формулы и периодичность | [CALCULATION_RULES](../fuel-hackathon/test_oil/docs/CALCULATION_RULES.md) |
-| BASE/стресс/исследования | [scenarios/README](../fuel-hackathon/test_oil/scenarios/README.md), [STRESS_PROTOCOL](../fuel-hackathon/test_oil/docs/STRESS_PROTOCOL.md) |
-| Оболочки плана и экспорта | [plan.schema](../fuel-hackathon/test_oil/schemas/plan.schema.json), [export.schema](../fuel-hackathon/test_oil/schemas/export.schema.json) |
-| Проверочные примеры | [V01–V10](../fuel-hackathon/test_oil/validation/control_cases.md), [ожидаемые значения](../fuel-hackathon/test_oil/validation/expected_checks.json) |
+| BASE/стресс/исследования | [scenarios](../data/scenarios/), [STRESS_PROTOCOL](../fuel-hackathon/test_oil/docs/STRESS_PROTOCOL.md) |
+| Оболочки плана и экспорта | [plan.schema](../data/schemas/plan.schema.json), [export.schema](../data/schemas/export.schema.json) |
+| Проверочные примеры | [V01–V10](../data/validation/control_cases.md), [ожидаемые значения](../data/validation/expected_checks.json) |
 | Научная база | [SCIENTIFIC_BASIS](../fuel-hackathon/test_oil/docs/SCIENTIFIC_BASIS.md) |
 
 Для старта ничего не нужно клонировать повторно. Новую версию источников сравнивают отдельно, согласуют и фиксируют явно, а не обновляют в расчёте незаметно.
 
 ## Версии и границы проверки
 
-В ZIP test_oil находится на `cec6de1950276091689e71a67f9a875fb4ca6213`; в этой сессии README и дерево main через GitHub дали тот же идентификатор. Основой сборки остались байты **из ZIP**. Контрольные суммы — [sources.lock.json](../sources.lock.json).
+В рабочую `data/` скопированы файлы из `fuel-hackathon/test_oil` на commit `cec6de1950276091689e71a67f9a875fb4ca6213`. Snapshot submodule остаётся оригиналом и не редактируется.
 
 `test` — другой кейс «Космос как инфраструктура», сохранён только для полноты исходного архива. Его формулы, лоты и ограничения не использовать. ВКД не входит в это рабочее пространство.
 

@@ -24,7 +24,7 @@ def test_plan_download_matches_input_and_organizer_schema(client, plan):
     assert response.status_code == 200, response.text
     assert "attachment" in response.headers["content-disposition"]
     assert response.json() == plan
-    schema = json.loads((ROOT / "fuel-hackathon/test_oil/schemas/plan.schema.json").read_text())
+    schema = json.loads((ROOT / "data/schemas/plan.schema.json").read_text())
     Draft202012Validator(schema).validate(response.json())
 
 
@@ -34,7 +34,7 @@ def test_result_json_retains_all_values_and_carries_prototype_provenance(client,
     response = client.get(url, params={"format": "json"})
     assert response.status_code == 200, response.text
     result = response.json()
-    schema = json.loads((ROOT / "fuel-hackathon/test_oil/schemas/export.schema.json").read_text())
+    schema = json.loads((ROOT / "data/schemas/export.schema.json").read_text())
     Draft202012Validator(schema).validate(result)
     metadata = result.pop("_web_export")
     assert metadata["input_hash"] == project["last_run"]["input_hash"]

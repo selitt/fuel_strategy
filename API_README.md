@@ -2,21 +2,21 @@
 
 Это инструкция рабочего HTTP-слоя. Математика находится за адаптером; здесь нет второй реализации расчёта. `frontend/` пока содержит только инструкцию для разработчика.
 
-Актуальная повторная проверка: [PRE_FRONTEND_REVIEW](docs/api/PRE_FRONTEND_REVIEW.md).
+Текущая передача и ограничения: [HANDOFF](docs/api/HANDOFF.md).
 
 ## Запуск
 
 Из корня проекта, Docker Compose:
 
 ```bash
-docker compose up --build -d backend
-docker compose logs -f backend
+docker compose -f docker/compose.yaml up --build -d backend
+docker compose -f docker/compose.yaml logs -f backend
 ```
 
 `http://127.0.0.1:8000/docs` — Swagger, `/openapi.json` — схема, `/api/health` — состояние HTTP.
 Compose поднимает только backend на loopback. Один worker: JSON-store использует блокировку внутри процесса. Не запускайте несколько процессов backend на одном каталоге проектов.
 
-Изменение порта/CORS/лимитов: скопировать `.env.example` в `.env`, отредактировать и пересоздать контейнер. Проекты лежат в volume `project_data`; не применять `docker compose down -v`, если их нужно сохранить.
+Изменение порта/CORS/лимитов: скопировать `docker/.env.example` в `docker/.env`, отредактировать и пересоздать контейнер. Проекты лежат в volume `project_data`; не применять `docker compose -f docker/compose.yaml down -v`, если их нужно сохранить.
 
 Без Docker, Linux/WSL (Python 3.12–3.13):
 
@@ -50,16 +50,16 @@ PowerShell: `./depend.ps1 --backend-only --check` или `./depend.ps1 --backend
 ## Проверка и схема
 
 ```bash
-python -m pytest -q
-python tools/workspace.py check
-python tools/export_openapi.py --check
+python3 -m pytest -q
+python3 tools/workspace.py check
+python3 tools/export_openapi.py --check
 ```
 
 После согласованного изменения HTTP-контракта:
 
 ```bash
-python tools/export_openapi.py
-python -m pytest -q
+python3 tools/export_openapi.py
+python3 -m pytest -q
 ```
 
 Полный контракт: [docs/api/openapi.json](docs/api/openapi.json). Он сравнивается тестом с работающим приложением. Базовые две операции Васи остаются в `src/app/api/KosmoAPI.yaml`; запросы, успешные ответы и `operationId` проверяются на совместимость. `/hello` удалён и не должен использоваться.
@@ -75,7 +75,7 @@ python -m pytest -q
 | Сохранённый расчёт | `POST /api/projects/{id}/calculate`, `GET /api/projects/{id}/result` |
 | Перенос и сравнение | `POST /api/projects/import`, `/api/projects/compare`, `GET /api/projects/{id}/export`, `/api/projects/{id}/result/export` |
 
-`/api/schemas/input` и `/api/schemas/result` — JSON Schema текущих расчётных DTO. `plan` и `export` — неизменённые исходные схемы организатора. `/api/catalog` отдаёт исходные CSV-таблицы строками, с именами столбцов и SHA-256; это read-only справочник, не подключение другого набора к математике.
+`/api/schemas/input` и `/api/schemas/result` — JSON Schema текущих расчётных DTO. `plan` и `export` — схемы рабочего набора `data/schemas/`. `/api/catalog` отдаёт CSV из `data/` строками, с именами столбцов и SHA-256; это read-only справочник, не подключение другого набора к математике.
 
 ## Пользовательский цикл для frontend
 

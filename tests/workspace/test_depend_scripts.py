@@ -75,6 +75,7 @@ class DependBootstrapContractTests(unittest.TestCase):
 
     def test_shell_uses_the_available_compose_filename(self):
         script = self._read_required("depend.sh")
+        self.assertIn('compose_file="$ROOT_DIR/docker/compose.yaml"', script)
         self.assertIn('compose_file="$ROOT_DIR/compose.yaml"', script)
         self.assertIn('compose_file="$ROOT_DIR/docker-compose.yml"', script)
         self.assertIn('docker compose -f "$compose_file" config --quiet', script)

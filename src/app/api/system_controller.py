@@ -48,11 +48,11 @@ def schema(name: Literal["plan", "export", "input", "result"], settings: Setting
 def catalog(settings: SettingsDep):
     tables = []
     for name in ("demand", "supply_sources", "storage_options", "investment_options", "constraints"):
-        path = settings.reference_dir / "data" / f"{name}.csv"
+        path = settings.reference_dir / f"{name}.csv"
         data = path.read_bytes()
         reader = csv.DictReader(StringIO(data.decode("utf-8-sig")))
         tables.append(ReferenceTableDTO(
-            table_id=name, source_path=f"fuel-hackathon/test_oil/data/{name}.csv",
+            table_id=name, source_path=f"data/{name}.csv",
             sha256=hashlib.sha256(data).hexdigest(), columns=reader.fieldnames or [], rows=list(reader),
         ))
     scenarios = [yaml.safe_load((settings.reference_dir / "scenarios" / name).read_text(encoding="utf-8"))
