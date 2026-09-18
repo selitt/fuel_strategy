@@ -1,0 +1,179 @@
+{
+  "status": "PASS",
+  "scope": "live Uvicorn HTTP, not mathematical acceptance",
+  "http_checks": [
+    {
+      "method": "OPTIONS",
+      "path": "/api/projects/import",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/openapi.json",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/meta",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/catalog",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/schemas/plan",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/schemas/export",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/schemas/input",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/schemas/result",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/calc/template",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/plans/validate",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/plans/import",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/plans/export",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373/calculate",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373/result",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373/result/export?format=csv",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373/result/export?format=json",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373/export",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/import",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/b853aa85-2618-4e60-a3d4-5884592406dd/calculate",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/compare",
+      "status": 200
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373",
+      "status": 409
+    },
+    {
+      "method": "PUT",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373/result",
+      "status": 409
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373/result/export?format=csv",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373/calculate",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/plans/validate",
+      "status": 422
+    },
+    {
+      "method": "POST",
+      "path": "/api/plans/validate",
+      "case": "no-content-type NaN",
+      "status": 422
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects/ef6827b4-ae71-4e88-b5d3-e7463ac33373",
+      "status": 200
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/projects/a31b9a35-1d2e-4313-8dc8-2541a3cc1c1a?expected_revision=1",
+      "status": 204
+    },
+    {
+      "method": "GET",
+      "path": "/api/projects",
+      "status": 200
+    }
+  ],
+  "check_count": 33,
+  "openapi_operations": 20,
+  "persistence_after_process_restart": true,
+  "csv_json_values_equal_saved_result": true,
+  "protected_math_not_modified": true,
+  "docker_tested": false,
+  "browser_ui_tested": false
+}

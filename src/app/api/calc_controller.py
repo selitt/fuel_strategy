@@ -1,40 +1,36 @@
-"""
-REST-контроллер для расчёта и планирования снабжения.
-Принимает ParticipantPlan (plan.schema.json) и возвращает ResultExportEnvelope (export.schema.json).
-"""
+"""Original two-operation calculation API: the payloads and operationIds stay compatible with KosmoAPI.yaml."""
+from typing import Annotated
+from fastapi import APIRouter, Depends
 
-from fastapi import APIRouter
-
-try:
-    from ..dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
-    from ..service.calc_service import calculation_service, get_template_plan
-except (ImportError, ValueError):
-    from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
-    from src.app.service.calc_service import calculation_service
+from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
+from src.app.api.dependencies import CalculationBackend, call_calculation, call_template, get_calculation_service
 
 router = APIRouter(prefix="/api/calc", tags=["Моделирование снабжения"])
+BackendDep = Annotated[CalculationBackend, Depends(get_calculation_service)]
 
 
 @router.get(
     "/template",
     response_model=ParticipantPlanDTO,
     summary="Получить типовой шаблон плана (ParticipantPlan)",
+    operation_id="get_template_api_calc_template_get",
 )
-async def get_template():
-    """
-    Возвращает предзаполненный шаблон плана оператора для быстрого старта.
-    """
-    return get_template_plan()
+def get_template(service: BackendDep):
+    """Возвращает предзаполненный шаблон плана оператора для быстрого старта."""
+    return call_template(service)
 
 
 @router.post(
     "",
     response_model=ResultExportEnvelopeDTO,
     summary="Запустить расчёт материального баланса и экономики",
+    operation_id="calculate_api_calc_post",
 )
-async def calculate(request: ParticipantPlanDTO):
+def calculate(request: ParticipantPlanDTO, service: BackendDep):
     """
     Принимает план решений оператора по схеме plan.schema.json
     и возвращает результаты моделирования по схеме export.schema.json.
     """
-    return calculate(request)
+    # A synchronous service runs in FastAPI's threadpool, not on the event loop.
+    # This is not a process pool or a claim of CPU parallelism/acceleration.
+    return call_calculation(service, request)

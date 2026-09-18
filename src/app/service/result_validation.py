@@ -14,5 +14,7 @@ def validate_result(value) -> ResultExportEnvelopeDTO:
     if not REQUIRED_RESULT_FIELDS <= supplied:
         raise ValueError("Incomplete result; success and zero defaults must not be manufactured")
     result = value if isinstance(value, ResultExportEnvelopeDTO) else ResultExportEnvelopeDTO.model_validate(value)
-    ensure_finite(result.model_dump(mode="json"))
+    # Check Python values before JSON serialization can turn NaN/Infinity in
+    # extensible fields into null and erase evidence of an invalid result.
+    ensure_finite(result.model_dump(mode="python"))
     return result

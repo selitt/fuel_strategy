@@ -4,6 +4,8 @@
 
 [Запуск и API](API_README.md) · [Роли и следующий этап](docs/api/TEAM_AND_NEXT.md) · [Проверки этой передачи](docs/api/HANDOFF.md) · [С чего начать](START_HERE.md)
 
+Последняя повторная проверка: [перед frontend](docs/api/PRE_FRONTEND_REVIEW.md) — 146 тестов и исправления JSON-границы, без изменений модели.
+
 ## Запуск backend в Docker
 
 ```bash

@@ -19,8 +19,8 @@ PLAN_WARNINGS = [
 
 
 def plan_hash(plan: ParticipantPlanDTO) -> str:
+    ensure_finite(plan.model_dump(mode="python"))
     value = plan.model_dump(mode="json")
-    ensure_finite(value)
     canonical = json.dumps(value, sort_keys=True, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
@@ -33,14 +33,15 @@ def validation_problem(exc: ValidationError) -> ApiProblem:
 
 
 def validate_plan(value) -> PlanValidationDTO:
-    raw = value.model_dump(mode="json") if isinstance(value, ParticipantPlanDTO) else value
+    raw = value.model_dump(mode="python") if isinstance(value, ParticipantPlanDTO) else value
     try:
+        ensure_finite(raw)
         plan = ParticipantPlanDTO.model_validate(raw)
-        ensure_finite(plan.model_dump(mode="json"))
+        ensure_finite(plan.model_dump(mode="python"))
     except ValidationError as exc:
         raise validation_problem(exc) from exc
     except InvalidJSON as exc:
-        raise ApiProblem(422, "VALIDATION_ERROR", [{"loc": ["body"], "msg": str(exc), "type": "value_error.non_finite"}]) from exc
+        raise ApiProblem(422, "VALIDATION_ERROR", [{"loc": ["body"], "msg": str(exc), "type": "value_error.json_value"}]) from exc
     return PlanValidationDTO(plan=plan, normalized=plan.model_dump(mode="json") != raw, warnings=list(PLAN_WARNINGS))
 
 

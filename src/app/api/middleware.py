@@ -75,7 +75,9 @@ class RequestContextMiddleware:
                     break
             body = b"".join(parts)
             content_type = headers.get("content-type", "").split(";")[0].strip().lower()
-            if body and (content_type == "application/json" or content_type.endswith("+json")):
+            # FastAPI also treats a body without Content-Type as JSON. Apply
+            # the same strict checks before its permissive decoder sees it.
+            if body and (not content_type or content_type == "application/json" or content_type.endswith("+json")):
                 try:
                     loads(body)
                 except InvalidJSON as exc:

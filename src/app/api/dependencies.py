@@ -36,10 +36,10 @@ def get_calculation_service(request: Request) -> CalculationBackend:
 
 def check_plan_finite(plan: ParticipantPlanDTO) -> None:
     try:
-        ensure_finite(plan.model_dump(mode="json"))
+        ensure_finite(plan.model_dump(mode="python"))
     except InvalidJSON as exc:
         raise ApiProblem(422, "VALIDATION_ERROR", [{
-            "loc": ["body"], "msg": str(exc), "type": "value_error.non_finite",
+            "loc": ["body"], "msg": str(exc), "type": "value_error.json_value",
         }]) from exc
 
 
@@ -47,7 +47,7 @@ def call_template(service: CalculationBackend) -> ParticipantPlanDTO:
     """Use the same availability/error boundary for template loading as calculation."""
     try:
         plan = ParticipantPlanDTO.model_validate(service.get_template_plan())
-        ensure_finite(plan.model_dump(mode="json"))
+        ensure_finite(plan.model_dump(mode="python"))
         return plan
     except ApiProblem:
         raise

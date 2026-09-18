@@ -74,11 +74,11 @@ class ProjectService:
 
     def import_snapshot(self, raw) -> ProjectDTO:
         from pydantic import ValidationError
-        from src.app.service.json_io import InvalidJSON, ensure_finite
+        from src.app.service.json_io import MAX_DOCUMENT_DEPTH, InvalidJSON, ensure_finite
         from src.app.service.plan_io import validation_problem
         try:
             imported = ProjectDTO.model_validate(raw)
-            ensure_finite(imported.model_dump(mode="json"))
+            ensure_finite(imported.model_dump(mode="python"), max_depth=MAX_DOCUMENT_DEPTH)
             validate_plan(imported.plan)
             run = imported.last_run
             if run is not None:

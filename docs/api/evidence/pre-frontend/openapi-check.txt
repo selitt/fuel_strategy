@@ -1,0 +1,1 @@
+OpenAPI snapshot is current: /mnt/data/fuel_review/kosmo-piter_vibecoders_47/docs/api/openapi.json

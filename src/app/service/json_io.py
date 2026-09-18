@@ -4,6 +4,13 @@ import math
 from typing import Any
 
 
+# Leave headroom for ProjectDTO / RunRecordDTO / export metadata around a
+# plan or result, below the serializer's recursion boundary. These are web
+# transport limits, not constraints on the mathematical model.
+MAX_VALUE_DEPTH = 128
+MAX_DOCUMENT_DEPTH = 192
+
+
 class InvalidJSON(ValueError):
     pass
 
@@ -21,27 +28,43 @@ def _constant(value):
     raise InvalidJSON("NaN и Infinity не являются допустимыми числами JSON")
 
 
-def ensure_finite(value: Any) -> None:
-    """Includes numbers in extensible DTO fields, not only declared float fields."""
-    stack = [value]
+def ensure_finite(value: Any, *, max_depth: int = MAX_VALUE_DEPTH) -> None:
+    """Validate finite numbers, Unicode and nesting before DTO JSON conversion.
+
+    Call with Python-mode values: JSON-mode serialization may replace non-finite
+    numbers in extension fields with null before this function can inspect them.
+    """
+    stack = [(value, 0)]
     while stack:
-        item = stack.pop()
+        item, depth = stack.pop()
+        if depth > max_depth:
+            raise InvalidJSON(f"JSON превышает допустимую вложенность ({max_depth})")
         if isinstance(item, float) and not math.isfinite(item):
             raise InvalidJSON("Числа должны быть конечными: NaN/Infinity запрещены")
-        if isinstance(item, dict):
-            stack.extend(item.values())
+        if isinstance(item, str):
+            try:
+                item.encode("utf-8")
+            except UnicodeEncodeError as exc:
+                raise InvalidJSON("Строки и имена полей JSON должны содержать корректный Unicode") from exc
+        elif isinstance(item, dict):
+            stack.extend((key, depth + 1) for key in item)
+            stack.extend((child, depth + 1) for child in item.values())
         elif isinstance(item, (tuple, list)):
-            stack.extend(item)
+            stack.extend((child, depth + 1) for child in item)
 
 
 def loads(data: bytes | str) -> Any:
     try:
         text = data.decode("utf-8-sig") if isinstance(data, bytes) else data
         value = json.loads(text, object_pairs_hook=_pairs, parse_constant=_constant)
-        ensure_finite(value)
+        ensure_finite(value, max_depth=MAX_DOCUMENT_DEPTH)
         return value
-    except (UnicodeDecodeError, json.JSONDecodeError, RecursionError) as exc:
-        raise InvalidJSON("Ожидается корректный JSON в UTF-8 без чрезмерной вложенности") from exc
+    except InvalidJSON:
+        raise
+    except (ValueError, RecursionError) as exc:
+        # ValueError also covers the interpreter's integer-conversion limit,
+        # JSONDecodeError and UnicodeDecodeError. Do not disable those limits.
+        raise InvalidJSON("Ожидается корректный JSON в UTF-8 с допустимыми числами и вложенностью") from exc
 
 
 def dumps(value: Any, *, pretty: bool = False) -> bytes:
