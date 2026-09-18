@@ -1,0 +1,11 @@
+* text=auto
+*.md text eol=lf
+*.json text eol=lf
+*.py text eol=lf
+*.pdf -text
+fuel-hackathon/test_oil/** -text
+fuel-hackathon/test/** -text
+docs/00_FUEL_CASE_BRIEF.md -text
+docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md -text
+docs/Топливный_кейс_разбор_материалов.md -text
+docs/provenance/original.* -text

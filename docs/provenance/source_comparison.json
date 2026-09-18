@@ -1,0 +1,319 @@
+{
+  "basis": "independent byte comparison with safely extracted original uploaded archive",
+  "checked_files": 52,
+  "all_equal": true,
+  "files": [
+    {
+      "original_path": ".gitignore",
+      "workspace_path": "docs/provenance/original.gitignore.txt",
+      "equal_bytes": true,
+      "sha256": "49ba72aabc68e3d6e2deb09d72becfacf15e95269dad38f2ce0c149cddb4d5d7"
+    },
+    {
+      "original_path": ".gitmodules",
+      "workspace_path": "docs/provenance/original.gitmodules.txt",
+      "equal_bytes": true,
+      "sha256": "323644e4514c79ff03228f9623d516f33cb92314e4dacddb7e848b0916164053"
+    },
+    {
+      "original_path": "README.md",
+      "workspace_path": "docs/provenance/original.README.md.txt",
+      "equal_bytes": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "original_path": "docs/00_FUEL_CASE_BRIEF.md",
+      "workspace_path": "docs/00_FUEL_CASE_BRIEF.md",
+      "equal_bytes": true,
+      "sha256": "8a9911ef80094c30993c23ee6026f7741bcff4fc39e5ad824295b30e13624e79"
+    },
+    {
+      "original_path": "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md",
+      "workspace_path": "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md",
+      "equal_bytes": true,
+      "sha256": "142582b7a53f336325df565be29e0a13a270d3ad645240ded41bf683f4926beb"
+    },
+    {
+      "original_path": "docs/Task/Дополнительно.pdf",
+      "workspace_path": "docs/Task/Дополнительно.pdf",
+      "equal_bytes": true,
+      "sha256": "b10c187b14b72b4c07dcebb770df69f046bbf97f223be48553028acaae2a7a66"
+    },
+    {
+      "original_path": "docs/Task/Критерии_оценки_—_Топливный_космоконтур_2035_КосмоХакатон_2026.pdf",
+      "workspace_path": "docs/Task/Критерии_оценки_—_Топливный_космоконтур_2035_КосмоХакатон_2026.pdf",
+      "equal_bytes": true,
+      "sha256": "7b12ebc5eb2ee2892854d730fd6ed6b3923d350b2e67c864f9cc0e604fa6295f"
+    },
+    {
+      "original_path": "docs/Task/Постановка_кейса_—_Топливный_космоконтур_2035_КосмоХакатон_2026.pdf",
+      "workspace_path": "docs/Task/Постановка_кейса_—_Топливный_космоконтур_2035_КосмоХакатон_2026.pdf",
+      "equal_bytes": true,
+      "sha256": "9bfdbd7082d810616b5ce6de4794dd2fd60944901be9d3e5aa9ed5747f0b3b8a"
+    },
+    {
+      "original_path": "docs/Топливный_кейс_разбор_материалов.md",
+      "workspace_path": "docs/Топливный_кейс_разбор_материалов.md",
+      "equal_bytes": true,
+      "sha256": "49915313e6ed6006c6842822e942636d733fab41d31f17197ce70a457c32d230"
+    },
+    {
+      "original_path": "fuel-hackathon/test/README.md",
+      "workspace_path": "fuel-hackathon/test/README.md",
+      "equal_bytes": true,
+      "sha256": "21776c3e41cb0f1b11f5107e0facc26bc592fe6ba184fcc70ee67ad26b15db07"
+    },
+    {
+      "original_path": "fuel-hackathon/test/case_core.py",
+      "workspace_path": "fuel-hackathon/test/case_core.py",
+      "equal_bytes": true,
+      "sha256": "0a6da8b99dbb2e6ff03cb94012f539d8cd0b9c7dd05525bda5b202ebb461e20c"
+    },
+    {
+      "original_path": "fuel-hackathon/test/config/case_config.json",
+      "workspace_path": "fuel-hackathon/test/config/case_config.json",
+      "equal_bytes": true,
+      "sha256": "aae20d265b69fa8ec309ce8dc435fb1ae43ed34510c2746baa5024b472426463"
+    },
+    {
+      "original_path": "fuel-hackathon/test/data/access_modes.csv",
+      "workspace_path": "fuel-hackathon/test/data/access_modes.csv",
+      "equal_bytes": true,
+      "sha256": "2669239db6c366c15b13df9d874dc3c8a790ba961bfeddbf9c428fa82fb861c7"
+    },
+    {
+      "original_path": "fuel-hackathon/test/data/lots.csv",
+      "workspace_path": "fuel-hackathon/test/data/lots.csv",
+      "equal_bytes": true,
+      "sha256": "8e2b6244178344f9f97050ce5c9f337cd311e9f86bbd96bbbfbdde6999c4ba8b"
+    },
+    {
+      "original_path": "fuel-hackathon/test/Космос_как_инфраструктура.ipynb",
+      "workspace_path": "fuel-hackathon/test/Космос_как_инфраструктура.ipynb",
+      "equal_bytes": true,
+      "sha256": "2201afcf4b4a0a4e2a7d637da773fe7f2518192aee4156e77781484341b947b9"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/.github/workflows/validate-reference-repo.yml",
+      "workspace_path": "fuel-hackathon/test_oil/.github/workflows/validate-reference-repo.yml",
+      "equal_bytes": true,
+      "sha256": "fac835b7db4ddab4ec8caa8fb147de2a3682cfb6c110b96cbf872f3c871fedeb"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/.gitignore",
+      "workspace_path": "fuel-hackathon/test_oil/.gitignore",
+      "equal_bytes": true,
+      "sha256": "95e321425ee28107c41aadd956398f8ebd01a8e3a28be94427f3db4726a9b39e"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/README.md",
+      "workspace_path": "fuel-hackathon/test_oil/README.md",
+      "equal_bytes": true,
+      "sha256": "c8d70de40e74bd3450d39c28d6ee04f8ecb428c147570f1030485ad6d48f7916"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/data/README.md",
+      "workspace_path": "fuel-hackathon/test_oil/data/README.md",
+      "equal_bytes": true,
+      "sha256": "07adb666407da4373b6aab3414c06b95040d53a32d9c861db1c160c82635bb2f"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/data/constraints.csv",
+      "workspace_path": "fuel-hackathon/test_oil/data/constraints.csv",
+      "equal_bytes": true,
+      "sha256": "9af0a70b445ee1c451b5dc368237b7727ed2923b89565f357dff61a21d4f4dc8"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/data/demand.csv",
+      "workspace_path": "fuel-hackathon/test_oil/data/demand.csv",
+      "equal_bytes": true,
+      "sha256": "a3049bd3ff3b9e7102858be94476a0f356be3027790382d3761be7745f82a1c1"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/data/investment_options.csv",
+      "workspace_path": "fuel-hackathon/test_oil/data/investment_options.csv",
+      "equal_bytes": true,
+      "sha256": "922c92bc0a70ab6e837e51a3017d4cde5b9a55baa51602132d21f4131d4b034c"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/data/storage_options.csv",
+      "workspace_path": "fuel-hackathon/test_oil/data/storage_options.csv",
+      "equal_bytes": true,
+      "sha256": "81c764ba07efae2860b72defff70b80ed6280a8243ec36a5ec5e8690187ed202"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/data/supply_sources.csv",
+      "workspace_path": "fuel-hackathon/test_oil/data/supply_sources.csv",
+      "equal_bytes": true,
+      "sha256": "182139c4870402024f540d0f010b4396db2fad77bf5a35449e04cbe584ef0977"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/CALCULATION_RULES.md",
+      "workspace_path": "fuel-hackathon/test_oil/docs/CALCULATION_RULES.md",
+      "equal_bytes": true,
+      "sha256": "639b9de750aa282bd1f2af434810eeb4814f86bb15615ea692c641dc24d663a2"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/CASE_RULES.md",
+      "workspace_path": "fuel-hackathon/test_oil/docs/CASE_RULES.md",
+      "equal_bytes": true,
+      "sha256": "435bdfd6f13b2560a68065d6e3b7f6093de23893d51823d0b3bbac0e2d107de0"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/DATA_DICTIONARY.md",
+      "workspace_path": "fuel-hackathon/test_oil/docs/DATA_DICTIONARY.md",
+      "equal_bytes": true,
+      "sha256": "3470582df353a8dc4c665d2b02df044270ddaae3f68fac0b2b5e631457bd114f"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/FAQ.md",
+      "workspace_path": "fuel-hackathon/test_oil/docs/FAQ.md",
+      "equal_bytes": true,
+      "sha256": "a67501dc9d85a18c64161c3f53b40933346f7132539dfca97468816f27db54cb"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/SCIENTIFIC_BASIS.md",
+      "workspace_path": "fuel-hackathon/test_oil/docs/SCIENTIFIC_BASIS.md",
+      "equal_bytes": true,
+      "sha256": "f314a79a6b7907c873fecb7056728b5152bfb56d28d0e52be9411e3aa5a03be5"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/STRESS_PROTOCOL.md",
+      "workspace_path": "fuel-hackathon/test_oil/docs/STRESS_PROTOCOL.md",
+      "equal_bytes": true,
+      "sha256": "ed43dcc5a05ae7d6405f3385da51a92daaa9f135586eea4020320b80163cad8f"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/figures/README.md",
+      "workspace_path": "fuel-hackathon/test_oil/docs/figures/README.md",
+      "equal_bytes": true,
+      "sha256": "d7d9280003b464e9175ce5331bbfb6e99a031bdb11d390763e7f63149472c037"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/figures/synthetic_cost_breakdown.svg",
+      "workspace_path": "fuel-hackathon/test_oil/docs/figures/synthetic_cost_breakdown.svg",
+      "equal_bytes": true,
+      "sha256": "cb1d208a2521c3dd2612d6259a4dcff3dbc682a582ec1781a7eff83a45497e56"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/figures/synthetic_inventory_and_reserve.svg",
+      "workspace_path": "fuel-hackathon/test_oil/docs/figures/synthetic_inventory_and_reserve.svg",
+      "equal_bytes": true,
+      "sha256": "9932ab98937bf8be14da14646a2b14bdd39ff7c40450d098b6916c8473102c02"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/docs/figures/synthetic_supply_vs_demand.svg",
+      "workspace_path": "fuel-hackathon/test_oil/docs/figures/synthetic_supply_vs_demand.svg",
+      "equal_bytes": true,
+      "sha256": "69b6f6dc92d62dfcaa2424c17e241cb98af35084b6551390ac9447a2ed3d372f"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/examples/empty_plan.json",
+      "workspace_path": "fuel-hackathon/test_oil/examples/empty_plan.json",
+      "equal_bytes": true,
+      "sha256": "2c6f01f7dd30178ec1311ec7bd31355119bcca29a472b627b415b7a8fbe4ccac"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/examples/example_export_structure.csv",
+      "workspace_path": "fuel-hackathon/test_oil/examples/example_export_structure.csv",
+      "equal_bytes": true,
+      "sha256": "0cade0dd990da8b4c8c4ae517bb244c5ceaa9862db854c7170091eaca702b408"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/examples/invalid_plan_examples/malformed_scenario.json",
+      "workspace_path": "fuel-hackathon/test_oil/examples/invalid_plan_examples/malformed_scenario.json",
+      "equal_bytes": true,
+      "sha256": "0adb91b25f3bb3362fef722ed1e0054e0145c77958729ef6662e4d303cfc7256"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/examples/invalid_plan_examples/negative_reservation.json",
+      "workspace_path": "fuel-hackathon/test_oil/examples/invalid_plan_examples/negative_reservation.json",
+      "equal_bytes": true,
+      "sha256": "af9a6ade988f309beccf9d2360579db871db314ff1e870305c9e25e2b416ab66"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/examples/invalid_plan_examples/over_capacity.json",
+      "workspace_path": "fuel-hackathon/test_oil/examples/invalid_plan_examples/over_capacity.json",
+      "equal_bytes": true,
+      "sha256": "ac478f3ca9c6079bbf8b28d4e220468b2327a27b6d9a30f902f68f7f14b5d134"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/scenarios/README.md",
+      "workspace_path": "fuel-hackathon/test_oil/scenarios/README.md",
+      "equal_bytes": true,
+      "sha256": "2e6f955f47992dbb12df901ec3359442ce2b0b1f3342454bdf79ddaf78cd2cb6"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/scenarios/base.yaml",
+      "workspace_path": "fuel-hackathon/test_oil/scenarios/base.yaml",
+      "equal_bytes": true,
+      "sha256": "f16f46e3b291365051543f7ef9874f4ed5a295beb589af1c095e78b706bcac3a"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/scenarios/mandatory_stress.yaml",
+      "workspace_path": "fuel-hackathon/test_oil/scenarios/mandatory_stress.yaml",
+      "equal_bytes": true,
+      "sha256": "312b097486d7940c92f70f9180b5d32141d27f1a9a7294f166f6bfeb5ca6a7f7"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/schemas/demand.schema.json",
+      "workspace_path": "fuel-hackathon/test_oil/schemas/demand.schema.json",
+      "equal_bytes": true,
+      "sha256": "817ec4bdcc0a071431a13fe62742d67cfc7bdda5ece214308c909a8b6874b1fd"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/schemas/export.schema.json",
+      "workspace_path": "fuel-hackathon/test_oil/schemas/export.schema.json",
+      "equal_bytes": true,
+      "sha256": "65433804e25d56641af94030a87b7b82e80d41388c385e333b3fe538bc1c99d1"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/schemas/plan.schema.json",
+      "workspace_path": "fuel-hackathon/test_oil/schemas/plan.schema.json",
+      "equal_bytes": true,
+      "sha256": "4caf4cce31bc99e18763a3d40295cfee2034328fc314a9c8f86a2d9890e5d419"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/schemas/scenario.schema.json",
+      "workspace_path": "fuel-hackathon/test_oil/schemas/scenario.schema.json",
+      "equal_bytes": true,
+      "sha256": "84b77b9e52409570ec211d5d31bb4bc889b337a466f766d8fe344fe189539e24"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/schemas/supply_sources.schema.json",
+      "workspace_path": "fuel-hackathon/test_oil/schemas/supply_sources.schema.json",
+      "equal_bytes": true,
+      "sha256": "069b212f9f9e3746fb0b62993c1768cf11aeb8f5623d29223e387abc4bf81c84"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/tools/generate_synthetic_figures.py",
+      "workspace_path": "fuel-hackathon/test_oil/tools/generate_synthetic_figures.py",
+      "equal_bytes": true,
+      "sha256": "2329a4f9a6df19cd60a3deb73317ae21078f493588c9567bd41e3491dbdbd168"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/tools/validate_reference_repo.py",
+      "workspace_path": "fuel-hackathon/test_oil/tools/validate_reference_repo.py",
+      "equal_bytes": true,
+      "sha256": "451a5e3844ddb13435e58bdcfac09b21fb0f372c1dd931e5d9a5c12d153b7947"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/validation/README.md",
+      "workspace_path": "fuel-hackathon/test_oil/validation/README.md",
+      "equal_bytes": true,
+      "sha256": "30e182be0d04e841e239d16c4038955e6da780da82d0dfe9af37021e7f1aecaf"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/validation/control_cases.md",
+      "workspace_path": "fuel-hackathon/test_oil/validation/control_cases.md",
+      "equal_bytes": true,
+      "sha256": "945f32aa1d2fe1c3e7bfa25ee5d2c6256ccd1d66621f757c0a34ed2df096ba27"
+    },
+    {
+      "original_path": "fuel-hackathon/test_oil/validation/expected_checks.json",
+      "workspace_path": "fuel-hackathon/test_oil/validation/expected_checks.json",
+      "equal_bytes": true,
+      "sha256": "00713cb5cb9ddb62b0d6077fa7573b8d296945f6fe455cc1a0052e2613d644c5"
+    }
+  ]
+}

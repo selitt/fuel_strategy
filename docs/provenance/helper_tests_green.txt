@@ -1,0 +1,23 @@
+Command: python3 -S -m unittest discover -s tests/workspace -v
+test_broken_local_navigation_is_rejected (test_workspace.WorkspaceChecks.test_broken_local_navigation_is_rejected) ... ok
+test_clean_workspace_passes_but_is_not_product_verification (test_workspace.WorkspaceChecks.test_clean_workspace_passes_but_is_not_product_verification) ... ok
+test_cli_handles_root_with_spaces_and_json_output (test_workspace.WorkspaceChecks.test_cli_handles_root_with_spaces_and_json_output) ... ok
+test_cli_returns_failure_on_missing_required_file (test_workspace.WorkspaceChecks.test_cli_returns_failure_on_missing_required_file) ... ok
+test_criterion_points_are_not_silently_changed (test_workspace.WorkspaceChecks.test_criterion_points_are_not_silently_changed) ... ok
+test_dependency_cycle_is_rejected (test_workspace.WorkspaceChecks.test_dependency_cycle_is_rejected) ... ok
+test_duplicate_criterion_is_rejected (test_workspace.WorkspaceChecks.test_duplicate_criterion_is_rejected) ... ok
+test_empty_plan_is_not_marked_feasible (test_workspace.WorkspaceChecks.test_empty_plan_is_not_marked_feasible) ... ok
+test_empty_required_document_is_rejected (test_workspace.WorkspaceChecks.test_empty_required_document_is_rejected) ... ok
+test_invalid_json_produces_diagnostic (test_workspace.WorkspaceChecks.test_invalid_json_produces_diagnostic) ... ok
+test_missing_acceptance_task_is_rejected (test_workspace.WorkspaceChecks.test_missing_acceptance_task_is_rejected) ... ok
+test_missing_required_file_is_rejected (test_workspace.WorkspaceChecks.test_missing_required_file_is_rejected) ... ok
+test_modified_original_is_rejected (test_workspace.WorkspaceChecks.test_modified_original_is_rejected) ... ok
+test_registered_reference_git_is_allowed_for_existing_repo_overlay (test_workspace.WorkspaceChecks.test_registered_reference_git_is_allowed_for_existing_repo_overlay) ... ok
+test_unknown_dependency_is_rejected (test_workspace.WorkspaceChecks.test_unknown_dependency_is_rejected) ... ok
+test_unregistered_nested_git_is_rejected (test_workspace.WorkspaceChecks.test_unregistered_nested_git_is_rejected) ... ok
+test_unsafe_manifest_path_is_rejected (test_workspace.WorkspaceChecks.test_unsafe_manifest_path_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 1.599s
+
+OK

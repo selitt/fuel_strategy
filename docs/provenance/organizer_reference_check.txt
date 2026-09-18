@@ -1,0 +1,14 @@
+Unmodified organizer tools/validate_reference_repo.py
+Executed with installed PyYAML/jsonschema and isolated Python (-S plus their package paths).
+No organizer files edited. This checks the reference kit, not the participant application.
+Exit code: 1
+
+PASS check_json_yaml_syntax
+PASS check_demand
+PASS check_sources
+PASS check_investments_and_constraints
+PASS check_mandatory_stress
+PASS check_schemas
+PASS check_validation_vectors
+FAIL broken relative Markdown links:
+data/README.md -> missing: ../docs/ERRATA_AND_PROVENANCE.md

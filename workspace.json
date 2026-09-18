@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "project_name": "Топливный космоконтур 2035",
+  "team_size": 5,
+  "stage": "preparation",
+  "application_implemented": false,
+  "application_stack": null,
+  "next_task": "T00",
+  "check_scope": "workspace_only_not_product",
+  "reference_paths": [
+    "fuel-hackathon/test_oil",
+    "fuel-hackathon/test"
+  ],
+  "required_paths": [
+    "README.md",
+    "START_HERE.md",
+    "AGENTS.md",
+    "sources.lock.json",
+    "docs/PRODUCT.md",
+    "docs/SOURCES.md",
+    "docs/ARCHITECTURE.md",
+    "docs/OPEN_QUESTIONS.md",
+    "docs/open_questions.json",
+    "docs/decisions.json",
+    "docs/regulation/criteria.json",
+    "docs/regulation/CRITERIA.md",
+    "docs/regulation/RULES.md",
+    "docs/ACCEPTANCE.md",
+    "docs/TEAM.md",
+    "docs/IMPORT_AND_GIT.md",
+    "contracts/README.md",
+    "tasks/index.json",
+    "tasks/team.json",
+    "prompts/00_START_IN_CODEX.md",
+    "tests/acceptance/catalog.json",
+    "tools/workspace.py",
+    "docs/provenance/BUILD_VERIFICATION.md"
+  ],
+  "legacy_note_paths": [
+    "docs/00_FUEL_CASE_BRIEF.md",
+    "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md",
+    "docs/Топливный_кейс_разбор_материалов.md"
+  ],
+  "note": "Stack-neutral scaffold. Python helper is infrastructure, not chosen business application stack."
+}

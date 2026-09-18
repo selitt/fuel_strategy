@@ -1,4 +1,21 @@
-build/
+# Local/generated files only. Keep plans, results and evidence under version control.
 .venv/
-.agents
-.idea/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+coverage/
+.coverage
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+.codex/
+.local/

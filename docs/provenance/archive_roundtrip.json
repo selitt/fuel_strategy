@@ -1,0 +1,11 @@
+{
+  "archive": "Fuel_Start_Workspace.zip",
+  "entry_folder": "fuel-workspace",
+  "zip_crc_check": "passed",
+  "unique_safe_entry_names": true,
+  "freshly_extracted_workspace_check_exit": 0,
+  "freshly_extracted_helper_tests_exit": 0,
+  "helper_tests_count": 17,
+  "product_tests_run": false,
+  "scope": "workspace tooling and intact package, not the fuel application"
+}

@@ -1,0 +1,26 @@
+Command: python3 -S -m unittest discover -s tests/workspace -v
+test_workspace (unittest.loader._FailedTest.test_workspace) ... ERROR
+
+======================================================================
+ERROR: test_workspace (unittest.loader._FailedTest.test_workspace)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_workspace
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/unittest/loader.py", line 396, in _find_test_path
+    module = self._get_module_from_name(name)
+  File "/usr/lib/python3.13/unittest/loader.py", line 339, in _get_module_from_name
+    __import__(name)
+    ~~~~~~~~~~^^^^^^
+  File "/mnt/data/fuel-workspace/tests/workspace/test_workspace.py", line 14, in <module>
+    SPEC.loader.exec_module(workspace)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 1022, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1159, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1217, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/mnt/data/fuel-workspace/tools/workspace.py'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

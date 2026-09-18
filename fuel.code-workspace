@@ -1,0 +1,73 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.encoding": "utf8",
+    "search.exclude": {
+      "**/.git": true,
+      "fuel-hackathon/test/**": true,
+      "**/node_modules": true,
+      "docs/00_FUEL_CASE_BRIEF.md": true,
+      "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md": true,
+      "docs/Топливный_кейс_разбор_материалов.md": true
+    }
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Fuel: check workspace only",
+        "type": "process",
+        "command": "python3",
+        "args": [
+          "tools/workspace.py",
+          "check"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "windows": {
+          "command": "py",
+          "args": [
+            "-3",
+            "tools/workspace.py",
+            "check"
+          ]
+        },
+        "problemMatcher": []
+      },
+      {
+        "label": "Fuel: test workspace helper",
+        "type": "process",
+        "command": "python3",
+        "args": [
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests/workspace",
+          "-v"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "windows": {
+          "command": "py",
+          "args": [
+            "-3",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "tests/workspace",
+            "-v"
+          ]
+        },
+        "problemMatcher": []
+      }
+    ]
+  }
+}

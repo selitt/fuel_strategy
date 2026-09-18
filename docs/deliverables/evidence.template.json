@@ -1,0 +1,79 @@
+{
+  "template_only": true,
+  "status": "no_product_evidence",
+  "note": "Пустые списки означают отсутствие заполнения, не отсутствие рисков и не выполнение критериев.",
+  "runs": [],
+  "source_method_map": [],
+  "risk_register": [],
+  "stakeholder_map": [],
+  "kpi_definitions": [],
+  "investment_roadmap": [],
+  "criterion_evidence": [],
+  "required_entry_fields": {
+    "run": [
+      "run_id",
+      "plan_id",
+      "scenario_id",
+      "input_version",
+      "algorithm_version",
+      "assumptions",
+      "command",
+      "results_path"
+    ],
+    "source_method": [
+      "source",
+      "authors_year",
+      "supported_method",
+      "model_application",
+      "limitations",
+      "access_status"
+    ],
+    "risk": [
+      "event",
+      "cause",
+      "affected_parameter",
+      "period",
+      "probability_basis_or_range",
+      "physical_financial_service_consequences",
+      "dependencies",
+      "owner",
+      "mitigation",
+      "mitigation_cost",
+      "residual_consequence"
+    ],
+    "stakeholder": [
+      "party",
+      "interest",
+      "metric",
+      "obligation",
+      "cost_bearer",
+      "risk_bearer",
+      "effect_of_adaptation"
+    ],
+    "kpi": [
+      "name",
+      "formula",
+      "unit",
+      "target_basis",
+      "control_method",
+      "data_source"
+    ],
+    "roadmap": [
+      "period",
+      "decision",
+      "funding",
+      "commissioning",
+      "owner",
+      "dependencies",
+      "investment_gate"
+    ],
+    "criterion": [
+      "criterion_id",
+      "implementation_path",
+      "run_id",
+      "verification_command",
+      "evidence_path",
+      "limitations"
+    ]
+  }
+}

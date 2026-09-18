@@ -1,0 +1,60 @@
+{
+  "status": "not_decided",
+  "note": "Структура каталогов — соглашение каркаса; реализация и бизнес-допущения ещё не утверждены.",
+  "decisions": [
+    {
+      "id": "D01",
+      "topic": "Стек расчётного приложения",
+      "status": "not_decided",
+      "value": null,
+      "rationale": null,
+      "approved_by": null,
+      "evidence": []
+    },
+    {
+      "id": "D02",
+      "topic": "Форма интерфейса",
+      "status": "not_decided",
+      "value": null,
+      "rationale": null,
+      "approved_by": null,
+      "evidence": []
+    },
+    {
+      "id": "D03",
+      "topic": "Модельное время и порядок событий",
+      "status": "not_decided",
+      "value": null,
+      "rationale": null,
+      "approved_by": null,
+      "evidence": []
+    },
+    {
+      "id": "D04",
+      "topic": "Точность и численные допуски",
+      "status": "not_decided",
+      "value": null,
+      "rationale": null,
+      "approved_by": null,
+      "evidence": []
+    },
+    {
+      "id": "D05",
+      "topic": "Дисконтирование",
+      "status": "not_decided",
+      "value": null,
+      "rationale": null,
+      "approved_by": null,
+      "evidence": []
+    },
+    {
+      "id": "D06",
+      "topic": "Владельцы задач и сроки",
+      "status": "not_decided",
+      "value": null,
+      "rationale": null,
+      "approved_by": null,
+      "evidence": []
+    }
+  ]
+}

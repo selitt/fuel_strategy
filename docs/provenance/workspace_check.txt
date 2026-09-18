@@ -1,0 +1,14 @@
+Command: python3 -S tools/workspace.py check
+WORKSPACE CHECK ONLY — not a fuel model or jury acceptance
+PASS workspace structure
+PASS original file hashes
+PASS portable paths and nested Git
+PASS task cards and dependency graph
+PASS rubric and workstream references
+PASS acceptance and open-question references
+PASS JSON syntax (not business schema validation)
+PASS new local Markdown navigation
+NOTE Product NOT implemented: these checks do not run V01-V10 or verify K01-K20.
+NOTE Known source gaps: original XLSX / source DOCX / ERRATA are absent; see OPEN_QUESTIONS.
+NOTE Original organizer Markdown links and legacy notes are preserved, not silently repaired.
+Workspace integrity OK; product not validated.

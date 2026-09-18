@@ -1,0 +1,13 @@
+SOURCE: docs/Task/Дополнительно.pdf
+SHA256: b10c187b14b72b4c07dcebb770df69f046bbf97f223be48553028acaae2a7a66
+AUTOMATIC TEXT EXTRACTION, NOT A REPLACEMENT FOR PDF. Tables/diagrams may be missing.
+
+===== PDF PAGE 1 OF 1 =====
+Дорогие участники, для Вашего удобства мы
+подготовили README по кейсу с комментариями:
+https://github.com/SpaceEconomyPolicy/test_oil
+
+
+Также подготовили для Вас список
+дополнительной литературы к кейсу:
+https://disk.360.yandex.ru/d/oMVoGQwhXvzzGg
