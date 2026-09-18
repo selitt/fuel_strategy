@@ -1,0 +1,103 @@
+test_broken_local_navigation_is_rejected (test_workspace.WorkspaceChecks.test_broken_local_navigation_is_rejected) ... ok
+test_clean_workspace_passes_but_is_not_product_verification (test_workspace.WorkspaceChecks.test_clean_workspace_passes_but_is_not_product_verification) ... FAIL
+test_cli_handles_root_with_spaces_and_json_output (test_workspace.WorkspaceChecks.test_cli_handles_root_with_spaces_and_json_output) ... FAIL
+test_cli_returns_failure_on_missing_required_file (test_workspace.WorkspaceChecks.test_cli_returns_failure_on_missing_required_file) ... ok
+test_criterion_points_are_not_silently_changed (test_workspace.WorkspaceChecks.test_criterion_points_are_not_silently_changed) ... ok
+test_dependency_cycle_is_rejected (test_workspace.WorkspaceChecks.test_dependency_cycle_is_rejected) ... ok
+test_duplicate_criterion_is_rejected (test_workspace.WorkspaceChecks.test_duplicate_criterion_is_rejected) ... ok
+test_empty_plan_is_not_marked_feasible (test_workspace.WorkspaceChecks.test_empty_plan_is_not_marked_feasible) ... ok
+test_empty_required_document_is_rejected (test_workspace.WorkspaceChecks.test_empty_required_document_is_rejected) ... ok
+test_invalid_json_produces_diagnostic (test_workspace.WorkspaceChecks.test_invalid_json_produces_diagnostic) ... ok
+test_missing_acceptance_task_is_rejected (test_workspace.WorkspaceChecks.test_missing_acceptance_task_is_rejected) ... ok
+test_missing_required_file_is_rejected (test_workspace.WorkspaceChecks.test_missing_required_file_is_rejected) ... ok
+test_modified_original_is_rejected (test_workspace.WorkspaceChecks.test_modified_original_is_rejected) ... ok
+test_registered_reference_git_is_allowed_for_existing_repo_overlay (test_workspace.WorkspaceChecks.test_registered_reference_git_is_allowed_for_existing_repo_overlay) ... FAIL
+test_unknown_dependency_is_rejected (test_workspace.WorkspaceChecks.test_unknown_dependency_is_rejected) ... ok
+test_unregistered_nested_git_is_rejected (test_workspace.WorkspaceChecks.test_unregistered_nested_git_is_rejected) ... ok
+test_unsafe_manifest_path_is_rejected (test_workspace.WorkspaceChecks.test_unsafe_manifest_path_is_rejected) ... ok
+
+======================================================================
+FAIL: test_clean_workspace_passes_but_is_not_product_verification (test_workspace.WorkspaceChecks.test_clean_workspace_passes_but_is_not_product_verification)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/recheck4/input/kosmo-piter_vibecoders_47/tests/workspace/test_workspace.py", line 38, in test_clean_workspace_passes_but_is_not_product_verification
+    self.assertTrue(report["ok"], report)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : {'ok': False, 'scope': 'workspace_only_not_product', 'root': '/tmp/fuel workspace y9r62k52/copy', 'application_implemented': False, 'stage': 'preparation', 'checks': [{'name': 'workspace structure', 'ok': True}, {'name': 'original file hashes', 'ok': True}, {'name': 'portable paths and nested Git', 'ok': True}, {'name': 'task cards and dependency graph', 'ok': True}, {'name': 'rubric and workstream references', 'ok': True}, {'name': 'acceptance and open-question references', 'ok': True}, {'name': 'JSON syntax (not business schema validation)', 'ok': True}, {'name': 'new local Markdown navigation', 'ok': False}], 'errors': ['broken local link (outside root): plans/README.md -> ../../docs/templates/HANDOFF.md', 'broken local link (outside root): plans/README.md -> ../../tasks/README.md', 'broken local link (outside root): plans/README.md -> ../../docs/ARCHITECTURE.md', 'broken local link (outside root): plans/README.md -> ../../docs/regulation/RULES.md', 'broken local link (outside root): plans/README.md -> ../../docs/ACCEPTANCE.md'], 'warnings': ['Product NOT implemented: these checks do not run V01-V10 or verify K01-K20.', 'Known source gaps: original XLSX / source DOCX / ERRATA are absent; see OPEN_QUESTIONS.', 'Original organizer Markdown links and legacy notes are preserved, not silently repaired.', 'Registered reference Git metadata detected: this does not verify submodule remotes or fresh clone.']}
+
+======================================================================
+FAIL: test_cli_handles_root_with_spaces_and_json_output (test_workspace.WorkspaceChecks.test_cli_handles_root_with_spaces_and_json_output)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/recheck4/input/kosmo-piter_vibecoders_47/tests/workspace/test_workspace.py", line 114, in test_cli_handles_root_with_spaces_and_json_output
+    self.assertEqual(run.returncode, 0, run.stderr + run.stdout)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : {
+  "ok": false,
+  "scope": "workspace_only_not_product",
+  "root": "/tmp/fuel workspace puq88o9k/copy",
+  "application_implemented": false,
+  "stage": "preparation",
+  "checks": [
+    {
+      "name": "workspace structure",
+      "ok": true
+    },
+    {
+      "name": "original file hashes",
+      "ok": true
+    },
+    {
+      "name": "portable paths and nested Git",
+      "ok": true
+    },
+    {
+      "name": "task cards and dependency graph",
+      "ok": true
+    },
+    {
+      "name": "rubric and workstream references",
+      "ok": true
+    },
+    {
+      "name": "acceptance and open-question references",
+      "ok": true
+    },
+    {
+      "name": "JSON syntax (not business schema validation)",
+      "ok": true
+    },
+    {
+      "name": "new local Markdown navigation",
+      "ok": false
+    }
+  ],
+  "errors": [
+    "broken local link (outside root): plans/README.md -> ../../docs/templates/HANDOFF.md",
+    "broken local link (outside root): plans/README.md -> ../../tasks/README.md",
+    "broken local link (outside root): plans/README.md -> ../../docs/ARCHITECTURE.md",
+    "broken local link (outside root): plans/README.md -> ../../docs/regulation/RULES.md",
+    "broken local link (outside root): plans/README.md -> ../../docs/ACCEPTANCE.md"
+  ],
+  "warnings": [
+    "Product NOT implemented: these checks do not run V01-V10 or verify K01-K20.",
+    "Known source gaps: original XLSX / source DOCX / ERRATA are absent; see OPEN_QUESTIONS.",
+    "Original organizer Markdown links and legacy notes are preserved, not silently repaired.",
+    "Registered reference Git metadata detected: this does not verify submodule remotes or fresh clone."
+  ]
+}
+
+
+======================================================================
+FAIL: test_registered_reference_git_is_allowed_for_existing_repo_overlay (test_workspace.WorkspaceChecks.test_registered_reference_git_is_allowed_for_existing_repo_overlay)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/recheck4/input/kosmo-piter_vibecoders_47/tests/workspace/test_workspace.py", line 101, in test_registered_reference_git_is_allowed_for_existing_repo_overlay
+    self.assertTrue(report["ok"], report)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : {'ok': False, 'scope': 'workspace_only_not_product', 'root': '/tmp/fuel workspace l38sezt1/copy', 'application_implemented': False, 'stage': 'preparation', 'checks': [{'name': 'workspace structure', 'ok': True}, {'name': 'original file hashes', 'ok': True}, {'name': 'portable paths and nested Git', 'ok': True}, {'name': 'task cards and dependency graph', 'ok': True}, {'name': 'rubric and workstream references', 'ok': True}, {'name': 'acceptance and open-question references', 'ok': True}, {'name': 'JSON syntax (not business schema validation)', 'ok': True}, {'name': 'new local Markdown navigation', 'ok': False}], 'errors': ['broken local link (outside root): plans/README.md -> ../../docs/templates/HANDOFF.md', 'broken local link (outside root): plans/README.md -> ../../tasks/README.md', 'broken local link (outside root): plans/README.md -> ../../docs/ARCHITECTURE.md', 'broken local link (outside root): plans/README.md -> ../../docs/regulation/RULES.md', 'broken local link (outside root): plans/README.md -> ../../docs/ACCEPTANCE.md'], 'warnings': ['Product NOT implemented: these checks do not run V01-V10 or verify K01-K20.', 'Known source gaps: original XLSX / source DOCX / ERRATA are absent; see OPEN_QUESTIONS.', 'Original organizer Markdown links and legacy notes are preserved, not silently repaired.', 'Registered reference Git metadata detected: this does not verify submodule remotes or fresh clone.']}
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.733s
+
+FAILED (failures=3)

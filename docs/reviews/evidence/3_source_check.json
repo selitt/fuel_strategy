@@ -1,0 +1,15 @@
+{
+  "scope": "document_and_reference_recheck_only",
+  "archive_sha256": "050031861de588bc700d16c7b0c173aed99618d2c2221bbc0d903d3bfd5a3310",
+  "protected_source_files_verified": 52,
+  "csv_tables_compared_to_case_pages_3_to_7": 5,
+  "mandatory_stress_yaml_blob_sha": "969086d14f444cc77a7f1935331daeb2cfff44c7",
+  "criterion_count": 20,
+  "max_main_score": 100,
+  "application_tests_run": false,
+  "environment": {
+    "os": "Linux",
+    "python": "3.13.5"
+  },
+  "note": "Checks apply to the submitted snapshot. No application implemented or fixes applied by this plan package."
+}

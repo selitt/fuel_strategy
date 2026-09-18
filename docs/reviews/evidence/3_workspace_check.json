@@ -1,0 +1,54 @@
+{
+  "ok": false,
+  "scope": "workspace_only_not_product",
+  "root": "/mnt/data/recheck4/input/kosmo-piter_vibecoders_47",
+  "application_implemented": false,
+  "stage": "preparation",
+  "checks": [
+    {
+      "name": "workspace structure",
+      "ok": true
+    },
+    {
+      "name": "original file hashes",
+      "ok": true
+    },
+    {
+      "name": "portable paths and nested Git",
+      "ok": true
+    },
+    {
+      "name": "task cards and dependency graph",
+      "ok": true
+    },
+    {
+      "name": "rubric and workstream references",
+      "ok": true
+    },
+    {
+      "name": "acceptance and open-question references",
+      "ok": true
+    },
+    {
+      "name": "JSON syntax (not business schema validation)",
+      "ok": true
+    },
+    {
+      "name": "new local Markdown navigation",
+      "ok": false
+    }
+  ],
+  "errors": [
+    "broken local link (outside root): plans/README.md -> ../../docs/templates/HANDOFF.md",
+    "broken local link (outside root): plans/README.md -> ../../tasks/README.md",
+    "broken local link (outside root): plans/README.md -> ../../docs/ARCHITECTURE.md",
+    "broken local link (outside root): plans/README.md -> ../../docs/regulation/RULES.md",
+    "broken local link (outside root): plans/README.md -> ../../docs/ACCEPTANCE.md"
+  ],
+  "warnings": [
+    "Product NOT implemented: these checks do not run V01-V10 or verify K01-K20.",
+    "Known source gaps: original XLSX / source DOCX / ERRATA are absent; see OPEN_QUESTIONS.",
+    "Original organizer Markdown links and legacy notes are preserved, not silently repaired.",
+    "Registered reference Git metadata detected: this does not verify submodule remotes or fresh clone."
+  ]
+}
