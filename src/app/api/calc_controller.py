@@ -1,24 +1,40 @@
 """
-REST-контроллер для расчёта.
-Принимает входные параметры, передаёт их в сервис и возвращает результат.
+REST-контроллер для расчёта и планирования снабжения.
+Принимает ParticipantPlan (plan.schema.json) и возвращает ResultExportEnvelope (export.schema.json).
 """
 
 from fastapi import APIRouter
 
 try:
-    from ..dto.calc_dto import CalculationRequest, CalculationResponse
+    from ..dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
     from ..service.calc_service import calculation_service
 except (ImportError, ValueError):
-    from src.app.dto.calc_dto import CalculationRequest, CalculationResponse
+    from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
     from src.app.service.calc_service import calculation_service
 
-router = APIRouter(prefix="/api/calc", tags=["Расчёт"])
+router = APIRouter(prefix="/api/calc", tags=["Моделирование снабжения"])
 
 
-@router.post("", response_model=CalculationResponse, summary="Запуск расчёта точек")
-async def calculate(request: CalculationRequest):
+@router.get(
+    "/template",
+    response_model=ParticipantPlanDTO,
+    summary="Получить типовой шаблон плана (ParticipantPlan)",
+)
+async def get_template():
     """
-    Принимает JSON с параметрами {"a": ..., "b": ..., "c": ...}
-    и возвращает {"points": [...]}.
+    Возвращает предзаполненный шаблон плана оператора для быстрого старта.
+    """
+    return calculation_service.get_template_plan()
+
+
+@router.post(
+    "",
+    response_model=ResultExportEnvelopeDTO,
+    summary="Запустить расчёт материального баланса и экономики",
+)
+async def calculate(request: ParticipantPlanDTO):
+    """
+    Принимает план решений оператора по схеме plan.schema.json
+    и возвращает результаты моделирования по схеме export.schema.json.
     """
     return calculation_service.calculate(request)

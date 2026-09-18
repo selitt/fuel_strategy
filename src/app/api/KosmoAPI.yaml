@@ -1,9 +1,482 @@
 openapi: 3.1.0
 info:
-  title: Title
-  description: Title
+  title: Топливный космоконтур 2035 — REST API
+  description: API расчёта и управления
   version: 1.0.0
-servers:
-  - url: 'https'
 paths:
-  
+  /hello:
+    get:
+      tags:
+      - hello
+      summary: Get Hello
+      operationId: get_hello_hello_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /hello/{name}:
+    get:
+      tags:
+      - hello
+      summary: Get Hello With Name
+      operationId: get_hello_with_name_hello__name__get
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/calc/template:
+    get:
+      tags:
+      - Моделирование снабжения
+      summary: Получить типовой шаблон плана (ParticipantPlan)
+      description: Возвращает предзаполненный шаблон плана оператора для быстрого
+        старта.
+      operationId: get_template_api_calc_template_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParticipantPlanDTO-Output'
+  /api/calc:
+    post:
+      tags:
+      - Моделирование снабжения
+      summary: Запустить расчёт материального баланса и экономики
+      description: 'Принимает план решений оператора по схеме plan.schema.json
+
+        и возвращает результаты моделирования по схеме export.schema.json.'
+      operationId: calculate_api_calc_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParticipantPlanDTO-Input'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultExportEnvelopeDTO'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    CapacityReservationDTO:
+      properties:
+        year:
+          type: integer
+          title: Year
+          description: Год резервирования (2035-2040)
+        source_id:
+          type: string
+          title: Source Id
+          description: Идентификатор канала
+        reserved_capacity_t:
+          type: number
+          minimum: 0.0
+          title: Reserved Capacity T
+          description: Зарезервированная мощность, тонн/год
+      additionalProperties: true
+      type: object
+      required:
+      - year
+      - source_id
+      - reserved_capacity_t
+      title: CapacityReservationDTO
+      description: Резервирование мощности канала снабжения.
+    ConstraintCheckDTO:
+      properties:
+        constraint_id:
+          type: string
+          title: Constraint Id
+        year:
+          type: integer
+          title: Year
+        passed:
+          type: boolean
+          title: Passed
+        detail:
+          type: string
+          title: Detail
+        excess:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Excess
+      additionalProperties: true
+      type: object
+      required:
+      - constraint_id
+      - year
+      - passed
+      - detail
+      title: ConstraintCheckDTO
+      description: Результат проверки ограничения.
+    FinancialBreakdownDTO:
+      properties:
+        year:
+          type: integer
+          title: Year
+        procurement:
+          type: number
+          title: Procurement
+        reservation:
+          type: number
+          title: Reservation
+        holding:
+          type: number
+          title: Holding
+        capex:
+          type: number
+          title: Capex
+        opex:
+          type: number
+          title: Opex
+        total:
+          type: number
+          title: Total
+      additionalProperties: true
+      type: object
+      required:
+      - year
+      - procurement
+      - reservation
+      - holding
+      - capex
+      - opex
+      - total
+      title: FinancialBreakdownDTO
+      description: Финансовая разбивка затрат за год (в млн у.е.).
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    InventoryPolicyDTO:
+      properties:
+        initial_inventory_t:
+          type: number
+          minimum: 0.0
+          title: Initial Inventory T
+          description: Начальный физический запас на 1 января 2035, тонн
+          default: 12.33
+      additionalProperties: true
+      type: object
+      title: InventoryPolicyDTO
+      description: Политика складских запасов.
+    InvestmentDecisionDTO:
+      properties:
+        investment_id:
+          type: string
+          title: Investment Id
+          description: 'Идентификатор опциона: ZBO, LUNAR_ISRU, EARTH_NEW'
+        year:
+          type: integer
+          title: Year
+          description: Год принятия решения или ввода
+      additionalProperties: true
+      type: object
+      required:
+      - investment_id
+      - year
+      title: InvestmentDecisionDTO
+      description: Инвестиционное решение.
+    ParticipantPlanDTO-Input:
+      properties:
+        plan_id:
+          type: string
+          minLength: 1
+          title: Plan Id
+          description: Идентификатор плана
+          default: plan-base
+        scenario_id:
+          type: string
+          minLength: 1
+          title: Scenario Id
+          description: 'Идентификатор сценария: BASE или MANDATORY_STRESS'
+          default: BASE
+        decisions:
+          $ref: '#/components/schemas/PlanDecisionsDTO'
+          description: Решения оператора
+      additionalProperties: true
+      type: object
+      required:
+      - decisions
+      title: ParticipantPlanDTO
+      description: 'Входной контракт: план участника (по plan.schema.json).'
+    ParticipantPlanDTO-Output:
+      properties:
+        plan_id:
+          type: string
+          minLength: 1
+          title: Plan Id
+          description: Идентификатор плана
+          default: plan-base
+        scenario_id:
+          type: string
+          minLength: 1
+          title: Scenario Id
+          description: 'Идентификатор сценария: BASE или MANDATORY_STRESS'
+          default: BASE
+        decisions:
+          $ref: '#/components/schemas/PlanDecisionsDTO'
+          description: Решения оператора
+      additionalProperties: true
+      type: object
+      required:
+      - decisions
+      title: ParticipantPlanDTO
+      description: 'Входной контракт: план участника (по plan.schema.json).'
+    PlanDecisionsDTO:
+      properties:
+        supply_orders:
+          items:
+            $ref: '#/components/schemas/SupplyOrderDTO'
+          type: array
+          title: Supply Orders
+          description: Заказы топлива
+        capacity_reservations:
+          items:
+            $ref: '#/components/schemas/CapacityReservationDTO'
+          type: array
+          title: Capacity Reservations
+          description: Резервирование мощностей
+        investments:
+          items:
+            $ref: '#/components/schemas/InvestmentDecisionDTO'
+          type: array
+          title: Investments
+          description: Инвестиции
+        inventory_policy:
+          $ref: '#/components/schemas/InventoryPolicyDTO'
+          description: Политика запасов
+      additionalProperties: true
+      type: object
+      title: PlanDecisionsDTO
+      description: Набор решений оператора.
+    ResultExportEnvelopeDTO:
+      properties:
+        scenario_id:
+          type: string
+          title: Scenario Id
+        plan_id:
+          type: string
+          title: Plan Id
+        units:
+          additionalProperties:
+            type: string
+          type: object
+          title: Units
+        assumptions_reference:
+          anyOf:
+          - type: string
+          - additionalProperties: true
+            type: object
+          title: Assumptions Reference
+          default: docs/CASE_RULES.md
+        yearly_balance:
+          items:
+            $ref: '#/components/schemas/YearlyBalanceDTO'
+          type: array
+          title: Yearly Balance
+        source_schedule:
+          items:
+            $ref: '#/components/schemas/SourceScheduleDTO'
+          type: array
+          title: Source Schedule
+        inventory_trace:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Inventory Trace
+        financial_breakdown:
+          items:
+            $ref: '#/components/schemas/FinancialBreakdownDTO'
+          type: array
+          title: Financial Breakdown
+        constraint_checks:
+          items:
+            $ref: '#/components/schemas/ConstraintCheckDTO'
+          type: array
+          title: Constraint Checks
+        risk_register:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Risk Register
+        is_feasible:
+          type: boolean
+          title: Is Feasible
+          default: true
+        total_cost_mln:
+          type: number
+          title: Total Cost Mln
+          default: 0.0
+      additionalProperties: true
+      type: object
+      required:
+      - scenario_id
+      - plan_id
+      title: ResultExportEnvelopeDTO
+      description: 'Выходной контракт: результат моделирования и выгрузки (по export.schema.json).'
+    SourceScheduleDTO:
+      properties:
+        year:
+          type: integer
+          title: Year
+        source_id:
+          type: string
+          title: Source Id
+        reserved_capacity_t:
+          type: number
+          title: Reserved Capacity T
+        ordered_t:
+          type: number
+          title: Ordered T
+        delivered_t:
+          type: number
+          title: Delivered T
+      additionalProperties: true
+      type: object
+      required:
+      - year
+      - source_id
+      - reserved_capacity_t
+      - ordered_t
+      - delivered_t
+      title: SourceScheduleDTO
+      description: График работы источника снабжения за год.
+    SupplyOrderDTO:
+      properties:
+        year:
+          type: integer
+          title: Year
+          description: Год поставки (2035-2040)
+        source_id:
+          type: string
+          title: Source Id
+          description: Идентификатор канала (A, B, C, D, E или Earth-Core и т.д.)
+        order_t:
+          type: number
+          minimum: 0.0
+          title: Order T
+          description: Заказанный объём, тонн
+      additionalProperties: true
+      type: object
+      required:
+      - year
+      - source_id
+      - order_t
+      title: SupplyOrderDTO
+      description: Заказ топлива у канала снабжения.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    YearlyBalanceDTO:
+      properties:
+        year:
+          type: integer
+          title: Year
+        opening_inventory_t:
+          type: number
+          title: Opening Inventory T
+        delivered_t:
+          type: number
+          title: Delivered T
+        losses_t:
+          type: number
+          title: Losses T
+        served_t:
+          type: number
+          title: Served T
+        closing_inventory_t:
+          type: number
+          title: Closing Inventory T
+        shortage_t:
+          type: number
+          title: Shortage T
+        demand_total_t:
+          type: number
+          title: Demand Total T
+        demand_critical_t:
+          type: number
+          title: Demand Critical T
+        service_level_total:
+          type: number
+          title: Service Level Total
+        service_level_critical:
+          type: number
+          title: Service Level Critical
+        reserve_45d_target_t:
+          type: number
+          title: Reserve 45D Target T
+        reserve_45d_met:
+          type: boolean
+          title: Reserve 45D Met
+      additionalProperties: true
+      type: object
+      required:
+      - year
+      - opening_inventory_t
+      - delivered_t
+      - losses_t
+      - served_t
+      - closing_inventory_t
+      - shortage_t
+      - demand_total_t
+      - demand_critical_t
+      - service_level_total
+      - service_level_critical
+      - reserve_45d_target_t
+      - reserve_45d_met
+      title: YearlyBalanceDTO
+      description: Материальный баланс за один год.
