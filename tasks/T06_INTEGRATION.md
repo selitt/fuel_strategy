@@ -9,7 +9,7 @@
 
 - `src/engine/`
 - `src/adapters/`
-- `src/persistence/`
+- `../src/app/persistence`
 - `src/reporting/`
 - `frontend/`
 - `tests/`
