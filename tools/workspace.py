@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 import configparser
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -18,11 +17,36 @@ from urllib.parse import unquote, urlsplit
 
 SCOPE = "workspace_only_not_product"
 # These directories belong to the local machine/runtime, not the portable
-# source bundle. Explicit source-lock entries are still validated separately.
+# source bundle.
 LOCAL_DIRECTORIES = frozenset({
     ".venv", "venv", "node_modules", "__pycache__", ".local", ".pytest_cache",
     ".mypy_cache", ".ruff_cache", "dist", "build", "coverage",
 })
+
+# Root data is the working copy used by the API. Each entry names the
+# corresponding path inside the untouched organizer snapshot.
+WORKING_DATA_FILES = (
+    ("data/constraints.csv", "constraints.csv"),
+    ("data/demand.csv", "demand.csv"),
+    ("data/investment_options.csv", "investment_options.csv"),
+    ("data/storage_options.csv", "storage_options.csv"),
+    ("data/supply_sources.csv", "supply_sources.csv"),
+    ("scenarios/base.yaml", "scenarios/base.yaml"),
+    ("scenarios/mandatory_stress.yaml", "scenarios/mandatory_stress.yaml"),
+    ("schemas/demand.schema.json", "schemas/demand.schema.json"),
+    ("schemas/export.schema.json", "schemas/export.schema.json"),
+    ("schemas/plan.schema.json", "schemas/plan.schema.json"),
+    ("schemas/scenario.schema.json", "schemas/scenario.schema.json"),
+    ("schemas/supply_sources.schema.json", "schemas/supply_sources.schema.json"),
+    ("examples/empty_plan.json", "examples/empty_plan.json"),
+    ("examples/example_export_structure.csv", "examples/example_export_structure.csv"),
+    ("examples/invalid_plan_examples/malformed_scenario.json", "examples/invalid_plan_examples/malformed_scenario.json"),
+    ("examples/invalid_plan_examples/negative_reservation.json", "examples/invalid_plan_examples/negative_reservation.json"),
+    ("examples/invalid_plan_examples/over_capacity.json", "examples/invalid_plan_examples/over_capacity.json"),
+    ("validation/README.md", "validation/README.md"),
+    ("validation/control_cases.md", "validation/control_cases.md"),
+    ("validation/expected_checks.json", "validation/expected_checks.json"),
+)
 
 
 def safe_path(root: Path, relative: str) -> Path:
@@ -59,7 +83,7 @@ def inspect_workspace(root: Path) -> dict:
     warnings = [
         "Product NOT validated: workspace checks do not test the HTTP API, run V01-V10 or verify K01-K20.",
         "Known source gaps: original XLSX / source DOCX / ERRATA are absent; see OPEN_QUESTIONS.",
-        "Organizer Markdown and CASE_INPUT are preserved; prior team notes are normalized with provenance.",
+        "Root data is checked against the untouched organizer snapshot; the snapshot itself is not edited.",
     ]
     checks: list[dict] = []
 
@@ -91,34 +115,26 @@ def inspect_workspace(root: Path) -> dict:
 
     bucket("workspace structure", required)
 
-    def original_files():
-        source_lock = load_json(root, "sources.lock.json")
-        seen = set()
-        for record in source_lock["files"]:
-            rel = record["path"]
-            if rel in seen:
-                errors.append(f"duplicate locked path: {rel}")
-            seen.add(rel)
-            file = safe_path(root, rel)
-            if not file.is_file():
-                errors.append(f"missing locked source: {rel}")
-                continue
-            digest = hashlib.sha256(file.read_bytes()).hexdigest()
-            if digest != record["sha256"] or file.stat().st_size != record["bytes"]:
-                errors.append(f"hash mismatch: {rel}; inspect the change, do not regenerate the lock silently")
-        if not seen:
-            errors.append("empty source lock")
+    def working_data():
         base = "fuel-hackathon/test_oil"
-        for rel in ["data/demand.csv", "data/supply_sources.csv", "data/storage_options.csv",
-                    "data/investment_options.csv", "data/constraints.csv",
-                    "scenarios/base.yaml", "scenarios/mandatory_stress.yaml"]:
-            if not safe_path(root, f"{base}/{rel}").is_file():
-                errors.append(f"missing organizer input: {rel}")
+        for source_rel, working_rel in WORKING_DATA_FILES:
+            source = safe_path(root, f"{base}/{source_rel}")
+            working = safe_path(root, f"data/{working_rel}")
+            if not source.is_file():
+                errors.append(f"missing organizer input: {source_rel}")
+                continue
+            if not working.is_file():
+                errors.append(f"missing working input: data/{working_rel}")
+                continue
+            if source.read_bytes() != working.read_bytes():
+                errors.append(f"working data mismatch: data/{working_rel} differs from {base}/{source_rel}")
 
-    bucket("original file hashes", original_files)
+    bucket("working data and organizer references", working_data)
 
     def nested_git():
         expected = set(meta["reference_paths"])
+        for rel in expected:
+            safe_path(root, rel)
         registered = set()
         module_file = root / ".gitmodules"
         if module_file.exists():
@@ -249,7 +265,7 @@ def inspect_workspace(root: Path) -> dict:
     bucket("JSON syntax (not business schema validation)", json_syntax)
 
     def links():
-        legacy = set(meta["legacy_note_paths"])
+        legacy = set(meta.get("legacy_note_paths", []))
         reference_paths = [p.rstrip("/") + "/" for p in meta["reference_paths"]]
         for parent, dirs, files in os.walk(root, followlinks=False):
             dirs[:] = [d for d in dirs if d not in LOCAL_DIRECTORIES and d != ".git"]
@@ -317,9 +333,21 @@ def main(argv=None) -> int:
             report["tasks"] = [{"id": t["id"], "status": t["status"], "owner": t["owner"]}
                                for t in load_json(args.root, "tasks/index.json")["tasks"]]
         else:
-            lock = load_json(args.root, "sources.lock.json")
-            report = {"repositories": lock["repositories"], "source_archive": lock["source_archive"],
-                      "locked_files": len(lock["files"]), "basis": lock["basis"]}
+            module_file = args.root / ".gitmodules"
+            parser = configparser.ConfigParser(interpolation=None)
+            repositories = []
+            if module_file.is_file():
+                parser.read(module_file, encoding="utf-8")
+                for section in parser.sections():
+                    repositories.append({
+                        "path": parser.get(section, "path", fallback=""),
+                        "url": parser.get(section, "url", fallback=""),
+                    })
+            report = {
+                "repositories": repositories,
+                "working_data_files": len(WORKING_DATA_FILES),
+                "basis": "root data is compared byte-for-byte with fuel-hackathon/test_oil",
+            }
         print(json.dumps(report, ensure_ascii=False, indent=2))
         return 0
     except (OSError, ValueError, TypeError, KeyError) as exc:

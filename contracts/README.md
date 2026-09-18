@@ -10,8 +10,8 @@
 
 Это **семантический проект**, не утверждённый API и не реализация.
 Читать вместе с [словарём организатора](../fuel-hackathon/test_oil/docs/DATA_DICTIONARY.md),
-[plan.schema](../fuel-hackathon/test_oil/schemas/plan.schema.json) и
-[export.schema](../fuel-hackathon/test_oil/schemas/export.schema.json).
+[plan.schema](../data/schemas/plan.schema.json) и
+[export.schema](../data/schemas/export.schema.json).
 Исходные схемы намеренно неполны: массив произвольных objects не проверяет даты, единицы, мощности и смысл решения.
 
 ## Сущности и границы

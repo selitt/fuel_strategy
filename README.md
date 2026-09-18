@@ -4,16 +4,16 @@
 
 [Запуск и API](API_README.md) · [Роли и следующий этап](docs/api/TEAM_AND_NEXT.md) · [Проверки этой передачи](docs/api/HANDOFF.md) · [С чего начать](START_HERE.md)
 
-Последняя повторная проверка: [перед frontend](docs/api/PRE_FRONTEND_REVIEW.md) — 146 тестов и исправления JSON-границы, без изменений модели.
+Рабочая документация и актуальные границы: [TEAM_AND_NEXT](docs/api/TEAM_AND_NEXT.md) и [HANDOFF](docs/api/HANDOFF.md).
 
 ## Запуск backend в Docker
 
 ```bash
-docker compose up --build -d backend
+docker compose -f docker/compose.yaml up --build -d backend
 ```
 
 Swagger: `http://127.0.0.1:8000/docs`. Health: `http://127.0.0.1:8000/api/health`.
-Compose пока поднимает только backend. Данные сохраняются в volume `project_data`; `docker compose down -v` их удалит.
+Compose пока поднимает только backend. Данные сохраняются в volume `project_data`; `docker compose -f docker/compose.yaml down -v` их удалит.
 
 ## Локальная разработка без Docker
 
@@ -31,15 +31,17 @@ Windows-команды и отдельный режим `depend.sh --backend-onl
 ## Проверка
 
 ```bash
-python -m pytest -q
-python tools/export_openapi.py --check
-python tools/workspace.py check
+python3 -m pytest -q
+python3 tools/export_openapi.py --check
+python3 tools/workspace.py check
 ```
 
 Схема для frontend: [openapi.json](docs/api/openapi.json), генерируется из реального приложения. Существующие расчётные DTO, сервис и `src/engine/` сохранены. Не переносите формулы на клиент.
 
 ## Исходные материалы
 
-[Постановка продукта](docs/PRODUCT.md), [правила](docs/regulation/RULES.md), [источники](docs/SOURCES.md). `fuel-hackathon/test_oil/` — снимок нужного кейса; `fuel-hackathon/test/` — другой кейс, сохранённый для provenance. SHA-256 исходников — [sources.lock.json](sources.lock.json).
+[Постановка продукта](docs/PRODUCT.md), [правила](docs/regulation/RULES.md), [источники](docs/SOURCES.md). Рабочие входы находятся в `data/`; полный snapshot нужного кейса — `fuel-hackathon/test_oil/`, другой кейс — `fuel-hackathon/test/`.
 
-Полный архив — отдельный snapshot без Git-метаданных и локальных кэшей. Для текущего командного репозитория используйте overlay после сверки файлов; исходный `.git` не удаляйте. Подробности — [IMPORT_AND_GIT](docs/IMPORT_AND_GIT.md).
+Рабочее дерево сохраняет Git-метаданные и оба исходных submodule snapshot.
+Для передачи изменений сначала сверяйте `git status` и diff; исходный `.git`
+и submodule не заменяйте. Подробности — [IMPORT_AND_GIT](docs/IMPORT_AND_GIT.md).

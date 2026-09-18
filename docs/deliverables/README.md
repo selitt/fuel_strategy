@@ -8,7 +8,7 @@
 | Записка 8–12 страниц | [MANAGEMENT_NOTE.template.md](MANAGEMENT_NOTE.template.md) |
 | Дополнительно одностраничное сравнение сценариев | [SCENARIO_SUMMARY.template.md](SCENARIO_SUMMARY.template.md) |
 | Презентация до12 слайдов | [PRESENTATION_OUTLINE.md](PRESENTATION_OUTLINE.md) |
-| Результаты, риски, stakeholders, KPI, источники, roadmap | [evidence.template.json](evidence.template.json), затем реальные артефакты в results |
+| Результаты, риски, stakeholders, KPI, источники, roadmap | [evidence.template.json](evidence.template.json), затем реальные артефакты в согласованном комплекте сдачи |
 | Код, конфигурации, планы обоих сценариев, тесты, export | Соответствующие каталоги приложения, после реализации |
 
 В записку/презентацию переносить только результат с ID запуска и версией.

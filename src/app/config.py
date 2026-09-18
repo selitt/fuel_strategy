@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 @dataclass(frozen=True, slots=True)
 class Settings:
     data_dir: Path = field(default_factory=lambda: ROOT / ".local" / "projects")
-    reference_dir: Path = field(default_factory=lambda: ROOT / "fuel-hackathon" / "test_oil")
+    reference_dir: Path = field(default_factory=lambda: ROOT / "data")
     max_request_bytes: int = 8 * 1024 * 1024
     max_upload_bytes: int = 2 * 1024 * 1024
     cors_origins: tuple[str, ...] = ("http://localhost:5173", "http://127.0.0.1:5173")

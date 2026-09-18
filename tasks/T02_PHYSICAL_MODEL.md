@@ -16,10 +16,10 @@
 
 [Постановка](../docs/Task/Постановка_кейса_—_Топливный_космоконтур_2035_КосмоХакатон_2026.pdf) — с. 4, 5, 6, 7, 9, 10.
 - [docs/CALCULATION_RULES.md](../fuel-hackathon/test_oil/docs/CALCULATION_RULES.md)
-- [data/supply_sources.csv](../fuel-hackathon/test_oil/data/supply_sources.csv)
-- [data/storage_options.csv](../fuel-hackathon/test_oil/data/storage_options.csv)
-- [scenarios/mandatory_stress.yaml](../fuel-hackathon/test_oil/scenarios/mandatory_stress.yaml)
-- [validation/control_cases.md](../fuel-hackathon/test_oil/validation/control_cases.md)
+- [data/supply_sources.csv](../data/supply_sources.csv)
+- [data/storage_options.csv](../data/storage_options.csv)
+- [scenarios/mandatory_stress.yaml](../data/scenarios/mandatory_stress.yaml)
+- [validation/control_cases.md](../data/validation/control_cases.md)
 
 [Общий контракт](../contracts/README.md) · [Контрольные правила](../docs/regulation/RULES.md) · [Открытые вопросы](../docs/OPEN_QUESTIONS.md)
 

@@ -54,16 +54,16 @@ class WorkspaceChecks(unittest.TestCase):
         self.assertTrue(report["ok"], report)
 
     def test_modified_original_is_rejected(self):
-        target = self.root / "fuel-hackathon/test_oil/data/demand.csv"
+        target = self.root / "data/demand.csv"
         target.write_bytes(target.read_bytes() + b"\n")
-        self.assertFailure("hash mismatch")
+        self.assertFailure("working data mismatch")
 
     def test_missing_required_file_is_rejected(self):
         (self.root / "docs/PRODUCT.md").unlink()
         self.assertFailure("missing")
 
-    def test_unsafe_manifest_path_is_rejected(self):
-        self.edit_json("sources.lock.json", lambda x: x["files"][0].update(path="../escape.txt"))
+    def test_unsafe_reference_path_is_rejected(self):
+        self.edit_json("workspace.json", lambda x: x["reference_paths"].append("../escape"))
         self.assertFailure("unsafe path")
 
     def test_empty_required_document_is_rejected(self):

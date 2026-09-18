@@ -563,7 +563,9 @@ sync_project_if_ready() {
         blocked "npm ci failed"
     fi
     local compose_file=""
-    if [[ -f "$ROOT_DIR/compose.yaml" ]]; then
+    if [[ -f "$ROOT_DIR/docker/compose.yaml" ]]; then
+        compose_file="$ROOT_DIR/docker/compose.yaml"
+    elif [[ -f "$ROOT_DIR/compose.yaml" ]]; then
         compose_file="$ROOT_DIR/compose.yaml"
     elif [[ -f "$ROOT_DIR/docker-compose.yml" ]]; then
         compose_file="$ROOT_DIR/docker-compose.yml"

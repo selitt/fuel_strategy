@@ -39,7 +39,7 @@ def test_actual_calculation_conforms_to_organizer_envelope(client, plan):
     assert response.status_code == 200, response.text
     assert response.headers["x-engine-status"] == "prototype"
     assert response.headers["x-model-verified"] == "false"
-    schema = json.loads((ROOT / "fuel-hackathon/test_oil/schemas/export.schema.json").read_text())
+    schema = json.loads((ROOT / "data/schemas/export.schema.json").read_text())
     Draft202012Validator(schema).validate(response.json())
     assert response.json()["plan_id"] == plan["plan_id"]
     assert len(response.json()["yearly_balance"]) == 6
@@ -58,7 +58,7 @@ def test_health_and_metadata_do_not_claim_verified_model(client):
 
 
 def test_original_schema_is_served_without_changes(client):
-    expected = json.loads((ROOT / "fuel-hackathon/test_oil/schemas/plan.schema.json").read_text())
+    expected = json.loads((ROOT / "data/schemas/plan.schema.json").read_text())
     assert client.get("/api/schemas/plan").json() == expected
     assert client.get("/api/schemas/no-such-schema").status_code == 422
 

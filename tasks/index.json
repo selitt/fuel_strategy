@@ -164,8 +164,7 @@
         "src/app/persistence/",
         "src/app/service/",
         "frontend/",
-        "tests/",
-        "results/"
+        "tests/"
       ],
       "evidence": []
     },
@@ -196,7 +195,6 @@
         "tests/acceptance/",
         "configs/scenarios/",
         "plans/",
-        "results/",
         "docs/deliverables/",
         "tests/"
       ],
@@ -224,7 +222,6 @@
       ],
       "scope_paths": [
         "docs/deliverables/",
-        "results/",
         "README.md",
         "tests/"
       ],
@@ -245,7 +242,6 @@
         "tests/acceptance/",
         "configs/scenarios/",
         "frontend/",
-        "results/",
         "docs/deliverables/"
       ],
       "evidence": []

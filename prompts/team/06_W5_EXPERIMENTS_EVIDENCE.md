@@ -6,7 +6,10 @@
 
 Занимаемся методикой исследования и обоснованием решения, не вторым расчётным движком. Прочитай [маршрут](../../plans/README.md), `AGENTS.md`, T05/T07/T08, критерии и `tests/acceptance/catalog.json`. Из источников нужны постановка, с. 10–14, `fuel-hackathon/test_oil/docs/SCIENTIFIC_BASIS.md` и STRESS_PROTOCOL. Сначала дай план ближайшего этапа; выполняй его после моего разрешения.
 
-**Границы:** `src/fuel_planner/experiments/`, `configs/scenarios/`, `plans/`, подтверждённые `results/`, `docs/deliverables/`, тесты экспериментов. Физика/деньги вычисляются общей моделью W1/W2 через согласованный вызов, не новыми формулами в notebook.
+**Границы:** `src/fuel_planner/experiments/`, `configs/scenarios/`, `plans/`,
+локальные результаты API в `.local/projects/`, `docs/deliverables/`, тесты
+экспериментов. Физика/деньги вычисляются общей моделью W1/W2 через
+согласованный вызов, не новыми формулами в notebook.
 
 ## Этап A: подготовка, пока коллеги пишут ядро
 

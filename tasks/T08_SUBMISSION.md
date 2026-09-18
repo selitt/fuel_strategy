@@ -8,7 +8,6 @@
 ## Где работать
 
 - `docs/deliverables/`
-- `results/`
 - `README.md`
 - `tests/`
 
