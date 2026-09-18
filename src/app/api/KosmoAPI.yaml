@@ -4,43 +4,6 @@ info:
   description: API расчёта и управления
   version: 1.0.0
 paths:
-  /hello:
-    get:
-      tags:
-      - hello
-      summary: Get Hello
-      operationId: get_hello_hello_get
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-  /hello/{name}:
-    get:
-      tags:
-      - hello
-      summary: Get Hello With Name
-      operationId: get_hello_with_name_hello__name__get
-      parameters:
-      - name: name
-        in: path
-        required: true
-        schema:
-          type: string
-          title: Name
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
   /api/calc/template:
     get:
       tags:
