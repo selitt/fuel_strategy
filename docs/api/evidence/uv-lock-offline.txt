@@ -1,0 +1,9 @@
+Using CPython 3.13.5 interpreter at: /opt/pyvenv/bin/python
+  × No solution found when resolving dependencies:
+  ╰─▶ Because fastapi was not found in the cache and your project depends on
+      fastapi==0.128.2, we can conclude that your project's requirements are
+      unsatisfiable.
+
+      hint: Packages were unavailable because the network was disabled. When
+      the network is disabled, registry packages may only be read from the
+      cache.

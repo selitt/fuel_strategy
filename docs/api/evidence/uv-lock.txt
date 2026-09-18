@@ -1,0 +1,29 @@
+Using CPython 3.13.5 interpreter at: /opt/pyvenv/bin/python
+WARN Retry attempt #0. Sleeping 532.155404ms before the next attempt
+WARN Retry attempt #0. Sleeping 651.903096ms before the next attempt
+WARN Retry attempt #0. Sleeping 233.706689ms before the next attempt
+WARN Retry attempt #0. Sleeping 961.482665ms before the next attempt
+WARN Retry attempt #0. Sleeping 639.227809ms before the next attempt
+WARN Retry attempt #0. Sleeping 420.000773ms before the next attempt
+WARN Retry attempt #0. Sleeping 219.101446ms before the next attempt
+WARN Retry attempt #0. Sleeping 79.130333ms before the next attempt
+WARN Retry attempt #1. Sleeping 663.120456ms before the next attempt
+WARN Retry attempt #1. Sleeping 293.125834ms before the next attempt
+WARN Retry attempt #1. Sleeping 1.102358439s before the next attempt
+WARN Retry attempt #1. Sleeping 922.058632ms before the next attempt
+WARN Retry attempt #2. Sleeping 1.229562397s before the next attempt
+WARN Retry attempt #1. Sleeping 991.977983ms before the next attempt
+WARN Retry attempt #1. Sleeping 990.086269ms before the next attempt
+WARN Retry attempt #1. Sleeping 409.469682ms before the next attempt
+WARN Retry attempt #2. Sleeping 2.557215697s before the next attempt
+WARN Retry attempt #1. Sleeping 1.320394596s before the next attempt
+WARN Retry attempt #2. Sleeping 3.065136412s before the next attempt
+WARN Retry attempt #2. Sleeping 875.631822ms before the next attempt
+WARN Retry attempt #2. Sleeping 486.343656ms before the next attempt
+WARN Retry attempt #2. Sleeping 1.489948243s before the next attempt
+error: Request failed after 3 retries
+  Caused by: Failed to fetch: `https://pypi.org/simple/uvicorn/`
+  Caused by: error sending request for url (https://pypi.org/simple/uvicorn/)
+  Caused by: client error (Connect)
+  Caused by: dns error
+  Caused by: failed to lookup address information: Temporary failure in name resolution

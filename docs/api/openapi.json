@@ -1,0 +1,2770 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Топливный космоконтур 2035 — REST API",
+    "description": "Совместимый API Васи + отдельные веб-операции. Расчётный модуль из 6.zip — prototype, не подтверждённая конкурсная модель.",
+    "version": "1.1.0"
+  },
+  "paths": {
+    "/hello": {
+      "get": {
+        "tags": [
+          "hello"
+        ],
+        "summary": "Get Hello",
+        "operationId": "get_hello_hello_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hello/{name}": {
+      "get": {
+        "tags": [
+          "hello"
+        ],
+        "summary": "Get Hello With Name",
+        "operationId": "get_hello_with_name_hello__name__get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calc/template": {
+      "get": {
+        "tags": [
+          "Моделирование снабжения"
+        ],
+        "summary": "Получить типовой шаблон плана (ParticipantPlan)",
+        "description": "Возвращает предзаполненный шаблон плана оператора для быстрого старта.",
+        "operationId": "get_template_api_calc_template_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParticipantPlanDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calc": {
+      "post": {
+        "tags": [
+          "Моделирование снабжения"
+        ],
+        "summary": "Запустить расчёт материального баланса и экономики",
+        "description": "Принимает план решений оператора по схеме plan.schema.json\nи возвращает результаты моделирования по схеме export.schema.json.",
+        "operationId": "calculate_api_calc_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipantPlanDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultExportEnvelopeDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Веб-инфраструктура"
+        ],
+        "summary": "Состояние HTTP API; не проверка математики",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/meta": {
+      "get": {
+        "tags": [
+          "Веб-инфраструктура"
+        ],
+        "summary": "Возможности и ограничения текущего backend",
+        "operationId": "meta_api_meta_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/schemas/{name}": {
+      "get": {
+        "tags": [
+          "Веб-инфраструктура"
+        ],
+        "summary": "Исходная схема организатора или схема существующего DTO",
+        "operationId": "schema_api_schemas__name__get",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "plan",
+                "export",
+                "input",
+                "result"
+              ],
+              "type": "string",
+              "title": "Name"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog": {
+      "get": {
+        "tags": [
+          "Веб-инфраструктура"
+        ],
+        "summary": "Неизменённые справочники кейса для форм и справки",
+        "operationId": "catalog_api_catalog_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CatalogDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/plans/validate": {
+      "post": {
+        "tags": [
+          "Планы · web extension"
+        ],
+        "summary": "Проверить структуру плана без расчёта",
+        "operationId": "validate_api_plans_validate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipantPlanDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanValidationDTO"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Content Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/plans/import": {
+      "post": {
+        "tags": [
+          "Планы · web extension"
+        ],
+        "summary": "Прочитать ParticipantPlan из JSON-файла",
+        "operationId": "import_plan_api_plans_import_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_import_plan_api_plans_import_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanValidationDTO"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Content Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/plans/export": {
+      "post": {
+        "tags": [
+          "Планы · web extension"
+        ],
+        "summary": "Скачать план в переносимом JSON без запуска расчёта",
+        "operationId": "export_plan_api_plans_export_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipantPlanDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParticipantPlanDTO"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Content Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects": {
+      "post": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Сохранить новый проект без запуска модели",
+        "operationId": "create_project_api_projects_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectCreateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Список проектов без тяжёлых таблиц результата",
+        "operationId": "list_projects_api_projects_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectListDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}": {
+      "get": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Открыть проект и последний снимок расчёта",
+        "operationId": "get_project_api_projects__project_id__get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Сохранить правки с проверкой expected_revision",
+        "operationId": "update_project_api_projects__project_id__put",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectUpdateDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Удалить проект, только если ревизия не изменилась",
+        "operationId": "delete_project_api_projects__project_id__delete",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "expected_revision",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "title": "Expected Revision"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/calculate": {
+      "post": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Рассчитать и атомарно сохранить результат этой ревизии",
+        "operationId": "calculate_project_api_projects__project_id__calculate_post",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculationCommandDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/result": {
+      "get": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Только актуальный ResultExportEnvelope; stale → 409",
+        "operationId": "get_result_api_projects__project_id__result_get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultExportEnvelopeDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/import": {
+      "post": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Открыть JSON-проект как новую копию; импортированный результат не доверенный",
+        "operationId": "import_project_api_projects_import_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_import_project_api_projects_import_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/compare": {
+      "post": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Сопоставить 2–6 актуальных сохранённых расчётов без пересчёта",
+        "operationId": "compare_projects_api_projects_compare_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComparisonRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComparisonDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/export": {
+      "get": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Скачать полный проект, включая явно устаревший снимок, если он есть",
+        "operationId": "export_project_api_projects__project_id__export_get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/projects/{project_id}/result/export": {
+      "get": {
+        "tags": [
+          "Проекты · web extension"
+        ],
+        "summary": "Скачать актуальный результат: JSON или ZIP с CSV и метаданными",
+        "operationId": "export_result_api_projects__project_id__result_export_get",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Project Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "type": "string",
+              "default": "json",
+              "title": "Format"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultDownloadDTO"
+                }
+              },
+              "application/zip": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_import_plan_api_plans_import_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File",
+            "description": "JSON-план; не исполняемый Python"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_import_plan_api_plans_import_post"
+      },
+      "Body_import_project_api_projects_import_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File",
+            "description": "JSON-файл сохранённого проекта, schema_version=1"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_import_project_api_projects_import_post"
+      },
+      "CalculationCommandDTO": {
+        "properties": {
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "expected_revision"
+        ],
+        "title": "CalculationCommandDTO"
+      },
+      "CapacityReservationDTO": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year",
+            "description": "Год резервирования (2035-2040)"
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id",
+            "description": "Идентификатор канала"
+          },
+          "reserved_capacity_t": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Reserved Capacity T",
+            "description": "Зарезервированная мощность, тонн/год"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "year",
+          "source_id",
+          "reserved_capacity_t"
+        ],
+        "title": "CapacityReservationDTO",
+        "description": "Резервирование мощности канала снабжения."
+      },
+      "CatalogDTO": {
+        "properties": {
+          "read_only": {
+            "type": "boolean",
+            "const": true,
+            "title": "Read Only",
+            "default": true
+          },
+          "tables": {
+            "items": {
+              "$ref": "#/components/schemas/ReferenceTableDTO"
+            },
+            "type": "array",
+            "title": "Tables"
+          },
+          "scenarios": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Scenarios"
+          },
+          "notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Notes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tables",
+          "scenarios",
+          "notes"
+        ],
+        "title": "CatalogDTO"
+      },
+      "ComparisonDTO": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ComparisonItemDTO"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "warnings"
+        ],
+        "title": "ComparisonDTO"
+      },
+      "ComparisonItemDTO": {
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "run": {
+            "$ref": "#/components/schemas/RunRecordDTO"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "project_id",
+          "name",
+          "revision",
+          "run"
+        ],
+        "title": "ComparisonItemDTO"
+      },
+      "ComparisonRequestDTO": {
+        "properties": {
+          "project_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 6,
+            "minItems": 2,
+            "title": "Project Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "project_ids"
+        ],
+        "title": "ComparisonRequestDTO"
+      },
+      "ConstraintCheckDTO": {
+        "properties": {
+          "constraint_id": {
+            "type": "string",
+            "title": "Constraint Id"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "excess": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Excess"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "constraint_id",
+          "year",
+          "passed",
+          "detail"
+        ],
+        "title": "ConstraintCheckDTO",
+        "description": "Результат проверки ограничения."
+      },
+      "EngineInfoDTO": {
+        "properties": {
+          "engine_id": {
+            "type": "string",
+            "title": "Engine Id"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "prototype",
+              "unverified",
+              "unavailable"
+            ],
+            "title": "Status"
+          },
+          "model_verified": {
+            "type": "boolean",
+            "const": false,
+            "title": "Model Verified",
+            "default": false
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "engine_id",
+          "version",
+          "status",
+          "limitations"
+        ],
+        "title": "EngineInfoDTO"
+      },
+      "ErrorDTO": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            ],
+            "title": "Detail"
+          },
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "detail",
+          "request_id"
+        ],
+        "title": "ErrorDTO"
+      },
+      "ExportMetadataDTO": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "project_revision": {
+            "type": "integer",
+            "title": "Project Revision"
+          },
+          "run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Run Id"
+          },
+          "input_revision": {
+            "type": "integer",
+            "title": "Input Revision"
+          },
+          "input_hash": {
+            "type": "string",
+            "title": "Input Hash"
+          },
+          "plan_id": {
+            "type": "string",
+            "title": "Plan Id"
+          },
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "units": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Units"
+          },
+          "assumptions_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            ],
+            "title": "Assumptions Reference"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineInfoDTO"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "server",
+              "imported"
+            ],
+            "title": "Origin"
+          },
+          "table_rows": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Table Rows"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "schema_version",
+          "project_id",
+          "project_revision",
+          "run_id",
+          "input_revision",
+          "input_hash",
+          "plan_id",
+          "scenario_id",
+          "created_at",
+          "units",
+          "assumptions_reference",
+          "engine",
+          "origin",
+          "table_rows",
+          "warnings"
+        ],
+        "title": "ExportMetadataDTO"
+      },
+      "FinancialBreakdownDTO": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "procurement": {
+            "type": "number",
+            "title": "Procurement"
+          },
+          "reservation": {
+            "type": "number",
+            "title": "Reservation"
+          },
+          "holding": {
+            "type": "number",
+            "title": "Holding"
+          },
+          "capex": {
+            "type": "number",
+            "title": "Capex"
+          },
+          "opex": {
+            "type": "number",
+            "title": "Opex"
+          },
+          "total": {
+            "type": "number",
+            "title": "Total"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "year",
+          "procurement",
+          "reservation",
+          "holding",
+          "capex",
+          "opex",
+          "total"
+        ],
+        "title": "FinancialBreakdownDTO",
+        "description": "Финансовая разбивка затрат за год (в млн у.е.)."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthDTO": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status",
+            "default": "ok"
+          },
+          "api_version": {
+            "type": "string",
+            "title": "Api Version"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineInfoDTO"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "api_version",
+          "engine"
+        ],
+        "title": "HealthDTO"
+      },
+      "InventoryPolicyDTO": {
+        "properties": {
+          "initial_inventory_t": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Initial Inventory T",
+            "description": "Начальный физический запас на 1 января 2035, тонн",
+            "default": 12.33
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "title": "InventoryPolicyDTO",
+        "description": "Политика складских запасов."
+      },
+      "InvestmentDecisionDTO": {
+        "properties": {
+          "investment_id": {
+            "type": "string",
+            "title": "Investment Id",
+            "description": "Идентификатор опциона: ZBO, LUNAR_ISRU, EARTH_NEW"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year",
+            "description": "Год принятия решения или ввода"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "investment_id",
+          "year"
+        ],
+        "title": "InvestmentDecisionDTO",
+        "description": "Инвестиционное решение."
+      },
+      "MetaDTO": {
+        "properties": {
+          "api_version": {
+            "type": "string",
+            "title": "Api Version"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineInfoDTO"
+          },
+          "plan_import_formats": {
+            "items": {
+              "type": "string",
+              "const": "json"
+            },
+            "type": "array",
+            "title": "Plan Import Formats"
+          },
+          "result_export_formats": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ]
+            },
+            "type": "array",
+            "title": "Result Export Formats"
+          },
+          "max_upload_bytes": {
+            "type": "integer",
+            "title": "Max Upload Bytes"
+          },
+          "max_request_bytes": {
+            "type": "integer",
+            "title": "Max Request Bytes"
+          },
+          "background_jobs": {
+            "type": "boolean",
+            "title": "Background Jobs",
+            "default": false
+          },
+          "workspace_mode": {
+            "type": "string",
+            "const": "single_shared_local_workspace",
+            "title": "Workspace Mode",
+            "default": "single_shared_local_workspace"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "api_version",
+          "engine",
+          "plan_import_formats",
+          "result_export_formats",
+          "max_upload_bytes",
+          "max_request_bytes",
+          "warnings"
+        ],
+        "title": "MetaDTO"
+      },
+      "ParticipantPlanDTO": {
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Plan Id",
+            "description": "Идентификатор плана",
+            "default": "plan-base"
+          },
+          "scenario_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Scenario Id",
+            "description": "Идентификатор сценария: BASE или MANDATORY_STRESS",
+            "default": "BASE"
+          },
+          "decisions": {
+            "$ref": "#/components/schemas/PlanDecisionsDTO",
+            "description": "Решения оператора"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "decisions"
+        ],
+        "title": "ParticipantPlanDTO",
+        "description": "Входной контракт: план участника (по plan.schema.json)."
+      },
+      "PlanDecisionsDTO": {
+        "properties": {
+          "supply_orders": {
+            "items": {
+              "$ref": "#/components/schemas/SupplyOrderDTO"
+            },
+            "type": "array",
+            "title": "Supply Orders",
+            "description": "Заказы топлива"
+          },
+          "capacity_reservations": {
+            "items": {
+              "$ref": "#/components/schemas/CapacityReservationDTO"
+            },
+            "type": "array",
+            "title": "Capacity Reservations",
+            "description": "Резервирование мощностей"
+          },
+          "investments": {
+            "items": {
+              "$ref": "#/components/schemas/InvestmentDecisionDTO"
+            },
+            "type": "array",
+            "title": "Investments",
+            "description": "Инвестиции"
+          },
+          "inventory_policy": {
+            "$ref": "#/components/schemas/InventoryPolicyDTO",
+            "description": "Политика запасов"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "title": "PlanDecisionsDTO",
+        "description": "Набор решений оператора."
+      },
+      "PlanValidationDTO": {
+        "properties": {
+          "validation_scope": {
+            "type": "string",
+            "const": "structure_only",
+            "title": "Validation Scope",
+            "default": "structure_only"
+          },
+          "model_checked": {
+            "type": "boolean",
+            "const": false,
+            "title": "Model Checked",
+            "default": false
+          },
+          "plan": {
+            "$ref": "#/components/schemas/ParticipantPlanDTO"
+          },
+          "normalized": {
+            "type": "boolean",
+            "title": "Normalized"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "plan",
+          "normalized",
+          "warnings"
+        ],
+        "title": "PlanValidationDTO"
+      },
+      "ProjectCreateDTO": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 140,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/ParticipantPlanDTO"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "plan"
+        ],
+        "title": "ProjectCreateDTO"
+      },
+      "ProjectDTO": {
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1,
+            "title": "Schema Version",
+            "default": 1
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 140,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Revision"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/ParticipantPlanDTO"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "result_state": {
+            "type": "string",
+            "enum": [
+              "not_calculated",
+              "current",
+              "stale"
+            ],
+            "title": "Result State",
+            "default": "not_calculated"
+          },
+          "last_run": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RunRecordDTO"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "project_id",
+          "name",
+          "revision",
+          "plan",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ProjectDTO"
+      },
+      "ProjectListDTO": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectSummaryDTO"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "ProjectListDTO"
+      },
+      "ProjectSummaryDTO": {
+        "properties": {
+          "project_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Project Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "plan_id": {
+            "type": "string",
+            "title": "Plan Id"
+          },
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "result_state": {
+            "type": "string",
+            "enum": [
+              "not_calculated",
+              "current",
+              "stale"
+            ],
+            "title": "Result State"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "project_id",
+          "name",
+          "revision",
+          "plan_id",
+          "scenario_id",
+          "created_at",
+          "updated_at",
+          "result_state"
+        ],
+        "title": "ProjectSummaryDTO"
+      },
+      "ProjectUpdateDTO": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 140,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/ParticipantPlanDTO"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Expected Revision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "plan",
+          "expected_revision"
+        ],
+        "title": "ProjectUpdateDTO"
+      },
+      "ReferenceTableDTO": {
+        "properties": {
+          "table_id": {
+            "type": "string",
+            "title": "Table Id"
+          },
+          "source_path": {
+            "type": "string",
+            "title": "Source Path"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "columns": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Columns"
+          },
+          "rows": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Rows"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "table_id",
+          "source_path",
+          "sha256",
+          "columns",
+          "rows"
+        ],
+        "title": "ReferenceTableDTO"
+      },
+      "ResultDownloadDTO": {
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "plan_id": {
+            "type": "string",
+            "title": "Plan Id"
+          },
+          "units": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Units"
+          },
+          "assumptions_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            ],
+            "title": "Assumptions Reference",
+            "default": "docs/CASE_RULES.md"
+          },
+          "yearly_balance": {
+            "items": {
+              "$ref": "#/components/schemas/YearlyBalanceDTO"
+            },
+            "type": "array",
+            "title": "Yearly Balance"
+          },
+          "source_schedule": {
+            "items": {
+              "$ref": "#/components/schemas/SourceScheduleDTO"
+            },
+            "type": "array",
+            "title": "Source Schedule"
+          },
+          "inventory_trace": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Inventory Trace"
+          },
+          "financial_breakdown": {
+            "items": {
+              "$ref": "#/components/schemas/FinancialBreakdownDTO"
+            },
+            "type": "array",
+            "title": "Financial Breakdown"
+          },
+          "constraint_checks": {
+            "items": {
+              "$ref": "#/components/schemas/ConstraintCheckDTO"
+            },
+            "type": "array",
+            "title": "Constraint Checks"
+          },
+          "risk_register": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Risk Register"
+          },
+          "is_feasible": {
+            "type": "boolean",
+            "title": "Is Feasible",
+            "default": true
+          },
+          "total_cost_mln": {
+            "type": "number",
+            "title": "Total Cost Mln",
+            "default": 0.0
+          },
+          "_web_export": {
+            "$ref": "#/components/schemas/ExportMetadataDTO"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "scenario_id",
+          "plan_id",
+          "_web_export"
+        ],
+        "title": "ResultDownloadDTO",
+        "description": "Same mathematical DTO + named web provenance. No duplicated row contracts."
+      },
+      "ResultExportEnvelopeDTO": {
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "plan_id": {
+            "type": "string",
+            "title": "Plan Id"
+          },
+          "units": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Units"
+          },
+          "assumptions_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "additionalProperties": true,
+                "type": "object"
+              }
+            ],
+            "title": "Assumptions Reference",
+            "default": "docs/CASE_RULES.md"
+          },
+          "yearly_balance": {
+            "items": {
+              "$ref": "#/components/schemas/YearlyBalanceDTO"
+            },
+            "type": "array",
+            "title": "Yearly Balance"
+          },
+          "source_schedule": {
+            "items": {
+              "$ref": "#/components/schemas/SourceScheduleDTO"
+            },
+            "type": "array",
+            "title": "Source Schedule"
+          },
+          "inventory_trace": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Inventory Trace"
+          },
+          "financial_breakdown": {
+            "items": {
+              "$ref": "#/components/schemas/FinancialBreakdownDTO"
+            },
+            "type": "array",
+            "title": "Financial Breakdown"
+          },
+          "constraint_checks": {
+            "items": {
+              "$ref": "#/components/schemas/ConstraintCheckDTO"
+            },
+            "type": "array",
+            "title": "Constraint Checks"
+          },
+          "risk_register": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Risk Register"
+          },
+          "is_feasible": {
+            "type": "boolean",
+            "title": "Is Feasible",
+            "default": true
+          },
+          "total_cost_mln": {
+            "type": "number",
+            "title": "Total Cost Mln",
+            "default": 0.0
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "scenario_id",
+          "plan_id"
+        ],
+        "title": "ResultExportEnvelopeDTO",
+        "description": "Выходной контракт: результат моделирования и выгрузки (по export.schema.json)."
+      },
+      "RunRecordDTO": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Run Id"
+          },
+          "input_revision": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Input Revision"
+          },
+          "input_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Input Hash"
+          },
+          "plan_snapshot": {
+            "$ref": "#/components/schemas/ParticipantPlanDTO"
+          },
+          "result": {
+            "$ref": "#/components/schemas/ResultExportEnvelopeDTO"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "duration_ms": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Duration Ms"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineInfoDTO"
+          },
+          "origin": {
+            "type": "string",
+            "enum": [
+              "server",
+              "imported"
+            ],
+            "title": "Origin",
+            "default": "server"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "run_id",
+          "input_revision",
+          "input_hash",
+          "plan_snapshot",
+          "result",
+          "created_at",
+          "duration_ms",
+          "engine"
+        ],
+        "title": "RunRecordDTO"
+      },
+      "SourceScheduleDTO": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id"
+          },
+          "reserved_capacity_t": {
+            "type": "number",
+            "title": "Reserved Capacity T"
+          },
+          "ordered_t": {
+            "type": "number",
+            "title": "Ordered T"
+          },
+          "delivered_t": {
+            "type": "number",
+            "title": "Delivered T"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "year",
+          "source_id",
+          "reserved_capacity_t",
+          "ordered_t",
+          "delivered_t"
+        ],
+        "title": "SourceScheduleDTO",
+        "description": "График работы источника снабжения за год."
+      },
+      "SupplyOrderDTO": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year",
+            "description": "Год поставки (2035-2040)"
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id",
+            "description": "Идентификатор канала (A, B, C, D, E или Earth-Core и т.д.)"
+          },
+          "order_t": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Order T",
+            "description": "Заказанный объём, тонн"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "year",
+          "source_id",
+          "order_t"
+        ],
+        "title": "SupplyOrderDTO",
+        "description": "Заказ топлива у канала снабжения."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "YearlyBalanceDTO": {
+        "properties": {
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "opening_inventory_t": {
+            "type": "number",
+            "title": "Opening Inventory T"
+          },
+          "delivered_t": {
+            "type": "number",
+            "title": "Delivered T"
+          },
+          "losses_t": {
+            "type": "number",
+            "title": "Losses T"
+          },
+          "served_t": {
+            "type": "number",
+            "title": "Served T"
+          },
+          "closing_inventory_t": {
+            "type": "number",
+            "title": "Closing Inventory T"
+          },
+          "shortage_t": {
+            "type": "number",
+            "title": "Shortage T"
+          },
+          "demand_total_t": {
+            "type": "number",
+            "title": "Demand Total T"
+          },
+          "demand_critical_t": {
+            "type": "number",
+            "title": "Demand Critical T"
+          },
+          "service_level_total": {
+            "type": "number",
+            "title": "Service Level Total"
+          },
+          "service_level_critical": {
+            "type": "number",
+            "title": "Service Level Critical"
+          },
+          "reserve_45d_target_t": {
+            "type": "number",
+            "title": "Reserve 45D Target T"
+          },
+          "reserve_45d_met": {
+            "type": "boolean",
+            "title": "Reserve 45D Met"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "year",
+          "opening_inventory_t",
+          "delivered_t",
+          "losses_t",
+          "served_t",
+          "closing_inventory_t",
+          "shortage_t",
+          "demand_total_t",
+          "demand_critical_t",
+          "service_level_total",
+          "service_level_critical",
+          "reserve_45d_target_t",
+          "reserve_45d_met"
+        ],
+        "title": "YearlyBalanceDTO",
+        "description": "Материальный баланс за один год."
+      }
+    }
+  }
+}

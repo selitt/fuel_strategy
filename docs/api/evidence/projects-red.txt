@@ -1,0 +1,469 @@
+FFFFFFFFFFFFFFFFFFF                                                      [100%]
+=================================== FAILURES ===================================
+__________ test_validate_is_structure_only_and_keeps_extension_fields __________
+
+client = <starlette.testclient.TestClient object at 0x7ff50a5e2cf0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_validate_is_structure_only_and_keeps_extension_fields(client, plan):
+        plan["decisions"]["supply_orders"][0]["delivery_date"] = "2035-05-01"
+        response = client.post("/api/plans/validate", json=plan)
+>       assert response.status_code == 200, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"5f7003a3-5870-4a1e-9a21-d46336ee9f76"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_projects.py:15: AssertionError
+___________ test_json_import_preserves_plan_and_is_not_a_calculation ___________
+
+client = <starlette.testclient.TestClient object at 0x7ff50a45a0d0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_json_import_preserves_plan_and_is_not_a_calculation(client, plan):
+        response = client.post("/api/plans/import", files={"file": ("план.json", json.dumps(plan).encode(), "application/json")})
+>       assert response.status_code == 200, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"aacaae3a-6e85-4ba2-9d50-788d15d3528a"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_projects.py:26: AssertionError
+________ test_invalid_uploads_have_user_facing_errors[script.py-{}-415] ________
+
+client = <starlette.testclient.TestClient object at 0x7ff50a4d1450>
+filename = 'script.py', contents = b'{}', status = 415
+
+    @pytest.mark.parametrize("filename,contents,status", [
+        ("script.py", b"{}", 415), ("plan.json", b"not json", 422),
+        ("plan.json", b'{"decisions": []}', 422),
+        ("plan.json", b'{"decisions": {}, "decisions": {}}', 422),
+    ])
+    def test_invalid_uploads_have_user_facing_errors(client, filename, contents, status):
+        response = client.post("/api/plans/import", files={"file": (filename, contents)})
+>       assert response.status_code == status, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"c736f5bf-2edd-474b-8756-be43a476e325"}
+E       assert 404 == 415
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_projects.py:38: AssertionError
+_____ test_invalid_uploads_have_user_facing_errors[plan.json-not json-422] _____
+
+client = <starlette.testclient.TestClient object at 0x7ff50a4ee650>
+filename = 'plan.json', contents = b'not json', status = 422
+
+    @pytest.mark.parametrize("filename,contents,status", [
+        ("script.py", b"{}", 415), ("plan.json", b"not json", 422),
+        ("plan.json", b'{"decisions": []}', 422),
+        ("plan.json", b'{"decisions": {}, "decisions": {}}', 422),
+    ])
+    def test_invalid_uploads_have_user_facing_errors(client, filename, contents, status):
+        response = client.post("/api/plans/import", files={"file": (filename, contents)})
+>       assert response.status_code == status, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"89045f0a-cf2d-45d3-a94a-2391fba00672"}
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_projects.py:38: AssertionError
+_ test_invalid_uploads_have_user_facing_errors[plan.json-{"decisions": []}-422] _
+
+client = <starlette.testclient.TestClient object at 0x7ff509ae6650>
+filename = 'plan.json', contents = b'{"decisions": []}', status = 422
+
+    @pytest.mark.parametrize("filename,contents,status", [
+        ("script.py", b"{}", 415), ("plan.json", b"not json", 422),
+        ("plan.json", b'{"decisions": []}', 422),
+        ("plan.json", b'{"decisions": {}, "decisions": {}}', 422),
+    ])
+    def test_invalid_uploads_have_user_facing_errors(client, filename, contents, status):
+        response = client.post("/api/plans/import", files={"file": (filename, contents)})
+>       assert response.status_code == status, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"09ac7ae8-2fd5-47b0-81cc-93a5931eaf9b"}
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_projects.py:38: AssertionError
+_ test_invalid_uploads_have_user_facing_errors[plan.json-{"decisions": {}, "decisions": {}}-422] _
+
+client = <starlette.testclient.TestClient object at 0x7ff50a4f1a30>
+filename = 'plan.json', contents = b'{"decisions": {}, "decisions": {}}'
+status = 422
+
+    @pytest.mark.parametrize("filename,contents,status", [
+        ("script.py", b"{}", 415), ("plan.json", b"not json", 422),
+        ("plan.json", b'{"decisions": []}', 422),
+        ("plan.json", b'{"decisions": {}, "decisions": {}}', 422),
+    ])
+    def test_invalid_uploads_have_user_facing_errors(client, filename, contents, status):
+        response = client.post("/api/plans/import", files={"file": (filename, contents)})
+>       assert response.status_code == status, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"512c0113-4ed9-4a98-8552-23f3a4c858ca"}
+E       assert 404 == 422
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_projects.py:38: AssertionError
+________ test_uploaded_file_limit_is_separate_from_total_request_limit _________
+
+client_factory = <function client_factory.<locals>.make at 0x7ff509ad3880>
+
+    def test_uploaded_file_limit_is_separate_from_total_request_limit(client_factory):
+        client = client_factory(max_upload_bytes=32, max_request_bytes=2048)
+        response = client.post("/api/plans/import", files={"file": ("plan.json", b" " * 33)})
+>       assert response.status_code == 413
+E       assert 404 == 413
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_projects.py:45: AssertionError
+___ test_missing_default_fields_are_disclosed_not_called_organizer_decisions ___
+
+client = <starlette.testclient.TestClient object at 0x7ff509b4de10>
+
+    def test_missing_default_fields_are_disclosed_not_called_organizer_decisions(client):
+        response = client.post("/api/plans/import", files={"file": ("empty.json", b'{"decisions": {}}')})
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_projects.py:50: AssertionError
+______________________ test_project_roundtrip_and_listing ______________________
+
+client = <starlette.testclient.TestClient object at 0x7ff5099e49e0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_project_roundtrip_and_listing(client, plan):
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff5099e49e0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"94c87001-51fd-49fc-ab48-5205cb234237"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+______________________ test_projects_survive_app_restart _______________________
+
+client_factory = <function client_factory.<locals>.make at 0x7ff509b82a20>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-2/test_projects_survive_app_rest0')
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_projects_survive_app_restart(client_factory, tmp_path, plan):
+        directory = tmp_path / "persistent"
+        first = client_factory(data_dir=directory)
+>       project = create_project(first, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff5099e5e10>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"7649045f-eda4-4ebf-86a0-ab61165da846"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+____ test_update_uses_optimistic_revision_and_keeps_other_project_isolated _____
+
+client = <starlette.testclient.TestClient object at 0x7ff5099e7240>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_update_uses_optimistic_revision_and_keeps_other_project_isolated(client, plan):
+>       first = create_project(client, plan)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff5099e7240>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"ca6f670d-d99b-41f5-81c3-8b271826419a"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+________________ test_two_writers_do_not_silently_lose_updates _________________
+
+client = <starlette.testclient.TestClient object at 0x7ff509a546b0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_two_writers_do_not_silently_lose_updates(client, plan):
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff509a546b0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"2a1ab0c1-e52b-4f50-9bbe-c5706083ee03"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+__________________ test_calculation_snapshot_and_stale_state ___________________
+
+client = <starlette.testclient.TestClient object at 0x7ff509a55ae0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_calculation_snapshot_and_stale_state(client, plan):
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff509a55ae0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"c1f86bca-253b-45f6-9784-7b58b48df0cc"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+______________ test_renaming_does_not_invalidate_identical_inputs ______________
+
+client = <starlette.testclient.TestClient object at 0x7ff509a56f10>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_renaming_does_not_invalidate_identical_inputs(client, plan):
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:127: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff509a56f10>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"2b18de1b-5e50-4ad3-ad1f-a6889101ea34"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+_______________ test_failed_calculation_keeps_last_good_snapshot _______________
+
+client_factory = <function client_factory.<locals>.make at 0x7ff509a8dee0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_failed_calculation_keeps_last_good_snapshot(client_factory, plan):
+        from src.app.service.calc_service import CalculationService
+        class Service:
+            fail = False
+            def calculate(self, request):
+                if self.fail:
+                    raise RuntimeError("private details")
+                return CalculationService().calculate(request)
+        service = Service()
+        client = client_factory(calculation_service=service)
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:144: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff509aac380>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"d82b3419-a106-475e-b5f8-9f7ef658451b"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+________________ test_slow_response_cannot_overwrite_a_new_plan ________________
+
+client_factory = <function client_factory.<locals>.make at 0x7ff509a8f560>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_slow_response_cannot_overwrite_a_new_plan(client_factory, plan):
+        from src.app.service.calc_service import CalculationService
+        started, release = Event(), Event()
+        class SlowService:
+            def calculate(self, request):
+                started.set()
+                assert release.wait(5)
+                return CalculationService().calculate(request)
+        client = client_factory(calculation_service=SlowService())
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff509aad7b0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"399b02f6-7a2b-4d33-85a5-60adcaebb622"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+_______ test_missing_result_and_unknown_project_are_not_empty_successes ________
+
+client = <starlette.testclient.TestClient object at 0x7ff509aaebe0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_missing_result_and_unknown_project_are_not_empty_successes(client, plan):
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff509aaebe0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"29cc82aa-0c5a-4412-8214-def5afe0408e"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+____________________ test_delete_requires_current_revision _____________________
+
+client = <starlette.testclient.TestClient object at 0x7ff509aa0050>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_delete_requires_current_revision(client, plan):
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:187: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff509aa0050>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"d1f97ba9-9846-45ad-a87b-2b64b7691363"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+_________ test_corrupt_saved_file_is_not_replaced_by_an_empty_project __________
+
+client_factory = <function client_factory.<locals>.make at 0x7ff509a85c60>
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-2/test_corrupt_saved_file_is_not0')
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_corrupt_saved_file_is_not_replaced_by_an_empty_project(client_factory, tmp_path, plan):
+        directory = tmp_path / "corrupt-case"
+        client = client_factory(data_dir=directory)
+>       project = create_project(client, plan)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/api/test_projects.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+client = <starlette.testclient.TestClient object at 0x7ff509aa1480>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+name = 'Первый план'
+
+    def create_project(client, plan, name="Первый план"):
+        response = client.post("/api/projects", json={"name": name, "plan": plan})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"551e80c2-40c6-4abb-af73-9e5a402a884e"}
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/conftest.py:41: AssertionError
+=========================== short test summary info ============================
+FAILED tests/api/test_projects.py::test_validate_is_structure_only_and_keeps_extension_fields - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"5f7003a3-5870-4a1e-9a21-d46336ee9f76"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_json_import_preserves_plan_and_is_not_a_calculation - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"aacaae3a-6e85-4ba2-9d50-788d15d3528a"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_invalid_uploads_have_user_facing_errors[script.py-{}-415] - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"c736f5bf-2edd-474b-8756-be43a476e325"}
+assert 404 == 415
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_invalid_uploads_have_user_facing_errors[plan.json-not json-422] - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"89045f0a-cf2d-45d3-a94a-2391fba00672"}
+assert 404 == 422
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_invalid_uploads_have_user_facing_errors[plan.json-{"decisions": []}-422] - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"09ac7ae8-2fd5-47b0-81cc-93a5931eaf9b"}
+assert 404 == 422
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_invalid_uploads_have_user_facing_errors[plan.json-{"decisions": {}, "decisions": {}}-422] - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"512c0113-4ed9-4a98-8552-23f3a4c858ca"}
+assert 404 == 422
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_uploaded_file_limit_is_separate_from_total_request_limit - assert 404 == 413
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_missing_default_fields_are_disclosed_not_called_organizer_decisions - assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_project_roundtrip_and_listing - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"94c87001-51fd-49fc-ab48-5205cb234237"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_projects_survive_app_restart - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"7649045f-eda4-4ebf-86a0-ab61165da846"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_update_uses_optimistic_revision_and_keeps_other_project_isolated - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"ca6f670d-d99b-41f5-81c3-8b271826419a"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_two_writers_do_not_silently_lose_updates - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"2a1ab0c1-e52b-4f50-9bbe-c5706083ee03"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_calculation_snapshot_and_stale_state - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"c1f86bca-253b-45f6-9784-7b58b48df0cc"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_renaming_does_not_invalidate_identical_inputs - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"2b18de1b-5e50-4ad3-ad1f-a6889101ea34"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_failed_calculation_keeps_last_good_snapshot - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"d82b3419-a106-475e-b5f8-9f7ef658451b"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_slow_response_cannot_overwrite_a_new_plan - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"399b02f6-7a2b-4d33-85a5-60adcaebb622"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_missing_result_and_unknown_project_are_not_empty_successes - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"29cc82aa-0c5a-4412-8214-def5afe0408e"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_delete_requires_current_revision - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"d1f97ba9-9846-45ad-a87b-2b64b7691363"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_projects.py::test_corrupt_saved_file_is_not_replaced_by_an_empty_project - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"551e80c2-40c6-4abb-af73-9e5a402a884e"}
+assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+19 failed in 0.32s

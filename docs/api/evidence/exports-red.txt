@@ -1,0 +1,177 @@
+FFFFFFFFF                                                                [100%]
+=================================== FAILURES ===================================
+____________ test_plan_download_matches_input_and_organizer_schema _____________
+
+client = <starlette.testclient.TestClient object at 0x7ff1aa4002f0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_plan_download_matches_input_and_organizer_schema(client, plan):
+        response = client.post("/api/plans/export", json=plan)
+>       assert response.status_code == 200, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"7c77e9a1-5c92-4c54-a0cc-c45593ef4142"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_exports.py:24: AssertionError
+_____ test_result_json_retains_all_values_and_carries_prototype_provenance _____
+
+client = <starlette.testclient.TestClient object at 0x7ff1aa256710>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_result_json_retains_all_values_and_carries_prototype_provenance(client, plan):
+        project = calculated_project(client, plan)
+        url = f'/api/projects/{project["project_id"]}/result/export'
+        response = client.get(url, params={"format": "json"})
+>       assert response.status_code == 200, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"85808d89-3b96-4833-9f8a-585c49fb2a48"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_exports.py:35: AssertionError
+______ test_csv_zip_matches_saved_result_and_keeps_empty_tables_explicit _______
+
+client = <starlette.testclient.TestClient object at 0x7ff1aa2fdf90>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_csv_zip_matches_saved_result_and_keeps_empty_tables_explicit(client, plan):
+        project = calculated_project(client, plan)
+        response = client.get(f'/api/projects/{project["project_id"]}/result/export?format=csv')
+>       assert response.status_code == 200, response.text
+E       AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"8c5fb908-ce3f-42b1-a836-1bf6a532f881"}
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_exports.py:49: AssertionError
+________________ test_no_automatic_recalculation_during_export _________________
+
+client_factory = <function client_factory.<locals>.make at 0x7ff1a913ad40>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_no_automatic_recalculation_during_export(client_factory, plan):
+        from src.app.service.calc_service import CalculationService
+        class Service:
+            calls = 0
+            def calculate(self, request):
+                self.calls += 1
+                return CalculationService().calculate(request)
+        service = Service()
+        client = client_factory(calculation_service=service)
+        project = calculated_project(client, plan)
+        url = f'/api/projects/{project["project_id"]}'
+        assert service.calls == 1
+>       assert client.get(url + "/result/export?format=csv").status_code == 200
+E       AssertionError: assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+E        +    where <Response [404 Not Found]> = get(('/api/projects/322d9052-7dfd-41f8-a81f-757d5e588833' + '/result/export?format=csv'))
+E        +      where get = <starlette.testclient.TestClient object at 0x7ff1a91a2d70>.get
+
+tests/api/test_exports.py:79: AssertionError
+_______________ test_stale_result_cannot_be_exported_as_current ________________
+
+client = <starlette.testclient.TestClient object at 0x7ff1a9029220>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_stale_result_cannot_be_exported_as_current(client, plan):
+        project = calculated_project(client, plan)
+        url = f'/api/projects/{project["project_id"]}'
+        changed = deepcopy(plan)
+        changed["scenario_id"] = "MANDATORY_STRESS"
+        client.put(url, json={"name": "stress", "plan": changed, "expected_revision": project["revision"]})
+>       assert client.get(url + "/result/export?format=csv").status_code == 409
+E       AssertionError: assert 404 == 409
+E        +  where 404 = <Response [404 Not Found]>.status_code
+E        +    where <Response [404 Not Found]> = get(('/api/projects/8a38a3fc-9759-4e12-827d-c5761680afe8' + '/result/export?format=csv'))
+E        +      where get = <starlette.testclient.TestClient object at 0x7ff1a9029220>.get
+
+tests/api/test_exports.py:90: AssertionError
+_____ test_project_file_reopens_as_new_id_with_imported_unverified_origin ______
+
+client = <starlette.testclient.TestClient object at 0x7ff1a902f890>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_project_file_reopens_as_new_id_with_imported_unverified_origin(client, plan):
+        original = calculated_project(client, plan)
+        response = client.get(f'/api/projects/{original["project_id"]}/export')
+>       assert response.status_code == 200
+E       assert 404 == 200
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tests/api/test_exports.py:98: AssertionError
+_______________ test_tampered_imported_snapshot_hash_is_rejected _______________
+
+client = <starlette.testclient.TestClient object at 0x7ff1a9107350>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_tampered_imported_snapshot_hash_is_rejected(client, plan):
+        project = calculated_project(client, plan)
+        project["last_run"]["plan_snapshot"]["plan_id"] = "altered"
+        project["last_run"]["result"]["plan_id"] = "altered"
+        response = client.post("/api/projects/import", files={"file": ("project.json", json.dumps(project).encode())})
+>       assert response.status_code == 422
+E       assert 405 == 422
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+tests/api/test_exports.py:117: AssertionError
+_____ test_comparison_returns_saved_results_not_an_invented_recommendation _____
+
+client = <starlette.testclient.TestClient object at 0x7ff1a8f9fdf0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_comparison_returns_saved_results_not_an_invented_recommendation(client, plan):
+        base = calculated_project(client, plan)
+        stress_plan = deepcopy(plan)
+        stress_plan["scenario_id"] = "MANDATORY_STRESS"
+        stress = calculated_project(client, stress_plan)
+        response = client.post("/api/projects/compare", json={"project_ids": [base["project_id"], stress["project_id"]]})
+>       assert response.status_code == 200, response.text
+E       AssertionError: {"code":"HTTP_405","detail":"Method Not Allowed","request_id":"d65a4a3e-6e91-4929-a6bd-57b3b592e92b"}
+E       assert 405 == 200
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+tests/api/test_exports.py:127: AssertionError
+_____________ test_csv_cells_are_neutralized_but_json_is_lossless ______________
+
+client = <starlette.testclient.TestClient object at 0x7ff1a8e449e0>
+plan = {'decisions': {'capacity_reservations': [{'reserved_capacity_t': 120.0, 'source_id': 'Earth-Core', 'year': 2035}, {'re...lan_id': 'integration-plan', 'scenario_id': 'BASE', 'team_notes': {'seed': 42, 'text': 'Входы сохраняются без потерь'}}
+
+    def test_csv_cells_are_neutralized_but_json_is_lossless(client, plan):
+        # The project import API is a realistic way user-provided strings reach CSV.
+        project = calculated_project(client, plan)
+        strings = ["=HYPERLINK(\"https://example.invalid\")", " +1+1", "@SUM(1)", "\tcmd", "-formula"]
+        project["last_run"]["result"]["risk_register"] = [{"label": text} for text in strings]
+        response = client.post("/api/projects/import", files={"file": ("project.json", json.dumps(project).encode())})
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"code":"HTTP_405","detail":"Method Not Allowed","request_id":"005ac12a-11ac-48f9-a4b1-195aa57ebd92"}
+E       assert 405 == 201
+E        +  where 405 = <Response [405 Method Not Allowed]>.status_code
+
+tests/api/test_exports.py:142: AssertionError
+=========================== short test summary info ============================
+FAILED tests/api/test_exports.py::test_plan_download_matches_input_and_organizer_schema - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"7c77e9a1-5c92-4c54-a0cc-c45593ef4142"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_exports.py::test_result_json_retains_all_values_and_carries_prototype_provenance - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"85808d89-3b96-4833-9f8a-585c49fb2a48"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_exports.py::test_csv_zip_matches_saved_result_and_keeps_empty_tables_explicit - AssertionError: {"code":"HTTP_404","detail":"Not Found","request_id":"8c5fb908-ce3f-42b1-a836-1bf6a532f881"}
+assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_exports.py::test_no_automatic_recalculation_during_export - AssertionError: assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+ +    where <Response [404 Not Found]> = get(('/api/projects/322d9052-7dfd-41f8-a81f-757d5e588833' + '/result/export?format=csv'))
+ +      where get = <starlette.testclient.TestClient object at 0x7ff1a91a2d70>.get
+FAILED tests/api/test_exports.py::test_stale_result_cannot_be_exported_as_current - AssertionError: assert 404 == 409
+ +  where 404 = <Response [404 Not Found]>.status_code
+ +    where <Response [404 Not Found]> = get(('/api/projects/8a38a3fc-9759-4e12-827d-c5761680afe8' + '/result/export?format=csv'))
+ +      where get = <starlette.testclient.TestClient object at 0x7ff1a9029220>.get
+FAILED tests/api/test_exports.py::test_project_file_reopens_as_new_id_with_imported_unverified_origin - assert 404 == 200
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tests/api/test_exports.py::test_tampered_imported_snapshot_hash_is_rejected - assert 405 == 422
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+FAILED tests/api/test_exports.py::test_comparison_returns_saved_results_not_an_invented_recommendation - AssertionError: {"code":"HTTP_405","detail":"Method Not Allowed","request_id":"d65a4a3e-6e91-4929-a6bd-57b3b592e92b"}
+assert 405 == 200
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+FAILED tests/api/test_exports.py::test_csv_cells_are_neutralized_but_json_is_lossless - AssertionError: {"code":"HTTP_405","detail":"Method Not Allowed","request_id":"005ac12a-11ac-48f9-a4b1-195aa57ebd92"}
+assert 405 == 201
+ +  where 405 = <Response [405 Method Not Allowed]>.status_code
+9 failed in 1.16s
