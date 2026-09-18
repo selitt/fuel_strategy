@@ -9,6 +9,8 @@ __pycache__/
 .ruff_cache/
 build/
 dist/
+.idea
+.agents
 coverage/
 .coverage
 .env
