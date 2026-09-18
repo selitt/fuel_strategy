@@ -1,5 +1,5 @@
 {
-  "stage": "preparation",
+  "stage": "web_api_integration",
   "dependency_note": "T06 early checkpoint starts on first compatible slices of T02/T03/T04; final T06 requires their completion.",
   "tasks": [
     {
@@ -40,7 +40,7 @@
       ],
       "scope_paths": [
         "contracts/",
-        "src/data_io/",
+        "src/app/service/",
         "configs/",
         "plans/",
         "tests/"
@@ -64,7 +64,7 @@
         "K10"
       ],
       "scope_paths": [
-        "src/engine/physical/",
+        "src/engine/",
         "tests/"
       ],
       "evidence": []
@@ -87,7 +87,7 @@
         "K10"
       ],
       "scope_paths": [
-        "src/engine/economics/",
+        "src/engine/",
         "tests/"
       ],
       "evidence": []
@@ -131,7 +131,6 @@
       ],
       "scope_paths": [
         "docs/deliverables/",
-        "src/experiments/",
         "tests/acceptance/"
       ],
       "evidence": []
@@ -161,9 +160,9 @@
       ],
       "scope_paths": [
         "src/engine/",
-        "src/adapters/",
-        "src/persistence/",
-        "src/reporting/",
+        "src/app/api/",
+        "src/app/persistence/",
+        "src/app/service/",
         "frontend/",
         "tests/",
         "results/"
@@ -194,7 +193,7 @@
         "K20"
       ],
       "scope_paths": [
-        "src/experiments/",
+        "tests/acceptance/",
         "configs/scenarios/",
         "plans/",
         "results/",
@@ -243,7 +242,7 @@
       "optional": true,
       "criteria": [],
       "scope_paths": [
-        "src/experiments/",
+        "tests/acceptance/",
         "configs/scenarios/",
         "frontend/",
         "results/",
@@ -251,5 +250,6 @@
       ],
       "evidence": []
     }
-  ]
+  ],
+  "layout_note": "scope_paths приведены к существующей раскладке. Будущие физические/экономические модули создают владельцы src/engine; эксперименты пока описываются в tests/acceptance. Статусы конкурсных задач не являются оценкой готовности HTTP API."
 }

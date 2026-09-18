@@ -1,9 +1,9 @@
-"""Original four-operation API: the payloads and operationIds stay compatible with KosmoAPI.yaml."""
+"""Original two-operation calculation API: the payloads and operationIds stay compatible with KosmoAPI.yaml."""
 from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
-from src.app.api.dependencies import CalculationBackend, call_calculation, get_calculation_service
+from src.app.api.dependencies import CalculationBackend, call_calculation, call_template, get_calculation_service
 
 router = APIRouter(prefix="/api/calc", tags=["Моделирование снабжения"])
 BackendDep = Annotated[CalculationBackend, Depends(get_calculation_service)]
@@ -17,7 +17,7 @@ BackendDep = Annotated[CalculationBackend, Depends(get_calculation_service)]
 )
 def get_template(service: BackendDep):
     """Возвращает предзаполненный шаблон плана оператора для быстрого старта."""
-    return service.get_template_plan()
+    return call_template(service)
 
 
 @router.post(

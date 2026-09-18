@@ -5,8 +5,25 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException
 
 from src.app.errors import ApiProblem
+from src.app.dto.web_dto import ErrorDTO
 
 logger = logging.getLogger("fuel.api")
+
+# Shared by the live application and its exported OpenAPI. No second error
+# format for generated clients: runtime detail/code/request_id match ErrorDTO.
+ERROR_RESPONSES = {
+    status: {"model": ErrorDTO, "description": description}
+    for status, description in {
+        400: "Некорректный HTTP-запрос",
+        404: "Ресурс не найден",
+        409: "Конфликт ревизии или неактуальный результат",
+        413: "Превышен размер запроса или файла",
+        415: "Неподдерживаемый формат файла или кодирование",
+        422: "Ошибка структуры ввода или явный отказ расчётного адаптера",
+        500: "Внутренняя ошибка; используйте request_id для диагностики",
+        503: "Расчётный сервис не подключён",
+    }.items()
+}
 
 
 def problem_response(request: Request, status: int, code: str, detail):

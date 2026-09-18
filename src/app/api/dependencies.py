@@ -43,6 +43,21 @@ def check_plan_finite(plan: ParticipantPlanDTO) -> None:
         }]) from exc
 
 
+def call_template(service: CalculationBackend) -> ParticipantPlanDTO:
+    """Use the same availability/error boundary for template loading as calculation."""
+    try:
+        plan = ParticipantPlanDTO.model_validate(service.get_template_plan())
+        ensure_finite(plan.model_dump(mode="json"))
+        return plan
+    except ApiProblem:
+        raise
+    except (NotImplementedError, ImportError) as exc:
+        raise ApiProblem(503, "ENGINE_NOT_READY", "Расчётный сервис ещё не подключён") from exc
+    except Exception as exc:
+        logger.exception("Template loading failed")
+        raise ApiProblem(500, "INVALID_SERVICE_RESULT", "Сервис вернул шаблон неправильного формата") from exc
+
+
 def call_calculation(service: CalculationBackend, plan: ParticipantPlanDTO) -> ResultExportEnvelopeDTO:
     check_plan_finite(plan)
     try:
@@ -50,6 +65,9 @@ def call_calculation(service: CalculationBackend, plan: ParticipantPlanDTO) -> R
         if result.plan_id != plan.plan_id or result.scenario_id != plan.scenario_id:
             raise ValueError("Calculation result identity does not match input")
         return result
+    except ApiProblem:
+        # Only explicit, public adapter errors are safe to expose to the UI.
+        raise
     except (NotImplementedError, ImportError) as exc:
         raise ApiProblem(503, "ENGINE_NOT_READY", "Расчётный сервис ещё не подключён") from exc
     except Exception as exc:

@@ -1,0 +1,225 @@
+{
+  "scope": "web_transport_storage_import_export_only_not_mathematical_validation",
+  "passed": 36,
+  "real_uvicorn": true,
+  "persisted_across_process_restart": true,
+  "docker_executed": false,
+  "checks": [
+    {
+      "check": "health and CORS",
+      "method": "GET",
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "check": "/api/meta",
+      "method": "GET",
+      "path": "/api/meta",
+      "status": 200
+    },
+    {
+      "check": "/api/catalog",
+      "method": "GET",
+      "path": "/api/catalog",
+      "status": 200
+    },
+    {
+      "check": "/api/schemas/plan",
+      "method": "GET",
+      "path": "/api/schemas/plan",
+      "status": 200
+    },
+    {
+      "check": "/api/schemas/export",
+      "method": "GET",
+      "path": "/api/schemas/export",
+      "status": 200
+    },
+    {
+      "check": "/api/schemas/input",
+      "method": "GET",
+      "path": "/api/schemas/input",
+      "status": 200
+    },
+    {
+      "check": "/api/schemas/result",
+      "method": "GET",
+      "path": "/api/schemas/result",
+      "status": 200
+    },
+    {
+      "check": "/openapi.json",
+      "method": "GET",
+      "path": "/openapi.json",
+      "status": 200
+    },
+    {
+      "check": "template",
+      "method": "GET",
+      "path": "/api/calc/template",
+      "status": 200
+    },
+    {
+      "check": "structural validation",
+      "method": "POST",
+      "path": "/api/plans/validate",
+      "status": 200
+    },
+    {
+      "check": "multipart /api/plans/import",
+      "method": "POST",
+      "path": "/api/plans/import",
+      "status": 200
+    },
+    {
+      "check": "plan export",
+      "method": "POST",
+      "path": "/api/plans/export",
+      "status": 200
+    },
+    {
+      "check": "unsaved calculation",
+      "method": "POST",
+      "path": "/api/calc",
+      "status": 200
+    },
+    {
+      "check": "create",
+      "method": "POST",
+      "path": "/api/projects",
+      "status": 201
+    },
+    {
+      "check": "save calculation",
+      "method": "POST",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2/calculate",
+      "status": 200
+    },
+    {
+      "check": "current result",
+      "method": "GET",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2/result",
+      "status": 200
+    },
+    {
+      "check": "result JSON",
+      "method": "GET",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2/result/export?format=json",
+      "status": 200
+    },
+    {
+      "check": "result CSV ZIP",
+      "method": "GET",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2/result/export?format=csv",
+      "status": 200
+    },
+    {
+      "check": "project JSON",
+      "method": "GET",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2/export",
+      "status": 200
+    },
+    {
+      "check": "multipart /api/projects/import",
+      "method": "POST",
+      "path": "/api/projects/import",
+      "status": 201
+    },
+    {
+      "check": "alternative",
+      "method": "POST",
+      "path": "/api/projects",
+      "status": 201
+    },
+    {
+      "check": "alternative calculation",
+      "method": "POST",
+      "path": "/api/projects/324bb39f-09d9-4719-8b5d-c92b2b0348e2/calculate",
+      "status": 200
+    },
+    {
+      "check": "compare",
+      "method": "POST",
+      "path": "/api/projects/compare",
+      "status": 200
+    },
+    {
+      "check": "revision conflict",
+      "method": "PUT",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2",
+      "status": 409
+    },
+    {
+      "check": "update inputs",
+      "method": "PUT",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2",
+      "status": 200
+    },
+    {
+      "check": "stale result rejected",
+      "method": "GET",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2/result",
+      "status": 409
+    },
+    {
+      "check": "stale export rejected",
+      "method": "GET",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2/result/export?format=csv",
+      "status": 409
+    },
+    {
+      "check": "typed input error",
+      "method": "POST",
+      "path": "/api/calc",
+      "status": 422
+    },
+    {
+      "check": "demo route removed",
+      "method": "GET",
+      "path": "/hello",
+      "status": 404
+    },
+    {
+      "check": "restart retains stale project",
+      "method": "GET",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2",
+      "status": 200
+    },
+    {
+      "check": "restart retains current project",
+      "method": "GET",
+      "path": "/api/projects/324bb39f-09d9-4719-8b5d-c92b2b0348e2",
+      "status": 200
+    },
+    {
+      "check": "list after restart",
+      "method": "GET",
+      "path": "/api/projects",
+      "status": 200
+    },
+    {
+      "check": "delete temporary project",
+      "method": "DELETE",
+      "path": "/api/projects/3cedbc6d-74ac-4be9-bc73-00a9732355b2?expected_revision=3",
+      "status": 204
+    },
+    {
+      "check": "delete temporary project",
+      "method": "DELETE",
+      "path": "/api/projects/324bb39f-09d9-4719-8b5d-c92b2b0348e2?expected_revision=2",
+      "status": 204
+    },
+    {
+      "check": "delete temporary project",
+      "method": "DELETE",
+      "path": "/api/projects/426754f2-ef3d-4989-9246-ca27a98733c7?expected_revision=1",
+      "status": 204
+    },
+    {
+      "check": "empty isolated workspace",
+      "method": "GET",
+      "path": "/api/projects",
+      "status": 200
+    }
+  ]
+}

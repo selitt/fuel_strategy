@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect this preparation workspace, never calculate a fuel supply plan.
+"""Inspect workspace integrity, never calculate or validate a fuel supply plan.
 
 Standard library only. No network, no installs, no writes, no automatic repairs.
 A successful check is not product validation or a jury score.
@@ -17,6 +17,12 @@ import sys
 from urllib.parse import unquote, urlsplit
 
 SCOPE = "workspace_only_not_product"
+# These directories belong to the local machine/runtime, not the portable
+# source bundle. Explicit source-lock entries are still validated separately.
+LOCAL_DIRECTORIES = frozenset({
+    ".venv", "venv", "node_modules", "__pycache__", ".local", ".pytest_cache",
+    ".mypy_cache", ".ruff_cache", "dist", "build", "coverage",
+})
 
 
 def safe_path(root: Path, relative: str) -> Path:
@@ -51,7 +57,7 @@ def inspect_workspace(root: Path) -> dict:
     root = Path(root).resolve()
     errors: list[str] = []
     warnings = [
-        "Product NOT implemented: these checks do not run V01-V10 or verify K01-K20.",
+        "Product NOT validated: workspace checks do not test the HTTP API, run V01-V10 or verify K01-K20.",
         "Known source gaps: original XLSX / source DOCX / ERRATA are absent; see OPEN_QUESTIONS.",
         "Organizer Markdown and CASE_INPUT are preserved; prior team notes are normalized with provenance.",
     ]
@@ -125,6 +131,7 @@ def inspect_workspace(root: Path) -> dict:
                 if rel in expected and url.strip():
                     registered.add(rel)
         for parent, dirs, files in os.walk(root, followlinks=False):
+            dirs[:] = [d for d in dirs if d not in LOCAL_DIRECTORIES]
             folder = Path(parent)
             for name in dirs + files:
                 candidate = folder / name
@@ -233,7 +240,7 @@ def inspect_workspace(root: Path) -> dict:
 
     def json_syntax():
         for parent, dirs, files in os.walk(root, followlinks=False):
-            dirs[:] = [d for d in dirs if d not in {".git", ".venv", "node_modules", "__pycache__"}]
+            dirs[:] = [d for d in dirs if d not in LOCAL_DIRECTORIES and d != ".git"]
             for name in files:
                 if name.endswith(".json"):
                     rel = (Path(parent) / name).relative_to(root).as_posix()
@@ -245,7 +252,7 @@ def inspect_workspace(root: Path) -> dict:
         legacy = set(meta["legacy_note_paths"])
         reference_paths = [p.rstrip("/") + "/" for p in meta["reference_paths"]]
         for parent, dirs, files in os.walk(root, followlinks=False):
-            dirs[:] = [d for d in dirs if d not in {".git", ".venv", "node_modules", "__pycache__"}]
+            dirs[:] = [d for d in dirs if d not in LOCAL_DIRECTORIES and d != ".git"]
             for name in files:
                 if not name.endswith(".md"):
                     continue

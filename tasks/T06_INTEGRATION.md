@@ -8,9 +8,9 @@
 ## Где работать
 
 - `src/engine/`
-- `src/adapters/`
+- `src/app/api/`
 - `../src/app/persistence`
-- `src/reporting/`
+- `src/app/service/`
 - `frontend/`
 - `tests/`
 - `results/`

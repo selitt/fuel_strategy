@@ -6,6 +6,9 @@ ROOT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
 VERSION_FILE="$ROOT_DIR/tools/tool-versions.env"
 MODE=install
 FULL_CHECK=0
+BACKEND_ONLY=0
+BACKEND_READY=0
+FRONTEND_READY=0
 BLOCKED=0
 G0_PENDING=0
 GROUP_RELOAD_NEEDED=0
@@ -20,6 +23,7 @@ Prepare the local development tools for the Kosmo Piter project.
 Options:
   --check       inspect only; do not install or change user configuration
   --full-check  run locked dependency checks and the available build checks
+  --backend-only  prepare/test Python API without Node or Docker
   --help        show this help
 
 The script never starts application services. Docker Desktop licensing and
@@ -34,6 +38,9 @@ for argument in "$@"; do
             ;;
         --full-check)
             FULL_CHECK=1
+            ;;
+        --backend-only)
+            BACKEND_ONLY=1
             ;;
         --help|-h)
             usage
@@ -505,31 +512,55 @@ run_workspace_check() {
 }
 
 sync_project_if_ready() {
-    local required_missing=0
-    local required
-    for required in pyproject.toml uv.lock frontend/package.json frontend/package-lock.json; do
-        if [[ ! -e "$ROOT_DIR/$required" ]]; then
-            required_missing=1
-        fi
-    done
-    if [[ "$required_missing" == 1 ]]; then
-        G0_PENDING=1
-        warn "G0_PENDING: lock files and frontend manifest are not published yet"
+    # Backend is independently usable while the frontend is not published yet.
+    if [[ ! -f "$ROOT_DIR/pyproject.toml" ]]; then
+        blocked "pyproject.toml is missing"
         return 0
     fi
     if [[ "$MODE" == check ]]; then
-        pass "G0 manifests present (check mode did not sync dependencies)"
-    else
-        if ! (cd "$ROOT_DIR" && uv sync --locked); then
-            blocked "uv sync --locked failed"
+        if [[ -f "$ROOT_DIR/uv.lock" || -f "$ROOT_DIR/requirements-dev.txt" ]]; then
+            BACKEND_READY=1
+            pass "backend manifests present (dependencies not installed in check mode)"
         else
+            blocked "backend requires uv.lock or requirements-dev.txt"
+        fi
+    elif ! command_exists uv; then
+        blocked "uv is unavailable; backend dependencies were not installed"
+    elif [[ -f "$ROOT_DIR/uv.lock" ]]; then
+        if (cd "$ROOT_DIR" && uv sync --locked); then
+            BACKEND_READY=1
             pass "Python dependencies synced from uv.lock"
-        fi
-        if ! npm --prefix "$ROOT_DIR/frontend" ci; then
-            blocked "npm ci failed"
         else
-            pass "frontend dependencies synced from package-lock.json"
+            blocked "uv sync --locked failed"
         fi
+    elif [[ -f "$ROOT_DIR/requirements-dev.txt" ]]; then
+        # Until a network-resolved uv.lock is published, use the existing exact
+        # requirements pins in a project-local venv, never global site-packages.
+        if [[ ! -d "$ROOT_DIR/.venv" ]] && ! uv venv --python "$PYTHON_TARGET" "$ROOT_DIR/.venv"; then
+            blocked "could not create the project-local Python environment"
+        elif (cd "$ROOT_DIR" && uv pip sync --python "$ROOT_DIR/.venv/bin/python" requirements-dev.txt); then
+            BACKEND_READY=1
+            pass "Python dependencies synced from requirements-dev.txt"
+        else
+            blocked "could not sync the project-local Python environment"
+        fi
+    else
+        blocked "backend requires uv.lock or requirements-dev.txt"
+    fi
+
+    if [[ "$BACKEND_ONLY" == 1 ]]; then
+        return 0
+    fi
+    if [[ ! -f "$ROOT_DIR/frontend/package.json" || ! -f "$ROOT_DIR/frontend/package-lock.json" ]]; then
+        G0_PENDING=1
+        warn "G0_PENDING: frontend manifests not published; backend checks remain available"
+    elif [[ "$MODE" == check ]]; then
+        pass "frontend manifests present (dependencies not installed in check mode)"
+    elif npm --prefix "$ROOT_DIR/frontend" ci; then
+        FRONTEND_READY=1
+        pass "frontend dependencies synced from package-lock.json"
+    else
+        blocked "npm ci failed"
     fi
     local compose_file=""
     if [[ -f "$ROOT_DIR/compose.yaml" ]]; then
@@ -550,21 +581,21 @@ sync_project_if_ready() {
 }
 
 run_full_checks() {
-    if [[ "$G0_PENDING" == 1 ]]; then
-        warn "full checks skipped while G0 is pending"
-        return 0
-    fi
     if [[ "$MODE" == check ]]; then
-        warn "full checks require install mode so locked environments can be used"
+        warn "full checks require install mode so project-local dependencies can be used"
         return 0
     fi
-    if ! (cd "$ROOT_DIR" && uv run --locked python -m unittest discover -s tests/workspace -v); then
-        blocked "workspace tests failed under uv"
+    if [[ "$BACKEND_READY" == 1 ]]; then
+        if ! (cd "$ROOT_DIR" && "$ROOT_DIR/.venv/bin/python" -m pytest -q); then
+            blocked "backend and workspace tests failed"
+        fi
+        if ! (cd "$ROOT_DIR" && "$ROOT_DIR/.venv/bin/python" tools/export_openapi.py --check); then
+            blocked "published OpenAPI is out of date"
+        fi
+    else
+        blocked "backend tests cannot run without its dependencies"
     fi
-    if [[ -d "$ROOT_DIR/tests/smoke" ]] && ! (cd "$ROOT_DIR" && uv run --locked pytest tests/smoke -q); then
-        blocked "application smoke tests failed"
-    fi
-    if [[ -f "$ROOT_DIR/frontend/package.json" ]]; then
+    if [[ "$FRONTEND_READY" == 1 ]]; then
         if grep -q '"typecheck"' "$ROOT_DIR/frontend/package.json" && ! npm --prefix "$ROOT_DIR/frontend" run typecheck; then
             blocked "frontend typecheck failed"
         fi
@@ -582,8 +613,10 @@ printf 'targets: python=%s node=%s uv=%s\n' "$PYTHON_TARGET" "$NODE_TARGET" "$UV
 ensure_git || true
 ensure_uv || true
 ensure_python || true
-ensure_node || true
-ensure_docker || true
+if [[ "$BACKEND_ONLY" == 0 ]]; then
+    ensure_node || true
+    ensure_docker || true
+fi
 run_workspace_check
 sync_project_if_ready
 if [[ "$FULL_CHECK" == 1 ]]; then
@@ -594,7 +627,9 @@ if [[ "$BLOCKED" != 0 ]]; then
     printf 'RESULT: BLOCKED (%s issue(s))\n' "$BLOCKED" >&2
     exit 2
 fi
-if [[ "$G0_PENDING" == 1 ]]; then
+if [[ "$BACKEND_ONLY" == 1 ]]; then
+    printf 'RESULT: READY (backend tools/manifests; frontend and Docker not requested)\n'
+elif [[ "$G0_PENDING" == 1 ]]; then
     printf 'RESULT: PROVISIONAL (host tools ready; waiting for W3 G0 manifests)\n'
 else
     printf 'RESULT: READY\n'

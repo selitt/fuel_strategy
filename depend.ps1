@@ -1,10 +1,13 @@
-[CmdletBinding()]
+# POSIX-style --flags are parsed from $args; keep this a non-advanced script.
 param()
 
 $ErrorActionPreference = "Continue"
 $Root = (Split-Path -Parent $MyInvocation.MyCommand.Path)
 $Mode = "install"
 $FullCheck = $false
+$BackendOnly = $false
+$BackendReady = $false
+$FrontendReady = $false
 $Blocked = 0
 $G0Pending = $false
 
@@ -16,6 +19,7 @@ Prepare the local development tools for the Kosmo Piter project.
 
   --check       inspect only; do not install or change user configuration
   --full-check  run locked dependency checks and available build checks
+  --backend-only  prepare/test Python API without Node or Docker
   --help        show this help
 
 The script never starts application services. Docker Desktop licensing and
@@ -25,6 +29,7 @@ administrator prompts remain with the machine owner.
 
 foreach ($Argument in $args) {
     switch ($Argument) {
+        "--backend-only" { $BackendOnly = $true; continue }
         "--check" { $Mode = "check"; continue }
         "-Check" { $Mode = "check"; continue }
         "--full-check" { $FullCheck = $true; continue }
@@ -226,37 +231,75 @@ function Invoke-WorkspaceCheck {
 }
 
 function Sync-ProjectIfReady {
-    $Required = @(
-        "pyproject.toml",
-        "uv.lock",
-        "frontend\package.json",
-        "frontend\package-lock.json"
-    )
-    $Missing = @($Required | Where-Object { -not (Test-Path (Join-Path $Root $_)) })
-    if ($Missing.Count -gt 0) {
-        $script:G0Pending = $true
-        Write-Warn "G0_PENDING: lock files and frontend manifest are not published yet"
+    if (-not (Test-Path (Join-Path $Root "pyproject.toml"))) {
+        Write-Blocked "pyproject.toml is missing"
         return
     }
+    $Lock = Join-Path $Root "uv.lock"
+    $Requirements = Join-Path $Root "requirements-dev.txt"
+    $VenvPython = Join-Path $Root ".venv\Scripts\python.exe"
     if ($Mode -eq "check") {
-        Write-Pass "G0 manifests present (check mode did not sync dependencies)"
+        if ((Test-Path $Lock) -or (Test-Path $Requirements)) {
+            $script:BackendReady = $true
+            Write-Pass "backend manifests present (dependencies not installed in check mode)"
+        }
+        else { Write-Blocked "backend requires uv.lock or requirements-dev.txt" }
     }
+    elseif (-not (Test-Command "uv")) { Write-Blocked "uv is unavailable" }
     else {
         Push-Location $Root
-        & uv sync --locked
-        if ($LASTEXITCODE -eq 0) { Write-Pass "Python dependencies synced from uv.lock" }
-        else { Write-Blocked "uv sync --locked failed" }
-        Pop-Location
+        try {
+            if (Test-Path $Lock) {
+                & uv sync --locked
+                if ($LASTEXITCODE -eq 0) {
+                    $script:BackendReady = $true
+                    Write-Pass "Python dependencies synced from uv.lock"
+                }
+                else { Write-Blocked "uv sync --locked failed" }
+            }
+            elseif (Test-Path $Requirements) {
+                if (-not (Test-Path (Join-Path $Root ".venv"))) {
+                    & uv venv --python $PythonTarget (Join-Path $Root ".venv")
+                    if ($LASTEXITCODE -ne 0) { Write-Blocked "could not create the project-local Python environment" }
+                }
+                if (Test-Path $VenvPython) {
+                    & uv pip sync --python $VenvPython $Requirements
+                    if ($LASTEXITCODE -eq 0) {
+                        $script:BackendReady = $true
+                        Write-Pass "Python dependencies synced from requirements-dev.txt"
+                    }
+                    else { Write-Blocked "could not sync the project-local Python environment" }
+                }
+                else { Write-Blocked "project-local Python environment is unavailable" }
+            }
+            else { Write-Blocked "backend requires uv.lock or requirements-dev.txt" }
+        }
+        finally { Pop-Location }
+    }
+    if ($BackendOnly) { return }
+    $Package = Join-Path $Root "frontend\package.json"
+    $PackageLock = Join-Path $Root "frontend\package-lock.json"
+    if (-not ((Test-Path $Package) -and (Test-Path $PackageLock))) {
+        $script:G0Pending = $true
+        Write-Warn "G0_PENDING: frontend manifests not published; backend checks remain available"
+    }
+    elseif ($Mode -eq "check") { Write-Pass "frontend manifests present (dependencies not installed in check mode)" }
+    else {
         & npm --prefix (Join-Path $Root "frontend") ci
-        if ($LASTEXITCODE -eq 0) { Write-Pass "frontend dependencies synced from package-lock.json" }
+        if ($LASTEXITCODE -eq 0) {
+            $script:FrontendReady = $true
+            Write-Pass "frontend dependencies synced from package-lock.json"
+        }
         else { Write-Blocked "npm ci failed" }
     }
     $Compose = Join-Path $Root "compose.yaml"
     if (-not (Test-Path $Compose)) { $Compose = Join-Path $Root "docker-compose.yml" }
     if (Test-Path $Compose) {
-        $null = & docker compose -f $Compose config --quiet
-        if ($LASTEXITCODE -eq 0) { Write-Pass "Docker Compose configuration" }
-        else { Write-Blocked "Docker Compose configuration is invalid" }
+        if (Test-Command "docker") {
+            $null = & docker compose -f $Compose config --quiet
+            if ($LASTEXITCODE -eq 0) { Write-Pass "Docker Compose configuration" }
+            else { Write-Blocked "Docker Compose configuration is invalid" }
+        }
     }
     else {
         $script:G0Pending = $true
@@ -265,19 +308,21 @@ function Sync-ProjectIfReady {
 }
 
 function Invoke-FullChecks {
-    if ($G0Pending) { Write-Warn "full checks skipped while G0 is pending"; return }
     if ($Mode -eq "check") { Write-Warn "full checks require install mode"; return }
-    Push-Location $Root
-    & uv run --locked python -m unittest discover -s tests/workspace -v
-    if ($LASTEXITCODE -ne 0) { Write-Blocked "workspace tests failed under uv" }
-    if (Test-Path "tests\smoke") {
-        & uv run --locked pytest tests/smoke -q
-        if ($LASTEXITCODE -ne 0) { Write-Blocked "application smoke tests failed" }
+    if ($BackendReady) {
+        Push-Location $Root
+        try {
+            $VenvPython = Join-Path $Root ".venv\Scripts\python.exe"
+            & $VenvPython -m pytest -q
+            if ($LASTEXITCODE -ne 0) { Write-Blocked "backend and workspace tests failed" }
+            & $VenvPython tools/export_openapi.py --check
+            if ($LASTEXITCODE -ne 0) { Write-Blocked "published OpenAPI is out of date" }
+        }
+        finally { Pop-Location }
     }
-    Pop-Location
-    $Package = Join-Path $Root "frontend\package.json"
-    if (Test-Path $Package) {
-        $PackageText = Get-Content -Raw -LiteralPath $Package
+    else { Write-Blocked "backend tests cannot run without its dependencies" }
+    if ($FrontendReady) {
+        $PackageText = Get-Content -Raw -LiteralPath (Join-Path $Root "frontend\package.json")
         if ($PackageText -match '"typecheck"') {
             & npm --prefix (Join-Path $Root "frontend") run typecheck
             if ($LASTEXITCODE -ne 0) { Write-Blocked "frontend typecheck failed" }
@@ -297,8 +342,10 @@ Write-Host "targets: python=$PythonTarget node=$NodeTarget uv=$UvTarget"
 Ensure-Git
 Ensure-Uv
 Ensure-Python
-Ensure-Node
-Ensure-Docker
+if (-not $BackendOnly) {
+    Ensure-Node
+    Ensure-Docker
+}
 Invoke-WorkspaceCheck
 Sync-ProjectIfReady
 if ($FullCheck) { Invoke-FullChecks }
@@ -307,5 +354,6 @@ if ($Blocked -gt 0) {
     Write-Error "RESULT: BLOCKED ($Blocked issue(s))"
     exit 2
 }
-if ($G0Pending) { Write-Host "RESULT: PROVISIONAL (host tools ready; waiting for W3 G0 manifests)" }
+if ($BackendOnly) { Write-Host "RESULT: READY (backend tools/manifests; frontend and Docker not requested)" }
+elseif ($G0Pending) { Write-Host "RESULT: PROVISIONAL (host tools ready; waiting for W3 G0 manifests)" }
 else { Write-Host "RESULT: READY" }

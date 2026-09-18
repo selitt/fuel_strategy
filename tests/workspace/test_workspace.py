@@ -19,7 +19,7 @@ class WorkspaceChecks(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix="fuel workspace ")
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / "copy"
-        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc"))
+        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".venv", "venv", "node_modules", ".local", ".pytest_cache", "dist", "build"))
 
     def edit_json(self, path, edit):
         file = self.root / path
@@ -39,6 +39,19 @@ class WorkspaceChecks(unittest.TestCase):
         self.assertEqual(report["scope"], "workspace_only_not_product")
         self.assertGreater(len(report["warnings"]), 0)
         self.assertFalse(report["application_implemented"])
+
+    def test_local_environments_and_runtime_files_are_not_source_materials(self):
+        for relative in (".venv", "venv", "node_modules", ".local", ".pytest_cache"):
+            local = self.root / relative
+            local.mkdir(exist_ok=True)
+            (local / "broken.json").write_text("not JSON", encoding="utf-8")
+            (local / "README.md").write_text("[missing](does-not-exist.md)", encoding="utf-8")
+        # POSIX virtualenvs legitimately contain symlinks to the interpreter.
+        # Windows' default venv uses copies and may require admin for symlinks.
+        if sys.platform != "win32":
+            (self.root / ".venv" / "python").symlink_to(sys.executable)
+        report = workspace.inspect_workspace(self.root)
+        self.assertTrue(report["ok"], report)
 
     def test_modified_original_is_rejected(self):
         target = self.root / "fuel-hackathon/test_oil/data/demand.csv"

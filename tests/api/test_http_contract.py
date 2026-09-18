@@ -32,7 +32,6 @@ def test_legacy_operations_and_payload_schemas_are_preserved(client):
             assert resolve(actual["responses"]["200"], live) == resolve(expected["responses"]["200"], baseline)
             if "requestBody" in expected:
                 assert resolve(actual["requestBody"], live) == resolve(expected["requestBody"], baseline)
-    assert client.get("/hello").json() == {"message": "Hello, World!"}
 
 
 def test_actual_calculation_conforms_to_organizer_envelope(client, plan):
