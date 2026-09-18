@@ -7,10 +7,9 @@
 - Проверка ограничений (45-дневный резерв, вместимость хранилища, мощности каналов)
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 
-# Справочник спроса (CASE_INPUT)
 DEMAND_CATALOG: Dict[int, Dict[str, float]] = {
     2035: {"total": 100.0, "critical": 80.0},
     2036: {"total": 140.0, "critical": 105.0},
@@ -28,7 +27,6 @@ SOURCE_CATALOG: Dict[str, Dict[str, Any]] = {
     "Lunar-ISRU": {"id": "D", "capacity": 120.0, "var_price": 3.0, "res_rate": 0.00, "top_share": 0.00},
     "Emergency":  {"id": "E", "capacity": 80.0,  "var_price": 13.8, "res_rate": 0.35, "top_share": 0.00},
 }
-# Псевдонимы коротких ID (A, B, C, D, E)
 for name, data in list(SOURCE_CATALOG.items()):
     SOURCE_CATALOG[data["id"]] = {**data, "name": name}
 
@@ -44,14 +42,12 @@ def run_pseudo_engine(
     """
     is_stress = scenario_id.upper() == "MANDATORY_STRESS"
 
-    # Решения оператора
     supply_orders = decisions.get("supply_orders", [])
     capacity_reservations = decisions.get("capacity_reservations", [])
     investments = decisions.get("investments", [])
     inventory_policy = decisions.get("inventory_policy", {})
     initial_inv = float(inventory_policy.get("initial_inventory_t", 12.33))
 
-    # Анализ инвестиционных решений
     zbo_year = None
     lunar_year = None
     earth_new_year = None
@@ -65,7 +61,6 @@ def run_pseudo_engine(
         elif "EARTH_NEW" in inv_id and y:
             earth_new_year = int(y)
 
-    # Индексация заказов и резервов по годам и источникам
     orders_map: Dict[int, Dict[str, float]] = {}
     for o in supply_orders:
         y = int(o.get("year", 2035))
@@ -90,13 +85,11 @@ def run_pseudo_engine(
     cum_capex = 0.0
 
     for year in range(2035, 2041):
-        # 1. Спрос
         dem_base = DEMAND_CATALOG[year]
         dem_mult = 1.15 if (is_stress and year >= 2038) else 1.0
         dem_total = round(dem_base["total"] * dem_mult, 2)
         dem_crit = round(dem_base["critical"] * dem_mult, 2)
 
-        # 2. Проверка 45-дневного резерва на 1 января
         r_45d_target = round(dem_total * 45.0 / 365.0, 2)
         reserve_met = current_inv >= (r_45d_target - 1e-4)
         constraint_checks.append({
@@ -114,7 +107,6 @@ def run_pseudo_engine(
         storage_cap = 120.0 if zbo_active else 70.0
         loss_rate = 0.012 if zbo_active else 0.045
 
-        # 4. Поставки и закупки по каналам
         year_orders = orders_map.get(year, {})
         year_res = reservations_map.get(year, {})
 
@@ -130,7 +122,6 @@ def run_pseudo_engine(
             ord_t = year_orders.get(s_name, year_orders.get(s_id, 0.0))
             res_t = year_res.get(s_name, year_res.get(s_id, 0.0))
 
-            # Проверка непревышения мощности источника
             if res_t > s_info["capacity"]:
                 excess = round(res_t - s_info["capacity"], 2)
                 constraint_checks.append({
@@ -153,7 +144,6 @@ def run_pseudo_engine(
             deliv_t = ord_t * actual_share
             year_delivered += deliv_t
 
-            # Расчёт цены с учётом стресс-мультипликатора
             price_mult = 1.0
             if is_stress and year in (2038, 2039) and s_name in ("Earth-Core", "Earth-Flex"):
                 price_mult = 1.25
@@ -174,14 +164,12 @@ def run_pseudo_engine(
                 "delivered_t": round(deliv_t, 2),
             })
 
-        # 5. Потери и материальный баланс
         losses = round(year_delivered * loss_rate, 2)
         available = current_inv + year_delivered - losses
         served = min(dem_total, available)
         shortage = round(max(0.0, dem_total - served), 2)
         closing_inv = round(max(0.0, available - served), 2)
 
-        # Проверка переполнения хранилища
         if closing_inv > storage_cap:
             excess = round(closing_inv - storage_cap, 2)
             constraint_checks.append({
@@ -193,10 +181,8 @@ def run_pseudo_engine(
             })
             all_feasible = False
 
-        # 6. Затраты периода
         holding_cost = round(0.72 * ((current_inv + closing_inv) / 2.0), 2)
 
-        # CAPEX
         capex = 0.0
         if zbo_year == year:
             capex += 180.0
@@ -207,7 +193,6 @@ def run_pseudo_engine(
 
         cum_capex += capex
 
-        # OPEX
         opex = 0.0
         if zbo_active:
             opex += 12.0
@@ -254,7 +239,6 @@ def run_pseudo_engine(
 
         current_inv = closing_inv
 
-    # Проверка лимитов CAPEX
     if cum_capex > 2800.0:
         all_feasible = False
         constraint_checks.append({

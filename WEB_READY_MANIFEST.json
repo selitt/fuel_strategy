@@ -1,0 +1,292 @@
+{
+  "source_archive": "9(1).zip",
+  "source_archive_sha256": "519433e6e99ed222f2edc10e0e541b98d9618a6a37d63505e4c8264ac64962d4",
+  "scope": "HTTP/UI bridge only; no mathematical engine, calculation DTO or adapter changes",
+  "protected_source_files": 58,
+  "protected_sources_unchanged": true,
+  "deleted_source_files": [],
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "operation": "modify",
+      "base_sha256": "1adeb0c564cae0f787e45c609dcac4339a6fa1a84b5ce318f26198003bb1baaa",
+      "new_sha256": "ecc74b0256147ba44836ec9c6527f8c511b0d03c0f9838a663f57aa67b2eb286"
+    },
+    {
+      "path": "API_README.md",
+      "operation": "modify",
+      "base_sha256": "19701073b46c61fc1aae1ed68d93503e85d0e668b6a416db2c42eb387167724b",
+      "new_sha256": "5d05eaa64330ed8579697a986d86d69936864f8e98659ee47e8d3dae926b1a8a"
+    },
+    {
+      "path": "DATASETS_CHEATSHEET.md",
+      "operation": "modify",
+      "base_sha256": "50e680f0eb6b9dfa6bb4c5566e041e2368ee74ba19c6aa5901e351624f709d0b",
+      "new_sha256": "c72bdeb18d91eb49cabff645757479b5e6a2f929b5d8f816bce4ba66629bc343"
+    },
+    {
+      "path": "README.md",
+      "operation": "modify",
+      "base_sha256": "29538c7e22b1c58d36271bfddbd5df918242aa5388293ecd3d6a8808c961078a",
+      "new_sha256": "55af4683766c9eadd5fd5b3c8c2a224dc43ab47e646c55c0050ea83f05d59fc6"
+    },
+    {
+      "path": "START_HERE.md",
+      "operation": "modify",
+      "base_sha256": "4f939963fe7b73ea4ca8da854bba30a06a7089d68f7bcbbc6866daf1377ca165",
+      "new_sha256": "a0a96950c81dcfc505b30663be157f6988e510c23106b5c4a67416f05f5e069b"
+    },
+    {
+      "path": "WORK_ORDER.md",
+      "operation": "modify",
+      "base_sha256": "c1a43b24351355bf47813af8f31d3002723eb797c89d25f3888f2fb153fe2f6b",
+      "new_sha256": "94b6f336a4b90d59cdf1db29ec42421e4025e6a2781994b49e655ea463ccb9df"
+    },
+    {
+      "path": "contracts/README.md",
+      "operation": "modify",
+      "base_sha256": "e0e8a2aabdf6fa80b7df1aa317fe97275698f77e91653fe78f768086147f2566",
+      "new_sha256": "77f67b38858ec5a63f0f2c963666fd8499056204b5ee646a2344a7932e399a83"
+    },
+    {
+      "path": "depend.ps1",
+      "operation": "modify",
+      "base_sha256": "b6878fc7f9fe1cc3e2f3a26eb3693ab21a87a28f76d51b615ff0f67bd0ad2cb1",
+      "new_sha256": "9157843319ea90f2a3d92435cd44d4caa43670cfee103865f18e609810c0b225"
+    },
+    {
+      "path": "depend.sh",
+      "operation": "modify",
+      "base_sha256": "1f7115c93c17852e6759f132430b16f00095c89289a7bae74566d8088555c038",
+      "new_sha256": "de59ea6f94e40dfc76d3ee16a84d8072d30ae901ae0be6c750a121ec978a1ff8"
+    },
+    {
+      "path": "docs/PRODUCT.md",
+      "operation": "modify",
+      "base_sha256": "55a546eb634800ee1dc4e148bc04ba540e4a3511d90467465ecec09b83dbb1f7",
+      "new_sha256": "7a9b1c8f031f01ab1318c6dd37b0307a1caf49588cca6029cd30b20d578209e6"
+    },
+    {
+      "path": "docs/api/HANDOFF.md",
+      "operation": "modify",
+      "base_sha256": "4063abc6cb54440fcd287aec2e6f922d3179bb9922c6ab614bfc5bbc0a543afe",
+      "new_sha256": "0fc1207f28fd8e0656988ca2f9845e12414d798d1323bbbf1f4d70886c7539f4"
+    },
+    {
+      "path": "docs/api/IMPLEMENTATION_PLAN.md",
+      "operation": "modify",
+      "base_sha256": "ba5a65d628f8c8e369ed5e88e9f6284f898cc00c7e91ea534f6fca238679db8f",
+      "new_sha256": "a6e5e8f699181bc5d07a5c04e36d1142ebef55065f3264b53b3442a01b1e200c"
+    },
+    {
+      "path": "docs/api/KOSMO_API_README.md",
+      "operation": "modify",
+      "base_sha256": "19701073b46c61fc1aae1ed68d93503e85d0e668b6a416db2c42eb387167724b",
+      "new_sha256": "3e35cc69ced05af4871c98d1b27b22374386bed8cc1a7d0e42cbf99e7800253d"
+    },
+    {
+      "path": "docs/api/TEAM_AND_NEXT.md",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "9fbf62916174684724a52e8dfc738a7fc40b82af9bb504f7ff1e70daebcbfb00"
+    },
+    {
+      "path": "docs/api/evidence/web-ready/baseline-pytest.txt",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "7d261ad7052d465a3ce688dc9ecdda525996e54a962bc3d8441db6fea526052e"
+    },
+    {
+      "path": "docs/api/evidence/web-ready/environment.json",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "f616f33cb9dee52182197162895918ab77741e48edd6bf179a22a73dbad89da6"
+    },
+    {
+      "path": "docs/api/evidence/web-ready/live-http.json",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "642733228dd115c3e5f2c12d2941078d78ba792bd7743c30fcac8b49bfdd1fa0"
+    },
+    {
+      "path": "docs/api/evidence/web-ready/openapi-check.txt",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "ada3d43d482f7b08c61333d61d8fec2e495c0ee7832702bc8d53750cb4c2dd8b"
+    },
+    {
+      "path": "docs/api/evidence/web-ready/protected-files.json",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "9e50d02745556a2c77b6c8b0840b2934aa588e0cc347e8d8c74f9513d4412f4e"
+    },
+    {
+      "path": "docs/api/evidence/web-ready/pytest.txt",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "4cccdd35b4544e0fb13e55f13e3887ba64c72fe63cf180e4a31c2a4759d6745a"
+    },
+    {
+      "path": "docs/api/evidence/web-ready/uv-lock-attempt.txt",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "5961c18617002802d4e4af8e36265244d37dc06692441c4715fe509244be92f2"
+    },
+    {
+      "path": "docs/api/evidence/web-ready/workspace-check.json",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "7501d5246302c31d5754d8750764d3f57820d51aaeb27ad694cba7cee24218b5"
+    },
+    {
+      "path": "docs/api/openapi.json",
+      "operation": "modify",
+      "base_sha256": "0c480eb896820957a0288f29a8780cd5d14277f55d2f8f27ea152d14a2a9f54d",
+      "new_sha256": "ff741a77cc2c8c8d5410329c8b54215cd30d6bc24bc6ed486900fc4f266e9d68"
+    },
+    {
+      "path": "docs/reviews/RECHECK_3.md",
+      "operation": "modify",
+      "base_sha256": "2b1f7f794fa62d3c89ac7e9188f9f148f9332242bc4e7d6707227bbe08e16b7b",
+      "new_sha256": "e8210b833e09c93faccec2f55fa92f5e5ebf85e78e79d9524e140ebb5f309258"
+    },
+    {
+      "path": "frontend/README.md",
+      "operation": "modify",
+      "base_sha256": "db86be0da69e82828ec1cf7602e6dd7615f61648c23a1b1affebafefecb3c583",
+      "new_sha256": "b9ea72d30a845df1332b867e5e5cd33425140b0fa5c7b7b75ced7daf371770fd"
+    },
+    {
+      "path": "src/README.md",
+      "operation": "modify",
+      "base_sha256": "408353f4f99dc923225f1f7e079ce09cb4f9c26a42f8695462c2550ac0ff26ec",
+      "new_sha256": "ea24ea59ac60b2386fafcc1f695df933185f6be49e0e5c7b02aa520b5da397b7"
+    },
+    {
+      "path": "src/app/api/calc_controller.py",
+      "operation": "modify",
+      "base_sha256": "4635fae9daf9ab0600215d5536e0c263c14a45deea82cfba0973e4e76564b764",
+      "new_sha256": "5debfd48c98346cedee0e1d3215cffbaff9836a626e3d3a9fb75fd86b3dd65ba"
+    },
+    {
+      "path": "src/app/api/dependencies.py",
+      "operation": "modify",
+      "base_sha256": "54e33890771a893e9ae481bc848cf64a68d30b0d143ecb836755b5d792459b7b",
+      "new_sha256": "12604fa0cdd6ba1a305b49a20edbcae059d876d5a64205e84ed25c0e96705795"
+    },
+    {
+      "path": "src/app/api/errors.py",
+      "operation": "modify",
+      "base_sha256": "a1f000f83059b807e9912b47c577df69e52c5ca071d9e49f4df357e669483ccc",
+      "new_sha256": "6da424631046bbdbd6986e068d51c0be71e1ec6e6c5440cc6fdeda1797298a54"
+    },
+    {
+      "path": "src/app/api/main.py",
+      "operation": "modify",
+      "base_sha256": "44e5316f5c8888fa1a98332416850b0d3b5d2ef878d5c7e234c87a8ad49e3fa3",
+      "new_sha256": "c566cd72b503682b76ddf6da6a10211fa8a9ef69c45c82bb9ea620d7ea2d0787"
+    },
+    {
+      "path": "tasks/B01_OPTIONAL_PRICE_SCENARIOS.md",
+      "operation": "modify",
+      "base_sha256": "2502b2b57fcf57980bf5979ce140ec21d5a92e9d348be65e6eb29e13556b02f2",
+      "new_sha256": "1d70121ff92dfba81cd9a23b68e9fe023db1a360206e2403885e683ce05f9f50"
+    },
+    {
+      "path": "tasks/T01_DATA_AND_CONTRACTS.md",
+      "operation": "modify",
+      "base_sha256": "5357a7df2bd75010cd832923e4e36af0497be65234d64eec81eb1351d3c9e305",
+      "new_sha256": "7829bb2b94788c6ddb15321a0e969c894879a223e822464e520bf95e34d677ab"
+    },
+    {
+      "path": "tasks/T02_PHYSICAL_MODEL.md",
+      "operation": "modify",
+      "base_sha256": "28eca4963a5650eaf445d1ac37d90ae3d3fe685a030a3b115b430282dedd0967",
+      "new_sha256": "81d279ce0ecaa1022812432b822daee915bf47654c37abe2039bf9120e6a7839"
+    },
+    {
+      "path": "tasks/T03_CONTRACTS_AND_FINANCE.md",
+      "operation": "modify",
+      "base_sha256": "1b60401b298b4c4fa0d43658f3059727cb3e2e51b0edc372a809f79d34de05b5",
+      "new_sha256": "47a8d1c9a7f86a17e51412dd29c1cd4556f0ab24173082ddfb549d721f9dcca3"
+    },
+    {
+      "path": "tasks/T05_RESEARCH_PROTOCOL.md",
+      "operation": "modify",
+      "base_sha256": "63f53651c71981a3bac2b83014cced0c9e25294a4b244ff2272a455450c597d5",
+      "new_sha256": "9ce140ecea5f37bdbf3edd25ae44dcebeacabe8359d83213153143ec3db4403f"
+    },
+    {
+      "path": "tasks/T06_INTEGRATION.md",
+      "operation": "modify",
+      "base_sha256": "31ee0d2fefa43af751c7fd7e37cc87fa4dc9cdd76be5d0bea40d25cc75857265",
+      "new_sha256": "cf8000cf7db7e0b2adfac45fcf905cfdec3a2ded6adb37eaf53fa030f51c1a70"
+    },
+    {
+      "path": "tasks/T07_EXPERIMENTS_AND_EXTENSION.md",
+      "operation": "modify",
+      "base_sha256": "c540cb2e2b0fb6dd7f6f8faad72180117e94a650f3add41e0c93015c66a0b251",
+      "new_sha256": "a8d5a094306e752efb97fabf1cb415d2cea7c5510d89231e51952d0e6cf2886b"
+    },
+    {
+      "path": "tasks/index.json",
+      "operation": "modify",
+      "base_sha256": "074cddea37bdf719c685430ec3f591c15691cd3630bf6fbc1686577d924621f5",
+      "new_sha256": "91e7386085999a9f1baf7101e84a5cef4da92d6706d1d522ff8bfa9e602f76cd"
+    },
+    {
+      "path": "tests/api/test_frontend_readiness.py",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "2b3b573dfd58d0623a5b792a490274bc09038c79e144140f158a47b3f1a94607"
+    },
+    {
+      "path": "tests/api/test_http_contract.py",
+      "operation": "modify",
+      "base_sha256": "f0e51bba7ba8973ab4a4add8d954046777e55ef34cf297ec77d093f50e89d0db",
+      "new_sha256": "c58df19655330edfb32a22cc5a029523ae97a4e3c998c85a567bf314ce8c418a"
+    },
+    {
+      "path": "tests/api/test_openapi_tool.py",
+      "operation": "add",
+      "base_sha256": null,
+      "new_sha256": "c9fd07831854f1b80fabc71b3f966bd8db9ee6e3a2b67223a56970e8f786c7e8"
+    },
+    {
+      "path": "tests/workspace/test_depend_scripts.py",
+      "operation": "modify",
+      "base_sha256": "726c7c80beec3b503008e1647637a93c27acc26acc4502693c35b408110b094f",
+      "new_sha256": "2882d5f4ed54b2d8687671b1d5794ce7746793783b10b0d0601fce89fe57c28e"
+    },
+    {
+      "path": "tests/workspace/test_workspace.py",
+      "operation": "modify",
+      "base_sha256": "0c2f3ea2d1227d3d0ff1251fa1d546fe9712a5c1973c426f47155785005ea095",
+      "new_sha256": "3b961306e761da2ad8ec9f93858f142bd705011b770d9a1050d6da0003ccbdc9"
+    },
+    {
+      "path": "tools/export_openapi.py",
+      "operation": "modify",
+      "base_sha256": "63bf59434f56cbc10f564d81c7dd10bfdadb9bc78287db05d517fc9d8dd97f60",
+      "new_sha256": "d139d19b3edb4c4d755dbe46be360c32e2df28279dd530eb1016e6ed4b93935c"
+    },
+    {
+      "path": "tools/workspace.py",
+      "operation": "modify",
+      "base_sha256": "e8d1f2924a9b0a3eae0d71ff8378a080ec419673a40ee1d4c54ef75300097498",
+      "new_sha256": "7ff46d75533d4e4d46baf02ff000bf455e8058a739be8e7b10a1e3339a6d6663"
+    },
+    {
+      "path": "workspace.json",
+      "operation": "modify",
+      "base_sha256": "2e861025de6526fdcfadefceb155b4010d5f86af130e8cac05fe2b0b10ddfbe0",
+      "new_sha256": "12179e2ff9568d435ac34c79707b46427f298940b17ab25f08835e120d8e37d1"
+    }
+  ],
+  "transfer_notes": [
+    "No .git directories or files included; original Git remains untouched.",
+    "Compare each base_sha256 before overlaying an existing team checkout.",
+    "The corrected main.py resolves source conflict markers, not the Git merge state in your checkout.",
+    "Install/test evidence excludes a clean network install, Docker and PowerShell runtime."
+  ]
+}

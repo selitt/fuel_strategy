@@ -1,146 +1,136 @@
-# HTTP API для будущего интерфейса
+# Backend → FastAPI → UI
 
-Этот пакет продолжает **6.zip**. API Васи и его математические DTO сохранены; добавлены только веб-операции вокруг существующего сервиса. Фронтенд в этом этапе не создавался.
-
-**Начинать здесь, а не с исторического плана подготовки.** Список файлов и результаты проверок — в [передаче](docs/api/HANDOFF.md).
-
-## Что сохранено
-
-`src/engine/**`, `src/app/service/calc_service.py`, `src/app/dto/calc_dto.py`, `src/app/api/KosmoAPI.yaml`, материалы организатора и `sources.lock.json` не изменены. У исходных операций сохранены URL, operationId и смысл JSON-схем:
-
-| Метод | Путь | Результат |
-|---|---|---|
-| GET | `/hello` | Старый ответ проверки связи |
-| GET | `/hello/{name}` | Старый ответ с именем |
-| GET | `/api/calc/template` | `ParticipantPlanDTO`, шаблон Васи |
-| POST | `/api/calc` | `ResultExportEnvelopeDTO`; без автоматического сохранения проекта |
-
-`KosmoAPI.yaml` — контракт команды, построенный на схемах организатора, а не предписанные организатором HTTP URL. Исходные `plan.schema.json` и `export.schema.json` задают переносимые конверты; поля строк детализированы в DTO Васи.
-
-**Текущий вычислительный сервис вызывает `pseudo_engine.py`.** Он не заменён и не объявлен проверенной конкурсной моделью. HTTP 200 означает успешный вызов, не выполнимость плана. Поля `is_feasible` и `constraint_checks` передаются от модели, а не вычисляются веб-слоем.
+Это инструкция рабочего HTTP-слоя. Математика находится за адаптером; здесь нет второй реализации расчёта. `frontend/` пока содержит только инструкцию для разработчика.
 
 ## Запуск
 
-### Docker Compose — только backend на этом этапе
+Из корня проекта, Docker Compose:
 
 ```bash
-docker compose up --build
+docker compose up --build -d backend
+docker compose logs -f backend
 ```
 
-Сервер: `http://127.0.0.1:8000`; Swagger: `/docs`; OpenAPI: `/openapi.json`; health: `/api/health`.
-Порт опубликован только на loopback. Проекты хранятся в named volume `project_data`; обычные перезапуски и `docker compose down` не удаляют его. Не выполняйте `docker compose down -v`, когда нужно сохранить проекты.
+`http://127.0.0.1:8000/docs` — Swagger, `/openapi.json` — схема, `/api/health` — состояние HTTP.
+Compose поднимает только backend на loopback. Один worker: JSON-store использует блокировку внутри процесса. Не запускайте несколько процессов backend на одном каталоге проектов.
 
-Dockerfile и Compose подготовлены, но **сборка образа в среде автора не выполнялась: Docker отсутствует**. Фронтового контейнера пока нет. При его добавлении проксировать `/api` в backend, не делать второй Python-сервер.
+Изменение порта/CORS/лимитов: скопировать `.env.example` в `.env`, отредактировать и пересоздать контейнер. Проекты лежат в volume `project_data`; не применять `docker compose down -v`, если их нужно сохранить.
 
-### Локальный Python 3.12–3.13
-
-Фактически проверен CPython 3.13.5/Linux. Из корня проекта:
+Без Docker, Linux/WSL (Python 3.12–3.13):
 
 ```bash
-python -m venv .venv
-# Linux/macOS:
+python3 -m venv .venv
 source .venv/bin/activate
-# Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements-dev.txt
-python -m uvicorn src.app.api.main:app --host 127.0.0.1 --port 8000
+python -m uvicorn src.app.api.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Для runtime без тестовых зависимостей: `python -m pip install -r requirements.txt`.
+Windows PowerShell, без обязательной активации окружения:
 
-В `requirements*.txt` зафиксированы версии из проверенной среды и замыкание активных зависимостей. Это **не** результат чистой сетевой установки: доступ к PyPI не работал (DNS). Настоящий `uv.lock` не выдумывался. Для принятого командой uv-workflow владелец зависимостей на машине с сетью выполняет `uv lock`, затем `uv sync --locked` и фиксирует полученный lock. До этого не использовать `--locked` как будто файл уже существует. Исходные `depend.sh`/`depend.ps1` не переделаны под незавершённый frontend/G0.
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.\.venv\Scripts\python.exe -m uvicorn src.app.api.main:app --reload --host 127.0.0.1 --port 8000
+```
 
-Настройки читаются из окружения: `FUEL_DATA_DIR` (по умолчанию `.local/projects`), `FUEL_CORS_ORIGINS`, `FUEL_MAX_REQUEST_BYTES` (8 MiB), `FUEL_MAX_UPLOAD_BYTES` (2 MiB). `.env.example` поясняет различие Compose `.env` и переменных локального Python-процесса.
+Проверить версию выбранного Python перед созданием окружения. Локальное приложение не читает `.env` автоматически: переменные `FUEL_DATA_DIR`, `FUEL_CORS_ORIGINS`, `FUEL_MAX_REQUEST_BYTES`, `FUEL_MAX_UPLOAD_BYTES` задаются в окружении процесса. По умолчанию проекты сохраняются в `.local/projects`.
 
-**Один backend-процесс / один Uvicorn worker на каталог хранения.** JSON-файлы записываются атомарно, ревизии проверяются под внутрипроцессным lock. Для нескольких процессов/реплик потребуется отдельное межпроцессное хранилище/блокировка; здесь это не заявлено.
-
-## Дополнительные операции для UI
-
-Это отдельное **web extension**, не новая версия математического контракта.
-
-| Метод | Путь | Назначение |
-|---|---|---|
-| GET | `/api/health` | HTTP жив; отдельно указан статус модели, не бизнес-приёмка |
-| GET | `/api/meta` | Возможности, лимиты, форматы, ограничения backend |
-| GET | `/api/catalog` | Пять исходных CSV и два YAML-сценария, read-only, с происхождением |
-| GET | `/api/schemas/{name}` | `plan` / `export`: исходные схемы; `input` / `result`: схемы DTO |
-| POST | `/api/plans/validate` | Проверка структуры без расчёта, предупреждение о defaults |
-| POST | `/api/plans/import` | Multipart, поле `file`: прочитать JSON-план; пока без сохранения |
-| POST | `/api/plans/export` | Скачать текущий план в JSON, без вычислений |
-| POST | `/api/projects` | `{name, plan}` → новый UUID проекта, revision=1 |
-| GET | `/api/projects` | Краткий список с `limit` / `offset`, без тяжёлых таблиц |
-| GET | `/api/projects/{id}` | Открыть план, ревизию, состояние и последний результат |
-| PUT | `/api/projects/{id}` | `{name, plan, expected_revision}` → сохранить правки |
-| DELETE | `/api/projects/{id}` | `expected_revision` в query; удалить только актуальную версию |
-| POST | `/api/projects/{id}/calculate` | `{expected_revision}` → вызвать сервис и сохранить результат |
-| GET | `/api/projects/{id}/result` | Актуальный `ResultExportEnvelopeDTO`; иначе 409 |
-| GET | `/api/projects/{id}/export` | Полный переносимый JSON-проект со снимком входов |
-| POST | `/api/projects/import` | Multipart `file`: открыть файл проекта **как новую копию** |
-| GET | `/api/projects/{id}/result/export` | `format=json` или `format=csv` (ZIP с CSV и метаданными) |
-| POST | `/api/projects/compare` | `{project_ids: [id1, id2, ...]}`, 2–6 разных актуальных результатов |
-
-UUID проекта (`project_id`) и пользовательский идентификатор плана (`plan_id`) — разные сущности. Два проекта могут иметь одинаковый `plan_id`; файлы на диске не называют пользовательской строкой или исходным именем upload.
-
-`/api/catalog` возвращает CSV-ячейки **строками**, как в источниках, без скрытой конвертации единиц. Это справочник для интерфейса. Сейчас engine использует свои константы: этот endpoint не означает, что произвольный новый CSV уже подаётся в модель.
-
-## Первый пользовательский путь
-
-1. Получить `/api/meta`, `/api/catalog`, затем `/api/calc/template` или импортировать JSON-план через `/api/plans/import`.
-2. Создать проект `POST /api/projects` с полями `name` и `plan`. Сохранить полученные `project_id` и `revision`.
-3. После правки отправить **весь** план через `PUT` с последней `expected_revision`. Использовать ревизию из ответа, не прибавлять её на клиенте вручную.
-4. Отправить `POST /api/projects/{id}/calculate` с текущей ревизией. В ответе — проект, `last_run`, `result_state` и новая ревизия.
-5. Показать таблицы из `last_run.result`; сохранить/открыть проект и скачать результат. Для сравнения создать отдельный проект с другим сценарием, рассчитать его и передать оба UUID в `/compare`.
-
-Пример ввода — [plan.json](docs/api/examples/plan.json); пример создания — [create-project.json](docs/api/examples/create-project.json). Это буквально шаблон существующего сервиса, **не выбранная или доказанно выполнимая стратегия**.
+Существующие bootstrap-скрипты теперь поддерживают отдельный backend:
 
 ```bash
-curl http://127.0.0.1:8000/api/calc/template -o plan.json
-curl -H "Content-Type: application/json" --data-binary @plan.json http://127.0.0.1:8000/api/calc
-curl -H "Content-Type: application/json" --data-binary @docs/api/examples/create-project.json http://127.0.0.1:8000/api/projects
+bash depend.sh --backend-only --check
+bash depend.sh --backend-only --full-check
 ```
 
-В Windows PowerShell при конфликте с alias используйте `curl.exe`.
+PowerShell: `./depend.ps1 --backend-only --check` или `./depend.ps1 --backend-only --full-check`.
+`--check` не устанавливает зависимости. Без `--check` скрипт может установить выбранные версии host tools. Backend-only не требует Node/Docker. При наличии `uv.lock` используется `uv sync --locked`; пока lock отсутствует — `uv pip sync` по зафиксированному `requirements-dev.txt` в локальное `.venv`. Отсутствие React-манифестов не блокирует backend-тесты.
 
-## Состояния, ошибки и защита от гонок
+## Проверка и схема
 
-`result_state`: `not_calculated` — результата нет; `current` — снимок соответствует входам и версии сервиса; `stale` — изменились входы или версия модели. **`current` не означает `is_feasible=true` и не означает научную достоверность.** Переименование проекта без изменения плана не делает результат устаревшим.
+```bash
+python -m pytest -q
+python tools/workspace.py check
+python tools/export_openapi.py --check
+```
 
-Расчёт хранит снимок `ParticipantPlanDTO`, SHA-256 нормализованных входов, входную ревизию, время, идентификатор запуска и метаданные сервиса. Изменение проекта во время расчёта приводит к 409 при попытке сохранить поздний ответ. Другой успешный результат не затирается ошибкой. Изменение входов сохраняет старый результат, но помечает его stale; выдавать его через `/result` или result-export как актуальный нельзя.
-
-Ошибки имеют `code`, `detail`, `request_id`. Для 422 сохранён формат FastAPI `detail: [{loc, msg, type}]`. Основные коды: `VALIDATION_ERROR`, `PROJECT_NOT_FOUND`, `REVISION_CONFLICT`, `RESULT_NOT_AVAILABLE`, `RESULT_STALE`, `FILE_TOO_LARGE`, `REQUEST_TOO_LARGE`, `CALCULATION_FAILED`, `ENGINE_NOT_READY`.
-
-По 409 frontend перечитывает проект и предлагает повтор действия на новой ревизии; не перезаписывает данные автоматическим retry. По 500/503 — показывает ошибку, **не подставляет mock**. При любых локальных изменениях ввода UI сразу помечает показанный результат устаревшим, ещё до сохранения.
-
-`X-Request-ID` возвращается в ответе и доступен через CORS. Для сохранённых результатов есть `X-Result-Origin`, `X-Input-Hash`, `X-Result-Run-ID`, `X-Engine-Status`; `X-Model-Verified=false`. В Python `fuel.api` пишет диагностические сообщения через стандартный logging; для INFO-журнала можно подключить свою logging-конфигурацию. Это не Prometheus, WebSocket-монитор и не космическая телеметрия.
-
-## Импорт и выгрузка
-
-Поддерживаются **JSON-план** и **JSON-проект приложения** — разные файлы и разные endpoints. CSV/XLSX не принимаются как произвольные входы модели; исполняемые Python-файлы не загружаются. Проверяются UTF-8, структура, лимит размера, повторяющиеся JSON-ключи и нечисловые NaN/Infinity. Дополнительные поля существующих DTO сохраняются; их математическая поддержка не угадывается.
-
-Файл проекта импортируется в новый UUID; чужие ревизии и пути не используются для перезаписи. Импортированный расчёт имеет `origin=imported`, статус `unverified`; сервер не выдаёт его за собственный пересчёт. Несовпадающий hash снимка, неполный результат или несовместимая версия формата вызывают ошибку.
-
-JSON результата соответствует исходному `ResultExportEnvelope` и дополнен `_web_export`: provenance, единицы, допущения, состояние модели и предупреждения. Числа ядра не пересчитываются. Для CSV скачивается ZIP: шесть таблиц, `metadata.json`, `plan.json`, `result.json`. Пустые таблицы не наполняются нулями. Опасные текстовые CSV-ячейки/заголовки экранируются для защиты от формул; неизменённые исходные строки остаются в JSON.
-
-## Стык с Васей и будущим frontend
-
-Существующий сервис предоставляет `get_template_plan()` и `calculate(ParticipantPlanDTO)`. HTTP-слой получает его через `get_calculation_service`; проектный слой использует тот же вызов, не отдельную модель. Точка подстановки: `create_app(calculation_service=my_service)` либо FastAPI dependency override. Экземпляр сервиса должен быть пригоден для одновременных вызовов; синхронные вызовы идут в threadpool. CPU-ускорение, process pool, фоновые jobs, отмена расчётов и прогресс не реализованы; закрытие HTTP-запроса не является командой остановки engine.
-
-Сервис обязан явно вернуть все поля конверта и сводные поля `is_feasible`/`total_cost_mln`. Пропущенные поля не превращаются в автоматический успех/нулевые расходы благодаря defaults. При появлении новой модели её владелец согласует DTO и версию сервиса; формулы внутри API не добавляются.
-
-Действующая расширенная схема — [docs/api/openapi.json](docs/api/openapi.json), оригинал Васи — [KosmoAPI.yaml](src/app/api/KosmoAPI.yaml). Перегенерация:
+После согласованного изменения HTTP-контракта:
 
 ```bash
 python tools/export_openapi.py
+python -m pytest -q
 ```
 
-После создания React-проекта из этой схемы генерируются TS-типы (`openapi-typescript` по уже принятому стеку). Не писать вручную вторую версию финансовых DTO. Для multipart не задавать `Content-Type` вручную: границу формирует `FormData`/браузер. Скачать CSV означает обработать ZIP как файл, не вызвать `response.json()`.
+Полный контракт: [docs/api/openapi.json](docs/api/openapi.json). Он сравнивается тестом с работающим приложением. Базовые две операции Васи остаются в `src/app/api/KosmoAPI.yaml`; запросы, успешные ответы и `operationId` проверяются на совместимость. `/hello` удалён и не должен использоваться.
 
-## Проверки и границы
+## Группы операций
 
-```bash
-python -m pytest tests/api tests/test_calc_api.py -q
-python -m pytest tests -q
+| Группа | Операции |
+|---|---|
+| Система | `GET /api/health`, `/api/meta`, `/api/catalog`, `/api/schemas/{name}` |
+| Расчёт без сохранения | `GET /api/calc/template`, `POST /api/calc` |
+| JSON-планы | `POST /api/plans/validate`, `/api/plans/import`, `/api/plans/export` |
+| Проекты | `POST/GET /api/projects`, `GET/PUT/DELETE /api/projects/{id}` |
+| Сохранённый расчёт | `POST /api/projects/{id}/calculate`, `GET /api/projects/{id}/result` |
+| Перенос и сравнение | `POST /api/projects/import`, `/api/projects/compare`, `GET /api/projects/{id}/export`, `/api/projects/{id}/result/export` |
+
+`/api/schemas/input` и `/api/schemas/result` — JSON Schema текущих расчётных DTO. `plan` и `export` — неизменённые исходные схемы организатора. `/api/catalog` отдаёт исходные CSV-таблицы строками, с именами столбцов и SHA-256; это read-only справочник, не подключение другого набора к математике.
+
+## Пользовательский цикл для frontend
+
+Получить шаблон или импортировать JSON-план. Создать проект через `{name, plan}` и сохранить `project_id`, `revision`. Все последующие операции используют серверную ревизию из последнего ответа.
+
+```text
+POST /api/projects                     {name, plan}
+PUT  /api/projects/{id}                 {name, plan, expected_revision}
+POST /api/projects/{id}/calculate       {expected_revision}
+GET  /api/projects/{id}/result
+POST /api/projects/compare              {project_ids: [id1, id2]}
+GET  /api/projects/{id}/result/export?format=csv
 ```
 
-Первый набор проверяет HTTP, проекты и совместимость с API Васи. Второй также запускает исторические проверки рабочего пространства: в исходном 6.zip уже падали три теста из-за отсутствующих каталогов в старой task-карте. Они не скрыты через skip/xfail и не исправлены созданием фиктивных engine-модулей. Полный вывод и сравнение до/после — в `docs/api/evidence/`.
+Расчёт проекта тоже меняет ревизию. При `409 REVISION_CONFLICT` перечитать проект и показать конфликт, не перезаписывать чужую правку автоматически. Обновление имени само по себе не меняет входы; изменение плана или версии адаптера делает результат `stale`. Без расчёта состояние `not_calculated`; после совпадающего расчёта — `current`.
 
-Нет готового React-сайта, научной валидации модели, новых физических/финансовых формул, оптимизатора, обновлённого риск-модуля, авторизации, многопользовательской изоляции, фоновой очереди или произвольного Excel-import. Это общий локальный workspace команды. Перед публикацией в интернете требуется отдельно организовать аутентификацию/контроль доступа и защищённый deployment.
+Актуальный результат недоступен до расчёта или после изменения входов: `409 RESULT_NOT_AVAILABLE` / `RESULT_STALE`. Старый снимок остаётся в проекте для просмотра, но его нельзя выдавать за актуальный. Хранится только последний запуск, не история запусков.
+
+Сравнение принимает 2–6 различных проектов и возвращает их сохранённые актуальные результаты. Это не оптимизатор и не автоматический выбор стратегии.
+
+## Файлы, экспорт, ошибки
+
+Импорт использует `multipart/form-data`, поле **`file`**. Поддерживаются JSON-план и JSON-проект, но не Python, CSV или XLSX для подачи в модель. Браузер должен сам установить multipart boundary:
+
+```typescript
+const body = new FormData();
+body.append("file", file);
+const response = await fetch(`${apiBase}/api/plans/import`, { method: "POST", body });
+// Не устанавливать Content-Type вручную для FormData.
+```
+
+JSON-проект импортируется как новая копия, а его результат помечается `origin=imported`, `model_verified=false`: перенесённым числам не присваивается доверие к серверному расчёту. Для серверного происхождения выполнить новый расчёт.
+
+Выгрузка плана — переносимый JSON. Выгрузка проекта включает план и последний снимок. Выгрузка результата: `format=json` или `format=csv` (ZIP с CSV, метаданными и входным снимком). Числа берутся из сохранённого результата без пересчёта на стороне экспорта; единицы/периоды/сценарий присутствуют в конверте и метаданных. Пустые таблицы не означают «рисков нет».
+
+Ошибки представлены единообразно:
+
+```json
+{"code":"VALIDATION_ERROR","detail":[{"loc":["body","decisions"],"msg":"...","type":"..."}],"request_id":"..."}
+```
+
+`detail` бывает строкой или массивом диагностик. UI сначала проверяет `response.ok`, затем отображает диагностическое сообщение; это касается и скачивания файлов. `X-Request-ID` доступен браузеру. В CORS разрешены `http://localhost:5173` и `http://127.0.0.1:5173`; публичный адрес нужно добавить явно. Доступен `Content-Disposition` для имён скачиваемых файлов.
+
+## Стык с Васей
+
+Контракт подключения — `CalculationBackend` в `src/app/api/dependencies.py`:
+`get_template_plan() -> ParticipantPlanDTO`, `calculate(plan) -> ResultExportEnvelopeDTO`.
+Подключение: `create_app(calculation_service=adapter, engine_info=...)`. Обычный запуск без аргументов подключает существующий `CalculationService`. Внедряемый адаптер должен быть синхронным; FastAPI вызывает его в threadpool, не в отдельной очереди задач.
+
+В `engine_info` передаются стабильные `engine_id` и `version`, статус и ограничения. Версию менять при изменении интерпретации входов/алгоритма, чтобы сохранённые результаты стали устаревшими. Статус подтверждённой математической модели веб-слой сам не назначает.
+
+Адаптер может сообщать ожидаемую ошибку через `ApiProblem`: FastAPI сохранит код/статус/диагностику. Исключения программирования скрываются за безопасным `500`; `NotImplementedError` и отсутствие реализации дают `503`. Доменную ошибку следует переводить в публичную диагностику в адаптере, а не помещать HTTP-зависимости в математическое ядро.
+
+[Разделение ответственности и последовательность](docs/api/TEAM_AND_NEXT.md).
+
+## Чего это не подтверждает
+
+Здесь не исправлены мощности, сроки, финансы или риск-модель `pseudo_engine`. Произвольные поля сохраняются согласно DTO, но могут не использоваться текущим адаптером. Проверка плана — `structure_only`, не проверка исполнимости.
+
+Нет frontend, авторизации, разделения пользователей, фоновых заданий, процентов прогресса и полноценной истории запусков. Общий локальный workspace нельзя без защиты публиковать в интернете. Проверки передачи и ограничения среды — [HANDOFF](docs/api/HANDOFF.md).

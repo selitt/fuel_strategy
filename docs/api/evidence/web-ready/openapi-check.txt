@@ -1,0 +1,1 @@
+OpenAPI snapshot is current: /mnt/data/web_ready_work/kosmo-piter_vibecoders_47/docs/api/openapi.json

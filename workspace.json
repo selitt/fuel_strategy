@@ -2,10 +2,10 @@
   "schema_version": "1.0",
   "project_name": "Топливный космоконтур 2035",
   "team_size": 5,
-  "stage": "preparation",
+  "stage": "web_api_ready_frontend_pending",
   "application_implemented": false,
   "application_stack": "Python/FastAPI/Pydantic + React/TypeScript/Vite/Plotly + Docker Compose; JSON persistence and CSV/XLSX export; no Streamlit, automatic optimizer, or SQL at start",
-  "next_task": "T00",
+  "next_task": "T04",
   "check_scope": "workspace_only_not_product",
   "reference_paths": [
     "fuel-hackathon/test_oil",
@@ -41,5 +41,16 @@
     "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md",
     "docs/Топливный_кейс_разбор_материалов.md"
   ],
-  "note": "Preparation scaffold with D01/D02 accepted. Python helper and future application stack are separate concerns; application_implemented remains false."
+  "note": "application_implemented относится к полному конкурсному приложению и остаётся false: HTTP API реализован, UI и полная модель не приняты. workspace check проверяет только материалы и навигацию. Тесты API: python -m pytest; актуальные границы: docs/api/TEAM_AND_NEXT.md.",
+  "implemented_components": [
+    "http_api",
+    "project_storage",
+    "json_plan_project_import",
+    "json_csv_result_export"
+  ],
+  "pending_components": [
+    "frontend",
+    "complete_case_model",
+    "product_acceptance"
+  ]
 }

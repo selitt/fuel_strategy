@@ -7,7 +7,7 @@
 
 ## Где работать
 
-- `src/experiments/`
+- `tests/acceptance/`
 - `configs/scenarios/`
 - `plans/`
 - `results/`

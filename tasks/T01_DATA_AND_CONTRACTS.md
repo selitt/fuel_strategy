@@ -8,7 +8,7 @@
 ## Где работать
 
 - `contracts/`
-- `src/data_io/`
+- `src/app/service/`
 - `configs/`
 - `plans/`
 - `tests/`

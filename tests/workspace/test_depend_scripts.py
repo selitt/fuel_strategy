@@ -104,6 +104,22 @@ class DependBootstrapContractTests(unittest.TestCase):
         self.assertIn("Refresh-SessionPath", script)
         self.assertIn("GetEnvironmentVariable(\"Path\"", script)
 
+    def test_backend_only_mode_does_not_require_frontend_tools(self):
+        for relative in ("depend.sh", "depend.ps1"):
+            script = self._read_required(relative)
+            self.assertIn("--backend-only", script)
+            self.assertIn("requirements-dev.txt", script)
+            self.assertIn("uv pip sync", script)
+            self.assertIn("-m pytest", script)
+
+    def test_shell_syncs_backend_before_optional_frontend(self):
+        script = self._read_required("depend.sh")
+        sync = script.split("sync_project_if_ready()", 1)[1].split("run_full_checks()", 1)[0]
+        # Missing UI manifests must not return before the Python environment exists.
+        self.assertLess(sync.index("uv pip sync"), sync.index("frontend/package.json"))
+        checks = script.split("run_full_checks()", 1)[1]
+        self.assertNotIn('"$G0_PENDING" == 1', checks.split("printf 'Kosmo", 1)[0])
+
     def test_shell_help_is_available(self):
         script = ROOT / "depend.sh"
         self.assertTrue(script.is_file(), "depend.sh must exist before invoking it")
