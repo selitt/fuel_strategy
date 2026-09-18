@@ -1,24 +1,57 @@
 {
-  "status": "not_decided",
-  "note": "Структура каталогов — соглашение каркаса; реализация и бизнес-допущения ещё не утверждены.",
+  "status": "partially_decided",
+  "note": "D01 и D02 приняты. Календарь, точность, дисконтирование, solver, владельцы и сроки остаются открытыми; структура Python-пакета не зафиксирована.",
   "decisions": [
     {
       "id": "D01",
       "topic": "Стек расчётного приложения",
-      "status": "not_decided",
-      "value": null,
-      "rationale": null,
-      "approved_by": null,
-      "evidence": []
+      "status": "decided",
+      "value": {
+        "backend_and_calculation": "Python + FastAPI + Pydantic",
+        "data_and_numeric": [
+          "NumPy",
+          "pandas",
+          "PyYAML"
+        ],
+        "frontend": "React + TypeScript + Vite + Plotly",
+        "local_runtime": "Docker Compose",
+        "persistence": "JSON",
+        "export": [
+          "CSV",
+          "XLSX"
+        ],
+        "excluded_at_start": [
+          "Streamlit",
+          "automatic optimizer",
+          "SQL database"
+        ]
+      },
+      "rationale": "Выбор пользователя: Python + React; рабочий вариант и границы зафиксированы в WORK_ORDER.md.",
+      "approved_by": "team",
+      "evidence": [
+        "WORK_ORDER.md",
+        "plans/README.md",
+        "START_HERE.md"
+      ]
     },
     {
       "id": "D02",
       "topic": "Форма интерфейса",
-      "status": "not_decided",
-      "value": null,
-      "rationale": null,
-      "approved_by": null,
-      "evidence": []
+      "status": "decided",
+      "value": {
+        "form": "web operator interface",
+        "framework": "React + TypeScript + Vite",
+        "visualization": "Plotly",
+        "backend_boundary": "Python API; UI consumes the shared calculation result and contracts",
+        "implementation_status": "not_started"
+      },
+      "rationale": "Форма выбрана вместе со стеком; UI не дублирует расчётные формулы.",
+      "approved_by": "team",
+      "evidence": [
+        "WORK_ORDER.md",
+        "plans/README.md",
+        "docs/PRODUCT.md"
+      ]
     },
     {
       "id": "D03",

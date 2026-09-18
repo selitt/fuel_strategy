@@ -5,7 +5,7 @@
 
 ## Промпт агенту
 
-Подготовь план общего фундамента существующего репозитория, затем выполняй только ближайший этап после моего разрешения. Прочитай [маршрут](README.md), `AGENTS.md`, `tasks/T00_START_AND_DECISIONS.md`, `tasks/T01_DATA_AND_CONTRACTS.md`, `contracts/README.md`, `docs/ARCHITECTURE.md`, `docs/OPEN_QUESTIONS.md`. Стек теперь Python/FastAPI + React/TypeScript/Vite + Plotly + Docker Compose. Streamlit не использовать. Перед изменениями изучи реальный код и Git: не начинай заново, если коллега уже реализовал часть.
+Подготовь план общего фундамента существующего репозитория, затем выполняй только ближайший этап после моего разрешения. Прочитай [маршрут](../../plans/README.md), `AGENTS.md`, `tasks/T00_START_AND_DECISIONS.md`, `tasks/T01_DATA_AND_CONTRACTS.md`, `contracts/README.md`, `docs/ARCHITECTURE.md`, `docs/OPEN_QUESTIONS.md`. Стек теперь Python/FastAPI + React/TypeScript/Vite + Plotly + Docker Compose. Streamlit не использовать. Перед изменениями изучи реальный код и Git: не начинай заново, если коллега уже реализовал часть.
 
 ## Этап A → G0: можно одинаково запустить у всех
 

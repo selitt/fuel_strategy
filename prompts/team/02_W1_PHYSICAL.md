@@ -4,7 +4,7 @@
 
 ## Промпт агенту
 
-Работаем только над физической моделью топливного кейса. Прочитай [маршрут](README.md), `AGENTS.md`, `tasks/T02_PHYSICAL_MODEL.md`, актуальный `contracts/PIPELINE.md`, общий календарь и `docs/implementation/G1_HANDOFF.md`. Из источников нужны `test_oil/docs/CALCULATION_RULES.md`, CSV хранилища/спроса и V01/V02/V06/V07/V09/V10. Все пути источника начинаются с `fuel-hackathon/`. Составь план ближайшего среза; код — после моего разрешения.
+Работаем только над физической моделью топливного кейса. Прочитай [маршрут](../../plans/README.md), `AGENTS.md`, `tasks/T02_PHYSICAL_MODEL.md`, актуальный `contracts/PIPELINE.md`, общий календарь и `docs/implementation/G1_HANDOFF.md`. Из источников нужны `test_oil/docs/CALCULATION_RULES.md`, CSV хранилища/спроса и V01/V02/V06/V07/V09/V10. Все пути источника начинаются с `fuel-hackathon/`. Составь план ближайшего среза; код — после моего разрешения.
 
 **Границы:** `src/fuel_planner/engine/physical/`, `tests/unit/physical/`, собственные фикстуры и объяснение модели. Если G1 утвердил другой пакет, используй его карту. Не изменяй финансы, API, frontend, общий календарь и lock-файлы самостоятельно.
 

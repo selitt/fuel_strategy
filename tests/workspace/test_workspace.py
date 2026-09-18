@@ -105,7 +105,7 @@ class WorkspaceChecks(unittest.TestCase):
         self.assertEqual(plan["decisions"]["supply_orders"], [])
         assumptions = json.loads((self.root / "configs/team_assumptions.template.json").read_text(encoding="utf-8"))
         self.assertFalse(assumptions["ready_for_calculation"])
-        self.assertIsNone(json.loads((self.root / "workspace.json").read_text())["application_stack"])
+        self.assertIsNotNone(json.loads((self.root / "workspace.json").read_text())["application_stack"])
 
     def test_cli_handles_root_with_spaces_and_json_output(self):
         run = subprocess.run(

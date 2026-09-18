@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "selection": "Топливный космоконтур 2035",
   "capture_date": "2026-09-18",
-  "basis": "exact files from uploaded ZIP, not a newly downloaded substitute",
+  "basis": "organizer/reference files remain exact files from uploaded ZIP; three prior team notes were normalized in the workspace on 2026-09-18 and are tracked with pre-normalization provenance",
   "source_archive": {
     "names": [
       "2.zip",
@@ -56,15 +56,15 @@
     {
       "original_path": "docs/00_FUEL_CASE_BRIEF.md",
       "path": "docs/00_FUEL_CASE_BRIEF.md",
-      "sha256": "8a9911ef80094c30993c23ee6026f7741bcff4fc39e5ad824295b30e13624e79",
-      "bytes": 29056,
+      "sha256": "c52e90576267e9b719597fad7830bcd878b788ac1fcce3350ae3b7f4d0fdf27b",
+      "bytes": 29373,
       "kind": "prior_team_note"
     },
     {
       "original_path": "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md",
       "path": "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md",
-      "sha256": "142582b7a53f336325df565be29e0a13a270d3ad645240ded41bf683f4926beb",
-      "bytes": 27250,
+      "sha256": "12f6c87de323b07720d5a254e9ba91b45c7ae1233fc02227ac348487826f452c",
+      "bytes": 27542,
       "kind": "prior_team_note"
     },
     {
@@ -91,8 +91,8 @@
     {
       "original_path": "docs/Топливный_кейс_разбор_материалов.md",
       "path": "docs/Топливный_кейс_разбор_материалов.md",
-      "sha256": "49915313e6ed6006c6842822e942636d733fab41d31f17197ce70a457c32d230",
-      "bytes": 45098,
+      "sha256": "411852ab54243a4d36a979d2a2766e9154b2644bbeea1bde68b7ec21c25594d9",
+      "bytes": 45436,
       "kind": "prior_team_note"
     },
     {
@@ -396,5 +396,12 @@
       "bytes": 642,
       "kind": "organizer_reference"
     }
-  ]
+  ],
+  "normalization": {
+    "date": "2026-09-18",
+    "scope": "prior_team_notes_only",
+    "original_manifest": "docs/provenance/pre_normalization_sources.lock.json",
+    "report": "docs/provenance/normalization_report.json",
+    "organizer_and_reference_files_unchanged": true
+  }
 }

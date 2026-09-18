@@ -53,7 +53,7 @@ def inspect_workspace(root: Path) -> dict:
     warnings = [
         "Product NOT implemented: these checks do not run V01-V10 or verify K01-K20.",
         "Known source gaps: original XLSX / source DOCX / ERRATA are absent; see OPEN_QUESTIONS.",
-        "Original organizer Markdown links and legacy notes are preserved, not silently repaired.",
+        "Organizer Markdown and CASE_INPUT are preserved; prior team notes are normalized with provenance.",
     ]
     checks: list[dict] = []
 

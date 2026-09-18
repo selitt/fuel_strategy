@@ -4,7 +4,7 @@
 
 ## Промпт агенту
 
-Планируй только интерфейс оператора для Python API. Стек React + TypeScript + Vite, Tailwind, Plotly.js/react-plotly.js; Streamlit/Next.js и второй backend не нужны. Прочитай [маршрут](README.md), `AGENTS.md`, T04, `docs/PRODUCT.md`, `contracts/` и G1_HANDOFF. Сначала предложи ближайший экран/срез; реализация после моего разрешения.
+Планируй только интерфейс оператора для Python API. Стек React + TypeScript + Vite, Tailwind, Plotly.js/react-plotly.js; Streamlit/Next.js и второй backend не нужны. Прочитай [маршрут](../../plans/README.md), `AGENTS.md`, T04, `docs/PRODUCT.md`, `contracts/` и G1_HANDOFF. Сначала предложи ближайший экран/срез; реализация после моего разрешения.
 
 **Границы:** `frontend/` и фронтовые тесты. Общий API меняй только с W3. В этапе 01 W3 создал минимальную оболочку; не генерируй поверх неё новый проект. Npm-зависимости и package-lock меняет один владелец за раз.
 

@@ -4,7 +4,7 @@
   "team_size": 5,
   "stage": "preparation",
   "application_implemented": false,
-  "application_stack": null,
+  "application_stack": "Python/FastAPI/Pydantic + React/TypeScript/Vite/Plotly + Docker Compose; JSON persistence and CSV/XLSX export; no Streamlit, automatic optimizer, or SQL at start",
   "next_task": "T00",
   "check_scope": "workspace_only_not_product",
   "reference_paths": [
@@ -41,5 +41,5 @@
     "docs/01_FUEL_STRUCTURE_AND_NEXT_STEP.md",
     "docs/Топливный_кейс_разбор_материалов.md"
   ],
-  "note": "Stack-neutral scaffold. Python helper is infrastructure, not chosen business application stack."
+  "note": "Preparation scaffold with D01/D02 accepted. Python helper and future application stack are separate concerns; application_implemented remains false."
 }
