@@ -1,0 +1,7 @@
+[submodule "fuel-hackathon/test"]
+	path = fuel-hackathon/test
+	url = https://github.com/SpaceEconomyPolicy/test.git
+
+[submodule "fuel-hackathon/test_oil"]
+	path = fuel-hackathon/test_oil
+	url = https://github.com/SpaceEconomyPolicy/test_oil.git
