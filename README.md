@@ -8,6 +8,13 @@
 
 ## Структура
 
+Для внешних решений: [как писать и загружать стратегии](frontend/public/templates/README.md),
+[пустой JSON](frontend/public/templates/plan-empty.json),
+[заполненный JSON](frontend/public/templates/strategy-example.json) и
+[такой же план в CSV](frontend/public/templates/strategy-example.csv).
+На сайте ссылки находятся в «Импорт плана» и «Исходные данные»;
+пустой XLSX скачивается там же. Это планы решений, а не файлы результатов модели.
+
 - `src/engine/` — расчётный прототип;
 - `src/app/` — FastAPI, DTO, проекты, импорт и экспорт;
 - `frontend/` — React/TypeScript/Vite интерфейс и тесты;

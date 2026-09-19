@@ -52,6 +52,8 @@ export function ImportPlanDialog({w,onClose,onConfirm}:{w:Workspace;onClose:()=>
   {!!w.error&&w.errorMessage&&<Notice tone="error">{w.errorMessage}</Notice>}
   {selected.map((item,index)=><div key={index} className="import-selection" role="status"><Icon name={item.error?'alert':'plan'}/><div><strong>{item.file.name}</strong><span>{item.inspection?.format} · {fileSize(item.file.size)}</span><small>{item.error||(item.inspection&&importDescriptions[item.inspection.kind])}</small></div></div>)}
   <div className="transfer-templates"><span>Нужен шаблон?</span><button type="button" className="text-button" disabled={!!w.busy} onClick={()=>void w.downloadTemplate('csv')}>Скачать CSV</button><button type="button" className="text-button" disabled={!!w.busy} onClick={()=>void w.downloadTemplate('xlsx')}>Скачать XLSX</button></div>
+  <p className="help"><a href="templates/plan-empty.json" download>Пустой JSON</a> · Заполненная стратегия: <a href="templates/strategy-example.json" download>JSON</a> / <a href="templates/strategy-example.csv" download>CSV</a></p>
+  <p className="help"><a href="templates/README.md" download>Как написать свою стратегию: инструкция и поля</a> · <a href="api/schemas/input" target="_blank" rel="noreferrer">JSON Schema</a>. Пример основан на «Базовой» стратегии; после импорта проверьте результат расчёта.</p>
   <div className="modal-actions"><Button onClick={onClose}>Отмена</Button><Button kind="primary" disabled={!selected.some(item=>item.inspection)||inspecting||!!w.busy||w.riskBusy} onClick={()=>onConfirm(selected.map(item=>item.file))}>Импортировать{selected.length>1?` (${selected.filter(item=>item.inspection).length})`:''}</Button></div>
  </Modal>;
 }
