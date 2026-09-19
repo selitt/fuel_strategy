@@ -1,0 +1,46 @@
+import { useState } from 'react';
+import type { Workspace } from '../state/useWorkspace';
+import type { Balance } from '../api/types';
+import { Button, Empty, Notice } from '../components/Ui';
+import { Icon } from '../components/Icon';
+import { Chart } from '../components/Chart';
+import { date, number, percent, scenario, supportedUnits } from '../lib/format';
+const label:Record<string,string>={BASE_CRITICAL_SERVICE:'Критический спрос',BASE_TOTAL_SERVICE:'Общий спрос',RESERVE_45D:'Резерв на 45 дней',STRESS_LOSS_LIMIT:'Потери в стрессе',CAPEX_2037:'CAPEX до 2037',CAPEX_2040:'CAPEX до 2040',EMERGENCY_BASE_STREAK:'Использование Emergency'};
+const numericRows:[keyof Balance,string,boolean?][]=[['demand_total_t','Общий спрос, т'],['demand_critical_t','Критический спрос, т'],['delivered_t','Фактическая поставка, т'],['served_t','Обслуженный спрос, т'],['shortage_t','Дефицит, т'],['losses_t','Потери, т'],['opening_inventory_t','Начальный запас, т'],['closing_inventory_t','Конечный запас, т'],['reserve_45d_target_t','Целевой резерв, т'],['service_level_total','Обслуживание общего спроса',true],['service_level_critical','Обслуживание критического спроса',true]];
+export function Overview({w}:{w:Workspace}){
+ const [year,setYear]=useState<number|null>(null);const [chart,setChart]=useState<'supply'|'inventory'|'cost'>('supply');
+ if(!w.current||!w.project?.last_run){
+  const stale=w.project?.last_run;
+  return <section className="page-enter"><div className="page-intro"><div><h1>Обзор плана</h1><p>Поставки, спрос и стоимость на одном экране.</p></div></div><Empty title={stale?'План изменился':'Результатов пока нет'} action={<Button kind="primary" disabled={!!w.busy||!w.draft} onClick={()=>void w.calculate()}><Icon name="play"/>Рассчитать план</Button>}>{stale?'Пересчитайте план, чтобы увидеть актуальные значения. Старые результаты не подставляются вместо новых.':'Проверьте решения на вкладке «План» и запустите расчёт. Здесь появится ответ вашей модели.'}</Empty></section>;
+ }
+ const run=w.project.last_run,result=run.result;
+ if(!supportedUnits(result.units))return <section><h1>Обзор плана</h1><Notice tone="warning">Модель передала другие единицы измерения: {JSON.stringify(result.units)}. Этот интерфейс подписывает тонны и млн у.е. — числовые графики скрыты, чтобы не менять смысл результата. Исходный JSON доступен в меню выгрузки.</Notice></section>;
+ const balances=result.yearly_balance||[];const years=balances.map(b=>b.year);const selected=balances.find(b=>b.year===year)||balances[0];
+ const financial=(result.financial_breakdown||[]).find(f=>f.year===selected?.year);
+ const checks=result.constraint_checks||[];const failed=checks.filter(c=>!c.passed);
+ const series=chart==='supply'?[
+  {key:'demand',label:'Общий спрос',values:balances.map(b=>b.demand_total_t),color:'#b3bdcc',dashed:true},
+  {key:'delivered',label:'Поставлено',values:balances.map(b=>b.delivered_t),color:'#a9c9ff'},
+  {key:'served',label:'Обслужено',values:balances.map(b=>b.served_t),color:'#83c9b2'},
+ ]:chart==='inventory'?[
+  {key:'opening',label:'Запас на начало',values:balances.map(b=>b.opening_inventory_t),color:'#a9c9ff'},
+  {key:'closing',label:'Запас на конец',values:balances.map(b=>b.closing_inventory_t),color:'#83c9b2'},
+  {key:'target',label:'Целевой резерв',values:balances.map(b=>b.reserve_45d_target_t),color:'#b3bdcc',dashed:true},
+ ]:[{key:'cost',label:'Годовые расходы',values:years.map(y=>result.financial_breakdown?.find(f=>f.year===y)?.total),color:'#a9c9ff'}];
+ return <section className="page-enter" aria-labelledby="overview-title">
+  <div className="page-intro"><div><h1 id="overview-title">Обзор плана</h1><p>{scenario(result.scenario_id)} сценарий <span className="text-separator">/</span> {years.length?`${years[0]}–${years.at(-1)}`:'Годы не переданы'}</p></div><label className="year-control">Показатели за<select aria-label="Год показателей" value={selected?.year||''} onChange={e=>setYear(Number(e.target.value))}>{years.map(y=><option key={y}>{y}</option>)}</select></label></div>
+  {run.origin==='imported'&&<Notice tone="warning">Результат импортирован из файла и ещё не пересчитан на сервере.</Notice>}
+  <div className="metric-strip"><div><span>Общий спрос</span><strong>{percent(selected?.service_level_total)}</strong><small>обслуживание за {selected?.year||'—'}</small></div><div><span>Критический спрос</span><strong>{percent(selected?.service_level_critical)}</strong><small>показан отдельно от общего</small></div><div><span>Годовые расходы</span><strong>{number(financial?.total)}<em>млн у.е.</em></strong><small>за весь горизонт: {number(result.total_cost_mln)} млн у.е.</small></div></div>
+  <div className="chart-section"><div className="section-heading"><h2>{chart==='supply'?'Спрос и поставки':chart==='inventory'?'Запасы и резерв':'Расходы по годам'}</h2><div className="segmented compact" aria-label="Показатель графика">{([['supply','Поставки'],['inventory','Запасы'],['cost','Расходы']] as const).map(([k,v])=><button type="button" key={k} aria-pressed={chart===k} onClick={()=>setChart(k)}>{v}</button>)}</div></div><Chart years={years} series={series} unit={chart==='cost'?'млн у.е.':'т'}/></div>
+  <div className="checks-block"><div className="section-heading"><h2>Ограничения</h2><span className={failed.length?'warning-text':'muted'}>{!checks.length?'Модель не передала проверки':failed.length?`${failed.length} нарушений в ответе модели`:'Нет нарушений в переданных проверках'}</span></div>
+   {failed.length>0?<div className="table-wrap"><table className="checks-table"><thead><tr><th>Год</th><th>Проверка</th><th>Причина</th><th className="numeric">Отклонение*</th></tr></thead><tbody>{failed.map((c,i)=><tr key={i}><td><span className="year-warning"><Icon name="alert" size={14}/>{c.year}</span></td><td>{label[c.constraint_id]||c.constraint_id}</td><td>{c.detail}</td><td className="numeric">{number(c.excess)}</td></tr>)}</tbody></table><p className="help">* Число передано моделью. Единица отклонения не выделена в текущем DTO; смотрите пояснение проверки.</p></div>:<p className="help">{checks.length?'Этот вывод относится только к проверкам текущего прототипа, не к полной приёмке модели.':'Отсутствие проверок не подтверждает исполнимость плана.'}</p>}
+  </div>
+  <details className="disclosure"><summary>Баланс по годам<Icon name="chevron" size={16}/></summary><div className="disclosure-body"><div className="table-wrap"><table className="matrix"><thead><tr><th>Показатель</th>{years.map(y=><th key={y} className="numeric">{y}</th>)}</tr></thead><tbody>{numericRows.map(([key,title,pct])=><tr key={key}><th scope="row">{title}</th>{balances.map(b=><td key={b.year} className="numeric">{pct?percent(b[key] as number):number(b[key] as number)}</td>)}</tr>)}<tr><th scope="row">Резерв по проверке модели</th>{balances.map(b=><td key={b.year}>{b.reserve_45d_met?'Выполнен':'Не выполнен'}</td>)}</tr></tbody></table></div></div></details>
+  <details className="disclosure"><summary>Структура расходов<Icon name="chevron" size={16}/></summary><div className="disclosure-body"><div className="table-wrap"><table><thead><tr><th>Год</th><th>Закупка</th><th>Резерв</th><th>Хранение</th><th>CAPEX</th><th>OPEX</th><th>Всего</th></tr></thead><tbody>{(result.financial_breakdown||[]).map(f=><tr key={f.year}><th scope="row">{f.year}</th>{(['procurement','reservation','holding','capex','opex','total'] as const).map(k=><td key={k} className="numeric">{number(f[k])}</td>)}</tr>)}</tbody></table></div><p className="help">Млн условных денежных единиц. Это расходы, не прибыль. Отдельные дисконтированные расходы и ставка в текущем DTO не передаются.</p></div></details>
+  <details className="disclosure"><summary>Поставки по источникам<Icon name="chevron" size={16}/></summary><div className="disclosure-body"><div className="table-wrap"><table><thead><tr><th>Год</th><th>Источник</th><th>Резерв, т/год</th><th>Заказ, т</th><th>Поставлено, т</th></tr></thead><tbody>{(result.source_schedule||[]).map((s,i)=><tr key={i}><td>{s.year}</td><td>{s.source_id}</td><td className="numeric">{number(s.reserved_capacity_t)}</td><td className="numeric">{number(s.ordered_t)}</td><td className="numeric">{number(s.delivered_t)}</td></tr>)}</tbody></table></div></div></details>
+  <details className="disclosure"><summary>Происхождение и дополнительные данные<Icon name="chevron" size={16}/></summary><div className="disclosure-body"><p>Расчёт: {date(run.created_at)}. Ревизия входов: {run.input_revision}. Модуль: <code>{run.engine.engine_id}</code>.</p><p className="help">Допущения переданы моделью: <code>{typeof result.assumptions_reference==='string'?result.assumptions_reference:JSON.stringify(result.assumptions_reference)}</code>. Это ссылка из ответа, не подтверждение наличия документа.</p>
+   {([['inventory_trace','Внутригодовые запасы'],['risk_register','Реестр рисков']] as const).map(([key,title])=><div key={key}><h3>{title}</h3>{result[key]?.length?<pre>{JSON.stringify(result[key],null,2)}</pre>:<p className="help">Модель пока не передала эти данные. Их отсутствие не означает отсутствие риска или дефицита.</p>}</div>)}
+   <details className="sub-details"><summary>Все проверки модели</summary><pre>{JSON.stringify(checks,null,2)}</pre></details>
+  </div></details>
+ </section>;
+}

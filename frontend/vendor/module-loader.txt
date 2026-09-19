@@ -1,0 +1,4 @@
+const __cache={};function __resolve(from,name){const parts=from.split('/');parts.pop();for(const part of name.split('/')){if(part==='..')parts.pop();else if(part!=='.')parts.push(part);}const base=parts.join('/');return [base,base+'.ts',base+'.tsx',base.replace(/\.js$/,'.ts'),base.replace(/\.js$/,'.tsx')].find(k=>__modules[k]);}
+function __load(id){if(__cache[id])return __cache[id].exports;const m={exports:{}};__cache[id]=m;__modules[id](m,m.exports,name=>{if(name==='react')return __vr(96540);if(name==='react-dom/client')return __vr(22551);if(name.endsWith('.css'))return {};const target=__resolve(id,name);if(!target)throw Error('Missing module: '+id+' -> '+name);return __load(target);});return m.exports;}
+__load('src/main.tsx');
+})();
