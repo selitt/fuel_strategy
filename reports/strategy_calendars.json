@@ -2992,6 +2992,515 @@
           }
         }
       }
+    },
+    "diversified": {
+      "scenario_id": "BASE_AND_MANDATORY_STRESS",
+      "method": "bounded coordinate search of delivery days in each source-month",
+      "evaluations": 10000,
+      "improvements": 491,
+      "evaluation_limit": 10000,
+      "baseline_objective": [
+        0.0,
+        0.0,
+        0,
+        0,
+        0.0,
+        21.68
+      ],
+      "selected_objective": [
+        0.0,
+        0.0,
+        0,
+        0,
+        0.0,
+        21.68
+      ],
+      "selection_objective_fields": [
+        "hard_constraint_violations",
+        "total_violation_excess",
+        "max_annual_regular_provider_share",
+        "base_total_cost_mln"
+      ],
+      "selection_baseline_objective": [
+        1,
+        46.03,
+        0.608696,
+        13666.5
+      ],
+      "selection_selected_objective": [
+        1,
+        38.97,
+        0.608696,
+        13642.11
+      ],
+      "global_optimum_proven": false,
+      "strategy_sha256": "a59c29a1cbd01713d3e017ebe5794112473ff36acf7db62616e38406a5666658",
+      "comparisons": {
+        "BASE": {
+          "baseline": {
+            "objective": [
+              0.0,
+              0.0,
+              0,
+              0,
+              0.0,
+              21.68
+            ],
+            "is_feasible": true,
+            "total_cost_mln": 13666.5,
+            "yearly_balance": [
+              {
+                "year": 2035,
+                "opening_inventory_t": 15.0,
+                "delivered_t": 115.0,
+                "losses_t": 5.17,
+                "spill_t": 0.0,
+                "served_t": 100.0,
+                "closing_inventory_t": 24.83,
+                "shortage_t": 0.0,
+                "demand_total_t": 100.0,
+                "demand_critical_t": 80.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 12.33,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2036,
+                "opening_inventory_t": 24.83,
+                "delivered_t": 145.0,
+                "losses_t": 1.74,
+                "spill_t": 0.0,
+                "served_t": 140.0,
+                "closing_inventory_t": 28.09,
+                "shortage_t": 0.0,
+                "demand_total_t": 140.0,
+                "demand_critical_t": 105.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 17.26,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2037,
+                "opening_inventory_t": 28.09,
+                "delivered_t": 205.0,
+                "losses_t": 2.46,
+                "spill_t": 0.0,
+                "served_t": 190.0,
+                "closing_inventory_t": 40.63,
+                "shortage_t": 0.0,
+                "demand_total_t": 190.0,
+                "demand_critical_t": 135.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 23.42,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2038,
+                "opening_inventory_t": 40.63,
+                "delivered_t": 305.0,
+                "losses_t": 3.66,
+                "spill_t": 0.0,
+                "served_t": 250.0,
+                "closing_inventory_t": 91.97,
+                "shortage_t": 0.0,
+                "demand_total_t": 250.0,
+                "demand_critical_t": 170.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 30.82,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2039,
+                "opening_inventory_t": 91.97,
+                "delivered_t": 321.0,
+                "losses_t": 3.85,
+                "spill_t": 0.0,
+                "served_t": 320.0,
+                "closing_inventory_t": 89.11,
+                "shortage_t": 0.0,
+                "demand_total_t": 320.0,
+                "demand_critical_t": 210.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 39.45,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2040,
+                "opening_inventory_t": 89.11,
+                "delivered_t": 400.0,
+                "losses_t": 4.8,
+                "spill_t": 0.0,
+                "served_t": 390.0,
+                "closing_inventory_t": 94.31,
+                "shortage_t": 0.0,
+                "demand_total_t": 390.0,
+                "demand_critical_t": 250.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 48.08,
+                "reserve_45d_met": true
+              }
+            ],
+            "violations": []
+          },
+          "selected": {
+            "objective": [
+              0.0,
+              0.0,
+              0,
+              0,
+              0.0,
+              21.68
+            ],
+            "is_feasible": true,
+            "total_cost_mln": 13642.11,
+            "yearly_balance": [
+              {
+                "year": 2035,
+                "opening_inventory_t": 15.0,
+                "delivered_t": 115.0,
+                "losses_t": 5.17,
+                "spill_t": 0.0,
+                "served_t": 100.0,
+                "closing_inventory_t": 24.83,
+                "shortage_t": 0.0,
+                "demand_total_t": 100.0,
+                "demand_critical_t": 80.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 12.33,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2036,
+                "opening_inventory_t": 24.83,
+                "delivered_t": 145.0,
+                "losses_t": 1.74,
+                "spill_t": 0.0,
+                "served_t": 140.0,
+                "closing_inventory_t": 28.09,
+                "shortage_t": 0.0,
+                "demand_total_t": 140.0,
+                "demand_critical_t": 105.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 17.26,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2037,
+                "opening_inventory_t": 28.09,
+                "delivered_t": 205.0,
+                "losses_t": 2.46,
+                "spill_t": 0.0,
+                "served_t": 190.0,
+                "closing_inventory_t": 40.63,
+                "shortage_t": 0.0,
+                "demand_total_t": 190.0,
+                "demand_critical_t": 135.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 23.42,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2038,
+                "opening_inventory_t": 40.63,
+                "delivered_t": 305.0,
+                "losses_t": 3.66,
+                "spill_t": 0.0,
+                "served_t": 250.0,
+                "closing_inventory_t": 91.97,
+                "shortage_t": 0.0,
+                "demand_total_t": 250.0,
+                "demand_critical_t": 170.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 30.82,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2039,
+                "opening_inventory_t": 91.97,
+                "delivered_t": 321.0,
+                "losses_t": 3.85,
+                "spill_t": 0.0,
+                "served_t": 320.0,
+                "closing_inventory_t": 89.11,
+                "shortage_t": 0.0,
+                "demand_total_t": 320.0,
+                "demand_critical_t": 210.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 39.45,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2040,
+                "opening_inventory_t": 89.11,
+                "delivered_t": 400.0,
+                "losses_t": 4.8,
+                "spill_t": 0.0,
+                "served_t": 390.0,
+                "closing_inventory_t": 94.31,
+                "shortage_t": 0.0,
+                "demand_total_t": 390.0,
+                "demand_critical_t": 250.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 48.08,
+                "reserve_45d_met": true
+              }
+            ],
+            "violations": []
+          }
+        },
+        "MANDATORY_STRESS": {
+          "baseline": {
+            "objective": [
+              43.3573,
+              70.8,
+              1,
+              46.03,
+              0.0,
+              21.57
+            ],
+            "is_feasible": false,
+            "total_cost_mln": 14310.55,
+            "yearly_balance": [
+              {
+                "year": 2035,
+                "opening_inventory_t": 15.0,
+                "delivered_t": 115.0,
+                "losses_t": 5.17,
+                "spill_t": 0.0,
+                "served_t": 100.0,
+                "closing_inventory_t": 24.83,
+                "shortage_t": 0.0,
+                "demand_total_t": 100.0,
+                "demand_critical_t": 80.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 12.33,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2036,
+                "opening_inventory_t": 24.83,
+                "delivered_t": 145.0,
+                "losses_t": 1.74,
+                "spill_t": 0.0,
+                "served_t": 140.0,
+                "closing_inventory_t": 28.09,
+                "shortage_t": 0.0,
+                "demand_total_t": 140.0,
+                "demand_critical_t": 105.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 17.26,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2037,
+                "opening_inventory_t": 28.09,
+                "delivered_t": 205.0,
+                "losses_t": 2.46,
+                "spill_t": 0.0,
+                "served_t": 190.0,
+                "closing_inventory_t": 40.63,
+                "shortage_t": 0.0,
+                "demand_total_t": 190.0,
+                "demand_critical_t": 135.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 23.42,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2038,
+                "opening_inventory_t": 40.63,
+                "delivered_t": 296.0,
+                "losses_t": 3.55,
+                "spill_t": 0.0,
+                "served_t": 287.5,
+                "closing_inventory_t": 45.57,
+                "shortage_t": 0.0,
+                "demand_total_t": 287.5,
+                "demand_critical_t": 195.5,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 35.45,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2039,
+                "opening_inventory_t": 45.57,
+                "delivered_t": 320.75,
+                "losses_t": 3.85,
+                "spill_t": 0.0,
+                "served_t": 353.21,
+                "closing_inventory_t": 9.26,
+                "shortage_t": 14.79,
+                "demand_total_t": 368.0,
+                "demand_critical_t": 241.5,
+                "service_level_total": 0.9598,
+                "service_level_critical": 0.9613,
+                "reserve_45d_target_t": 45.37,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2040,
+                "opening_inventory_t": 9.26,
+                "delivered_t": 400.0,
+                "losses_t": 4.8,
+                "spill_t": 0.0,
+                "served_t": 392.49,
+                "closing_inventory_t": 11.97,
+                "shortage_t": 56.01,
+                "demand_total_t": 448.5,
+                "demand_critical_t": 287.5,
+                "service_level_total": 0.8751,
+                "service_level_critical": 0.8817,
+                "reserve_45d_target_t": 55.29,
+                "reserve_45d_met": false
+              }
+            ],
+            "violations": [
+              {
+                "constraint_id": "RESERVE_45D",
+                "year": 2040,
+                "passed": false,
+                "detail": "Запас на 1 января 9.26 т при норме 45 дней 55.29 т",
+                "excess": 46.03
+              }
+            ]
+          },
+          "selected": {
+            "objective": [
+              48.9659,
+              79.4,
+              1,
+              38.97,
+              0.0,
+              21.57
+            ],
+            "is_feasible": false,
+            "total_cost_mln": 14293.16,
+            "yearly_balance": [
+              {
+                "year": 2035,
+                "opening_inventory_t": 15.0,
+                "delivered_t": 115.0,
+                "losses_t": 5.17,
+                "spill_t": 0.0,
+                "served_t": 100.0,
+                "closing_inventory_t": 24.83,
+                "shortage_t": 0.0,
+                "demand_total_t": 100.0,
+                "demand_critical_t": 80.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 12.33,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2036,
+                "opening_inventory_t": 24.83,
+                "delivered_t": 145.0,
+                "losses_t": 1.74,
+                "spill_t": 0.0,
+                "served_t": 140.0,
+                "closing_inventory_t": 28.09,
+                "shortage_t": 0.0,
+                "demand_total_t": 140.0,
+                "demand_critical_t": 105.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 17.26,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2037,
+                "opening_inventory_t": 28.09,
+                "delivered_t": 205.0,
+                "losses_t": 2.46,
+                "spill_t": 0.0,
+                "served_t": 190.0,
+                "closing_inventory_t": 40.63,
+                "shortage_t": 0.0,
+                "demand_total_t": 190.0,
+                "demand_critical_t": 135.0,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 23.42,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2038,
+                "opening_inventory_t": 40.63,
+                "delivered_t": 296.0,
+                "losses_t": 3.55,
+                "spill_t": 0.0,
+                "served_t": 287.5,
+                "closing_inventory_t": 45.57,
+                "shortage_t": 0.0,
+                "demand_total_t": 287.5,
+                "demand_critical_t": 195.5,
+                "service_level_total": 1.0,
+                "service_level_critical": 1.0,
+                "reserve_45d_target_t": 35.45,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2039,
+                "opening_inventory_t": 45.57,
+                "delivered_t": 320.75,
+                "losses_t": 3.85,
+                "spill_t": 0.0,
+                "served_t": 346.16,
+                "closing_inventory_t": 16.32,
+                "shortage_t": 21.84,
+                "demand_total_t": 368.0,
+                "demand_critical_t": 241.5,
+                "service_level_total": 0.9406,
+                "service_level_critical": 0.9426,
+                "reserve_45d_target_t": 45.37,
+                "reserve_45d_met": true
+              },
+              {
+                "year": 2040,
+                "opening_inventory_t": 16.32,
+                "delivered_t": 400.0,
+                "losses_t": 4.8,
+                "spill_t": 0.0,
+                "served_t": 390.94,
+                "closing_inventory_t": 20.57,
+                "shortage_t": 57.56,
+                "demand_total_t": 448.5,
+                "demand_critical_t": 287.5,
+                "service_level_total": 0.8717,
+                "service_level_critical": 0.8779,
+                "reserve_45d_target_t": 55.29,
+                "reserve_45d_met": false
+              }
+            ],
+            "violations": [
+              {
+                "constraint_id": "RESERVE_45D",
+                "year": 2040,
+                "passed": false,
+                "detail": "Запас на 1 января 16.32 т при норме 45 дней 55.29 т",
+                "excess": 38.97
+              }
+            ]
+          }
+        }
+      }
     }
   }
 }

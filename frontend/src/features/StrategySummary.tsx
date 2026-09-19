@@ -39,8 +39,9 @@ export function StrategySummary({w,onDetails}:{w:Workspace;onDetails:()=>void}) 
   : w.dirty ? 'Результат текущих настроек. Изменения ещё не сохранены.' : 'Результат текущих настроек.';
  const quietStatus = fresh && !!w.displayResult && !invalid && !w.errorMessage && !w.riskBusy;
  const name=(r:Result|null|undefined)=>r?.scenario_id==='MANDATORY_STRESS'?'STRESS · Обязательный стресс':r?.scenario_id==='BASE'?'BASE · Базовые условия':r?.scenario_id||'Сценарий';
+ const researchConditions=!!w.draft?.source_overrides&&Object.keys(w.draft.source_overrides).length>0;
  return <section className={`strategy-summary panel ${quietStatus ? 'strategy-summary-quiet' : 'strategy-summary-alert'}`} aria-labelledby="strategy-title">
-  <div className="panel-heading"><div><h2 id="strategy-title">Стратегия 2035–2040</h2><p>Расходы и проверки за весь период.</p></div><button type="button" className="text-button" onClick={onDetails} disabled={!w.displayResult}>Подробнее →</button></div>
+  <div className="panel-heading"><div><h2 id="strategy-title">Стратегия 2035–2040 {researchConditions&&<em className="research-conditions-badge">Исследовательские условия</em>}</h2><p>Расходы и проверки за весь период.</p></div><button type="button" className="text-button" onClick={onDetails} disabled={!w.displayResult}>Подробнее →</button></div>
   <p className={`strategy-freshness ${quietStatus ? 'strategy-freshness-quiet' : ''} ${!fresh ? 'strategy-attention' : ''}`} role="status">{status}</p>
   <div className={`strategy-scenarios ${w.both ? 'strategy-pair' : ''}`}>
    <ScenarioSummary result={w.displayResult} label={name(w.displayResult) || 'BASE'} fresh={fresh}/>

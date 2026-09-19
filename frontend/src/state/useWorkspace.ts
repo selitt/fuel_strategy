@@ -24,7 +24,7 @@ export function useWorkspace() {
  const [comparison,setComparisonState]=useState<ComparisonSettings>({year:2035,scenario:'BASE',metric:'inventory',range:'all',referenceId:null});
  const [projects,setProjects]=useState<Summary[]>([]),[catalog,setCatalog]=useState<Catalog|null>(null),[meta,setMeta]=useState<Meta|null>(null);
  const [loading,setLoading]=useState(true),[busy,setBusy]=useState(''),[error,setError]=useState<unknown>(null),[message,setMessage]=useState('');
- const [riskBusy,setRiskBusy]=useState(false),[riskStage,setRiskStage]=useState(''),[riskError,setRiskError]=useState('');
+ const [riskBusy,setRiskBusy]=useState(false),[riskStage,setRiskStage]=useState('');
  const [imports,setImports]=useState<{filename:string;value?:{id:string;warning?:string};error?:string}[]>([]);
  const lock=useRef(false),mounted=useRef(false),queue=useRef<StrategyCalculationQueue|null>(null);
  const changeTabs=useCallback((change:(tabs:StrategyTab[])=>StrategyTab[])=>{
@@ -94,7 +94,7 @@ export function useWorkspace() {
   }
   queue.current?.reconcile(jobs);
  },[tabs,activeId,selectedIds,loading,busy,riskBusy]);
- function activateTab(id:string){if(lock.current||!tabsRef.current.some(t=>t.id===id))return;setActiveId(id);setViewState('plan');setError(null);setRiskError('');}
+ function activateTab(id:string){if(lock.current||!tabsRef.current.some(t=>t.id===id))return;setActiveId(id);setViewState('plan');setError(null);}
  function editComparedTab(id:string,scenario=comparison.scenario){
   if(lock.current)return;
   patch(id,t=>({...t,both:true,ui:comparisonEditorContext({...comparison,scenario},t.ui,t.viewScenario??t.plan.scenario_id)}));
@@ -174,9 +174,9 @@ export function useWorkspace() {
  async function downloadTemplate(format:'csv'|'xlsx'){return execute('Готовим шаблон…',()=>api.downloadPlanTemplate(format));}
  async function analyzeRisk(){return execute('Проверяем сбои…',async()=>{
   const t=requireTab(),stored=assertValid(t),basis=structuredClone(scenarioPlan(t,t.viewScenario??stored.scenario_id)),pairMode=t.both;
-  setRiskBusy(true);setRiskError('');patch(t.id,now=>({...now,risk:{basis,both:pairMode,runs:[],createdAt:new Date().toISOString()}}));
+  setRiskBusy(true);patch(t.id,now=>({...now,risk:{basis,both:pairMode,runs:[],createdAt:new Date().toISOString(),error:''}}));
   try{await calculateRisks(basis,pairMode,api.analyzeRisk,run=>patch(t.id,now=>({...now,risk:now.risk?{...now.risk,runs:[...now.risk.runs,run]}:null})),setRiskStage);}
-  catch(cause){setRiskError(errorText(cause));}
+  catch(cause){patch(t.id,now=>({...now,risk:now.risk?{...now.risk,error:errorText(cause)}:null}));}
   finally{setRiskBusy(false);setRiskStage('');}
  });}
  async function saveOther(){return execute('Создаём второй сценарий…',async()=>{
@@ -218,7 +218,7 @@ export function useWorkspace() {
   tabs,activeId,selectedIds,comparison,setComparison:(change:Partial<ComparisonSettings>)=>setComparisonState(old=>({...old,...change})),
   activateTab,editComparedTab,closeTab,toggleComparison,retryTab,imports,clearImports:()=>setImports([]),
   ui:tab?.ui??{},setUi,fieldIssues,
-  risk:tab?.risk??null,riskBusy,riskStage,riskError,analyzeRisk,displayResult,displayOther,preview,previewFresh,displayRun:savedPrimary?project?.last_run:null,
+  risk:tab?.risk??null,riskBusy,riskStage,riskError:tab?.risk?.error??'',analyzeRisk,displayResult,displayOther,preview,previewFresh,displayRun:savedPrimary?project?.last_run:null,
   selection:tab?.selection??null,setSelection:(selection:StrategyTab['selection'])=>patch(activeId,t=>({...t,selection})),
   both,setBoth:(value:boolean)=>patch(activeId,t=>({...t,both:value})),setScenario:(value:string)=>patch(activeId,t=>t.builtin?{...t,viewScenario:value}:updateStrategyPlan(t,{...t.plan,scenario_id:value})),pair,saveOther,view,setView,project,draft,name,builtin:tab?.builtin??null,immutable:!!tab?.builtin,projects,catalog,meta,loading,busy,error,message,dirty,inputChanged,current,
   setDraft:(plan:Plan)=>patch(activeId,t=>updateStrategyPlan(t,plan)),setName:(value:string)=>patch(activeId,t=>renameStrategy(t,value)),

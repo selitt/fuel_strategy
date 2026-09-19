@@ -83,8 +83,6 @@ async def main():
                     await page.screenshot(path=str(out/'both.png'),full_page=True)
                     check('Both scenarios fit the desktop workspace',await page.evaluate('document.documentElement.scrollHeight<=innerHeight+1'))
                     await page.screenshot(path=str(out/'both.png'),full_page=True)
-                    await page.get_by_test_id('risk-disclosure').click()
-                    check('Opening risk explanation does not run the model', not risk_requests)
                     await page.get_by_test_id('run-risk-button').click()
                     await expect(page.locator('.risk-summary').first.locator('thead th')).to_have_count(3, timeout=120000)
                     check('Explicit risks calculate both scenarios', len(risk_requests) == 2 and {r['scenario_id'] for r in risk_requests} == {'BASE','MANDATORY_STRESS'})

@@ -212,7 +212,8 @@ def _subtract_months(value: date, months: int) -> date:
     return date(year, month, day)
 
 
-def _preparation_date(source: SupplySource, delivery_date: date) -> date:
+def shift_source_date(source: SupplySource, value: date, direction: int) -> date:
+    """Move by a source lead time in the fixed 365-day calendar."""
     lead = source.lead_time_max_value
     if not float(lead).is_integer() or lead < 0:
         raise ValueError(
@@ -221,14 +222,18 @@ def _preparation_date(source: SupplySource, delivery_date: date) -> date:
     amount = int(lead)
     unit = source.lead_time_unit.strip().lower()
     if unit in {"month", "months"}:
-        return _subtract_months(delivery_date, amount)
+        return _subtract_months(value, -direction * amount)
     if unit in {"week", "weeks"}:
-        ordinal = delivery_date.year * 365 + _day_of_year(delivery_date)
-        return _from_model_ordinal(ordinal - amount * 7)
+        ordinal = value.year * 365 + _day_of_year(value)
+        return _from_model_ordinal(ordinal + direction * amount * 7)
     if unit in {"day", "days"}:
-        ordinal = delivery_date.year * 365 + _day_of_year(delivery_date)
-        return _from_model_ordinal(ordinal - amount)
+        ordinal = value.year * 365 + _day_of_year(value)
+        return _from_model_ordinal(ordinal + direction * amount)
     raise ValueError(f"unsupported catalog lead time unit for {source.source_id}: {unit}")
+
+
+def _preparation_date(source: SupplySource, delivery_date: date) -> date:
+    return shift_source_date(source, delivery_date, -1)
 
 
 def _investment_years(
@@ -562,7 +567,7 @@ def normalize_batches(
                     year=year,
                 )
             ready_date = date(decision_year, 1, 1)
-            ready_date = _subtract_months(ready_date, -int(source.lead_time_max_value))
+            ready_date = shift_source_date(source, ready_date, 1)
             if delivery_date < ready_date:
                 detail = (
                     f"Партия Earth-New {batch_id} приходит раньше завершения подготовки "
@@ -639,7 +644,7 @@ def normalize_batches(
                 actual=ordered_t,
                 limit=source.capacity_t_per_year,
             )
-        if source.reservation_rate > 0:
+        if source_id in catalog.reservation_required_sources:
             reserved_t = reservations.get((year, source_id), 0.0)
             if ordered_t > reserved_t + 1e-9:
                 detail = (
@@ -692,11 +697,8 @@ def source_operating_years(
     result: Dict[str, int] = {}
     for source in {item.source_id: item for item in catalog.sources.values()}.values():
         if source.source_id == "C" and "EARTH_NEW" in investment_years:
-            ready = _subtract_months(
-                date(investment_years["EARTH_NEW"], 1, 1),
-                -int(source.lead_time_max_value),
-            )
-            result[source.source_id] = ready.year
+            ready = shift_source_date(source, date(investment_years["EARTH_NEW"], 1, 1), 1)
+            result[source.source_id] = max(ready.year, source.available_from_year or ready.year)
         elif getattr(source, "available_from_year", None) is not None:
             result[source.source_id] = source.available_from_year
         elif source.source_id in first_shipments:

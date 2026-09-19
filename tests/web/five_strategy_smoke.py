@@ -1,4 +1,4 @@
-"""Compare all five real built-in strategies in an isolated native browser session."""
+"""Compare all six real built-in strategies in an isolated native browser session."""
 from __future__ import annotations
 import json,os,socket,subprocess,sys,tempfile,time
 from pathlib import Path
@@ -35,12 +35,12 @@ def main():
       result=r.json();results[(result['plan_id'],result['scenario_id'])]=result
     page.on('response',response)
     page.goto(url)
-    expect(page.locator('.comparison-compact-table tbody tr')).to_have_count(5)
-    page.wait_for_function("()=>document.querySelectorAll('.comparison-compact-table .is-fresh,.comparison-compact-table .is-error').length===10",timeout=60000)
+    expect(page.locator('.comparison-compact-table tbody tr')).to_have_count(6)
+    page.wait_for_function("()=>document.querySelectorAll('.comparison-compact-table .is-fresh,.comparison-compact-table .is-error').length===12",timeout=60000)
     builtins=httpx.get(url+'/api/calc/strategies').json()
-    check('All five built-in strategies finish both calculations',len(results)==10 and len(builtins)==5)
+    check('All six built-in strategies finish both calculations',len(results)==12 and len(builtins)==6)
     colors=page.locator('.comparison-chart-legend i').evaluate_all('(items)=>items.map(e=>getComputedStyle(e).backgroundColor)')
-    check('Five chart series have five distinct colors',len(colors)==5 and len(set(colors))==5)
+    check('Six chart series have six distinct colors',len(colors)==6 and len(set(colors))==6)
     for strategy in builtins:
      for scenario in ['BASE','MANDATORY_STRESS']:
       label='STRESS' if scenario=='MANDATORY_STRESS' else 'BASE'
@@ -54,33 +54,33 @@ def main():
       assert all(item['detail'] in text for item in failed),strategy['name']
       if not failed:expect(dialog).to_contain_text('не обнаружила нарушений')
       if strategy==builtins[0] and scenario=='BASE':page.screenshot(path=str(OUT/'constraint-reasons.png'))
-      dialog.get_by_role('button',name='Закрыть',exact=True).click()
-    check('All ten violation dialogs show the actual engine reasons, including zero violations')
+      dialog.get_by_role('button',name='Закрыть окно',exact=True).click()
+    check('All twelve violation dialogs show the actual engine reasons, including zero violations')
     for name in ['Дефицит','Затраты','Запас']:
      page.locator('.comparison-metric-switch').get_by_role('button',name=name,exact=True).click()
-     expect(page.locator('.comparison-chart-legend>span')).to_have_count(5)
+     expect(page.locator('.comparison-chart-legend>span')).to_have_count(6)
     page.locator('.comparison-chart-controls').get_by_role('button',name='STRESS',exact=True).click()
     page.locator('.comparison-chart-controls').get_by_role('button',name='2035',exact=True).click()
     page.locator('.comparison-chart-controls').get_by_role('button',name='Весь период',exact=True).click()
-    check('All five series remain available for each metric, scenario and period')
+    check('All six series remain available for each metric, scenario and period')
     first=builtins[0];failed=[c for c in results[(first['plan']['plan_id'],'MANDATORY_STRESS')]['constraint_checks'] if not c['passed']]
     page.get_by_role('button',name=f"Нарушения {first['name']}, STRESS: {len(failed)}",exact=True).click()
     page.get_by_role('dialog').get_by_role('button',name='Открыть стратегию',exact=True).click()
     expect(page.locator('.daily-detail-switch').get_by_role('button',name='STRESS',exact=True)).to_have_attribute('aria-pressed','true')
-    page.get_by_role('button',name='К сравнению 5',exact=True).click()
-    expect(page.locator('.comparison-compact-table tbody tr')).to_have_count(5)
-    check('Opening a violation preserves its scenario and returns to all five strategies')
+    page.get_by_role('button',name='К сравнению 6',exact=True).click()
+    expect(page.locator('.comparison-compact-table tbody tr')).to_have_count(6)
+    check('Opening a violation preserves its scenario and returns to all six strategies')
     page.locator('.comparison-chart-controls').get_by_role('button',name='BASE',exact=True).click()
     for width,height in [(1600,1000),(1366,768),(1280,720)]:
      page.set_viewport_size({'width':width,'height':height});page.wait_for_timeout(150)
      metrics=page.evaluate('''()=>({viewport:[innerWidth,innerHeight],document:[document.documentElement.scrollWidth,document.documentElement.scrollHeight],items:[...document.querySelectorAll('.comparison-compact-table tbody tr,.comparison-chart-card,.comparison-chart-legend')].map(e=>({name:e.className,text:e.textContent.slice(0,110),x:e.getBoundingClientRect().x,y:e.getBoundingClientRect().y,w:e.getBoundingClientRect().width,h:e.getBoundingClientRect().height}))})''')
      report.setdefault('layouts',[]).append(metrics)
-     check(f'Five rows and chart fit at {width}x{height}',metrics['document']==[width,height] and len(metrics['items'])==7 and all(item['x']>=0 and item['y']>=0 and item['y']+item['h']<=height+1 for item in metrics['items']))
+     check(f'Six rows and chart fit at {width}x{height}',metrics['document']==[width,height] and len(metrics['items'])==8 and all(item['x']>=0 and item['y']>=0 and item['y']+item['h']<=height+1 for item in metrics['items']))
      page.screenshot(path=str(OUT/f'comparison-{width}.png'))
     page.reload()
-    expect(page.locator('.comparison-compact-table tbody tr')).to_have_count(5)
-    expect(page.locator('.comparison-compact-table .is-fresh')).to_have_count(10,timeout=60000)
-    check('Reload restores all five builtins and recalculates both scenarios')
+    expect(page.locator('.comparison-compact-table tbody tr')).to_have_count(6)
+    expect(page.locator('.comparison-compact-table .is-fresh')).to_have_count(12,timeout=60000)
+    check('Reload restores all six builtins and recalculates both scenarios')
     check('No JavaScript or calculation errors',not report['errors'] and all(item['status']==200 for item in report['responses']))
     browser.close()
   finally:

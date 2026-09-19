@@ -232,12 +232,19 @@ def main() -> None:
                     response = page.goto(public_url, wait_until="networkidle", timeout=120_000)
                     assert response is not None and response.ok
                     expect(page.get_by_role('heading', name='Сравнение стратегий', exact=True)).to_be_visible()
-                    expect(page.get_by_role('tab')).to_have_count(2)
+                    tabs = page.get_by_role('tablist', name='Открытые стратегии').get_by_role('tab')
+                    expect(tabs).to_have_count(6)
+                    for name in ('Земная крепость', 'Лунный прорыв', 'Сбалансированный контур', 'Базовая', 'Стресс-устойчивая', 'Распределённый контур'):
+                        expect(tabs.filter(has_text=name)).to_be_visible()
                     with httpx.Client(base_url=backend_url, auth=(USERNAME, PASSWORD)) as client:
                         import_plan = client.get("/api/calc/template").json()
                     upload_all_plan_formats(page, public_url, import_plan)
                     order = _earth_core_january_order(page)
+                    page.get_by_role('region', name='Партии Earth-Core: Янв 2035', exact=True).get_by_role(
+                        'button', name='+ Добавить партию', exact=True
+                    ).click()
                     order.wait_for(state="visible")
+                    page.get_by_label('Резерв Earth-Core 2035, т/год', exact=True).fill('20')
                     page.locator("#plan-name").fill("Public browser smoke")
 
                     with page.expect_response(
@@ -246,7 +253,7 @@ def main() -> None:
                         timeout=120_000,
                     ) as preview_info:
                         order.fill("9")
-                    assert preview_info.value.ok
+                    assert preview_info.value.ok, preview_info.value.text()
                     assert order.input_value() == "9"
 
                     with page.expect_response(

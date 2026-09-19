@@ -1,0 +1,1772 @@
+{
+  "id": "strategy_diversified",
+  "name": "Распределённый контур",
+  "description": "Стратегия 6: «Распределённый контур». Earth-Core и Earth-Flex работают с 2035 года; Earth-New и Lunar-ISRU подключаются с 2038 года; Emergency зарезервирован для сбоев и не используется как плановый канал.",
+  "scenario_id": "BASE",
+  "legacy_description": "Стратегия 6: «Распределённый контур». Earth-Core и Earth-Flex работают с 2035 года; Earth-New и Lunar-ISRU подключаются с 2038 года; Emergency зарезервирован для сбоев и не используется как плановый канал.",
+  "annual_orders": [
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "volume_t": 45.0,
+      "prefix": "core"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "volume_t": 70.0,
+      "prefix": "flex"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "volume_t": 75.0,
+      "prefix": "core"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "volume_t": 70.0,
+      "prefix": "flex"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "volume_t": 115.0,
+      "prefix": "core"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "volume_t": 90.0,
+      "prefix": "flex"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "volume_t": 100.0,
+      "prefix": "core"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "volume_t": 100.0,
+      "prefix": "flex"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "volume_t": 85.0,
+      "prefix": "new"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "volume_t": 20.0,
+      "prefix": "lunar"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "volume_t": 115.0,
+      "prefix": "core"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "volume_t": 95.0,
+      "prefix": "flex"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "volume_t": 110.0,
+      "prefix": "new"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "volume_t": 1.0,
+      "prefix": "lunar"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "volume_t": 155.0,
+      "prefix": "core"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "volume_t": 95.0,
+      "prefix": "flex"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "volume_t": 120.0,
+      "prefix": "new"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "volume_t": 30.0,
+      "prefix": "lunar"
+    }
+  ],
+  "investments": [
+    {
+      "investment_id": "ZBO",
+      "year": 2036
+    },
+    {
+      "investment_id": "LUNAR_ISRU",
+      "year": 2036
+    },
+    {
+      "investment_id": "EARTH_NEW",
+      "year": 2036
+    }
+  ],
+  "capacity_reservations": [
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "reserved_capacity_t": 45.0
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "reserved_capacity_t": 70.0
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "reserved_capacity_t": 75.0
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "reserved_capacity_t": 70.0
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "reserved_capacity_t": 115.0
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "reserved_capacity_t": 90.0
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "reserved_capacity_t": 100.0
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "reserved_capacity_t": 100.0
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "reserved_capacity_t": 85.0
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "reserved_capacity_t": 20.0
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "reserved_capacity_t": 115.0
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "reserved_capacity_t": 95.0
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "reserved_capacity_t": 110.0
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "reserved_capacity_t": 1.0
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "reserved_capacity_t": 155.0
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "reserved_capacity_t": 95.0
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "reserved_capacity_t": 120.0
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "reserved_capacity_t": 30.0
+    },
+    {
+      "year": 2035,
+      "source_id": "Emergency",
+      "reserved_capacity_t": 28.0
+    },
+    {
+      "year": 2036,
+      "source_id": "Emergency",
+      "reserved_capacity_t": 28.0
+    },
+    {
+      "year": 2037,
+      "source_id": "Emergency",
+      "reserved_capacity_t": 28.0
+    },
+    {
+      "year": 2038,
+      "source_id": "Emergency",
+      "reserved_capacity_t": 28.0
+    },
+    {
+      "year": 2039,
+      "source_id": "Emergency",
+      "reserved_capacity_t": 28.0
+    },
+    {
+      "year": 2040,
+      "source_id": "Emergency",
+      "reserved_capacity_t": 28.0
+    }
+  ],
+  "inventory_policy": {
+    "initial_inventory_t": 15.0
+  },
+  "decision_kind": "TEAM_DECISION",
+  "supply_orders": [
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-01-26",
+      "batch_id": "core-2035-01"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-02-26",
+      "batch_id": "core-2035-02"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-03-26",
+      "batch_id": "core-2035-03"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-04-26",
+      "batch_id": "core-2035-04"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-05-26",
+      "batch_id": "core-2035-05"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-06-26",
+      "batch_id": "core-2035-06"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-07-26",
+      "batch_id": "core-2035-07"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-08-26",
+      "batch_id": "core-2035-08"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-09-26",
+      "batch_id": "core-2035-09"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-10-26",
+      "batch_id": "core-2035-10"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-11-26",
+      "batch_id": "core-2035-11"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Core",
+      "order_t": 3.75,
+      "delivery_date": "2035-12-26",
+      "batch_id": "core-2035-12"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-01-26",
+      "batch_id": "flex-2035-01"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-02-26",
+      "batch_id": "flex-2035-02"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-03-26",
+      "batch_id": "flex-2035-03"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-04-26",
+      "batch_id": "flex-2035-04"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-05-26",
+      "batch_id": "flex-2035-05"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-06-26",
+      "batch_id": "flex-2035-06"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-07-26",
+      "batch_id": "flex-2035-07"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-08-26",
+      "batch_id": "flex-2035-08"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-09-26",
+      "batch_id": "flex-2035-09"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-10-26",
+      "batch_id": "flex-2035-10"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2035-11-26",
+      "batch_id": "flex-2035-11"
+    },
+    {
+      "year": 2035,
+      "source_id": "Earth-Flex",
+      "order_t": 5.87,
+      "delivery_date": "2035-12-26",
+      "batch_id": "flex-2035-12"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-01-26",
+      "batch_id": "core-2036-01"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-02-26",
+      "batch_id": "core-2036-02"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-03-26",
+      "batch_id": "core-2036-03"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-04-26",
+      "batch_id": "core-2036-04"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-05-26",
+      "batch_id": "core-2036-05"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-06-26",
+      "batch_id": "core-2036-06"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-07-26",
+      "batch_id": "core-2036-07"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-08-26",
+      "batch_id": "core-2036-08"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-09-26",
+      "batch_id": "core-2036-09"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-10-26",
+      "batch_id": "core-2036-10"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-11-26",
+      "batch_id": "core-2036-11"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Core",
+      "order_t": 6.25,
+      "delivery_date": "2036-12-26",
+      "batch_id": "core-2036-12"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-01-26",
+      "batch_id": "flex-2036-01"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-02-26",
+      "batch_id": "flex-2036-02"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-03-26",
+      "batch_id": "flex-2036-03"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-04-26",
+      "batch_id": "flex-2036-04"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-05-26",
+      "batch_id": "flex-2036-05"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-06-26",
+      "batch_id": "flex-2036-06"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-07-26",
+      "batch_id": "flex-2036-07"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-08-26",
+      "batch_id": "flex-2036-08"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-09-26",
+      "batch_id": "flex-2036-09"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-10-26",
+      "batch_id": "flex-2036-10"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.83,
+      "delivery_date": "2036-11-26",
+      "batch_id": "flex-2036-11"
+    },
+    {
+      "year": 2036,
+      "source_id": "Earth-Flex",
+      "order_t": 5.87,
+      "delivery_date": "2036-12-26",
+      "batch_id": "flex-2036-12"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-01-26",
+      "batch_id": "core-2037-01"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-02-26",
+      "batch_id": "core-2037-02"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-03-26",
+      "batch_id": "core-2037-03"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-04-26",
+      "batch_id": "core-2037-04"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-05-26",
+      "batch_id": "core-2037-05"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-06-26",
+      "batch_id": "core-2037-06"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-07-26",
+      "batch_id": "core-2037-07"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-08-26",
+      "batch_id": "core-2037-08"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-09-26",
+      "batch_id": "core-2037-09"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-10-26",
+      "batch_id": "core-2037-10"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2037-11-26",
+      "batch_id": "core-2037-11"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Core",
+      "order_t": 9.62,
+      "delivery_date": "2037-12-26",
+      "batch_id": "core-2037-12"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-01-26",
+      "batch_id": "flex-2037-01"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-02-26",
+      "batch_id": "flex-2037-02"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-03-26",
+      "batch_id": "flex-2037-03"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-04-26",
+      "batch_id": "flex-2037-04"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-05-26",
+      "batch_id": "flex-2037-05"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-06-26",
+      "batch_id": "flex-2037-06"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-07-26",
+      "batch_id": "flex-2037-07"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-08-26",
+      "batch_id": "flex-2037-08"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-09-26",
+      "batch_id": "flex-2037-09"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-10-26",
+      "batch_id": "flex-2037-10"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-11-26",
+      "batch_id": "flex-2037-11"
+    },
+    {
+      "year": 2037,
+      "source_id": "Earth-Flex",
+      "order_t": 7.5,
+      "delivery_date": "2037-12-26",
+      "batch_id": "flex-2037-12"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-01-26",
+      "batch_id": "core-2038-01"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-02-26",
+      "batch_id": "core-2038-02"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-03-26",
+      "batch_id": "core-2038-03"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-04-26",
+      "batch_id": "core-2038-04"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-05-26",
+      "batch_id": "core-2038-05"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-06-26",
+      "batch_id": "core-2038-06"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-07-26",
+      "batch_id": "core-2038-07"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-08-26",
+      "batch_id": "core-2038-08"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-09-22",
+      "batch_id": "core-2038-09"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-10-22",
+      "batch_id": "core-2038-10"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.33,
+      "delivery_date": "2038-11-22",
+      "batch_id": "core-2038-11"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Core",
+      "order_t": 8.37,
+      "delivery_date": "2038-12-22",
+      "batch_id": "core-2038-12"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-01-22",
+      "batch_id": "flex-2038-01"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-02-22",
+      "batch_id": "flex-2038-02"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-03-22",
+      "batch_id": "flex-2038-03"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-04-22",
+      "batch_id": "flex-2038-04"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-05-22",
+      "batch_id": "flex-2038-05"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-06-22",
+      "batch_id": "flex-2038-06"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-07-22",
+      "batch_id": "flex-2038-07"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-08-22",
+      "batch_id": "flex-2038-08"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-09-22",
+      "batch_id": "flex-2038-09"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-10-22",
+      "batch_id": "flex-2038-10"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.33,
+      "delivery_date": "2038-11-22",
+      "batch_id": "flex-2038-11"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-Flex",
+      "order_t": 8.37,
+      "delivery_date": "2038-12-22",
+      "batch_id": "flex-2038-12"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-01-22",
+      "batch_id": "new-2038-01"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-02-22",
+      "batch_id": "new-2038-02"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-03-22",
+      "batch_id": "new-2038-03"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-04-22",
+      "batch_id": "new-2038-04"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-05-22",
+      "batch_id": "new-2038-05"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-06-22",
+      "batch_id": "new-2038-06"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-07-22",
+      "batch_id": "new-2038-07"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-08-22",
+      "batch_id": "new-2038-08"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-09-22",
+      "batch_id": "new-2038-09"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-10-22",
+      "batch_id": "new-2038-10"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.08,
+      "delivery_date": "2038-11-22",
+      "batch_id": "new-2038-11"
+    },
+    {
+      "year": 2038,
+      "source_id": "Earth-New",
+      "order_t": 7.12,
+      "delivery_date": "2038-12-22",
+      "batch_id": "new-2038-12"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-01-22",
+      "batch_id": "lunar-2038-01"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-02-22",
+      "batch_id": "lunar-2038-02"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-03-26",
+      "batch_id": "lunar-2038-03"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-04-22",
+      "batch_id": "lunar-2038-04"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-05-22",
+      "batch_id": "lunar-2038-05"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-06-22",
+      "batch_id": "lunar-2038-06"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-07-22",
+      "batch_id": "lunar-2038-07"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-08-22",
+      "batch_id": "lunar-2038-08"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-09-22",
+      "batch_id": "lunar-2038-09"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-10-22",
+      "batch_id": "lunar-2038-10"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.67,
+      "delivery_date": "2038-11-22",
+      "batch_id": "lunar-2038-11"
+    },
+    {
+      "year": 2038,
+      "source_id": "Lunar-ISRU",
+      "order_t": 1.63,
+      "delivery_date": "2038-12-22",
+      "batch_id": "lunar-2038-12"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-01-22",
+      "batch_id": "core-2039-01"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-02-22",
+      "batch_id": "core-2039-02"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-03-22",
+      "batch_id": "core-2039-03"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-04-22",
+      "batch_id": "core-2039-04"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-05-22",
+      "batch_id": "core-2039-05"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-06-22",
+      "batch_id": "core-2039-06"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-07-22",
+      "batch_id": "core-2039-07"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-08-22",
+      "batch_id": "core-2039-08"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-09-22",
+      "batch_id": "core-2039-09"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-10-22",
+      "batch_id": "core-2039-10"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.58,
+      "delivery_date": "2039-11-22",
+      "batch_id": "core-2039-11"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Core",
+      "order_t": 9.62,
+      "delivery_date": "2039-12-22",
+      "batch_id": "core-2039-12"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-01-22",
+      "batch_id": "flex-2039-01"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-02-22",
+      "batch_id": "flex-2039-02"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-03-22",
+      "batch_id": "flex-2039-03"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-04-22",
+      "batch_id": "flex-2039-04"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-05-22",
+      "batch_id": "flex-2039-05"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-06-22",
+      "batch_id": "flex-2039-06"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-07-22",
+      "batch_id": "flex-2039-07"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-08-22",
+      "batch_id": "flex-2039-08"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-09-22",
+      "batch_id": "flex-2039-09"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-10-22",
+      "batch_id": "flex-2039-10"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2039-11-22",
+      "batch_id": "flex-2039-11"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-Flex",
+      "order_t": 7.88,
+      "delivery_date": "2039-12-22",
+      "batch_id": "flex-2039-12"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-01-22",
+      "batch_id": "new-2039-01"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-02-22",
+      "batch_id": "new-2039-02"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-03-22",
+      "batch_id": "new-2039-03"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-04-22",
+      "batch_id": "new-2039-04"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-05-22",
+      "batch_id": "new-2039-05"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-06-22",
+      "batch_id": "new-2039-06"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-07-22",
+      "batch_id": "new-2039-07"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-08-22",
+      "batch_id": "new-2039-08"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-09-22",
+      "batch_id": "new-2039-09"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-10-22",
+      "batch_id": "new-2039-10"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.17,
+      "delivery_date": "2039-11-22",
+      "batch_id": "new-2039-11"
+    },
+    {
+      "year": 2039,
+      "source_id": "Earth-New",
+      "order_t": 9.13,
+      "delivery_date": "2039-12-22",
+      "batch_id": "new-2039-12"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-01-31",
+      "batch_id": "lunar-2039-01"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-02-15",
+      "batch_id": "lunar-2039-02"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-03-15",
+      "batch_id": "lunar-2039-03"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-04-15",
+      "batch_id": "lunar-2039-04"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-05-15",
+      "batch_id": "lunar-2039-05"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-06-15",
+      "batch_id": "lunar-2039-06"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-07-15",
+      "batch_id": "lunar-2039-07"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-08-15",
+      "batch_id": "lunar-2039-08"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-09-15",
+      "batch_id": "lunar-2039-09"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-10-15",
+      "batch_id": "lunar-2039-10"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.08,
+      "delivery_date": "2039-11-15",
+      "batch_id": "lunar-2039-11"
+    },
+    {
+      "year": 2039,
+      "source_id": "Lunar-ISRU",
+      "order_t": 0.12,
+      "delivery_date": "2039-12-22",
+      "batch_id": "lunar-2039-12"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-01-22",
+      "batch_id": "core-2040-01"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-02-22",
+      "batch_id": "core-2040-02"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-03-22",
+      "batch_id": "core-2040-03"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-04-22",
+      "batch_id": "core-2040-04"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-05-22",
+      "batch_id": "core-2040-05"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-06-22",
+      "batch_id": "core-2040-06"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-07-22",
+      "batch_id": "core-2040-07"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-08-22",
+      "batch_id": "core-2040-08"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-09-22",
+      "batch_id": "core-2040-09"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-10-22",
+      "batch_id": "core-2040-10"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.92,
+      "delivery_date": "2040-11-22",
+      "batch_id": "core-2040-11"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Core",
+      "order_t": 12.88,
+      "delivery_date": "2040-12-22",
+      "batch_id": "core-2040-12"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-01-22",
+      "batch_id": "flex-2040-01"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-02-22",
+      "batch_id": "flex-2040-02"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-03-22",
+      "batch_id": "flex-2040-03"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-04-22",
+      "batch_id": "flex-2040-04"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-05-22",
+      "batch_id": "flex-2040-05"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-06-22",
+      "batch_id": "flex-2040-06"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-07-22",
+      "batch_id": "flex-2040-07"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-08-22",
+      "batch_id": "flex-2040-08"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-09-22",
+      "batch_id": "flex-2040-09"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-10-22",
+      "batch_id": "flex-2040-10"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.92,
+      "delivery_date": "2040-11-22",
+      "batch_id": "flex-2040-11"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-Flex",
+      "order_t": 7.88,
+      "delivery_date": "2040-12-22",
+      "batch_id": "flex-2040-12"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-01-22",
+      "batch_id": "new-2040-01"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-02-22",
+      "batch_id": "new-2040-02"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-03-22",
+      "batch_id": "new-2040-03"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-04-22",
+      "batch_id": "new-2040-04"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-05-22",
+      "batch_id": "new-2040-05"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-06-22",
+      "batch_id": "new-2040-06"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-07-22",
+      "batch_id": "new-2040-07"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-08-22",
+      "batch_id": "new-2040-08"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-09-22",
+      "batch_id": "new-2040-09"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-10-22",
+      "batch_id": "new-2040-10"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-11-22",
+      "batch_id": "new-2040-11"
+    },
+    {
+      "year": 2040,
+      "source_id": "Earth-New",
+      "order_t": 10.0,
+      "delivery_date": "2040-12-22",
+      "batch_id": "new-2040-12"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-01-22",
+      "batch_id": "lunar-2040-01"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-02-22",
+      "batch_id": "lunar-2040-02"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-03-22",
+      "batch_id": "lunar-2040-03"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-04-22",
+      "batch_id": "lunar-2040-04"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-05-22",
+      "batch_id": "lunar-2040-05"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-06-22",
+      "batch_id": "lunar-2040-06"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-07-22",
+      "batch_id": "lunar-2040-07"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-08-22",
+      "batch_id": "lunar-2040-08"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-09-22",
+      "batch_id": "lunar-2040-09"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-10-22",
+      "batch_id": "lunar-2040-10"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-11-22",
+      "batch_id": "lunar-2040-11"
+    },
+    {
+      "year": 2040,
+      "source_id": "Lunar-ISRU",
+      "order_t": 2.5,
+      "delivery_date": "2040-12-22",
+      "batch_id": "lunar-2040-12"
+    }
+  ],
+  "calendar_note": "TEAM_DECISION: даты выбраны ограниченным поиском по BASE и обязательному стрессу. Глобальная оптимальность и математическая приёмка не доказаны."
+}

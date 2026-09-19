@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { RiskTrajectoryChart } from '../components/RiskTrajectoryChart';
 import { RiskHistogram } from '../components/RiskHistogram';
-import { financialRiskFields, riskDistribution, riskFinancialSummary, riskTrajectories } from '../lib/risk';
+import { financialRiskFields, riskAnalysisStatus, riskCanRun, riskDistribution, riskFinancialSummary, riskTrajectories } from '../lib/risk';
 import type { Workspace } from '../state/useWorkspace';
 import { Button, Notice, Spinner } from '../components/Ui';
 import { number, percent, scenario } from '../lib/format';
-import { samePlan } from '../lib/plan';
 
 const mainFields = [
   ['probability_of_no_shortage', 'Прогоны без дефицита топлива'],
@@ -23,7 +22,8 @@ const detailFields = [
 export function RiskPanel({w}: {w: Workspace}) {
   const analysis = w.risk;
   const [chosenScenario,setChosenScenario]=useState<string>();
-  const changed = !!analysis && ((!!w.draft && !samePlan(analysis.basis, w.draft)) || analysis.both !== w.both);
+  const invalid=!riskCanRun(w.name,w.draft);
+  const changed = riskAnalysisStatus(w.draft,w.both,analysis,false,'')==='stale';
   const summaries = analysis?.runs.map(item => ({
     scenarioId: item.plan.scenario_id,
     value: item.result.risk_register?.find(record => record.risk_id === 'R_LAUNCH_FAILURE_MONTE_CARLO'),
@@ -38,10 +38,11 @@ export function RiskPanel({w}: {w: Workspace}) {
   const iterations = summaries.map(item => item.value?.iterations).find(value => typeof value === 'number' && Number.isFinite(value));
 
   return <div className="risk-panel">
-    <div className="risk-toolbar"><div><strong>Проверка случайных сбоев поставок</strong><span>{analysis ? `План: ${analysis.basis.plan_id}` : 'Текущие решения'}</span></div><Button disabled={w.riskBusy || !!w.busy} onClick={() => void w.analyzeRisk()}>Повторить проверку</Button></div>
+    <div className="risk-toolbar"><div><strong>Проверка случайных сбоев поставок</strong><span>{analysis ? `План: ${analysis.basis.plan_id} · ${analysis.both?'BASE + STRESS':analysis.basis.scenario_id==='MANDATORY_STRESS'?'STRESS':'BASE'}` : 'Текущие решения'}</span></div><Button disabled={w.riskBusy || !!w.busy || invalid} onClick={() => void w.analyzeRisk()}>Повторить проверку</Button></div>
     <p className="risk-explanation">Для каждого сценария модель выполняет {typeof iterations === 'number' ? number(iterations) : '100'} прогонов со случайными сбоями поставок. На графике — дневные результаты этих прогонов.</p>
     {w.riskBusy && <div className="risk-progress" role="status"><Spinner/>Проверяем сценарий {scenario(w.riskStage)}…</div>}
     {w.riskError && <Notice tone="error">{w.riskError}</Notice>}
+    {invalid && <Notice tone="warning">Исправьте ошибки в плане и названии стратегии перед новой проверкой.</Notice>}
     {changed && <Notice tone="warning">Решения изменены. Эта проверка относится к прежнему снимку плана.</Notice>}
     {!analysis && !w.riskBusy && <p className="help">Запустите проверку, чтобы получить агрегированную оценку устойчивости текущего плана.</p>}
     {!!analysis?.runs.length && <>

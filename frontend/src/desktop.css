@@ -50,6 +50,9 @@ button,input,select,textarea{font-family:inherit}
 .compact-desktop .storage-zbo select,.compact-desktop .source-investment select{height:26px;padding:2px 4px;width:72px}
 .compact-desktop .storage-help{padding:0;border:0;align-self:center;white-space:nowrap}
 .compact-desktop .matrix-help{padding:6px 0;align-self:flex-start;border:0}
+.compact-desktop .risk-launcher{flex:0 0 auto;margin-top:8px;padding:10px 12px}
+.compact-desktop .risk-launcher-mark{width:32px;height:32px}
+.compact-desktop .risk-launcher .button{min-height:34px;padding:6px 11px;font-size:13px}
 .compact-desktop .field-error{grid-column:1/-1}
 .compact-desktop .direct-matrix{min-height:0;display:flex;flex-direction:column}
 .compact-desktop .matrix-instruction{font-size:13px;color:var(--muted);margin:0;padding:0 0 6px}
@@ -196,3 +199,9 @@ button,input,select,textarea{font-family:inherit}
 .compact-desktop .result-widget>.timeline-control{grid-row:4;min-height:0}
 .compact-desktop .result-widget-cost>.result-chart-area{grid-row:2/5}
 .compact-desktop .result-widget>.comparison-caption{grid-row:2;margin:0;font-size:13px}
+@media(max-width:600px){
+ .compact-desktop .result-widget{height:auto;min-height:520px;grid-template-rows:auto 30px minmax(250px,1fr) auto}
+ .compact-desktop .result-widget>.result-toolbar{grid-template-columns:minmax(0,1fr);gap:4px}
+ .compact-desktop .result-widget .chart-mode,.compact-desktop .result-widget .timeline-view-toggle,.compact-desktop .result-widget .cost-year-selector{width:100%;min-width:0}
+ .compact-desktop .result-widget .chart-mode button,.compact-desktop .result-widget .timeline-view-toggle button{white-space:nowrap}
+}

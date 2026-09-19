@@ -11,12 +11,19 @@ import os
 import json
 import argparse
 import random
+import hashlib
+import math
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Dict, Any, List, Tuple
 
 # Добавляем корень проекта в путь поиска модулей
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.engine.engine import run_engine
+from src.engine.engine import SimulationEngine
+from src.engine.loader import CaseCatalog
+from src.engine.monte_carlo import run_monte_carlo
 from src.engine.optimize import to_participant_plan
 from src.engine.strategies import make_monthly_batches
 
@@ -149,6 +156,541 @@ def decode_lunar_dual(params: List[float], plan_id: str = "strategy_lunar_dual_o
     }
 
 
+DIVERSIFIED_YEARS_AND_SOURCES = (
+    (2035, ("Earth-Core", "Earth-Flex")),
+    (2036, ("Earth-Core", "Earth-Flex")),
+    (2037, ("Earth-Core", "Earth-Flex")),
+    (2038, ("Earth-Core", "Earth-Flex", "Earth-New", "Lunar-ISRU")),
+    (2039, ("Earth-Core", "Earth-Flex", "Earth-New", "Lunar-ISRU")),
+    (2040, ("Earth-Core", "Earth-Flex", "Earth-New", "Lunar-ISRU")),
+)
+DIVERSIFIED_WARM_START = (
+    62.5, 62.5,
+    82.5, 82.5,
+    105.0, 105.0,
+    90.0, 70.0, 70.0, 110.0,
+    100.0, 90.0, 100.0, 120.0,
+    120.0, 110.0, 110.0, 120.0,
+)
+DIVERSIFIED_LEAN_START = (
+    55.0, 55.0,
+    75.0, 75.0,
+    100.0, 100.0,
+    95.0, 90.0, 100.0, 5.0,
+    125.0, 110.0, 125.0, 10.0,
+    160.0, 110.0, 130.0, 40.0,
+)
+
+
+def decode_diversified(
+    params: List[float],
+    plan_id: str = "strategy_diversified",
+    catalog: CaseCatalog | None = None,
+) -> Dict[str, Any]:
+    """Decode regular annual volumes for the diversified team decision."""
+    reference = catalog or CaseCatalog()
+    expected = sum(len(sources) for _, sources in DIVERSIFIED_YEARS_AND_SOURCES)
+    if len(params) != expected:
+        raise ValueError(f"diversified vector must contain {expected} volumes")
+
+    annual_orders = []
+    index = 0
+    for year, sources in DIVERSIFIED_YEARS_AND_SOURCES:
+        for source_id in sources:
+            volume = round(float(params[index]), 1)
+            index += 1
+            if not math.isfinite(volume) or volume <= 0:
+                raise ValueError("diversified regular volumes must be positive and finite")
+            capacity = reference.sources[source_id].capacity_t_per_year
+            if volume > capacity:
+                raise ValueError(f"{source_id} volume exceeds reference capacity")
+            annual_orders.append((year, source_id, volume))
+
+    supply_orders = [
+        batch
+        for year, source_id, volume in annual_orders
+        for batch in make_monthly_batches(
+            year,
+            source_id,
+            volume,
+            batch_prefix={
+                "Earth-Core": "core",
+                "Earth-Flex": "flex",
+                "Earth-New": "new",
+                "Lunar-ISRU": "lunar",
+            }[source_id],
+        )
+    ]
+    reservations = [
+        {
+            "year": year,
+            "source_id": source_id,
+            "reserved_capacity_t": volume,
+        }
+        for year, source_id, volume in annual_orders
+    ]
+    reservations.extend(
+        {
+            "year": year,
+            "source_id": "Emergency",
+            "reserved_capacity_t": 28.0,
+        }
+        for year, _ in DIVERSIFIED_YEARS_AND_SOURCES
+    )
+    return {
+        "plan_id": plan_id,
+        "description": (
+            "Стратегия «Распределённый контур»: Earth-Core и Earth-Flex с 2035 года, "
+            "Earth-New и Lunar-ISRU с 2038 года; Emergency зарезервирован только для сбоев."
+        ),
+        "investments": [
+            {"investment_id": "ZBO", "year": 2036},
+            {"investment_id": "LUNAR_ISRU", "year": 2036},
+            {"investment_id": "EARTH_NEW", "year": 2036},
+        ],
+        "capacity_reservations": reservations,
+        "supply_orders": supply_orders,
+        "inventory_policy": {"initial_inventory_t": 15.0},
+    }
+
+
+def diversified_concentration(plan: Dict[str, Any]) -> float:
+    """Maximum annual share of one planned regular provider."""
+    volumes: Dict[int, Dict[str, float]] = {}
+    for row in plan["supply_orders"]:
+        if row["source_id"] == "Emergency":
+            continue
+        year = int(row["year"])
+        source = str(row["source_id"])
+        volumes.setdefault(year, {})[source] = (
+            volumes.setdefault(year, {}).get(source, 0.0) + float(row["order_t"])
+        )
+    shares = [max(by_source.values()) / sum(by_source.values()) for by_source in volumes.values()]
+    return round(max(shares), 6)
+
+
+def _scenario_summary(result: Dict[str, Any]) -> Dict[str, Any]:
+    violations = [row for row in result["constraint_checks"] if not row["passed"]]
+    return {
+        "is_feasible": result["is_feasible"],
+        "total_cost_mln": result["total_cost_mln"],
+        "total_shortage_t": round(
+            sum(float(row["shortage_t"]) for row in result["yearly_balance"]), 2
+        ),
+        "minimum_critical_service": min(
+            float(row["service_level_critical"]) for row in result["yearly_balance"]
+        ),
+        "yearly_balance": result["yearly_balance"],
+        "violations": violations,
+    }
+
+
+def evaluate_diversified_candidate(
+    params: List[float], engine: SimulationEngine | None = None
+) -> Tuple[Tuple[float, float, float, float], Dict[str, Any]]:
+    """Evaluate BASE and mandatory stress before concentration and BASE cost."""
+    candidate_engine = engine or SimulationEngine(CaseCatalog())
+    plan = decode_diversified(params, catalog=candidate_engine.catalog)
+    results = {
+        scenario: candidate_engine.run(
+            plan["plan_id"], scenario, plan, run_risk_analysis=False
+        )
+        for scenario in ("BASE", "MANDATORY_STRESS")
+    }
+    summaries = {scenario: _scenario_summary(result) for scenario, result in results.items()}
+    violations = [
+        violation
+        for summary in summaries.values()
+        for violation in summary["violations"]
+    ]
+    excess = round(
+        sum(abs(float(row["excess"])) if row.get("excess") is not None else 1.0 for row in violations),
+        6,
+    )
+    score = (
+        len(violations),
+        excess,
+        diversified_concentration(plan),
+        float(results["BASE"]["total_cost_mln"]),
+    )
+    return score, {"plan": plan, "scenarios": summaries}
+
+
+def _diversified_candidates(seed: int, catalog: CaseCatalog):
+    """Yield deterministic candidate vectors, starting from a hand-checkable seed."""
+    anchors = (list(DIVERSIFIED_WARM_START), list(DIVERSIFIED_LEAN_START))
+    yield from anchors
+    rng = random.Random(seed)
+    capacities = [
+        catalog.sources[source].capacity_t_per_year
+        for _, sources in DIVERSIFIED_YEARS_AND_SOURCES
+        for source in sources
+    ]
+    while True:
+        base = anchors[rng.randrange(len(anchors))]
+        candidate = []
+        for value, capacity in zip(base, capacities):
+            shifted = value + rng.choice((-15.0, -10.0, -5.0, 0.0, 5.0, 10.0, 15.0))
+            candidate.append(round(min(capacity, max(1.0, shifted)), 1))
+        yield candidate
+
+
+def _calendar_objective(
+    plan: Dict[str, Any], results: Dict[str, Dict[str, Any]]
+) -> Tuple[float, float, float, float]:
+    violations = [
+        violation
+        for result in results.values()
+        for violation in result["constraint_checks"]
+        if not violation["passed"]
+    ]
+    excess = round(
+        sum(
+            abs(float(row["excess"])) if row.get("excess") is not None else 1.0
+            for row in violations
+        ),
+        6,
+    )
+    return (
+        len(violations),
+        excess,
+        diversified_concentration(plan),
+        float(results["BASE"]["total_cost_mln"]),
+    )
+
+
+def _evaluate_diversified_plan(
+    plan: Dict[str, Any], engine: SimulationEngine
+) -> Tuple[Tuple[float, float, float, float], Dict[str, Dict[str, Any]]]:
+    results = {
+        scenario: engine.run(plan["plan_id"], scenario, plan, run_risk_analysis=False)
+        for scenario in ("BASE", "MANDATORY_STRESS")
+    }
+    return _calendar_objective(plan, results), results
+
+
+def prepare_diversified_calendar(
+    plan: Dict[str, Any],
+    engine: SimulationEngine,
+    max_evaluations: int,
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Search delivery days against both required deterministic scenarios."""
+    if max_evaluations < 2:
+        return plan, {
+            "method": "not run: no remaining two-scenario evaluation budget",
+            "engine_evaluations": 0,
+            "improvements": 0,
+        }
+
+    selected = {**plan, "supply_orders": [dict(row) for row in plan["supply_orders"]]}
+    best, results = _evaluate_diversified_plan(selected, engine)
+    baseline = list(best)
+    evaluations = 2
+    improvements = 0
+
+    source_patterns = (
+        {"Earth-Core": 5, "Earth-Flex": 12, "Earth-New": 19, "Lunar-ISRU": 26},
+        {"Earth-Core": 28, "Earth-Flex": 21, "Earth-New": 14, "Lunar-ISRU": 7},
+    )
+    for pattern in source_patterns:
+        if evaluations + 2 > max_evaluations:
+            break
+        candidate = {**selected, "supply_orders": [dict(row) for row in selected["supply_orders"]]}
+        for row in candidate["supply_orders"]:
+            month = int(row["delivery_date"][5:7])
+            last_day = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)[month - 1]
+            day = min(pattern[row["source_id"]], last_day)
+            row["delivery_date"] = f"{row['year']}-{month:02d}-{day:02d}"
+        score, candidate_results = _evaluate_diversified_plan(candidate, engine)
+        evaluations += 2
+        if score < best:
+            selected, best, results = candidate, score, candidate_results
+            improvements += 1
+
+    while evaluations + 2 <= max_evaluations:
+        improved_sweep = False
+        for index, row in enumerate(selected["supply_orders"]):
+            month = int(row["delivery_date"][5:7])
+            last_day = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)[month - 1]
+            days = tuple(dict.fromkeys((1, 5, 8, 12, 15, 19, 22, 26, last_day)))
+            for day in days:
+                if evaluations + 2 > max_evaluations:
+                    break
+                proposed_date = f"{row['year']}-{month:02d}-{day:02d}"
+                if proposed_date == row["delivery_date"]:
+                    continue
+                candidate = {
+                    **selected,
+                    "supply_orders": [dict(item) for item in selected["supply_orders"]],
+                }
+                candidate["supply_orders"][index]["delivery_date"] = proposed_date
+                score, candidate_results = _evaluate_diversified_plan(candidate, engine)
+                evaluations += 2
+                if score < best:
+                    selected, best, results = candidate, score, candidate_results
+                    improvements += 1
+                    improved_sweep = True
+                    break
+            if evaluations + 2 > max_evaluations:
+                break
+        if not improved_sweep:
+            break
+
+    return selected, {
+        "method": "bounded coordinate search of delivery days in each source-month",
+        "engine_evaluations": evaluations,
+        "improvements": improvements,
+        "objective_fields": [
+            "hard_constraint_violations",
+            "total_violation_excess",
+            "max_annual_regular_provider_share",
+            "base_total_cost_mln",
+        ],
+        "baseline_objective": baseline,
+        "selected_objective": list(best),
+        "global_optimum_proven": False,
+        "scenarios": {
+            scenario: _scenario_summary(result) for scenario, result in results.items()
+        },
+    }
+
+
+def optimize_diversified(
+    max_evaluations: int = 10_000, seed: int = 42
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Bounded reproducible search; one candidate consumes two engine evaluations."""
+    if not 2 <= max_evaluations <= 10_000:
+        raise ValueError("max_evaluations must be between 2 and 10000")
+    engine = SimulationEngine(CaseCatalog())
+    best_score = None
+    best_details = None
+    evaluations = 0
+    candidates = 0
+    # Preserve enough of a full run for the required two-scenario calendar search.
+    annual_budget = max_evaluations if max_evaluations < 1_000 else min(4_000, max_evaluations)
+    for params in _diversified_candidates(seed, engine.catalog):
+        if evaluations + 2 > annual_budget:
+            break
+        score, details = evaluate_diversified_candidate(params, engine)
+        evaluations += 2
+        candidates += 1
+        if best_score is None or score < best_score:
+            best_score, best_details = score, details
+    assert best_score is not None and best_details is not None
+    annual_evaluations = evaluations
+    selected_plan, calendar_search = prepare_diversified_calendar(
+        best_details["plan"], engine, max_evaluations - evaluations
+    )
+    evaluations += calendar_search["engine_evaluations"]
+    selected_scenarios = calendar_search.get("scenarios", best_details["scenarios"])
+    selected_objective = calendar_search.get("selected_objective", list(best_score))
+    return selected_plan, {
+        "method": "bounded deterministic seeded candidate search",
+        "seed": seed,
+        "evaluation_limit": max_evaluations,
+        "engine_evaluations": evaluations,
+        "annual_engine_evaluations": annual_evaluations,
+        "candidate_count": candidates,
+        "objective_order": [
+            "hard_constraint_violations",
+            "total_violation_excess",
+            "max_annual_regular_provider_share",
+            "base_total_cost_mln",
+        ],
+        "selected_objective": selected_objective,
+        "global_optimum_proven": False,
+        "scenarios": selected_scenarios,
+        "calendar_search": calendar_search,
+    }
+
+
+def _annual_orders(plan: Dict[str, Any]) -> List[Dict[str, Any]]:
+    from decimal import Decimal
+
+    grouped: Dict[Tuple[int, str], Decimal] = {}
+    for row in plan["supply_orders"]:
+        key = (int(row["year"]), str(row["source_id"]))
+        grouped[key] = grouped.get(key, Decimal("0")) + Decimal(str(row["order_t"]))
+    prefix = {
+        "Earth-Core": "core",
+        "Earth-Flex": "flex",
+        "Earth-New": "new",
+        "Lunar-ISRU": "lunar",
+    }
+    return [
+        {"year": year, "source_id": source, "volume_t": float(volume), "prefix": prefix[source]}
+        for (year, source), volume in grouped.items()
+    ]
+
+
+def diversified_strategy_data(plan: Dict[str, Any]) -> Dict[str, Any]:
+    description = (
+        "Стратегия 6: «Распределённый контур». Earth-Core и Earth-Flex работают с "
+        "2035 года; Earth-New и Lunar-ISRU подключаются с 2038 года; Emergency "
+        "зарезервирован для сбоев и не используется как плановый канал."
+    )
+    return {
+        "id": "strategy_diversified",
+        "name": "Распределённый контур",
+        "description": description,
+        "scenario_id": "BASE",
+        "legacy_description": description,
+        "annual_orders": _annual_orders(plan),
+        "investments": plan["investments"],
+        "capacity_reservations": plan["capacity_reservations"],
+        "inventory_policy": plan["inventory_policy"],
+        "decision_kind": "TEAM_DECISION",
+        "supply_orders": plan["supply_orders"],
+        "calendar_note": (
+            "TEAM_DECISION: даты выбраны ограниченным поиском по BASE и обязательному "
+            "стрессу. Глобальная оптимальность и математическая приёмка не доказаны."
+        ),
+    }
+
+
+def _decisions_from_strategy(data: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        key: data[key]
+        for key in ("investments", "capacity_reservations", "supply_orders", "inventory_policy")
+    }
+
+
+def _sha256_json(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
+
+
+def _mc_summary(result: Dict[str, Any]) -> Dict[str, Any]:
+    fields = (
+        "iterations", "seed", "probability_of_no_shortage",
+        "probability_of_all_constraints", "probability_of_zero_shortage",
+        "median_shortage_t", "p95_shortage_t", "max_shortage_t",
+        "mean_total_cost_mln", "p95_total_cost_mln",
+        "mean_emergency_procurement_mln", "p95_emergency_procurement_mln",
+        "quantile_method", "median_method",
+    )
+    return {field: result[field] for field in fields}
+
+
+def build_diversified_report(
+    strategy: Dict[str, Any], search: Dict[str, Any], catalog: CaseCatalog
+) -> Dict[str, Any]:
+    from tools.prepare_strategy_calendars import OBJECTIVE_FIELDS, objective, uniform_plan
+
+    root = catalog.data_root
+    engine = SimulationEngine(catalog)
+    decisions = _decisions_from_strategy(strategy)
+    selected_results = {
+        scenario: engine.run(strategy["id"], scenario, decisions, run_risk_analysis=False)
+        for scenario in ("BASE", "MANDATORY_STRESS")
+    }
+    deterministic = {
+        scenario: _scenario_summary(result) for scenario, result in selected_results.items()
+    }
+    uniform = uniform_plan(strategy)
+    uniform_results = {
+        scenario: engine.run(strategy["id"], scenario, uniform, run_risk_analysis=False)
+        for scenario in ("BASE", "MANDATORY_STRESS")
+    }
+    calendar_comparison = {
+        "objective_fields": list(OBJECTIVE_FIELDS),
+        "BASE": {
+            "uniform_objective": list(objective(uniform_results["BASE"])),
+            "selected_objective": list(objective(selected_results["BASE"])),
+            "uniform": _scenario_summary(uniform_results["BASE"]),
+            "selected": deterministic["BASE"],
+        },
+        "MANDATORY_STRESS": {
+            "uniform": _scenario_summary(uniform_results["MANDATORY_STRESS"]),
+            "selected": deterministic["MANDATORY_STRESS"],
+        },
+    }
+    balanced = json.loads((root / "strategies" / "balanced.json").read_text(encoding="utf-8"))
+    monte_carlo = {}
+    for kind, plan in (("diversified", strategy), ("balanced", balanced)):
+        result = run_monte_carlo(
+            catalog,
+            "BASE",
+            _decisions_from_strategy(plan),
+            iterations=100,
+            seed=42,
+            include_trajectories=False,
+        )
+        monte_carlo[kind] = _mc_summary(result)
+
+    provenance_paths = (
+        "demand.csv", "supply_sources.csv", "storage_options.csv",
+        "investment_options.csv", "constraints.csv", "scenarios/base.yaml",
+        "scenarios/mandatory_stress.yaml", "strategies/balanced.json",
+    )
+    input_sha256 = {
+        path: hashlib.sha256((root / path).read_bytes()).hexdigest()
+        for path in provenance_paths
+    }
+    annual_shares = {}
+    for row in strategy["annual_orders"]:
+        annual_shares.setdefault(str(row["year"]), {})[row["source_id"]] = row["volume_t"]
+    for year, volumes in annual_shares.items():
+        total = sum(volumes.values())
+        annual_shares[year] = {
+            source: round(volume / total, 6) for source, volume in volumes.items()
+        }
+    code_paths = [Path(__file__), *sorted((Path(__file__).parents[1] / "src/engine").glob("*.py"))]
+    code_sha256 = {
+        str(path.resolve().relative_to(Path(__file__).parents[1].resolve())):
+            hashlib.sha256(path.read_bytes()).hexdigest()
+        for path in code_paths
+    }
+    return {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "method": "bounded annual-volume search followed by bounded delivery-day search",
+        "model_verified": False,
+        "global_optimum_proven": False,
+        "strategy_sha256": _sha256_json(strategy),
+        "balanced_strategy_sha256": _sha256_json(balanced),
+        "input_sha256": input_sha256,
+        "code_sha256": code_sha256,
+        "team_decisions": {
+            "initial_inventory_t": strategy["inventory_policy"]["initial_inventory_t"],
+            "investments": strategy["investments"],
+            "emergency_reservation_t_per_year": 28.0,
+        },
+        "annual_orders": strategy["annual_orders"],
+        "annual_regular_provider_shares": annual_shares,
+        "max_annual_regular_provider_share": diversified_concentration(decisions),
+        "search": search,
+        "calendar_comparison": calendar_comparison,
+        "deterministic": deterministic,
+        "monte_carlo_base": monte_carlo,
+    }
+
+
+def publish_diversified(
+    output: Path,
+    report_output: Path,
+    max_evaluations: int = 10_000,
+    seed: int = 42,
+) -> Dict[str, Any]:
+    plan, search = optimize_diversified(max_evaluations=max_evaluations, seed=seed)
+    strategy = diversified_strategy_data(plan)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(strategy, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    scratch = Path(".local/diversified-work/search.json")
+    scratch.parent.mkdir(parents=True, exist_ok=True)
+    scratch.write_text(
+        json.dumps({"strategy": strategy, "search": search}, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    report = build_diversified_report(strategy, search, CaseCatalog())
+    report_output.parent.mkdir(parents=True, exist_ok=True)
+    report_output.write_text(
+        json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    return strategy
+
+
 def evaluate_candidate(params: List[float], decode_fn, mc_iterations: int = 30) -> Tuple[float, Dict[str, Any]]:
     """
     Фитнес-функция с двухуровневой оценкой (Early-Exit).
@@ -264,11 +806,27 @@ def run_pure_python_differential_evolution(
 
 def main():
     parser = argparse.ArgumentParser(description="Оптимизация топливной стратегии (DE)")
-    parser.add_argument("--archetype", choices=["earth_fortress", "lunar_dual"], default="earth_fortress", help="Архетип для оптимизации (earth_fortress или lunar_dual)")
+    parser.add_argument("--archetype", choices=["earth_fortress", "lunar_dual", "diversified"], default="earth_fortress", help="Архетип для оптимизации")
     parser.add_argument("--iter", type=int, default=15, help="Число поколений эволюции (default: 15)")
     parser.add_argument("--pop", type=int, default=12, help="Размер популяции (default: 12)")
     parser.add_argument("--output", type=str, default="data/optimized_strategy.json", help="Путь для сохранения JSON-плана")
+    parser.add_argument("--report", type=str, default="reports/diversified_strategy.json", help="Отчёт для diversified")
+    parser.add_argument("--max-evaluations", type=int, default=10_000, help="Общий лимит engine-оценок diversified")
+    parser.add_argument("--seed", type=int, default=42, help="Seed поиска diversified")
     args = parser.parse_args()
+
+    if args.archetype == "diversified":
+        strategy = publish_diversified(
+            Path(args.output),
+            Path(args.report),
+            max_evaluations=args.max_evaluations,
+            seed=args.seed,
+        )
+        print(
+            f"Стратегия сохранена в {args.output}; отчёт — в {args.report}",
+            file=sys.stderr,
+        )
+        return strategy
 
     if args.archetype == "lunar_dual":
         decode_fn = decode_lunar_dual

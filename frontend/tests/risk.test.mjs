@@ -1,24 +1,55 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {calculateRisks,riskDistribution} from '../.test-build/lib/risk.js';
+import {calculateRisks,riskAnalysisStatus,riskCanRun,riskDistribution} from '../.test-build/lib/risk.js';
 import * as riskModule from '../.test-build/lib/risk.js';
 test('risk analysis runs two scenarios sequentially on same decisions',async()=>{
  const basis={plan_id:'p',scenario_id:'BASE',decisions:{extra:{keep:1}}};
  const calls=[],received=[],stages=[];
  const pending=calculateRisks(basis,true,p=>new Promise(resolve=>calls.push({p,resolve})),v=>received.push(v),s=>stages.push(s));
  assert.equal(calls.length,1);assert.equal(calls[0].p.scenario_id,'BASE');
- calls[0].resolve({scenario_id:'BASE',risk_register:[{iterations:100}]});await Promise.resolve();await Promise.resolve();
+ calls[0].resolve({plan_id:'p',scenario_id:'BASE',risk_register:[{iterations:100}]});await Promise.resolve();await Promise.resolve();
  assert.equal(calls.length,2);assert.equal(calls[1].p.scenario_id,'MANDATORY_STRESS');assert.deepEqual(calls[1].p.decisions,basis.decisions);
- calls[1].resolve({scenario_id:'MANDATORY_STRESS',risk_register:[]});await pending;
+ calls[1].resolve({plan_id:'p',scenario_id:'MANDATORY_STRESS',risk_register:[]});await pending;
  assert.equal(received.length,2);assert.deepEqual(stages,['BASE','MANDATORY_STRESS']);assert.equal(basis.scenario_id,'BASE');
 });
 test('secondary failure retains already published first analysis',async()=>{
  const received=[];let calls=0;
- await assert.rejects(calculateRisks({plan_id:'p',scenario_id:'BASE',decisions:{}},true,async p=>{if(++calls===2)throw Error('second failed');return {scenario_id:p.scenario_id}},v=>received.push(v),()=>{}),/second failed/);
+ await assert.rejects(calculateRisks({plan_id:'p',scenario_id:'BASE',decisions:{}},true,async p=>{if(++calls===2)throw Error('second failed');return {plan_id:p.plan_id,scenario_id:p.scenario_id}},v=>received.push(v),()=>{}),/second failed/);
  assert.equal(received.length,1);assert.equal(received[0].plan.scenario_id,'BASE');
 });
 test('single mode invokes only selected scenario',async()=>{
- let count=0;await calculateRisks({plan_id:'p',scenario_id:'MANDATORY_STRESS',decisions:{}},false,async()=>{count++;return {}},()=>{},()=>{});assert.equal(count,1);
+ let count=0;await calculateRisks({plan_id:'p',scenario_id:'MANDATORY_STRESS',decisions:{}},false,async p=>{count++;return {plan_id:p.plan_id,scenario_id:p.scenario_id}},()=>{},()=>{});assert.equal(count,1);
+});
+test('risk analysis rejects a response for another plan or scenario before publishing',async()=>{
+ const basis={plan_id:'p',scenario_id:'BASE',decisions:{}},received=[];
+ await assert.rejects(calculateRisks(basis,false,async()=>({plan_id:'other',scenario_id:'BASE'}),run=>received.push(run),()=>{}),/другого плана или сценария/);
+ await assert.rejects(calculateRisks(basis,false,async()=>({plan_id:'p',scenario_id:'MANDATORY_STRESS'}),run=>received.push(run),()=>{}),/другого плана или сценария/);
+ assert.deepEqual(received,[]);
+});
+
+test('risk launch status stays bound to the exact decisions and scenario mode',()=>{
+ const basis={plan_id:'p',scenario_id:'BASE',decisions:{supply_orders:[]}};
+ const analysis={basis, both:false, runs:[{plan:basis,result:{plan_id:'p',scenario_id:'BASE'}}],createdAt:'now'};
+ assert.equal(riskAnalysisStatus(basis,false,null,false,''),'idle');
+ assert.equal(riskAnalysisStatus(basis,false,analysis,true,''),'running');
+ assert.equal(riskAnalysisStatus(basis,false,analysis,false,''),'ready');
+ assert.equal(riskAnalysisStatus({...basis,decisions:{supply_orders:[{source_id:'A',year:2035,order_t:1}]}},false,analysis,false,''),'stale');
+ assert.equal(riskAnalysisStatus({...basis,source_overrides:{A:{capacity_t_per_year:175}}},false,analysis,false,''),'stale');
+ assert.equal(riskAnalysisStatus(basis,true,analysis,false,''),'stale');
+ assert.equal(riskAnalysisStatus({...basis,scenario_id:'MANDATORY_STRESS'},false,analysis,false,''),'stale');
+ assert.equal(riskAnalysisStatus(basis,false,{...analysis,runs:[]},false,''),'idle');
+ assert.equal(riskAnalysisStatus(basis,false,analysis,false,'backend failed'),'error');
+ const partialFailure={...analysis,both:true,error:'second scenario failed'};
+ assert.equal(riskAnalysisStatus(basis,true,partialFailure,false,''),'error');
+ assert.equal(riskAnalysisStatus({...basis,decisions:{supply_orders:[{source_id:'A',year:2035,order_t:1}]}},true,partialFailure,false,''),'stale');
+ assert.equal(riskAnalysisStatus(basis,false,partialFailure,false,''),'stale');
+ assert.equal(riskAnalysisStatus(basis,false,{...analysis,runs:[{plan:basis,result:{plan_id:'other',scenario_id:'BASE'}}]},false,''),'idle');
+});
+test('risk launch uses the same strategy name validation as execution',()=>{
+ const plan={plan_id:'p',scenario_id:'BASE',decisions:{supply_orders:[],capacity_reservations:[],investments:[],inventory_policy:{initial_inventory_t:0}}};
+ assert.equal(riskCanRun('Стратегия',plan),true);
+ assert.equal(riskCanRun('   ',plan),false);
+ assert.equal(riskCanRun('Стратегия',null),false);
 });
 
 const valid=()=>({iterations:4,shortage_samples_t:[1,3,2,4],shortage_histogram:[{lower_t:1,upper_t:3,count:2},{lower_t:3,upper_t:4,count:2}],median_shortage_t:2.5,p95_shortage_t:4,max_shortage_t:4});

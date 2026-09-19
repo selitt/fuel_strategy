@@ -4,18 +4,34 @@ from src.app.main import create_app
 from src.app.config.config import Settings
 from src.app.config.config import ROOT
 from src.engine.strategies import (get_earth_fortress_strategy, get_lunar_pioneer_strategy,
-    get_balanced_strategy, get_optimal_resilient_strategy, get_stress_resilient_strategy)
+    get_balanced_strategy, get_optimal_resilient_strategy, get_stress_resilient_strategy,
+    get_diversified_strategy)
 from decimal import Decimal
 from datetime import date
 import hashlib
 import json
 
-KINDS = ("earth_fortress", "lunar_pioneer", "balanced", "base", "stress")
+KINDS = ("earth_fortress", "lunar_pioneer", "balanced", "base", "stress", "diversified")
 FACTORIES = (get_earth_fortress_strategy, get_lunar_pioneer_strategy, get_balanced_strategy,
-             get_optimal_resilient_strategy, get_stress_resilient_strategy)
+             get_optimal_resilient_strategy, get_stress_resilient_strategy, get_diversified_strategy)
 IDS = ("strategy_earth_fortress", "strategy_lunar_pioneer", "strategy_balanced_dual",
-       "strategy_optimal_resilient_mc90", "strategy_mandatory_stress_resilient")
-SCENARIOS = ("BASE", "BASE", "BASE", "BASE", "MANDATORY_STRESS")
+       "strategy_optimal_resilient_mc90", "strategy_mandatory_stress_resilient", "strategy_diversified")
+SCENARIOS = ("BASE", "BASE", "BASE", "BASE", "MANDATORY_STRESS", "BASE")
+
+
+def test_diversified_is_a_sixth_independent_builtin(tmp_path):
+    with TestClient(create_app(settings=Settings(data_dir=tmp_path))) as client:
+        items = client.get('/api/calc/strategies').json()
+        assert len(items) == 6
+        item = items[-1]
+        assert item['id'] == 'strategy_diversified'
+        assert item['name'] == 'Распределённый контур'
+        assert item['plan']['scenario_id'] == 'BASE'
+        orders = item['plan']['decisions']['supply_orders']
+        assert {'Earth-Core', 'Earth-Flex'} <= {r['source_id'] for r in orders if r['year'] == 2035}
+        assert {'Earth-New', 'Lunar-ISRU'} <= {r['source_id'] for r in orders}
+        assert all(r['source_id'] != 'Emergency' for r in orders)
+        assert client.get('/api/projects').json()['total'] == 0
 
 
 def test_builtin_catalog_is_read_only_and_matches_engine(tmp_path):

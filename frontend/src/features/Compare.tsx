@@ -214,7 +214,7 @@ export function Compare({ w }: { w: Workspace }) {
           const checked = w.selectedIds.includes(tab.id);
           return <label key={tab.id} className={`comparison-strategy-chip ${checked ? 'is-selected' : ''}`} style={{ '--strategy-color': strategyColor(tab.id) } as CSSProperties}>
             <input type="checkbox" checked={checked} onChange={() => w.toggleComparison(tab.id)}/>
-            <i/><span>{tab.name}</span>{tab.builtin&&<em>готовая</em>}{strategyDirty(tab) && <b title="Есть несохранённые изменения">●</b>}
+            <i/><span>{tab.name}</span>{tab.builtin&&<em>готовая</em>}{tab.plan.source_overrides&&Object.keys(tab.plan.source_overrides).length>0&&<em className="research-conditions-badge">исслед. условия</em>}{strategyDirty(tab) && <b title="Есть несохранённые изменения">●</b>}
           </label>;
         })}
       </div>
@@ -240,7 +240,7 @@ export function Compare({ w }: { w: Workspace }) {
             </thead>
             <tbody>{selected.map(tab => <tr key={tab.id}>
               <th scope="row">
-                <span className="comparison-strategy-heading"><i style={{ background: strategyColor(tab.id) }}/><span title={tab.name}>{tab.name}</span>{reference?.id === tab.id && <em>эталон</em>}</span>
+                <span className="comparison-strategy-heading"><i style={{ background: strategyColor(tab.id) }}/><span title={tab.name}>{tab.name}</span>{tab.plan.source_overrides&&Object.keys(tab.plan.source_overrides).length>0&&<em className="research-conditions-badge">исслед. условия</em>}{reference?.id === tab.id && <em>эталон</em>}</span>
                 <span className="comparison-status-pair">{scenarios.map(scenarioId => <ScenarioStatus key={scenarioId} tab={tab} scenarioId={scenarioId}/>)}</span>
               </th>
               {metricRows.flatMap(row => scenarios.map(scenarioId => {
@@ -306,7 +306,7 @@ export function Compare({ w }: { w: Workspace }) {
           <caption className="sr-only">Подробное сравнение стратегий</caption>
           <thead>
             <tr><th rowSpan={2} scope="col">Показатель</th>{selected.map(tab => <th key={tab.id} scope="colgroup" colSpan={2}>
-              <span className="comparison-strategy-heading"><i style={{ background: strategyColor(tab.id) }}/><span>{tab.name}</span></span>
+              <span className="comparison-strategy-heading"><i style={{ background: strategyColor(tab.id) }}/><span>{tab.name}</span>{tab.plan.source_overrides&&Object.keys(tab.plan.source_overrides).length>0&&<em className="research-conditions-badge">исслед. условия</em>}</span>
               <button type="button" className="text-button" onClick={() => { setDetailsOpen(false); w.editComparedTab(tab.id); }}>Открыть в редакторе</button>{tab.builtin&&<button type="button" className="text-button" disabled={!!w.busy} onClick={()=>{setDetailsOpen(false);void w.copyFrom(tab.id);}}>Создать свою копию</button>}
             </th>)}</tr>
             <tr>{selected.flatMap(tab => scenarios.map(scenarioId => <th scope="col" key={`${tab.id}-${scenarioId}`}><strong>{scenarioNames[scenarioId]}</strong><ScenarioStatus tab={tab} scenarioId={scenarioId}/></th>))}</tr>

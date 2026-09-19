@@ -13,6 +13,7 @@ import { issueTarget } from '../lib/validation';
 import type { PlanIssue } from '../lib/validation';
 import './supply-validation.css';
 import { Toggle } from '../components/Controls';
+import { RiskLauncher } from './RiskLauncher';
 
 const MONTHS = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'] as const;
 const options: Record<string, {id:string;year:number}> = {
@@ -20,7 +21,7 @@ const options: Record<string, {id:string;year:number}> = {
 };
 type Expanded = {source:string;month:number|null};
 
-export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=>void;onSource:(source:MatrixSource)=>void}) {
+export function SupplyMatrix({w,onAdvanced,onSource,onRisk}:{w:Workspace;onAdvanced:()=>void;onSource:(source:MatrixSource)=>void;onRisk:(run:boolean)=>void}) {
  const [help,setHelp]=useState<string|null>(null);
  const [chosenYear,setChosenYear]=useStrategyUiState<number|null>(w,'supplyYear',null);
  const [expanded,setExpanded]=useStrategyUiState<Expanded|null>(w,'supplyExpanded',null);
@@ -104,8 +105,8 @@ export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=
   </div></td></tr>;
  }
  return <section className="panel supply-panel direct-matrix monthly-matrix" aria-labelledby="matrix-title">
-  <div className="panel-heading monthly-heading"><div><h2 id="matrix-title">Поставки по месяцам</h2><span className="muted">Партии с точными датами · engine считает каждый день</span></div><div className="monthly-actions"><label>Год<select aria-label="Год плана поставок" value={selectedYear} onChange={e=>{setChosenYear(Number(e.target.value));setExpanded(null);}}>{years.map(year=><option key={year}>{year}</option>)}</select></label><button type="button" className="text-button" onClick={onAdvanced}>Другие записи →</button></div></div>
-  <p className="matrix-instruction">Нажмите месяц → укажите дату и тонны. Резерв — один раз на год.</p>
+  <div className="panel-heading monthly-heading"><div><h2 id="matrix-title">Поставки по месяцам</h2><span className="muted">Объём поставок по месяцам, т</span></div><div className="monthly-actions"><label>Год<select aria-label="Год плана поставок" value={selectedYear} onChange={e=>{setChosenYear(Number(e.target.value));setExpanded(null);}}>{years.map(year=><option key={year}>{year}</option>)}</select></label><button type="button" className="text-button" onClick={onAdvanced}>Другие записи →</button></div></div>
+  <p className="matrix-instruction">Откройте месяц, чтобы посмотреть партии. Резерв указывается на весь год.</p>
   {issues.length>0&&<div className="supply-issue-summary" aria-label="Ошибки поставок" aria-live="polite"><strong>Проверьте поставки и резерв</strong>{issues.map((issue,index)=>{const target=issueTarget(issue,plan);return <button type="button" key={index} onClick={()=>revealIssue(issue)}><span>{target.source||'Запись'} · {target.year??'год не указан'}</span> {issue.message} <span aria-hidden="true">→</span></button>;})}</div>}
   <fieldset disabled={!!w.busy} className="matrix-fieldset"><div ref={viewport} onScroll={event=>{w.setUi('supplyScrollX',event.currentTarget.scrollLeft,0);w.setUi('supplyScrollY',event.currentTarget.scrollTop,0);}} className="matrix-viewport" tabIndex={0} aria-label={`Поставки за ${selectedYear} год`}>
    <table className="supply-matrix monthly-supply-table"><caption className="sr-only">Партии поставок по месяцам за {selectedYear} год</caption>
@@ -117,7 +118,8 @@ export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=
      const defaultInvestmentYear=source.key==='Lunar-ISRU'&&Number.isInteger(availableYear)?availableYear-1:option?.year;
      const investmentYears=[...new Set([...years,...investments.map(i=>i.year),...(defaultInvestmentYear?[defaultInvestmentYear]:[])])].sort((a,b)=>a-b);
      const leadMin=Number(source.reference?.lead_time_min_value), leadMax=Number(source.reference?.lead_time_max_value);
-     const readiness=source.key==='Lunar-ISRU'&&Number.isInteger(availableYear)?`Доступно с ${availableYear}; решение до ${availableYear}`:source.key==='Earth-New'&&Number.isFinite(leadMin)&&Number.isFinite(leadMax)?`Подготовка ${leadMin}–${leadMax} мес. после решения`:'';
+     const leadUnit=source.reference?.lead_time_unit==='week'?'нед.':source.reference?.lead_time_unit==='day'?'дн.':'мес.';
+     const readiness=source.key==='Lunar-ISRU'&&Number.isInteger(availableYear)?`Доступно с ${availableYear}; решение до ${availableYear}`:source.key==='Earth-New'&&Number.isFinite(leadMin)&&Number.isFinite(leadMax)?`Подготовка ${leadMin}–${leadMax} ${leadUnit} после решения`:'';
      const reason=unavailable(source), reserve=readCell(plan,'capacity_reservations',source,selectedYear), undated=unscheduledSupplyIndices(plan,source,selectedYear);
      const related=sourceIssues(source);
      const reserveIssues=related.filter(issue=>{const target=issueTarget(issue,plan);return target.kind==='capacity_reservations'||target.index===undefined;});
@@ -125,7 +127,7 @@ export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=
      const reserveId=`reserve-${source.key}-${selectedYear}`;
      const opened=expanded?.source===source.key;
      return <Fragment key={source.key}><tr className={w.selection?.source===source.key?'selected-source':''}>
-      <th scope="row" className="monthly-source"><button type="button" className="source-name" aria-label={`Параметры ${source.label}`} onClick={()=>onSource(source)}>{source.label} <span aria-hidden="true">ⓘ</span></button>
+      <th scope="row" className="monthly-source"><button type="button" className="source-name" aria-label={`Параметры ${source.label}`} onClick={()=>onSource(source)}>{source.label} <span aria-hidden="true">ⓘ</span>{source.customized&&<em className="source-custom-badge">Исслед. условия</em>}</button>
        <label className="annual-reserve"><span>Резерв, т/год</span>{reserve.indices.length>1?<button type="button" className="text-button" onClick={onAdvanced}>{reserve.indices.length} записи</button>:<input id={reserveId} aria-invalid={reserveInvalid} aria-describedby={reserveIssues.length?`${reserveId}-issues`:undefined} disabled={w.immutable} type="number" inputMode="decimal" min={0} step="any" placeholder="—" value={reserve.value===null||!Number.isFinite(reserve.value)?'':reserve.value} aria-label={`Резерв ${source.label} ${selectedYear}, т/год`} onChange={e=>w.setDraft(writeCell(plan,'capacity_reservations',source,selectedYear,e.target.value===''?NaN:Number(e.target.value)))}/>}</label>
        {reserveIssues.length>0&&<div className="reserve-issues" id={`${reserveId}-issues`}>{reserveIssues.map((issue,index)=><small key={index}>{issue.message}</small>)}</div>}
        {related.some(issue=>issueTarget(issue,plan).index===undefined)&&<button type="button" className="text-button source-cost-help" onClick={()=>onSource(source)}>Тарифы и пределы источника →</button>}
@@ -137,6 +139,7 @@ export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=
     })}</tbody>
    </table>
   </div></fieldset>
+  <RiskLauncher w={w} onOpen={onRisk}/>
   <button type="button" className="text-button matrix-help" onClick={()=>setHelp('Каждая поставка — отдельная партия с точной датой получения и объёмом в тоннах. Ячейка месяца показывает сумму таких партий. Резерв — годовая пропускная способность канала, а не запас топлива. Записи старых планов без даты не распределяются автоматически: дату нужно назначить вручную.')}>Как заполнить таблицу ⓘ</button>
   {help&&<Modal title="Пояснение к поставкам" onClose={()=>setHelp(null)}><p>{help}</p></Modal>}
  </section>;

@@ -7,9 +7,12 @@
 .strategy-workspace .strategy-import-report{flex:0 0 auto;max-height:80px;overflow:auto}
 .comparison-loading{display:flex;flex:1;align-items:center;justify-content:center;gap:10px;color:var(--muted)}
 .builtin-strategy-note{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:12px;padding:7px 10px;border:1px solid #83c9b244;border-radius:5px;background:#83c9b20b}.builtin-strategy-note>div{display:grid;min-width:0;gap:2px}.builtin-strategy-note strong{font-size:12px}.builtin-strategy-note span{overflow:hidden;color:var(--muted);font-size:10px;text-overflow:ellipsis;white-space:nowrap}.builtin-strategy-note .button{flex:none;min-height:28px;padding:4px 8px;font-size:10px}
-@media(min-width:1200px) and (min-height:680px){
+@media(min-width:1551px) and (min-height:800px){
  .strategy-workspace.compact-desktop>.operator-grid{align-items:stretch;align-content:stretch}
- .strategy-workspace.compact-desktop .strategy-summary>.panel-heading h2,.strategy-workspace.compact-desktop .strategy-summary>.panel-heading button{white-space:nowrap}
+ .strategy-workspace.compact-desktop .strategy-summary>.panel-heading{width:100%;min-width:0}
+ .strategy-workspace.compact-desktop .strategy-summary>.panel-heading>div{min-width:0}
+ .strategy-workspace.compact-desktop .strategy-summary>.panel-heading h2{line-height:1.25;white-space:normal}
+ .strategy-workspace.compact-desktop .strategy-summary>.panel-heading button{flex:none;white-space:nowrap}
  .strategy-workspace.compact-desktop .strategy-freshness-quiet{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
  .strategy-workspace.compact-desktop .strategy-summary-alert .strategy-footnote{display:none}
  .strategy-workspace.compact-desktop .monthly-matrix .monthly-supply-table{min-width:720px}
@@ -18,7 +21,7 @@
  .strategy-workspace.compact-desktop>.operator-header{height:46px;min-height:46px;flex:0 0 46px}
  .strategy-workspace.compact-desktop>.strategy-tabs-bar{padding:5px 16px;min-height:38px;flex:0 0 38px}
  .strategy-workspace.compact-desktop>.operator-grid{flex:1;min-height:0;height:auto;max-width:none;width:100%;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);grid-template-rows:72px minmax(0,1fr);gap:10px 16px;padding:8px 16px 12px;overflow:hidden}
- .strategy-workspace.compact-desktop .strategy-summary{grid-column:1/-1;grid-row:1;display:grid;grid-template-columns:285px minmax(0,1fr);grid-template-rows:24px 32px;gap:4px 16px;padding-bottom:8px;min-height:0}
+ .strategy-workspace.compact-desktop .strategy-summary{grid-column:1/-1;grid-row:1;display:grid;grid-template-columns:300px minmax(0,1fr);grid-template-rows:38px 24px;gap:4px 16px;padding-bottom:8px;min-height:0}
  .strategy-workspace.compact-desktop .strategy-summary>.panel-heading{grid-column:1;grid-row:1}
  .strategy-workspace.compact-desktop .strategy-summary>.strategy-freshness{grid-column:1;grid-row:2}
  .strategy-workspace.compact-desktop .strategy-summary>.strategy-scenarios{grid-column:2;grid-row:1/3;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));height:auto;gap:12px}

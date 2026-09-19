@@ -7,7 +7,7 @@ from pathlib import Path
 from .loader import find_data_root
 
 
-BUILTIN_STRATEGY_KINDS = ("earth_fortress", "lunar_pioneer", "balanced", "base", "stress")
+BUILTIN_STRATEGY_KINDS = ("earth_fortress", "lunar_pioneer", "balanced", "base", "stress", "diversified")
 
 
 def load_builtin_strategy_data(kind: str, data_root: Optional[Path] = None) -> Dict[str, Any]:
@@ -103,3 +103,7 @@ def get_optimal_resilient_strategy(monthly: bool = True) -> Dict[str, Any]:
 
 def get_stress_resilient_strategy(monthly: bool = True) -> Dict[str, Any]:
     return load_builtin_strategy("stress", monthly=monthly)
+
+
+def get_diversified_strategy(monthly: bool = True) -> Dict[str, Any]:
+    return load_builtin_strategy("diversified", monthly=monthly)

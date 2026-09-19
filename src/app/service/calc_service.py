@@ -17,6 +17,7 @@ from src.app.dto.calc_dto import (
 from src.app.service.json_io import ensure_finite
 from src.engine.engine import SimulationEngine
 from src.engine.loader import CaseCatalog
+from src.engine.source_overrides import catalog_with_source_overrides
 
 REQUIRED_RESULT_FIELDS = frozenset({
     "scenario_id", "plan_id", "units", "assumptions_reference",
@@ -46,26 +47,31 @@ class CalculationService:
         path = self.engine.catalog.data_root / "examples" / "empty_plan.json"
         return ParticipantPlanDTO.model_validate_json(path.read_text(encoding="utf-8"))
 
+    def _run(self, request: ParticipantPlanDTO, *, risk: bool) -> ResultExportEnvelopeDTO:
+        overrides = {key: value.model_dump() for key, value in request.source_overrides.items()}
+        engine = self.engine
+        if overrides:
+            engine = SimulationEngine(catalog_with_source_overrides(self.engine.catalog, overrides))
+        result = engine.run(
+            plan_id=request.plan_id, scenario_id=request.scenario_id,
+            decisions=request.decisions.model_dump(), run_risk_analysis=risk,
+        )
+        if overrides:
+            result['source_overrides'] = overrides
+            result['input_context'] = 'RESEARCH_SOURCE_OVERRIDES'
+            result['assumptions_reference'] = {
+                'model': 'docs/MODEL.md', 'classification': 'TEAM_ASSUMPTION',
+                'source_overrides': overrides,
+            }
+        return validate_result(result)
+
     def calculate(self, request: ParticipantPlanDTO) -> ResultExportEnvelopeDTO:
         """
         Принимает план участника (ParticipantPlan), выполняет симуляцию в движке
         и возвращает валидированный конверт результатов (ResultExportEnvelope).
         """
-        decisions_dict = request.decisions.model_dump()
-        result_dict = self.engine.run(
-            plan_id=request.plan_id,
-            scenario_id=request.scenario_id,
-            decisions=decisions_dict,
-            run_risk_analysis=False,
-        )
-        return validate_result(result_dict)
+        return self._run(request, risk=False)
 
     def calculate_risk(self, request: ParticipantPlanDTO) -> ResultExportEnvelopeDTO:
         """Запускает тот же расчёт с существующим анализом Монте-Карло."""
-        result_dict = self.engine.run(
-            plan_id=request.plan_id,
-            scenario_id=request.scenario_id,
-            decisions=request.decisions.model_dump(),
-            run_risk_analysis=True,
-        )
-        return validate_result(result_dict)
+        return self._run(request, risk=True)

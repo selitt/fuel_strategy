@@ -5,8 +5,8 @@ DTO контракты для взаимодействия с API планиро
 - ResultExportEnvelope (data/schemas/export.schema.json)
 """
 
-from typing import List, Dict, Any, Optional, Union
-from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Dict, Any, Optional, Union, Literal
+from pydantic import BaseModel, Field, ConfigDict, model_validator, model_serializer
 
 
 # === ВХОДНЫЕ КОНТРАКТЫ (plan.schema.json) ===
@@ -68,6 +68,34 @@ class PlanDecisionsDTO(BaseModel):
     )
 
 
+class SourceOverrideDTO(BaseModel):
+    """Явные пользовательские допущения; отсутствующие поля берутся из CASE_INPUT."""
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+
+    capacity_t_per_year: Optional[float] = Field(default=None, ge=0)
+    variable_cost_mln_per_t: Optional[float] = Field(default=None, ge=0)
+    reservation_rate_mln_per_t_year_capacity: Optional[float] = Field(default=None, ge=0)
+    take_or_pay_share: Optional[float] = Field(default=None, ge=0, le=1)
+    lead_time_min_value: Optional[int] = Field(default=None, ge=0)
+    lead_time_max_value: Optional[int] = Field(default=None, ge=0)
+    lead_time_unit: Optional[Literal['month', 'week', 'day']] = None
+    reliability_profile: Optional[str] = None
+    available_from_year: Optional[int] = Field(default=None, ge=1, le=9999)
+
+    @model_validator(mode='before')
+    @classmethod
+    def explicit_values(cls, value):
+        if isinstance(value, dict):
+            for key, item in value.items():
+                if isinstance(item, bool) or (item is None and key != 'available_from_year'):
+                    raise ValueError(f'{key}: укажите значение; пустым может быть только неизвестный год доступности')
+        return value
+
+    @model_serializer(mode='wrap')
+    def sparse_fields(self, handler):
+        return {key: value for key, value in handler(self).items() if key in self.model_fields_set}
+
+
 class ParticipantPlanDTO(BaseModel):
     """Входной контракт: план участника (по plan.schema.json)."""
     model_config = ConfigDict(extra="allow")
@@ -79,6 +107,17 @@ class ParticipantPlanDTO(BaseModel):
         description="Идентификатор сценария: BASE или MANDATORY_STRESS",
     )
     decisions: PlanDecisionsDTO = Field(..., description="Решения оператора")
+    source_overrides: Dict[str, SourceOverrideDTO] = Field(
+        default_factory=dict,
+        description="Исследовательские условия существующих поставщиков по коду из справочника. CASE_INPUT не изменяется.",
+    )
+
+    @model_serializer(mode='wrap')
+    def preserve_legacy_shape(self, handler):
+        value = handler(self)
+        if not value.get('source_overrides'):
+            value.pop('source_overrides', None)
+        return value
 
 
 

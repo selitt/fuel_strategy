@@ -31,16 +31,15 @@ const dailyFields = [
   ['shortage_t', 'Дефицит', 'т'],
 ] as const;
 
-export function ResultPanel({ w, onDetails, onRisk }: {
+export function ResultPanel({ w, onDetails }: {
   w: Workspace;
   onDetails: () => void;
-  onRisk: () => void;
 }) {
   const [chart, setChart] = useStrategyUiState<'inventory' | 'cost'>(w,'resultChart','inventory');
   const [selectedModelDay, setSelectedModelDay] = useStrategyUiState(w,'resultDay',1);
   const [timelineView, setTimelineView] = useStrategyUiState<'overview' | 'detail'>(w,'resultRange','overview');
   const [dayDetailsOpen, setDayDetailsOpen] = useStrategyUiState(w,'dayDetails',false);
-  const [infoModal, setInfoModal] = useState<'checks' | 'risk' | null>(null);
+  const [infoModal, setInfoModal] = useState<'checks' | null>(null);
   const [detailSide, setDetailSide] = useStrategyUiState<'primary' | 'other'>(w,'resultSide','primary');
   const result = w.displayResult;
   const fresh = w.preview ? w.previewFresh : w.current;
@@ -142,7 +141,6 @@ export function ResultPanel({ w, onDetails, onRisk }: {
     <div className="result-numbers"><div><span>Дефицит</span><strong className={(detailRow?.shortage_t || 0) > 0 ? 'warning-text' : ''}>{number(detailRow?.shortage_t)}<small> т</small></strong></div><div><span>Запас на конец</span><strong>{number(detailRow?.closing_inventory_t)}<small> т</small></strong></div><div><span>Расходы за год</span><strong>{number(detailFinancial?.total)}<small> млн у.е.</small></strong></div></div>
     <div className="result-actions">
       <button className="result-action" type="button" data-testid="result-checks" onClick={() => setInfoModal('checks')}><Icon name={failed.length ? 'alert' : 'check'} size={15}/><span>{scenarioCode(detailResult)} · {checks.length ? (failed.length ? `${failed.length} нарушений за горизонт` : 'Все проверки модели пройдены') : 'Проверки не переданы'}</span><Icon name="right" size={15}/></button>
-      <button className="result-action risk-entry" type="button" data-testid="risk-disclosure" onClick={() => setInfoModal('risk')}><span>Проверка сбоев поставок</span><Icon name="right" size={15}/></button>
     </div>
     {infoModal === 'checks' && <Modal title={`Проверки модели · ${scenarioCode(detailResult)}`} wide onClose={() => setInfoModal(null)}>
       <div className="compact-checks">
@@ -150,11 +148,6 @@ export function ResultPanel({ w, onDetails, onRisk }: {
         {yearFails.length > 0 && <p className="help">За выбранный {year} год: {yearFails.length}.</p>}
         <div className="modal-actions"><Button onClick={() => { setInfoModal(null); onDetails(); }}>Все показатели и значения</Button></div>
       </div>
-    </Modal>}
-    {infoModal === 'risk' && <Modal title="Проверка сбоев поставок" onClose={() => setInfoModal(null)}>
-      <p>Модель выполнит 100 случайных прогонов отказов поставок и покажет, как часто нет дефицита, нарушений начального резерва и переполнения.</p>
-      <p className="help">Это дополнительная оценка устойчивости текущего плана. Она запускается отдельно и не меняет введённые решения.</p>
-      <div className="modal-actions"><Button data-testid="run-risk-button" disabled={w.riskBusy || !!w.busy} onClick={() => { setInfoModal(null); onRisk(); }}>Запустить проверку сбоев</Button></div>
     </Modal>}
     {dayDetailsOpen && <Modal title={modelDayLabel(selectedModelDay)} wide onClose={() => setDayDetailsOpen(false)}>
       <div className="daily-detail" data-testid="daily-detail">

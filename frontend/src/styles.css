@@ -1845,6 +1845,22 @@ table {
   overflow: auto;
   line-height: 1.7;
 }
+.modal:has(.source-editor) {width:min(94vw,760px);}
+.source-editor {display:grid;gap:14px;min-width:0;}
+.source-editor fieldset {border:0;margin:0;padding:0;display:grid;gap:14px;}
+.source-editor-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;}
+.source-editor .field {display:grid;gap:5px;color:var(--muted);font-size:12px;}
+.source-editor .field input,.source-editor .field select {width:100%;}
+.source-editor .field-error {display:block;color:var(--amber);font-size:11px;line-height:1.3;}
+.reliability-editor {display:grid;gap:9px;padding:12px;border:1px solid var(--line);background:#111514;}
+.reliability-editor>strong {font-size:13px;}
+.annual-reliability {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.source-editor-reference {display:grid;gap:6px;margin:0;padding-top:2px;color:var(--muted);font-size:11px;}
+.source-editor-reference div {display:grid;grid-template-columns:150px 1fr;gap:12px;}
+.source-editor-reference dt,.source-editor-reference dd {margin:0;}
+.source-custom-badge {display:inline-flex;margin-left:5px;padding:1px 4px;border:1px solid #755f3e;color:#edbe77;font-size:9px;font-style:normal;font-weight:500;letter-spacing:.02em;vertical-align:middle;}
+.research-conditions-badge {display:inline-flex;align-items:center;padding:1px 5px;border:1px solid #755f3e;color:#edbe77;font-size:9px;font-style:normal;font-weight:500;line-height:1.35;letter-spacing:.02em;vertical-align:middle;white-space:nowrap;}
+@media(max-width:700px) {.source-editor {min-width:0}.source-editor-grid,.annual-reliability {grid-template-columns:1fr}.source-editor-reference div {grid-template-columns:1fr;gap:2px}}
 .disclosure {
   border-top: 1px solid var(--border);
   margin: 15px 0;
@@ -3211,6 +3227,38 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 }
 
 /* Explicit risk analysis: snapshot-bound summary, separate from ordinary dynamics. */
+.risk-launcher {
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+  margin-top:8px;
+  padding:12px;
+  border:1px solid #3d514b;
+  border-radius:5px;
+  background:linear-gradient(100deg,#16211e 0%,#111817 70%);
+}
+.risk-launcher-mark {
+  display:grid;
+  width:32px;
+  height:32px;
+  place-items:center;
+  border:1px solid #5f8175;
+  border-radius:4px;
+  color:#9ed6c2;
+  background:#20332d;
+}
+.risk-launcher-copy {display:grid;min-width:0;gap:2px;line-height:1.3;}
+.risk-launcher-copy strong,.risk-launcher-copy span,.risk-launcher-copy small {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.risk-launcher-copy strong {font-size:14px;font-weight:600;}
+.risk-launcher-copy span {color:var(--muted);font-size:12px;}
+.risk-launcher-copy small {color:#8bb7a8;font-size:12px;}
+.risk-launcher .button {display:inline-flex;min-height:34px;align-items:center;gap:6px;font-size:13px;white-space:nowrap;}
+.risk-launcher-stale {border-color:#755f3e;background:linear-gradient(100deg,#241f17 0%,#171612 70%);}
+.risk-launcher-stale .risk-launcher-mark,.risk-launcher-stale .risk-launcher-copy small {color:#edbe77;}
+.risk-launcher-error {border-color:#764944;background:linear-gradient(100deg,#241917 0%,#171312 70%);}
+.risk-launcher-error .risk-launcher-mark,.risk-launcher-error .risk-launcher-copy small {color:#e89b91;}
+.risk-launcher-running .risk-launcher-mark {color:#b8ddd0;}
 .risk-toolbar,.risk-chart-heading,.risk-progress {
   display:flex;
   align-items:center;
@@ -3229,6 +3277,11 @@ button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,s
 .risk-summary td {font-variant-numeric:tabular-nums;}
 .risk-panel .daily-chart {min-height:300px;}
 .risk-panel .help {line-height:1.55;}
+@media(max-width:600px) {
+  .risk-launcher {grid-template-columns:auto minmax(0,1fr);}
+  .risk-launcher-copy strong,.risk-launcher-copy span,.risk-launcher-copy small {overflow:visible;text-overflow:clip;white-space:normal;}
+  .risk-launcher .button {grid-column:1/-1;justify-content:center;width:100%;}
+}
 
 /* Desktop density: keep the decision matrix and useful daily plot in one viewport. */
 @media(min-width:901px) {

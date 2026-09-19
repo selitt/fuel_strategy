@@ -153,6 +153,12 @@ class CaseCatalog:
         self.data_root = data_root or find_data_root()
         self.demands = load_demand(self.data_root)
         self.sources = load_supply_sources(self.data_root)
+        # Keep the existing CASE_INPUT contract requirement independent of
+        # research edits to its price (a free reservation is still required).
+        self.reservation_required_sources = frozenset(
+            source.source_id for source in self.sources.values()
+            if source.reservation_rate > 0
+        )
         self.storages = load_storage_options(self.data_root)
         self.investments = load_investment_options(self.data_root)
         self.constraints = load_constraints(self.data_root)

@@ -13,7 +13,7 @@ export type StrategyTab = {
  errors: Record<string, {basis: Plan; message: string; issues?: PlanIssue[]} | undefined>;
  ui: Record<string, unknown>;
  selection: {source: string; year: number} | null;
- risk: {basis: Plan; both: boolean; runs: RiskRun[]; createdAt: string} | null;
+ risk: {basis: Plan; both: boolean; runs: RiskRun[]; createdAt: string; error: string} | null;
 };
 export const comparisonScenarios = ['BASE','MANDATORY_STRESS'] as const;
 export function savedStrategyIsCalculated(project:Project):boolean {
@@ -76,6 +76,7 @@ export function strategyColor(id: string): string {
   'builtin-strategy_balanced_dual':'#a9c9ff',
   'builtin-strategy_optimal_resilient_mc90':'#baabe0',
   'builtin-strategy_mandatory_stress_resilient':'#d49fa9',
+  'builtin-strategy_diversified':'#e3a46f',
  };
  if(builtinColors[id])return builtinColors[id];
  const colors=['#83c9b2','#a9c9ff','#d9b990','#baabe0','#d49fa9','#91c9d6'];

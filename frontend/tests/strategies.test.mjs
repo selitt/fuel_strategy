@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { makeStrategy, makeBuiltinStrategy, updateStrategy, updateStrategyPlan, renameStrategy, removeStrategyTab, toggleStrategySelection, nextStrategyCopyName, strategyColor, strategyDirty, strategyRunFresh, strategyComparisonExport, strategyComparisonCsv, importStrategyFiles, acceptStrategyRun, acceptSavedStrategy, savedStrategyIsCalculated } from '../.test-build/lib/strategies.js';
+import { makeStrategy, makeBuiltinStrategy, updateStrategy, updateStrategyPlan, renameStrategy, removeStrategyTab, toggleStrategySelection, nextStrategyCopyName, strategyColor, strategyDirty, strategyRunFresh, strategyComparisonExport, strategyComparisonCsv, importStrategyFiles, acceptStrategyRun, acceptSavedStrategy, savedStrategyIsCalculated, scenarioPlan } from '../.test-build/lib/strategies.js';
 import { StrategyCalculationQueue } from '../.test-build/lib/strategyQueue.js';
 import { errorText } from '../.test-build/api/client.js';
 
@@ -16,30 +16,30 @@ test('save immediately after import cannot reuse a current imported snapshot',()
 });
 
 const plan = (id='p') => ({plan_id:id,scenario_id:'BASE',extra:{owner:'team'},decisions:{supply_orders:[],capacity_reservations:[],investments:[],inventory_policy:{initial_inventory_t:0}}});
-test('five built-in strategies have stable distinct chart colors without changing custom colors',()=>{
- const builtins=['earth_fortress','lunar_pioneer','balanced_dual','optimal_resilient_mc90','mandatory_stress_resilient']
+test('six built-in strategies have stable distinct chart colors without changing custom colors',()=>{
+ const builtins=['earth_fortress','lunar_pioneer','balanced_dual','optimal_resilient_mc90','mandatory_stress_resilient','diversified']
   .map(id=>strategyColor(`builtin-strategy_${id}`));
- assert.equal(new Set(builtins).size,5);
- assert.deepEqual(builtins,['#83c9b2','#d9b990','#a9c9ff','#baabe0','#d49fa9']);
+ assert.equal(new Set(builtins).size,6);
+ assert.deepEqual(builtins,['#83c9b2','#d9b990','#a9c9ff','#baabe0','#d49fa9','#e3a46f']);
  assert.deepEqual(['strategy-1','strategy-23','own-tab'].map(strategyColor),['#a9c9ff','#91c9d6','#83c9b2']);
 });
-test('five supplied calendars and an empty user plan coexist without changing builtins',()=>{
- const kinds=['earth_fortress','lunar_pioneer','balanced','base','stress'];
+test('six supplied calendars and an empty user plan coexist without changing builtins',()=>{
+ const kinds=['earth_fortress','lunar_pioneer','balanced','base','stress','diversified'];
  const tabs=kinds.map((kind,index)=>{
   const source=JSON.parse(readFileSync(new URL(`../../data/strategies/${kind}.json`,import.meta.url),'utf8'));
   const {supply_orders,capacity_reservations,investments,inventory_policy}=source;
   return makeBuiltinStrategy(`strategy-${index+1}`,{...source,plan:{plan_id:source.id,scenario_id:source.scenario_id,decisions:{supply_orders,capacity_reservations,investments,inventory_policy}}});
  });
- assert.equal(new Set(tabs.map(t=>t.plan.plan_id)).size,5);
- assert.deepEqual(tabs.map(t=>t.name),['Земная крепость','Лунный прорыв','Сбалансированный контур','Базовая','Стресс-устойчивая']);
+ assert.equal(new Set(tabs.map(t=>t.plan.plan_id)).size,6);
+ assert.deepEqual(tabs.map(t=>t.name),['Земная крепость','Лунный прорыв','Сбалансированный контур','Базовая','Стресс-устойчивая','Распределённый контур']);
  assert.ok(tabs.every(t=>t.plan.decisions.supply_orders.every(r=>r.delivery_date&&r.batch_id)));
  const originals=structuredClone(tabs);
- const own=makeStrategy('strategy-6','Моя стратегия',plan('own'));
- const copied=makeStrategy('strategy-7','Моя копия',tabs[0].plan);
+ const own=makeStrategy('strategy-7','Моя стратегия',plan('own'));
+ const copied=makeStrategy('strategy-8','Моя копия',tabs[0].plan);
  copied.plan.decisions.supply_orders[0].order_t+=1;
  own.plan.extra.owner='user';
  const exported=strategyComparisonExport([...tabs,own,copied],undefined);
- assert.equal(exported.items.length,7);
+ assert.equal(exported.items.length,8);
  assert.deepEqual(tabs,originals);
  assert.deepEqual(own.plan.decisions.supply_orders,[]);
  assert.ok(tabs.every(t=>!strategyDirty(t)));
@@ -115,6 +115,15 @@ test('freshness follows input and scenario, exports preserve stale and missing v
  assert.equal(exported.items[0].scenarios.MANDATORY_STRESS.run,null);
  const csv=strategyComparisonCsv([changed],undefined);
  assert.match(csv,/123/);assert.match(csv,/MANDATORY_STRESS/);assert.match(csv,/input_snapshot/);
+});
+test('source condition edits invalidate results and scenario copies retain the exact overrides',()=>{
+ const basis=plan(),result={plan_id:'p',scenario_id:'BASE'};
+ const tab={...makeStrategy('a','Research',basis),results:{BASE:{basis,result,createdAt:'now'}}};
+ const changed={...tab,plan:{...basis,source_overrides:{A:{capacity_t_per_year:175}}}};
+ assert.equal(strategyRunFresh(changed,'BASE'),false);
+ const stress=scenarioPlan(changed,'MANDATORY_STRESS');
+ assert.deepEqual(stress.source_overrides,{A:{capacity_t_per_year:175}});
+ assert.equal(stress.scenario_id,'MANDATORY_STRESS');
 });
 test('batch import continues after a bad file and preserves equal filenames as separate entries',async()=>{
  const files=[{name:'same.json'},{name:'bad.json'},{name:'same.json'}];

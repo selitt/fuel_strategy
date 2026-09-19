@@ -99,7 +99,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -247,7 +247,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -405,7 +405,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -563,7 +563,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -710,7 +710,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -857,7 +857,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1019,14 +1019,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -1166,7 +1166,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1323,7 +1323,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1480,7 +1480,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1641,14 +1641,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -1798,7 +1798,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1955,14 +1955,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2125,14 +2125,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2284,14 +2284,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2451,14 +2451,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2611,14 +2611,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2780,14 +2780,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2939,14 +2939,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -3096,7 +3096,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -3253,7 +3253,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -3412,14 +3412,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -3591,14 +3591,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -4347,6 +4347,14 @@
           "decisions": {
             "$ref": "#/components/schemas/PlanDecisionsDTO",
             "description": "Решения оператора"
+          },
+          "source_overrides": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SourceOverrideDTO"
+            },
+            "type": "object",
+            "title": "Source Overrides",
+            "description": "Исследовательские условия существующих поставщиков по коду из справочника. CASE_INPUT не изменяется."
           }
         },
         "additionalProperties": true,
@@ -4946,6 +4954,127 @@
           "engine"
         ],
         "title": "RunRecordDTO"
+      },
+      "SourceOverrideDTO": {
+        "properties": {
+          "capacity_t_per_year": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capacity T Per Year"
+          },
+          "variable_cost_mln_per_t": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variable Cost Mln Per T"
+          },
+          "reservation_rate_mln_per_t_year_capacity": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reservation Rate Mln Per T Year Capacity"
+          },
+          "take_or_pay_share": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Take Or Pay Share"
+          },
+          "lead_time_min_value": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Time Min Value"
+          },
+          "lead_time_max_value": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Time Max Value"
+          },
+          "lead_time_unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "month",
+                  "week",
+                  "day"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Time Unit"
+          },
+          "reliability_profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reliability Profile"
+          },
+          "available_from_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Available From Year"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SourceOverrideDTO",
+        "description": "Явные пользовательские допущения; отсутствующие поля берутся из CASE_INPUT."
       },
       "SourceScheduleDTO": {
         "properties": {

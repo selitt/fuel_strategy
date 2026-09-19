@@ -23,6 +23,18 @@ def test_published_openapi_matches_running_application(client):
     assert saved == client.get('/openapi.json').json()
 
 
+def test_openapi_422_description_does_not_depend_on_python_http_phrases(monkeypatch, client_factory):
+    from http.client import responses as http_responses
+
+    monkeypatch.setitem(http_responses, 422, 'Interpreter-dependent phrase')
+    spec = client_factory().get('/openapi.json').json()
+    responses = [operation['responses']['422']
+                 for path in spec['paths'].values() for operation in path.values()
+                 if '422' in operation.get('responses', {})]
+    assert responses
+    assert all(response['description'] == 'Unprocessable Content' for response in responses)
+
+
 def test_public_adapter_validation_error_reaches_ui(client_factory, plan):
     class Adapter:
         def calculate(self, request):
