@@ -132,7 +132,7 @@ python_usable() {
     if [[ "${PYTHON_PINNED:-0}" == 1 ]]; then
         version_matches "$1" "$PYTHON_TARGET"
     else
-        [[ "$1" =~ ^3\.(12|13)(\.|$) ]]
+        [[ "$1" =~ ^3\.13(\.|$) ]]
     fi
 }
 

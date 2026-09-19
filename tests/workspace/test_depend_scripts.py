@@ -323,7 +323,7 @@ node() { echo "v$TEST_VERSION"; }
 npm() { echo 10.0.0; }
 '''
         with tempfile.TemporaryDirectory() as directory:
-            cases = [('python', '3.12.3', True), ('python', '3.13.5', True),
+            cases = [('python', '3.12.3', False), ('python', '3.13.5', True),
                      ('python', '3.14.0', False), ('node', '22.11.0', False),
                      ('node', '22.12.0', True), ('node', '22.17.0', True),
                      ('node', '24.21.0', True), ('node', '25.0.0', False)]
