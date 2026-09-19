@@ -172,6 +172,8 @@ class DependBootstrapContractTests(unittest.TestCase):
                 '#!/bin/sh\ncase "$*" in *"config --format json") '
                 'printf \'CONFIG\\n\' >> "$TEST_LOG"; printf \'%s\\n\' '
                 '\'{"services":{"web":{"environment":{"FUEL_HTTP_USER":"team","FUEL_HTTP_PASSWORD":"secret"}}}}\'; exit 0;; esac\n'
+                'if [ "$1" = create ]; then printf "%s\\n" frontend-export; fi\n'
+                'if [ "$1" = cp ]; then mkdir -p "$3"; : > "$3/index.html"; fi\n'
                 'printf "%s|%s\\n" "$FUEL_BIND_HOST" "$*" >> "$TEST_LOG"\n'
             )
             docker.chmod(0o755)
@@ -190,17 +192,25 @@ class DependBootstrapContractTests(unittest.TestCase):
                 check=False,
             )
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(
-                log.read_text().splitlines(),
-                [
-                    "CONFIG",
-                    "0.0.0.0|compose --env-file "
-                    + str(root / "docker/.env.example")
-                    + " -f "
-                    + str(root / "docker/compose.yaml")
-                    + " up --build -d --wait"
-                ],
+            lines = log.read_text().splitlines()
+            self.assertEqual(lines[0], "CONFIG")
+            self.assertIn(
+                "build --file " + str(root / "docker/Dockerfile.frontend"), lines[1]
             )
+            self.assertEqual(lines[2], "0.0.0.0|create fuel-contour-frontend-build:local")
+            self.assertRegex(lines[3], r"0\.0\.0\.0\|cp frontend-export:/build/dist/\. .+/.docker-frontend\.[^/]+$")
+            self.assertEqual(lines[4], "0.0.0.0|rm -f frontend-export")
+            self.assertIn("build --build-arg FUEL_FRONTEND_BUILD_DIR=.docker-frontend.", lines[5])
+            self.assertIn("--tag fuel-contour-web:latest", lines[5])
+            self.assertEqual(
+                lines[6],
+                "0.0.0.0|compose --env-file "
+                + str(root / "docker/.env.example")
+                + " -f "
+                + str(root / "docker/compose.yaml")
+                + " up --no-build -d --wait",
+            )
+            self.assertEqual(list(root.glob(".docker-frontend.*")), [])
 
     def test_run_reports_web_logs_when_public_service_is_not_ready(self):
         import shutil
@@ -219,8 +229,10 @@ class DependBootstrapContractTests(unittest.TestCase):
                 '#!/bin/sh\ncase "$*" in *"config --format json") '
                 'printf \'CONFIG\\n\' >> "$TEST_LOG"; printf \'%s\\n\' '
                 '\'{"services":{"web":{"environment":{"FUEL_HTTP_USER":"team","FUEL_HTTP_PASSWORD":"secret"}}}}\'; exit 0;; esac\n'
+                'if [ "$1" = create ]; then printf "%s\\n" frontend-export; fi\n'
+                'if [ "$1" = cp ]; then mkdir -p "$3"; : > "$3/index.html"; fi\n'
                 'printf "%s\\n" "$*" >> "$TEST_LOG"\n'
-                'case "$*" in *" up --build -d --wait") exit 9;; esac\n'
+                'case "$*" in *" up --no-build -d --wait") exit 9;; esac\n'
             )
             docker.chmod(0o755)
             result = subprocess.run(

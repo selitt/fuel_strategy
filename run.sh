@@ -43,6 +43,52 @@ compose() {
   docker compose --env-file "$COMPOSE_ENV" -f "$COMPOSE_FILE" "$@"
 }
 
+PUBLIC_BUILD_DIR=""
+PUBLIC_BUILD_CONTAINER=""
+
+cleanup_public_build() {
+  local exit_status=$?
+  if [[ -n "$PUBLIC_BUILD_CONTAINER" ]]; then
+    docker rm -f "$PUBLIC_BUILD_CONTAINER" >/dev/null 2>&1 || true
+    PUBLIC_BUILD_CONTAINER=""
+  fi
+  if [[ -n "$PUBLIC_BUILD_DIR" && -d "$PUBLIC_BUILD_DIR" ]]; then
+    rm -rf -- "$PUBLIC_BUILD_DIR"
+    PUBLIC_BUILD_DIR=""
+  fi
+  return "$exit_status"
+}
+
+build_public_image() {
+  local frontend_image="fuel-contour-frontend-build:local"
+  local runtime_image="fuel-contour-web:latest"
+  local relative_frontend_dir
+
+  PUBLIC_BUILD_DIR=$(mktemp -d "$ROOT_DIR/.docker-frontend.XXXXXX")
+  trap cleanup_public_build EXIT
+
+  docker build \
+    --file "$ROOT_DIR/docker/Dockerfile.frontend" \
+    --tag "$frontend_image" \
+    "$ROOT_DIR"
+  PUBLIC_BUILD_CONTAINER=$(docker create "$frontend_image")
+  docker cp "$PUBLIC_BUILD_CONTAINER:/build/dist/." "$PUBLIC_BUILD_DIR"
+  docker rm -f "$PUBLIC_BUILD_CONTAINER" >/dev/null
+  PUBLIC_BUILD_CONTAINER=""
+
+  if [[ ! -f "$PUBLIC_BUILD_DIR/index.html" ]]; then
+    printf 'ERROR: frontend build did not produce index.html.\n' >&2
+    return 1
+  fi
+
+  relative_frontend_dir=${PUBLIC_BUILD_DIR#"$ROOT_DIR"/}
+  docker build \
+    --build-arg "FUEL_FRONTEND_BUILD_DIR=$relative_frontend_dir" \
+    --file "$ROOT_DIR/docker/Dockerfile" \
+    --tag "$runtime_image" \
+    "$ROOT_DIR"
+}
+
 run_public() {
   select_compose_env
   select_python
@@ -57,7 +103,7 @@ run_public() {
   fi
   export FUEL_BIND_HOST="${FUEL_BIND_HOST:-0.0.0.0}"
   export FUEL_WEB_PORT="${FUEL_WEB_PORT:-8080}"
-  if ! compose up --build -d --wait; then
+  if ! build_public_image || ! compose up --no-build -d --wait; then
     printf 'ERROR: site did not become ready; recent web logs follow.\n' >&2
     compose logs --tail=100 web >&2 || true
     return 1

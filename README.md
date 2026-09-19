@@ -46,7 +46,7 @@ Frontend будет доступен на `http://localhost:5173`, API — на 
 
 ## Docker и GitVerse Cloud
 
-Локальный сервер и облачная площадка используют один путь: `docker/Dockerfile` собирает Vite frontend, затем FastAPI обслуживает UI и API из одного контейнера.
+Локальный сервер и облачная площадка используют один launcher: `docker/Dockerfile.frontend` собирает Vite frontend во временном контейнере, `run.sh` извлекает статические файлы, а `docker/Dockerfile` собирает итоговый FastAPI-образ. В рабочем окружении по-прежнему запускается один контейнер с UI и API; Node.js на хосте для Docker-запуска не нужен.
 
 ```bash
 ./run.sh
