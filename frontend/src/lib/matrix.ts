@@ -8,6 +8,94 @@ export interface MatrixSource {
     writeId: string;
     reference?: Record<string, string>;
 }
+export interface SupplyMonthCell {
+    indices: number[];
+    total: number;
+}
+const MODEL_MONTH_DAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] as const;
+
+function dateParts(value: unknown): { year: number; month: number; day: number } | null {
+    if (typeof value !== 'string')
+        return null;
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    if (!match)
+        return null;
+    const year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
+    if (!Number.isInteger(year) || month < 1 || month > 12 || day < 1 || day > MODEL_MONTH_DAYS[month - 1])
+        return null;
+    return { year, month, day };
+}
+
+/** The model has 365 days in every year, so 29 February is never a valid delivery date. */
+export function supplyDateIssue(value: unknown, expectedYear: number): string {
+    if (value === '' || value === null || value === undefined)
+        return 'Укажите дату поставки.';
+    const parts = dateParts(value);
+    if (!parts)
+        return 'Дата должна существовать в 365-дневном календаре модели (29 февраля недоступно).';
+    if (parts.year !== expectedYear)
+        return `Дата поставки должна относиться к ${expectedYear} году.`;
+    return '';
+}
+
+/** Dated rows are intentional individual batches and may be totalled for their month. */
+export function readSupplyMonth(plan: Plan, source: MatrixSource, year: number, month: number): SupplyMonthCell {
+    const indices: number[] = [];
+    let total = 0;
+    plan.decisions.supply_orders.forEach((row, index) => {
+        const parts = dateParts(row.delivery_date);
+        if (row.year === year && source.aliases.includes(row.source_id) && parts?.year === year && parts.month === month) {
+            indices.push(index);
+            total += Number(row.order_t);
+        }
+    });
+    return { indices, total };
+}
+
+/** Legacy or malformed annual rows stay visible and separate until the operator assigns a valid exact date. */
+export function unscheduledSupplyIndices(plan: Plan, source: MatrixSource, year: number): number[] {
+    const indices: number[] = [];
+    plan.decisions.supply_orders.forEach((row, index) => {
+        if (row.year === year && source.aliases.includes(row.source_id) && supplyDateIssue(row.delivery_date, year))
+            indices.push(index);
+    });
+    return indices;
+}
+
+export function updateSupplyBatch(plan: Plan, index: number, patch: { delivery_date?: string; order_t?: number; batch_id?: string }): Plan {
+    const supply_orders = plan.decisions.supply_orders.map((row, rowIndex) => {
+        if (rowIndex !== index)
+            return row;
+        const next = { ...row, ...patch, ...(patch.order_t !== undefined && "order_volume_t" in row ? {order_volume_t: patch.order_t} : {}) };
+        const parts = dateParts(next.delivery_date);
+        return parts ? { ...next, year: parts.year } : next;
+    });
+    return { ...plan, decisions: { ...plan.decisions, supply_orders } };
+}
+
+export function addSupplyBatch(plan: Plan, source: MatrixSource, deliveryDate: string, orderT: number, batchId: string): Plan {
+    const parts = dateParts(deliveryDate);
+    if (!parts)
+        throw new Error('Нельзя добавить поставку без корректной даты модели.');
+    if (!batchId.trim())
+        throw new Error('Нельзя добавить поставку без идентификатора партии.');
+    const row = { year: parts.year, source_id: source.writeId, order_t: orderT, delivery_date: deliveryDate, batch_id: batchId };
+    return { ...plan, decisions: { ...plan.decisions, supply_orders: [...plan.decisions.supply_orders, row] } };
+}
+
+export function nextSupplyBatchId(plan: Plan, deliveryDate: string): string {
+    const stem = `batch-${deliveryDate.replaceAll('-', '')}-`;
+    const used = new Set(plan.decisions.supply_orders.map(row => row.batch_id).filter(value => typeof value === 'string'));
+    let serial = 1;
+    while (used.has(stem + serial))
+        serial += 1;
+    return stem + serial;
+}
+
+export function removeSupplyBatch(plan: Plan, index: number): Plan {
+    return { ...plan, decisions: { ...plan.decisions,
+        supply_orders: plan.decisions.supply_orders.filter((_, rowIndex) => rowIndex !== index) } };
+}
 /** A visual row may have a short-ID alias. Stored decisions are never normalized. */
 export function matrixSources(plan: Plan, catalog: Pick<Catalog, 'tables'> | null): MatrixSource[] {
     const refs = catalog?.tables.find(t => t.table_id === 'supply_sources')?.rows || [];
@@ -51,7 +139,7 @@ export function setInvestment(plan: Plan, id: string, year: number | null): Plan
     if (existing.length > 1)
         throw new Error('Для инвестиции несколько записей. Измените каждую отдельно.');
     const investments = year === null ? plan.decisions.investments.filter(r => r.investment_id !== id)
-        : existing.length ? plan.decisions.investments.map(r => r.investment_id === id ? { ...r, year } : r)
+        : existing.length ? plan.decisions.investments.map(r => r.investment_id === id ? { ...r, year, ...("commissioning_year" in r ? {commissioning_year: year} : {}) } : r)
             : [...plan.decisions.investments, { investment_id: id, year }];
     return { ...plan, decisions: { ...plan.decisions, investments } };
 }

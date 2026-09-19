@@ -8,28 +8,37 @@ import random
 import statistics
 from fractions import Fraction
 from typing import Dict, List, Any, Tuple
+from .calendar import normalize_plan, source_operating_years
 from .loader import CaseCatalog
 from .simulation import simulate_daily
 
 
-def extract_reliability(reliability_profile: str, year: int) -> float:
+def extract_reliability(
+    reliability_profile: str,
+    year: int,
+    first_operating_year: int | None = None,
+) -> float:
     """Извлекает числовой коэффициент надежности для заданного года."""
     s = reliability_profile.strip()
     if s.startswith("constant:"):
         return float(s.split(":")[1])
-    elif "2038:" in s:
-        # Например: 2038:0.78;2039:0.90;2040:0.93
-        parts = s.split(";")
-        for p in parts:
-            if f"{year}:" in p:
-                return float(p.split(":")[1])
-        return 0.90
-    elif "first_operating_year:" in s:
-        return 0.88 if year == 2035 else 0.94
+    parts = {}
+    for item in s.split(";"):
+        if ":" in item:
+            key, value = item.split(":", 1)
+            parts[key.strip()] = value.strip()
+    if "first_operating_year" in parts:
+        first_year = year if first_operating_year is None else first_operating_year
+        key = "first_operating_year" if year == first_year else "later"
+        if key not in parts:
+            raise ValueError(f"reliability profile has no {key} value: {s}")
+        return float(parts[key])
+    if str(year) in parts:
+        return float(parts[str(year)])
     try:
         return float(s)
-    except ValueError:
-        return 0.95
+    except ValueError as exc:
+        raise ValueError(f"reliability profile has no value for {year}: {s}") from exc
 
 
 def _build_shortage_histogram(samples: List[float]) -> List[Dict[str, Any]]:
@@ -141,27 +150,34 @@ def run_monte_carlo(
         raise ValueError("iterations must be a positive integer")
 
     rng = random.Random(seed)
-    years = sorted(catalog.demands.keys())
+    batches, _ = normalize_plan(catalog, decisions)
+    source_first_year = source_operating_years(catalog, decisions, batches)
+    is_mandatory_stress = scenario_id.upper() == "MANDATORY_STRESS"
 
     total_shortages: List[float] = []
     daily_trajectories = _empty_daily_trajectories()
     feasible_runs = 0
     zero_shortage_runs = 0
-    num_batches = 6
-
-    sources = [s for s in catalog.sources.values() if s.source_id in ("A", "B", "C", "D", "E")]
-    # Убираем дубли по именам
-    unique_sources = {s.source_id: s for s in sources}.values()
-
     for run_index in range(iterations):
         failures = {}
-        for y in years:
-            for s in unique_sources:
-                p = extract_reliability(s.reliability_profile, y)
-                for b_idx in range(num_batches):
-                    # Испытание Бернулли: сбой с вероятностью 1 - p
-                    if rng.random() > p:
-                        failures[(y, s.source_id, b_idx)] = True
+        for batch in batches:
+            source = batch.source
+            # Обязательный стресс уже задаёт фактическую долю Lunar по годам.
+            # Второй случайный отказ того же канала смешал бы два механизма.
+            if is_mandatory_stress and source.source_id == "D":
+                continue
+            p = extract_reliability(
+                source.reliability_profile,
+                batch.year,
+                first_operating_year=source_first_year[source.source_id],
+            )
+            if not 0 <= p <= 1:
+                raise ValueError(
+                    f"reliability for {source.source_id} in {batch.year} must be in [0, 1]"
+                )
+            # Испытание Бернулли выполняется ровно для реальной партии плана.
+            if rng.random() > p:
+                failures[(batch.year, source.source_id, batch.batch_id)] = True
 
         yearly_bal, _, daily_trace, violations, _ = simulate_daily(
             catalog=catalog,
@@ -210,7 +226,17 @@ def run_monte_carlo(
 
     risk_register_entry = {
         "risk_id": "R_LAUNCH_FAILURE_MONTE_CARLO",
-        "event": "Случайные сбои и аварии пусков танкеров по схеме Бернулли",
+        "analysis_context": (
+            "RESEARCH_STRESS_RISK"
+            if is_mandatory_stress
+            else "RESEARCH_BASE_RISK"
+        ),
+        "event": (
+            "Исследовательские случайные сбои партий поверх обязательного "
+            "стресса; Lunar использует только фиксированные доли сценария"
+            if is_mandatory_stress
+            else "Случайные сбои и аварии пусков танкеров по схеме Бернулли"
+        ),
         "iterations": iterations,
         "seed": seed,
         "shortage_samples_t": total_shortages,

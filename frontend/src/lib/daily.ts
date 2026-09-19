@@ -12,6 +12,7 @@ export type DailyPoint = {
   opening_inventory_t?: number;
   delivered_t?: number;
   losses_t?: number;
+  spill_t?: number;
   demand_total_t?: number;
   served_total_t?: number;
   shortage_t?: number;
@@ -26,6 +27,7 @@ const measurementFields = [
   'opening_inventory_t',
   'delivered_t',
   'losses_t',
+  'spill_t',
   'demand_total_t',
   'served_total_t',
   'shortage_t',
@@ -192,4 +194,13 @@ export function modelTimelineTicks(range?: readonly [number, number], maxTicks =
 export function modelDayLabel(modelDay: number): string {
   const coordinate = yearDayFromModelDay(modelDay);
   return coordinate ? `${coordinate.year} · день ${coordinate.day}` : '—';
+}
+
+/** Calendar presentation only: February always has 28 days in the model. */
+export function modelCalendarDate(year: number, day: number): string {
+  if (!Number.isInteger(year) || !Number.isInteger(day) || day < 1 || day > 365) return '—';
+  const lengths = [31,28,31,30,31,30,31,31,30,31,30,31];
+  let month = 0;
+  while (day > lengths[month]) day -= lengths[month++];
+  return `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
 }

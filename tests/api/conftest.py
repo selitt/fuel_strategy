@@ -14,6 +14,15 @@ def plan():
     from src.app.service.calc_service import CalculationService
     value = CalculationService().get_template_plan().model_dump(mode="json")
     value["plan_id"] = "integration-plan"
+    # Explicit test fixture, independent of the empty operator template.
+    value["decisions"]["supply_orders"] = [
+        {"year": 2035, "source_id": "Earth-Core", "order_t": 5.0,
+         "delivery_date": "2035-05-01", "batch_id": "fixture-1"},
+    ]
+    value["decisions"]["capacity_reservations"] = [
+        {"year": 2035, "source_id": "Earth-Core", "reserved_capacity_t": 120.0},
+    ]
+    value["decisions"]["inventory_policy"]["initial_inventory_t"] = 12.33
     value["team_notes"] = {"text": "Входы сохраняются без потерь", "seed": 42}
     return deepcopy(value)
 

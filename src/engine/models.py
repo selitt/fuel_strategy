@@ -83,6 +83,7 @@ class DailyTraceRecord:
     shortage_t: float
     closing_inventory_t: float
     storage_capacity_t: float
+    spill_t: float = 0.0
 
 
 @dataclass
@@ -100,6 +101,7 @@ class YearlyBalanceRecord:
     service_level_critical: float
     reserve_45d_target_t: float
     reserve_45d_met: bool
+    spill_t: float = 0.0
 
 
 @dataclass
@@ -114,6 +116,20 @@ class SourceScheduleRecord:
     payable_volume_t: float
     reservation_cost_mln: float
     procurement_cost_mln: float
+    batches: List["DeliveryScheduleRecord"] = field(default_factory=list)
+
+
+@dataclass
+class DeliveryScheduleRecord:
+    batch_id: str
+    source_id: str
+    source_name: str
+    year: int
+    order_date: str
+    delivery_date: str
+    ordered_t: float
+    delivered_t: float
+    status: str
 
 
 @dataclass

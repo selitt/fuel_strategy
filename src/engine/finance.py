@@ -14,9 +14,9 @@ def calculate_finances(
     source_schedules: List[SourceScheduleRecord],
     avg_inventory_by_year: Dict[int, float],
     investments: List[Dict[str, Any]],
-    initial_inventory_t: float = 12.33,
-    initial_stock_source_price: float = 6.2,
-    holding_cost_rate: float = 0.72,
+    initial_inventory_t: float = 0,
+    initial_stock_source_price: float | None = None,
+    holding_cost_rate: float | None = None,
 ) -> Tuple[List[FinancialBreakdownRecord], float, float]:
     """
     Рассчитывает финансовые потоки по годам.
@@ -25,6 +25,8 @@ def calculate_finances(
     2. total_cost_all_years (суммарные затраты за 6 лет)
     3. final_cumulative_capex (накопленный CAPEX на конец горизонта)
     """
+    if initial_stock_source_price is None:
+        initial_stock_source_price = catalog.sources["Earth-Core"].variable_cost_mln_per_t
     # 1. Извлечение параметров инвестиций
     zbo_year = None
     lunar_year = None
@@ -34,7 +36,7 @@ def calculate_finances(
 
     for inv in investments:
         inv_id = str(inv.get("investment_id", "")).upper()
-        y = inv.get("commissioning_year", inv.get("year"))
+        y = inv.get("year", inv.get("commissioning_year"))
         if "ZBO" in inv_id and y:
             zbo_year = int(y)
         elif "LUNAR" in inv_id:
@@ -52,6 +54,8 @@ def calculate_finances(
                 earth_new_exercise_year = int(ex_y)
             if y and not ex_y:
                 earth_new_exercise_year = int(y)
+            if not opt_y:
+                earth_new_option_year = earth_new_exercise_year
 
     # Группировка procurement и reservation по годам
     procurement_by_year: Dict[int, float] = {}
@@ -83,31 +87,34 @@ def calculate_finances(
 
         # Holding cost по среднему физическому остатку года
         avg_inv = avg_inventory_by_year.get(year, 0.0)
-        holding_cost = round(holding_cost_rate * avg_inv, 2)
+        zbo_active = zbo_year is not None and year >= max(zbo_year, catalog.storages["ZBO"].available_from_year)
+        storage = catalog.storages["ZBO" if zbo_active else "BASE"]
+        rate = holding_cost_rate if holding_cost_rate is not None else storage.holding_cost_mln_per_t_year
+        holding_cost = round(rate * avg_inv, 2)
 
         # CAPEX года
         capex_year = 0.0
         if zbo_year == year:
-            capex_year += 180.0
+            capex_year += catalog.investments["ZBO"].total_capex_mln
 
         if custom_isru_schedule:
             capex_year += custom_isru_schedule.get(year, 0.0)
-        elif year == 2037 and lunar_year == 2038:
-            capex_year += 1250.0
+        elif year == lunar_year:
+            capex_year += catalog.investments["LUNAR_ISRU"].total_capex_mln
 
         if earth_new_option_year == year:
-            capex_year += 90.0
+            capex_year += catalog.investments["EARTH_NEW"].option_fee_mln
         if earth_new_exercise_year == year:
-            capex_year += 270.0
+            capex_year += catalog.investments["EARTH_NEW"].exercise_cost_mln
 
         cum_capex = round(cum_capex + capex_year, 2)
 
         # OPEX года
         opex_year = 0.0
-        if zbo_year is not None and year >= zbo_year:
-            opex_year += 12.0
-        if lunar_year is not None and year >= lunar_year:
-            opex_year += 70.0
+        if zbo_active:
+            opex_year += catalog.investments["ZBO"].fixed_opex_mln_per_year
+        if lunar_year is not None and year >= max(lunar_year, catalog.sources["Lunar-ISRU"].available_from_year or lunar_year):
+            opex_year += catalog.investments["LUNAR_ISRU"].fixed_opex_mln_per_year
 
         year_total = round(proc_cost + res_cost + holding_cost + capex_year + opex_year, 2)
         total_cost_all = round(total_cost_all + year_total, 2)

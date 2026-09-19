@@ -114,7 +114,7 @@ export function FinanceChart({ rows, selected, onSelect }: {
     const left = 42, right = 16, top = 22, bottom = 27;
     // This sum only positions stacked rectangles. Displayed total remains the API total.
     const stacks = rows.map(row => signedStack(costKeys.map(k => row[k])));
-    const min = Math.min(0, ...stacks.map(s => s.min)) * 1.1, max = Math.max(1, ...stacks.map(s => s.max)) * 1.1, cell = (width - left - right) / Math.max(1, rows.length), bw = Math.min(36, cell * .62), h = height - top - bottom;
+    const min = Math.min(0, ...stacks.map(s => s.min)) * 1.1, max = Math.max(1, ...stacks.map(s => s.max)) * 1.1, cell = (width - left - right) / Math.max(1, rows.length), bw = Math.min(84, cell * .68), h = height - top - bottom;
     const y = (value: number) => height - bottom - (value - min) / (max - min) * h;
     const gridValues = [0, 1, 2, 3].map(i => min + (max - min) * i / 3);
     const geometry = useMotionNumbers([

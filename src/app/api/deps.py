@@ -10,6 +10,7 @@ from fastapi import HTTPException, Request, Response, UploadFile
 from src.app.config.config import Settings
 from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
 from src.app.dto.web_dto import ProjectDTO
+from src.engine.calendar import PlanValidationError
 from src.app.service.calc_service import validate_result
 from src.app.service.calculation_admission import AdmittedCalculationService
 from src.app.service.json_io import InvalidJSON, dumps, ensure_finite
@@ -59,6 +60,8 @@ def call_template(service: CalculationBackend) -> ParticipantPlanDTO:
         return plan
     except HTTPException:
         raise
+    except PlanValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     except (NotImplementedError, ImportError) as exc:
         raise HTTPException(status_code=503, detail="Расчётный сервис ещё не подключён") from exc
     except Exception as exc:
@@ -76,6 +79,8 @@ def call_calculation(service: CalculationBackend, plan: ParticipantPlanDTO) -> R
         return result
     except HTTPException:
         raise
+    except PlanValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     except (NotImplementedError, ImportError) as exc:
         raise HTTPException(status_code=503, detail="Расчётный сервис ещё не подключён") from exc
     except Exception as exc:
@@ -98,6 +103,8 @@ def call_risk_calculation(service: CalculationBackend, plan: ParticipantPlanDTO)
         return result
     except HTTPException:
         raise
+    except PlanValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     except (NotImplementedError, ImportError) as exc:
         raise HTTPException(
             503,

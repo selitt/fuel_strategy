@@ -9,6 +9,7 @@ import xlwt
 HEADERS = [
     "record_type", "plan_id", "scenario_id", "year", "source_id",
     "order_t", "reserved_capacity_t", "investment_id", "initial_inventory_t",
+    "delivery_date", "batch_id",
 ]
 
 
@@ -18,7 +19,7 @@ def rows_for(plan):
         ["inventory_policy", "", "", "", "", "", "", "", plan["decisions"]["inventory_policy"]["initial_inventory_t"]],
     ]
     rows.extend([
-        "supply_order", "", "", row["year"], row["source_id"], row["order_t"], "", "", "",
+        "supply_order", "", "", row["year"], row["source_id"], row["order_t"], "", "", "", row.get("delivery_date", ""), row.get("batch_id", ""),
     ] for row in plan["decisions"]["supply_orders"])
     rows.extend([
         "capacity_reservation", "", "", row["year"], row["source_id"], "", row["reserved_capacity_t"], "", "",
@@ -134,7 +135,7 @@ def test_tabular_validation_reports_source_row(client):
 
 
 def test_csv_never_ignores_a_value_without_a_header(client):
-    content = ",".join(HEADERS) + "\nplan,p,BASE,,,,,,,hidden\n"
+    content = ",".join(HEADERS) + "\n" + ",".join(["plan", "p", "BASE", *([""] * (len(HEADERS)-3)), "hidden"]) + "\n"
     response = client.post("/api/plans/import", files={"file": ("plan.csv", content.encode())})
     assert response.status_code == 422, response.text
     assert "без заголовка" in str(response.json()["detail"])

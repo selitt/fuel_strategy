@@ -19,6 +19,7 @@ from src.app.service.json_io import InvalidJSON, loads
 PLAN_COLUMNS = (
     "record_type", "plan_id", "scenario_id", "year", "source_id",
     "order_t", "reserved_capacity_t", "investment_id", "initial_inventory_t",
+    "delivery_date", "batch_id",
 )
 ALLOWED_FORMATS = ("json", "csv", "xlsx", "xls")
 MAX_TABLE_ROWS = 10_000
@@ -187,10 +188,12 @@ def _table_to_plan(
         raise _problem(422, "Таблица плана пуста")
     header_number, header_values = rows[0]
     headers = [str(value).strip() if value is not None else "" for value in header_values]
+    while headers and not headers[-1]:
+        headers.pop()
     if len(headers) != len(set(headers)):
         raise _problem(422, f"Строка {header_number}: заголовки колонок не должны повторяться")
     unknown = sorted(set(headers) - set(PLAN_COLUMNS) - {""})
-    missing = sorted(set(PLAN_COLUMNS) - set(headers))
+    missing = sorted(set(PLAN_COLUMNS) - {"delivery_date", "batch_id"} - set(headers))
     if unknown:
         raise _problem(422, f"Неизвестные колонки: {', '.join(unknown)}")
     if missing:
@@ -237,11 +240,12 @@ def _table_to_plan(
         ),
     }
     for number, row in grouped.get("supply_order", []):
-        _reject_unused(row, number, {"record_type", "year", "source_id", "order_t"})
+        _reject_unused(row, number, {"record_type", "year", "source_id", "order_t", "delivery_date", "batch_id"})
         plan["decisions"]["supply_orders"].append({
             "year": _number(row["year"], number, "year", integer=True, allow_decimal_comma=allow_decimal_comma),
             "source_id": _required_text(row, number, "source_id"),
             "order_t": _number(row["order_t"], number, "order_t", allow_decimal_comma=allow_decimal_comma),
+            **{key: str(row[key]) for key in ("delivery_date", "batch_id") if row.get(key) not in (None, "")},
         })
     for number, row in grouped.get("capacity_reservation", []):
         _reject_unused(row, number, {"record_type", "year", "source_id", "reserved_capacity_t"})
@@ -283,7 +287,7 @@ def _template_rows() -> list[list[Any]]:
     return [
         list(PLAN_COLUMNS),
         ["plan", "plan-import", "BASE", "", "", "", "", "", ""],
-        ["inventory_policy", "", "", "", "", "", "", "", 12.33],
+        ["inventory_policy", "", "", "", "", "", "", "", 0],
     ]
 
 

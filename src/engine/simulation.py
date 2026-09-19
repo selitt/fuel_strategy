@@ -5,8 +5,10 @@
 """
 
 from typing import Dict, List, Any, Tuple
+from .calendar import PlanValidationError, normalize_plan
 from .models import (
     DailyTraceRecord,
+    DeliveryScheduleRecord,
     YearlyBalanceRecord,
     SourceScheduleRecord,
 )
@@ -17,7 +19,7 @@ def simulate_daily(
     catalog: CaseCatalog,
     scenario_id: str,
     decisions: Dict[str, Any],
-    monte_carlo_failures: Dict[Tuple[int, str, int], bool] = None,
+    monte_carlo_failures: Dict[Tuple[int, str, Any], bool] = None,
 ) -> Tuple[List[YearlyBalanceRecord], List[SourceScheduleRecord], List[DailyTraceRecord], List[Dict[str, Any]], Dict[int, float]]:
     """
     Выполняет посуточное моделирование.
@@ -28,101 +30,91 @@ def simulate_daily(
     4. violations (выявленные физические нарушения: OVERFLOW, RESERVE_45D)
     5. avg_inventory_by_year (средний физический остаток по годам для Holding Cost)
     """
-    is_stress = scenario_id.upper() == "MANDATORY_STRESS"
+    if scenario_id not in {"BASE", "MANDATORY_STRESS"} or scenario_id not in catalog.scenarios:
+        raise PlanValidationError(f"Неизвестный или неподдерживаемый сценарий: {scenario_id}")
+    is_stress = scenario_id == "MANDATORY_STRESS"
     monte_carlo_failures = monte_carlo_failures or {}
 
     # 1. Извлечение решений
-    supply_orders = decisions.get("supply_orders", [])
-    capacity_reservations = decisions.get("capacity_reservations", [])
     investments = decisions.get("investments", [])
     inventory_policy = decisions.get("inventory_policy", {})
-    initial_inv = float(inventory_policy.get("initial_inventory_t", 12.33))
+    initial_inv = float(inventory_policy.get("initial_inventory_t", 0.0))
+    batches, reservations_map = normalize_plan(catalog, decisions)
 
     # Года инвестиций
     zbo_year = None
-    lunar_year = None
-    earth_new_year = None
     for inv in investments:
         inv_id = str(inv.get("investment_id", "")).upper()
-        y = inv.get("commissioning_year", inv.get("year"))
+        y = inv.get("year")
+        if y is None:
+            y = inv.get("commissioning_year")
         if "ZBO" in inv_id and y:
-            zbo_year = int(y)
-        elif "LUNAR" in inv_id and y:
-            lunar_year = int(y)
-        elif "EARTH_NEW" in inv_id and y:
-            earth_new_year = int(y)
+            zbo_year = max(int(y), catalog.storages["ZBO"].available_from_year)
 
-    # Карта заказов и резервов
-    orders_map: Dict[int, Dict[str, float]] = {}
-    for o in supply_orders:
-        y = int(o.get("year", 2035))
-        s_id = str(o.get("source_id", ""))
-        val = float(o.get("order_volume_t", o.get("order_t", 0.0)))
-        orders_map.setdefault(y, {})[s_id] = val
-
-    reservations_map: Dict[int, Dict[str, float]] = {}
-    for r in capacity_reservations:
-        y = int(r.get("year", 2035))
-        s_id = str(r.get("source_id", ""))
-        val = float(r.get("reserved_capacity_t", 0.0))
-        reservations_map.setdefault(y, {})[s_id] = val
-
-    # 2. Построение календаря прихода поставок по дням (день 0 .. 2189)
-    # Разбиваем годовой заказ каждого источника на регулярные партии (например, ежемесячно на 15-й день месяца),
-    # чтобы не переполнять 70-тонный бак станции разовым вбросом всего годового объема.
+    # 2. Построение календаря прихода поставок по явно заданным датам.
     deliveries_calendar: Dict[int, List[Dict[str, Any]]] = {}
 
     years = sorted(catalog.demands.keys())
-    start_year = years[0] if years else 2035
-    total_days = len(years) * 365
+    unique_sources = {source.source_id: source for source in catalog.sources.values()}
+    all_sources = sorted(unique_sources.values(), key=lambda source: source.source_id)
 
-    # Уникальные имена каналов
-    unique_sources = set()
-    for s_key, s_obj in catalog.sources.items():
-        unique_sources.add(s_obj.name)
-    all_sources = sorted(list(unique_sources))
+    batches_by_year_source: Dict[Tuple[int, str], List[Any]] = {}
+    for batch in batches:
+        batches_by_year_source.setdefault(
+            (batch.year, batch.source.source_id), []
+        ).append(batch)
 
     source_schedule_records: List[SourceScheduleRecord] = []
 
     for y_idx, year in enumerate(years):
-        year_orders = orders_map.get(year, {})
-        year_res = reservations_map.get(year, {})
-
-        for s_name in all_sources:
-            s_info = catalog.sources[s_name]
+        for s_info in all_sources:
             s_id = s_info.source_id
-
-            ord_t = year_orders.get(s_name, year_orders.get(s_id, 0.0))
-            res_t = year_res.get(s_name, year_res.get(s_id, 0.0))
+            s_name = s_info.name
+            source_batches = batches_by_year_source.get((year, s_id), [])
+            ord_t = sum(batch.ordered_t for batch in source_batches)
+            res_t = reservations_map.get((year, s_id), 0.0)
 
             # Фактическая доля поставки (для Луны в стрессе)
-            delivery_multiplier = 1.0
-            if is_stress and s_name == "Lunar-ISRU":
-                if year == 2038:
-                    delivery_multiplier = 0.55
-                elif year == 2039:
-                    delivery_multiplier = 0.75
+            delivery_multiplier = catalog.multiplier(scenario_id, "actual_delivery_share", year, s_name)
 
-            # Доступность канала
-            is_available = True
-            if s_name == "Lunar-ISRU" and (lunar_year is None or year < lunar_year):
-                is_available = False
-            if s_name == "Earth-New" and (earth_new_year is None or year < earth_new_year):
-                is_available = False
-
-            if not is_available:
-                ord_t = 0.0
-
-            actual_deliv_t = ord_t * delivery_multiplier
+            actual_deliv_t = 0.0
+            delivery_records: List[DeliveryScheduleRecord] = []
+            for batch_index, batch in enumerate(source_batches):
+                is_failed = bool(
+                    monte_carlo_failures.get((year, s_id, batch.batch_id), False)
+                    or monte_carlo_failures.get((year, s_id, batch_index), False)
+                )
+                delivered_t = 0.0 if is_failed else batch.ordered_t * delivery_multiplier
+                status = "failed" if is_failed else "delivered"
+                actual_deliv_t += delivered_t
+                delivery_records.append(
+                    DeliveryScheduleRecord(
+                        batch_id=batch.batch_id,
+                        source_id=s_id,
+                        source_name=s_name,
+                        year=year,
+                        order_date=batch.order_date.isoformat(),
+                        delivery_date=batch.delivery_date.isoformat(),
+                        ordered_t=round(batch.ordered_t, 2),
+                        delivered_t=round(delivered_t, 2),
+                        status=status,
+                    )
+                )
+                if delivered_t > 0:
+                    deliveries_calendar.setdefault(batch.model_day, []).append(
+                        {
+                            "source_id": s_id,
+                            "source_name": s_name,
+                            "volume": delivered_t,
+                        }
+                    )
 
             # Take-or-pay объем
             top_threshold = round(s_info.take_or_pay_share * res_t, 2)
             payable_volume = max(ord_t, top_threshold)
 
             # Переменная цена (в стрессе +25% для Core и Flex в 2038-2039)
-            price_mult = 1.0
-            if is_stress and year in (2038, 2039) and s_name in ("Earth-Core", "Earth-Flex"):
-                price_mult = 1.25
+            price_mult = catalog.multiplier(scenario_id, "variable_price_multiplier", year, s_name)
             unit_price = s_info.variable_cost_mln_per_t * price_mult
 
             procurement_cost = round(payable_volume * unit_price, 2)
@@ -139,28 +131,8 @@ def simulate_daily(
                 payable_volume_t=round(payable_volume, 2),
                 reservation_cost_mln=reservation_cost,
                 procurement_cost_mln=procurement_cost,
+                batches=delivery_records,
             ))
-
-            # Если объем > 0, планируем поставки партиями внутри года
-            if actual_deliv_t > 0:
-                # 6 партий в год (каждые 60 дней)
-                num_batches = 6
-                batch_vol = actual_deliv_t / num_batches
-                for b_idx in range(num_batches):
-                    # Проверка Монте-Карло на срыв партии
-                    is_failed = monte_carlo_failures.get((year, s_id, b_idx), False)
-                    if is_failed:
-                        continue
-
-                    # День отправки
-                    dispatch_day_in_year = b_idx * 60 + 15
-                    dispatch_day = y_idx * 365 + dispatch_day_in_year
-                    if dispatch_day < total_days:
-                        deliveries_calendar.setdefault(dispatch_day, []).append({
-                            "source_id": s_id,
-                            "source_name": s_name,
-                            "volume": batch_vol,
-                        })
 
     # 3. Посуточный цикл симуляции
     daily_trace: List[DailyTraceRecord] = []
@@ -172,16 +144,17 @@ def simulate_daily(
 
     for y_idx, year in enumerate(years):
         dem_rec = catalog.demands[year]
-        dem_mult = 1.15 if (is_stress and year >= 2038) else 1.0
+        dem_mult = catalog.multiplier(scenario_id, "demand_multiplier", year)
+        critical_mult = catalog.multiplier(scenario_id, "critical_demand_multiplier", year) if "critical_demand_multiplier" in catalog.scenarios[scenario_id] else dem_mult
         dem_total_year = round(dem_rec.base_total_t * dem_mult, 2)
-        dem_crit_year = round(dem_rec.base_critical_t * dem_mult, 2)
+        dem_crit_year = round(dem_rec.base_critical_t * critical_mult, 2)
 
         daily_dem_total = dem_total_year / 365.0
         daily_dem_crit = dem_crit_year / 365.0
         daily_dem_reg = daily_dem_total - daily_dem_crit
 
         # Проверка 45-дневного резерва на 1 января
-        r_45d_target = round(dem_total_year * 45.0 / 365.0, 2)
+        r_45d_target = round(dem_total_year * catalog.constraint_value("RESERVE_45D") / 365.0, 2)
         reserve_met = current_inv >= (r_45d_target - 1e-5)
         if not reserve_met:
             violations.append({
@@ -194,12 +167,14 @@ def simulate_daily(
 
         # Режим хранилища текущего года
         zbo_active = (zbo_year is not None and year >= zbo_year)
-        storage_cap = 120.0 if zbo_active else 70.0
-        loss_rate = 0.012 if zbo_active else 0.045
+        storage = catalog.storages["ZBO" if zbo_active else "BASE"]
+        storage_cap = storage.capacity_t
+        loss_rate = storage.loss_rate_on_throughput
 
         year_start_inv = current_inv
         year_delivered_sum = 0.0
         year_losses_sum = 0.0
+        year_spill_sum = 0.0
         year_served_total_sum = 0.0
         year_served_crit_sum = 0.0
         year_shortage_sum = 0.0
@@ -224,6 +199,8 @@ def simulate_daily(
             year_delivered_sum += deliv_today
             year_losses_sum += losses_today
 
+            spill_today = max(0.0, current_inv + net_inflow - storage_cap)
+            year_spill_sum += spill_today
             # Проверка переполнения бака
             if current_inv + net_inflow > storage_cap:
                 overflow_excess = round(current_inv + net_inflow - storage_cap, 2)
@@ -281,6 +258,7 @@ def simulate_daily(
                 shortage_t=round(shortage, 2),
                 closing_inventory_t=round(current_inv, 2),
                 storage_capacity_t=storage_cap,
+                spill_t=round(spill_today, 2),
             ))
 
         avg_inventory_by_year[year] = daily_inv_sum / 365.0
@@ -302,6 +280,7 @@ def simulate_daily(
             service_level_critical=sl_crit,
             reserve_45d_target_t=r_45d_target,
             reserve_45d_met=reserve_met,
+            spill_t=round(year_spill_sum, 2),
         ))
 
     return yearly_balance_records, source_schedule_records, daily_trace, violations, avg_inventory_by_year

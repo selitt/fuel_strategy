@@ -265,3 +265,7 @@
 .risk-distribution-details{margin-top:18px}
 .risk-distribution-details>summary{cursor:pointer;font-size:14px;color:var(--muted)}
 @media(max-width:700px){.risk-path-heading{align-items:flex-start;flex-direction:column}.risk-terminal-toolbar{gap:8px}.risk-zoom-controls{margin-left:0}.risk-terminal-legend{gap:8px}.risk-day-readout{min-height:90px}.risk-chart-help{flex-direction:column}.risk-chart-unit{margin-left:0}.modal.wide:has(.risk-panel){width:98vw}.risk-terminal svg{min-height:160px}}
+
+.result-local-status{height:24px;line-height:24px;color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.result-stale .result-local-status{color:#edbd79}
+.result-stale .result-chart-area{opacity:.5}

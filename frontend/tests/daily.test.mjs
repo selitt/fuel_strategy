@@ -100,3 +100,10 @@ test('timeline ticks are sparse for the full horizon and readable inside a detai
   assert.deepEqual(daily.modelTimelineTicks([340, 429], 4), [340, 370, 399, 429]);
   assert.equal(daily.modelDayLabel(366), '2036 · день 1');
 });
+
+test('month date labels follow the fixed 365-day model, including leap years', () => {
+  assert.equal(daily.modelCalendarDate(2036, 59), '2036-02-28');
+  assert.equal(daily.modelCalendarDate(2036, 60), '2036-03-01');
+  assert.equal(daily.modelCalendarDate(2035, 365), '2035-12-31');
+  assert.equal(daily.modelCalendarDate(2035, 366), '—');
+});

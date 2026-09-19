@@ -41,28 +41,10 @@ class CalculationService:
     def __init__(self, reference_dir: Path | None = None):
         self.engine = SimulationEngine(CaseCatalog(reference_dir))
 
-    @staticmethod
-    def get_template_plan() -> ParticipantPlanDTO:
+    def get_template_plan(self) -> ParticipantPlanDTO:
         """Возвращает типовой базовый план (шаблон)."""
-        orders = []
-        reservations = []
-        for y in range(2035, 2041):
-            orders.append(SupplyOrderDTO(year=y, source_id="Earth-Core", order_t=100.0))
-            reservations.append(CapacityReservationDTO(year=y, source_id="Earth-Core", reserved_capacity_t=120.0))
-
-        return ParticipantPlanDTO(
-            plan_id="baseline-plan-v1",
-            scenario_id="BASE",
-            decisions=PlanDecisionsDTO(
-                supply_orders=orders,
-                capacity_reservations=reservations,
-                investments=[
-                    InvestmentDecisionDTO(investment_id="ZBO", year=2036),
-                    InvestmentDecisionDTO(investment_id="LUNAR_ISRU", year=2038),
-                ],
-                inventory_policy=InventoryPolicyDTO(initial_inventory_t=12.33),
-            ),
-        )
+        path = self.engine.catalog.data_root / "monthly_start_plan.json"
+        return ParticipantPlanDTO.model_validate_json(path.read_text(encoding="utf-8"))
 
     def calculate(self, request: ParticipantPlanDTO) -> ResultExportEnvelopeDTO:
         """

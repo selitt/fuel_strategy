@@ -14,3 +14,63 @@ test('investment editing preserves additional fields and unrelated investments',
 test('duplicate investments require per-record editing',()=>{const p=plan();p.decisions.investments=[{investment_id:'ZBO',year:2036},{investment_id:'ZBO',year:2037}];assert.throws(()=>m.setInvestment(p,'ZBO',2038),/несколько/);});
 test('disabling an investment never removes or zeroes supply decisions',()=>{const p=plan();p.decisions.investments=[{investment_id:'ZBO',year:2036}];const q=m.setInvestment(p,'ZBO',null);assert.deepEqual(q.decisions.supply_orders,p.decisions.supply_orders);assert.deepEqual(q.decisions.capacity_reservations,p.decisions.capacity_reservations);});
 test('comparison changes only scenario and preserves full plan data',()=>{const p=plan();const q=m.otherScenario(p);assert.equal(q.scenario_id,'MANDATORY_STRESS');assert.deepEqual(q.decisions,p.decisions);assert.deepEqual(q.extra,p.extra);assert.equal(p.scenario_id,'BASE');assert.equal(m.otherScenario(q).scenario_id,'BASE');});
+
+test('a monthly supply cell totals only dated batches from that model month',()=>{
+ const p=plan();
+ p.decisions.supply_orders=[
+  {year:2036,source_id:'A',order_t:12,delivery_date:'2036-02-01',batch_id:'b1'},
+  {year:2036,source_id:'Earth-Core',order_t:23,delivery_date:'2036-02-28',batch_id:'b2',note:'keep'},
+  {year:2036,source_id:'A',order_t:7,delivery_date:'2036-03-01',batch_id:'b3'},
+  {year:2036,source_id:'A',order_t:100,shipment:'legacy'},
+ ];
+ const source=m.matrixSources(p,catalog)[0];
+ assert.deepEqual(m.readSupplyMonth(p,source,2036,2),{indices:[0,1],total:35});
+ assert.deepEqual(m.readSupplyMonth(p,source,2036,3),{indices:[2],total:7});
+});
+
+test('legacy and invalid annual orders stay separate until an exact model date is assigned',()=>{
+ const p=plan();
+ p.decisions.supply_orders=[
+  {year:2036,source_id:'A',order_t:10,shipment:'legacy'},
+  {year:2036,source_id:'A',order_t:20,delivery_date:'2036-02-29',batch_id:'bad-leap'},
+  {year:2036,source_id:'A',order_t:30,delivery_date:'2037-01-03',batch_id:'wrong-year'},
+ ];
+ const source=m.matrixSources(p,catalog)[0];
+ assert.deepEqual(m.unscheduledSupplyIndices(p,source,2036),[0,1,2]);
+ assert.equal(m.supplyDateIssue('',2036),'Укажите дату поставки.');
+ assert.match(m.supplyDateIssue('2036-02-29',2036),/365/);
+ assert.match(m.supplyDateIssue('2037-01-03',2036),/2036/);
+ assert.equal(m.supplyDateIssue('2036-02-28',2036),'');
+});
+
+test('editing a batch preserves extensions and keeps year equal to its delivery date',()=>{
+ const p=plan();
+ p.decisions.supply_orders=[{year:2035,source_id:'A',order_t:11,delivery_date:'2035-01-02',batch_id:'b1',note:'keep'}];
+ const next=m.updateSupplyBatch(p,0,{delivery_date:'2036-12-31',order_t:18});
+ assert.deepEqual(next.decisions.supply_orders[0],{year:2036,source_id:'A',order_t:18,delivery_date:'2036-12-31',batch_id:'b1',note:'keep'});
+ assert.equal(p.decisions.supply_orders[0].year,2035);
+});
+
+test('adding and removing a dated batch changes only that supply row',()=>{
+ const p=plan();
+ const source=m.matrixSources(p,catalog)[0];
+ const added=m.addSupplyBatch(p,source,'2036-04-15',9,'batch-new');
+ assert.deepEqual(added.decisions.supply_orders[1],{year:2036,source_id:'A',order_t:9,delivery_date:'2036-04-15',batch_id:'batch-new'});
+ assert.deepEqual(added.decisions.capacity_reservations,p.decisions.capacity_reservations);
+ assert.deepEqual(m.removeSupplyBatch(added,1).decisions.supply_orders,p.decisions.supply_orders);
+});
+
+test('new batch IDs are stable and do not collide with imported IDs',()=>{
+ const p=plan();
+ p.decisions.supply_orders.push({year:2036,source_id:'A',order_t:2,delivery_date:'2036-04-15',batch_id:'batch-20360415-1'});
+ assert.equal(m.nextSupplyBatchId(p,'2036-04-15'),'batch-20360415-2');
+});
+
+test('explicit edits update known legacy aliases instead of leaving conflicting hidden values',()=>{
+ const p=plan();p.decisions.supply_orders=[{year:2035,source_id:'A',order_t:10,order_volume_t:10,keep:'yes'}];
+ const q=m.updateSupplyBatch(p,0,{order_t:15});
+ assert.equal(q.decisions.supply_orders[0].order_volume_t,15);
+ assert.equal(q.decisions.supply_orders[0].keep,'yes');
+ p.decisions.investments=[{investment_id:'ZBO',year:2036,commissioning_year:2036}];
+ assert.equal(m.setInvestment(p,'ZBO',2037).decisions.investments[0].commissioning_year,2037);
+});

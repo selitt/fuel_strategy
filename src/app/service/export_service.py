@@ -11,7 +11,7 @@ from fastapi import HTTPException
 from src.app.dto.web_dto import ProjectDTO
 from src.app.service.json_io import dumps
 
-TABLES = ("yearly_balance", "source_schedule", "inventory_trace", "financial_breakdown",
+TABLES = ("yearly_balance", "source_schedule", "delivery_schedule", "inventory_trace", "financial_breakdown",
           "constraint_checks", "risk_register")
 
 

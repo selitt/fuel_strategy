@@ -8,6 +8,7 @@ import { Icon } from '../components/Icon';
 import { Button, Modal } from '../components/Ui';
 import {
   MODEL_HORIZON_DAYS,
+  modelCalendarDate,
   detailTimelineRange,
   modelDayFromYearDay,
   modelDayLabel,
@@ -25,6 +26,7 @@ const dailyFields = [
   ['demand_total_t', 'Спрос', 'т'],
   ['served_total_t', 'Обслужено', 'т'],
   ['losses_t', 'Потери', 'т'],
+  ['spill_t', 'Сброс при переполнении', 'т'],
   ['shortage_t', 'Дефицит', 'т'],
 ] as const;
 
@@ -40,6 +42,7 @@ export function ResultPanel({ w, onDetails, onRisk }: {
   const [infoModal, setInfoModal] = useState<'checks' | 'risk' | null>(null);
   const [detailSide, setDetailSide] = useState<'primary' | 'other'>('primary');
   const result = w.displayResult;
+  const fresh = w.preview ? w.previewFresh : w.current;
   if (!result)
     return <section className="result-panel panel result-empty" aria-label="Результат расчёта"><div className="panel-heading"><h2>Результат</h2></div><div className="empty-result-body"><h3>Нет расчёта</h3></div></section>;
   if (!supportedUnits(result.units))
@@ -72,8 +75,9 @@ export function ResultPanel({ w, onDetails, onRisk }: {
   };
   const rangePercent = 100 * (selectedModelDay - 1) / (MODEL_HORIZON_DAYS - 1);
 
-  return <section className="result-panel panel" aria-labelledby="result-title">
-    <div className="panel-heading"><h2 id="result-title">{other ? 'Сравнение сценариев' : 'Результат'}</h2><strong className="timeline-selected-day" data-testid="timeline-selected-day">{chart === 'inventory' ? modelDayLabel(selectedModelDay) : `Расходы за ${year}`}</strong></div>
+  return <section className={`result-panel panel ${fresh ? "" : "result-stale"}`} aria-labelledby="result-title">
+    <div className="panel-heading"><h2 id="result-title">{other ? 'Сравнение сценариев' : 'Результат'}</h2><strong className="timeline-selected-day" data-testid="timeline-selected-day">{chart === 'inventory' ? modelCalendarDate(year, day) : `Расходы за ${year}`}</strong></div>
+    <div className="result-local-status" role="status">{fresh ? "Расчёт текущих настроек" : w.errorMessage ? "Устарел — исправьте ошибки плана для пересчёта" : "Устарел — ожидаем пересчёт"}</div>
     <div className="result-metrics result-metrics-compact">
       <strong className="service-year">Обеспечение спроса за {year}</strong>
       <div className="service-scenario">
