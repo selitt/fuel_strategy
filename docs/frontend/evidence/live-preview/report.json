@@ -1,0 +1,122 @@
+{
+  "checks": [
+    "Opening automatically calculates without saving a project",
+    "Footer prose removed",
+    "Latest slider snapshot reaches backend",
+    "Slow preview does not queue every slider position",
+    "One active request in single mode",
+    "No project writes during dragging",
+    "No loading overlay while dragging",
+    "Calculation cycles remain at least 100ms apart",
+    "Chart shows actual latest API delivery",
+    "Timeline selection updates editor and result year",
+    "Both scenarios are actual calculations",
+    "Explicit save creates one project",
+    "Saved result is current",
+    "Saving does not launch another preview of the same inputs",
+    "Export equals saved actual result",
+    "Invalid input is not calculated",
+    "Changed draft cannot export old saved result",
+    "Revision conflict stays visible",
+    "No document horizontal overflow 1366",
+    "Contents fit .result-panel at 1366",
+    "Contents fit .matrix-viewport at 1366",
+    "Contents fit .timeline-viewport at 1366",
+    "No document horizontal overflow 1280",
+    "Contents fit .result-panel at 1280",
+    "Contents fit .matrix-viewport at 1280",
+    "Contents fit .timeline-viewport at 1280",
+    "No document horizontal overflow 390",
+    "Mobile retains timeline beside active mode",
+    "Keyboard focus remains visible",
+    "Saved primary replaces old preview even if second scenario fails",
+    "Future selected year never substitutes first-year result (SYNTHETIC contract fixture)",
+    "Result-only source never edits Earth-Core by fallback (SYNTHETIC contract fixture)",
+    "Foreign-unit result is not shown as tons in timeline (SYNTHETIC contract fixture)",
+    "No uncaught browser errors"
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "at": 2685.45159547,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2685.556188131,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2685.765275707,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2685.973874233,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2686.181774351,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2686.698941881,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2686.700062331,
+      "scenario": "MANDATORY_STRESS"
+    },
+    {
+      "at": 2686.976664394,
+      "scenario": "MANDATORY_STRESS"
+    },
+    {
+      "at": 2687.846543222,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2687.847232416,
+      "scenario": "MANDATORY_STRESS"
+    },
+    {
+      "at": 2689.917030279,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2689.917698125,
+      "scenario": "MANDATORY_STRESS"
+    },
+    {
+      "at": 2690.180603715,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2690.181285843,
+      "scenario": "MANDATORY_STRESS"
+    },
+    {
+      "at": 2690.248078967,
+      "scenario": "MANDATORY_STRESS"
+    },
+    {
+      "at": 2690.280264642,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2690.280782028,
+      "scenario": "MANDATORY_STRESS"
+    },
+    {
+      "at": 2690.438634309,
+      "scenario": "BASE"
+    },
+    {
+      "at": 2690.66061355,
+      "scenario": "BASE"
+    }
+  ],
+  "frame_intervals_ms": {
+    "count": 39,
+    "median": 16.69999999999999,
+    "max": 16.800000000000068
+  }
+}

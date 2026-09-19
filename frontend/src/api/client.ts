@@ -48,6 +48,7 @@ export async function download(path:string,fallback:string,init?:RequestInit):Pr
 }
 export const api = {
   simulate:(plan:Plan)=>json<Result>('/calc',body(plan)),
+  analyzeRisk:(plan:Plan)=>json<Result>('/calc/risk',body(plan)),
   meta:()=>json<Meta>('/meta'), catalog:()=>json<Catalog>('/catalog'), template:()=>json<Plan>('/calc/template'),
   async list():Promise<Summary[]> {
     const all:Summary[]=[];let offset=0;

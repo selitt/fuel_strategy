@@ -7,4 +7,4 @@
 `app/persistence/` — локальное JSON-хранилище проектов, один процесс backend.
 `engine/` — расчёты, зона трёх участников математического направления.
 
-[Разделение ответственности](../docs/api/TEAM_AND_NEXT.md) · [API](../API_README.md)
+[Разделение ответственности](../docs/api/TEAM_AND_NEXT.md) · [API](../docs/api/README.md)

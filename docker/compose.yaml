@@ -1,25 +1,32 @@
+name: fuel-contour
 services:
-  backend:
+  web:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: ${FUEL_DOCKERFILE:-docker/Dockerfile}
     ports:
-      - "127.0.0.1:${FUEL_PORT:-8000}:8000"
+      - "${FUEL_BIND_HOST:-127.0.0.1}:${FUEL_WEB_PORT:-8080}:8080"
     environment:
       FUEL_DATA_DIR: /data/projects
-      FUEL_CORS_ORIGINS: ${FUEL_CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+      FUEL_HTTP_USER: ${FUEL_HTTP_USER:-}
+      FUEL_HTTP_PASSWORD: ${FUEL_HTTP_PASSWORD:-}
       FUEL_MAX_REQUEST_BYTES: ${FUEL_MAX_REQUEST_BYTES:-8388608}
       FUEL_MAX_UPLOAD_BYTES: ${FUEL_MAX_UPLOAD_BYTES:-2097152}
     volumes:
       - project_data:/data
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/health', timeout=3)"]
       interval: 15s
       timeout: 5s
+      start_period: 15s
       retries: 3
-      start_period: 10s
-    restart: unless-stopped
     init: true
-
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
 volumes:
   project_data:

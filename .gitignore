@@ -29,3 +29,6 @@ frontend/dist/
 frontend/.test-build/
 frontend/test-results/
 .env
+
+# Windows download metadata, not project source.
+*:Zone.Identifier

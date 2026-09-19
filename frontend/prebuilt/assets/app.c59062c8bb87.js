@@ -12,6 +12,7 @@ const Icon_1 = require("./components/Icon");
 const Ui_1 = require("./components/Ui");
 const Infrastructure_1 = require("./features/Infrastructure");
 const SupplyMatrix_1 = require("./features/SupplyMatrix");
+const RiskPanel_1 = require("./features/RiskPanel");
 const ResultPanel_1 = require("./features/ResultPanel");
 const ResultDetails_1 = require("./features/ResultDetails");
 const PlanEditor_1 = require("./features/PlanEditor");
@@ -23,7 +24,7 @@ const pair_1 = require("./lib/pair");
 function App() {
     const w = (0, useWorkspace_1.useWorkspace)(), file = (0, react_1.useRef)(null), menu = (0, react_1.useRef)(null);
     const [modal, setModal] = (0, react_1.useState)(null), [pending, setPending] = (0, react_1.useState)(null), [source, setSource] = (0, react_1.useState)(null);
-    const [copyName, setCopyName] = (0, react_1.useState)(''), [copyScenario, setCopyScenario] = (0, react_1.useState)('BASE'), [mobile, setMobile] = (0, react_1.useState)('plan');
+    const [copyName, setCopyName] = (0, react_1.useState)(''), [copyScenario, setCopyScenario] = (0, react_1.useState)('BASE');
     function guard(action) {
         if (w.dirty)
             setPending(() => action);
@@ -50,7 +51,7 @@ function App() {
         const key = (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
                 e.preventDefault();
-                if (!w.busy)
+                if (!w.busy && !w.riskBusy)
                     void w.save();
             }
             if (e.key === 'Escape' && menu.current)
@@ -76,10 +77,9 @@ function App() {
                 __React.createElement("div", null,
                     __React.createElement("strong", null,
                         "\u041A\u043E\u043D\u0442\u0443\u0440",
-                        __React.createElement("span", null, "2035")),
-                    __React.createElement("small", null, "\u041F\u043B\u0430\u043D\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435 \u0441\u043D\u0430\u0431\u0436\u0435\u043D\u0438\u044F"))),
+                        __React.createElement("span", null, "2035")))),
             __React.createElement("div", { className: "plan-title" },
-                __React.createElement("button", { type: "button", className: "icon-button", "aria-label": "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0451\u043D\u043D\u044B\u0439 \u043F\u043B\u0430\u043D", onClick: () => setModal('projects'), disabled: !!w.busy },
+                __React.createElement("button", { type: "button", className: "icon-button", "aria-label": "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0441\u043E\u0445\u0440\u0430\u043D\u0451\u043D\u043D\u044B\u0439 \u043F\u043B\u0430\u043D", onClick: () => setModal('projects'), disabled: !!w.busy || w.riskBusy },
                     __React.createElement(Icon_1.Icon, { name: "folder" })),
                 __React.createElement("label", { className: "sr-only", htmlFor: "plan-name" }, "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043F\u043B\u0430\u043D\u0430"),
                 __React.createElement("input", { id: "plan-name", name: "plan-name", title: "\u041D\u0430\u0437\u0432\u0430\u043D\u0438\u0435 \u043F\u043B\u0430\u043D\u0430 \u2014 \u043C\u043E\u0436\u043D\u043E \u0438\u0437\u043C\u0435\u043D\u0438\u0442\u044C", value: w.name, maxLength: 140, disabled: !!w.busy, autoComplete: "off", onChange: e => w.setName(e.target.value) }),
@@ -91,28 +91,32 @@ function App() {
                     __React.createElement(Icon_1.Icon, { name: "compare", size: 14 }),
                     __React.createElement("span", null, "\u041E\u0431\u0430"))),
             __React.createElement("div", { className: "header-actions" },
-                __React.createElement(Ui_1.Button, { kind: "primary", className: "calculate-button", disabled: !!w.busy || !w.draft || w.loading, onClick: () => void w.calculate() },
-                    w.busy ? __React.createElement(Ui_1.Spinner, null) : __React.createElement(Icon_1.Icon, { name: "play", size: 14 }),
-                    __React.createElement("span", null, w.busy ? 'Выполняем…' : w.both ? 'Рассчитать оба' : 'Рассчитать')),
+                __React.createElement(Ui_1.Button, { className: "risk-button", disabled: !!w.busy || !w.draft || w.loading, onClick: () => { setModal('risk'); if (!w.riskBusy)
+                        void w.analyzeRisk(); } },
+                    w.riskBusy ? __React.createElement(Ui_1.Spinner, null) : __React.createElement(Icon_1.Icon, { name: "chart", size: 14 }),
+                    "\u0410\u043D\u0430\u043B\u0438\u0437 \u0440\u0438\u0441\u043A\u043E\u0432"),
+                __React.createElement(Ui_1.Button, { kind: "primary", className: "calculate-button", disabled: !!w.busy || w.riskBusy || !w.draft || w.loading, onClick: () => void w.save() },
+                    w.busy ? __React.createElement(Ui_1.Spinner, null) : __React.createElement(Icon_1.Icon, { name: "save", size: 14 }),
+                    __React.createElement("span", null, w.busy ? 'Выполняем…' : 'Сохранить')),
                 __React.createElement("details", { ref: menu, className: "actions-menu" },
                     __React.createElement("summary", { "aria-label": "\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044F \u0441 \u043F\u043B\u0430\u043D\u043E\u043C" },
                         __React.createElement(Icon_1.Icon, { name: "more" })),
                     __React.createElement("div", { className: "menu-panel" },
-                        __React.createElement("button", { type: "button", disabled: !!w.busy, onClick: () => menuAction(() => guard(() => void w.newPlan())) },
+                        __React.createElement("button", { type: "button", disabled: !!w.busy || w.riskBusy, onClick: () => menuAction(() => guard(() => void w.newPlan())) },
                             __React.createElement(Icon_1.Icon, { name: "plus" }),
-                            "\u041D\u043E\u0432\u044B\u0439 \u043F\u043B\u0430\u043D \u0438\u0437 \u0448\u0430\u0431\u043B\u043E\u043D\u0430 API"),
-                        __React.createElement("button", { type: "button", disabled: !!w.busy || !w.draft, onClick: () => menuAction(() => void w.save()) },
+                            "\u041D\u043E\u0432\u044B\u0439 \u043F\u043B\u0430\u043D"),
+                        __React.createElement("button", { type: "button", disabled: !!w.busy || w.riskBusy || !w.draft, onClick: () => menuAction(() => void w.save()) },
                             __React.createElement(Icon_1.Icon, { name: "save" }),
                             "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C",
                             __React.createElement("span", { className: "key-hint" }, "Ctrl S")),
-                        __React.createElement("button", { type: "button", disabled: !!w.busy || !w.draft, onClick: () => menuAction(showCopy) },
+                        __React.createElement("button", { type: "button", disabled: !!w.busy || w.riskBusy || !w.draft, onClick: () => menuAction(showCopy) },
                             __React.createElement(Icon_1.Icon, { name: "copy" }),
                             "\u0421\u043E\u0437\u0434\u0430\u0442\u044C \u043A\u043E\u043F\u0438\u044E"),
                         __React.createElement("div", { className: "menu-divider" }),
-                        __React.createElement("button", { type: "button", disabled: !!w.busy, onClick: () => menuAction(importFile) },
+                        __React.createElement("button", { type: "button", disabled: !!w.busy || w.riskBusy, onClick: () => menuAction(importFile) },
                             __React.createElement(Icon_1.Icon, { name: "upload" }),
                             "\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C JSON"),
-                        __React.createElement("button", { type: "button", disabled: !!w.busy || !w.draft, onClick: () => menuAction(() => setModal('export')) },
+                        __React.createElement("button", { type: "button", disabled: !!w.busy || w.riskBusy || !w.draft, onClick: () => menuAction(() => setModal('export')) },
                             __React.createElement(Icon_1.Icon, { name: "download" }),
                             "\u0421\u043A\u0430\u0447\u0430\u0442\u044C\u2026"),
                         __React.createElement("button", { type: "button", onClick: () => menuAction(() => setModal('compare')) },
@@ -122,7 +126,7 @@ function App() {
                             __React.createElement(Icon_1.Icon, { name: "info" }),
                             "\u041E \u043C\u043E\u0434\u0435\u043B\u0438 \u0438 \u0438\u043D\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u0435"),
                         __React.createElement("div", { className: "menu-divider" }),
-                        __React.createElement("button", { className: "danger-text", type: "button", disabled: !!w.busy || !w.project, onClick: () => menuAction(() => setModal('delete')) },
+                        __React.createElement("button", { className: "danger-text", type: "button", disabled: !!w.busy || w.riskBusy || !w.project, onClick: () => menuAction(() => setModal('delete')) },
                             __React.createElement(Icon_1.Icon, { name: "trash" }),
                             "\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u043F\u043B\u0430\u043D"))))),
         w.errorMessage && __React.createElement("div", { className: "error-banner", role: "alert" },
@@ -132,24 +136,16 @@ function App() {
                 w.requestId && __React.createElement("small", null,
                     "\u0417\u0430\u043F\u0440\u043E\u0441: ",
                     w.requestId),
-                w.project && __React.createElement("button", { className: "text-button", type: "button", disabled: !!w.busy, onClick: () => guard(() => void w.load(w.project.project_id)) }, "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0432\u0435\u0440\u0441\u0438\u044E \u0441 \u0441\u0435\u0440\u0432\u0435\u0440\u0430"),
+                w.project && __React.createElement("button", { className: "text-button", type: "button", disabled: !!w.busy || w.riskBusy, onClick: () => guard(() => void w.load(w.project.project_id)) }, "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0432\u0435\u0440\u0441\u0438\u044E \u0441 \u0441\u0435\u0440\u0432\u0435\u0440\u0430"),
                 !w.draft && !w.loading && __React.createElement("button", { className: "text-button", type: "button", onClick: () => location.reload() }, "\u041F\u043E\u0432\u0442\u043E\u0440\u0438\u0442\u044C \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u0435")),
             __React.createElement("button", { type: "button", className: "icon-button", "aria-label": "\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u043E\u0448\u0438\u0431\u043A\u0443", onClick: w.clearError },
                 __React.createElement(Icon_1.Icon, { name: "close" }))),
-        __React.createElement("div", { className: "mobile-switch segmented" },
-            __React.createElement("button", { type: "button", "aria-pressed": mobile === 'plan', onClick: () => setMobile('plan') }, "\u041F\u043B\u0430\u043D"),
-            __React.createElement("button", { type: "button", "aria-pressed": mobile === 'result', onClick: () => setMobile('result') }, "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442")),
-        __React.createElement("main", { id: "main", className: `operator-grid mobile-${mobile}`, tabIndex: -1 }, w.loading ? __React.createElement("div", { className: "loading-state", role: "status" },
+        __React.createElement("main", { id: "main", className: "operator-grid", tabIndex: -1 }, w.loading ? __React.createElement("div", { className: "loading-state", role: "status" },
             __React.createElement(Ui_1.Spinner, null),
             "\u041E\u0442\u043A\u0440\u044B\u0432\u0430\u0435\u043C \u043F\u043B\u0430\u043D\u2026") : __React.createElement(__React.Fragment, null,
             __React.createElement(Infrastructure_1.Infrastructure, { w: w, onAdvanced: advanced, onData: () => setModal('data') }),
             __React.createElement(SupplyMatrix_1.SupplyMatrix, { w: w, onAdvanced: advanced, onSource: setSource }),
             __React.createElement(ResultPanel_1.ResultPanel, { w: w, onDetails: () => setModal('results') }))),
-        __React.createElement("footer", { className: "operator-footer" },
-            __React.createElement("span", null, w.busy || (w.dirty ? 'Изменения сохранятся перед расчётом' : 'Решения, результаты и данные — в одном пространстве')),
-            __React.createElement("button", { type: "button", onClick: () => setModal('help') },
-                "\u041F\u0440\u043E\u0442\u043E\u0442\u0438\u043F \u0440\u0430\u0441\u0447\u0451\u0442\u0430",
-                __React.createElement(Icon_1.Icon, { name: "info", size: 12 }))),
         __React.createElement("input", { ref: file, className: "sr-only", type: "file", accept: ".json,application/json", "aria-label": "\u0424\u0430\u0439\u043B \u043F\u043B\u0430\u043D\u0430 \u0438\u043B\u0438 \u043F\u0440\u043E\u0435\u043A\u0442\u0430", onChange: e => {
                 const f = e.currentTarget.files?.[0];
                 e.currentTarget.value = '';
@@ -167,7 +163,7 @@ function App() {
             __React.createElement("div", { className: "modal-actions" },
                 __React.createElement(Ui_1.Button, { onClick: () => setPending(null) }, "\u041E\u0441\u0442\u0430\u0442\u044C\u0441\u044F"),
                 __React.createElement(Ui_1.Button, { kind: "danger", onClick: () => { const action = pending; setPending(null); action(); } }, "\u041D\u0435 \u0441\u043E\u0445\u0440\u0430\u043D\u044F\u0442\u044C"),
-                __React.createElement(Ui_1.Button, { kind: "primary", disabled: !!w.busy, onClick: () => {
+                __React.createElement(Ui_1.Button, { kind: "primary", disabled: !!w.busy || w.riskBusy, onClick: () => {
                         const action = pending;
                         void w.save().then(p => {
                             if (p) {
@@ -233,7 +229,7 @@ function App() {
                         if (w.pair && w.project?.last_run)
                             (0, format_1.downloadBlob)(new Blob([(0, pair_1.scenarioPairCsv)(w.project.last_run, w.pair.otherPlan, w.pair.other)], { type: "text/csv;charset=utf-8" }), "scenario-comparison.csv");
                     } }, "\u0421\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u0435 CSV"),
-                __React.createElement(Ui_1.Button, { disabled: !!w.busy, onClick: () => void w.saveOther() }, "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0432\u0442\u043E\u0440\u043E\u0439 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u0439"))),
+                __React.createElement(Ui_1.Button, { disabled: !!w.busy || w.riskBusy, onClick: () => void w.saveOther() }, "\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0432\u0442\u043E\u0440\u043E\u0439 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u0439"))),
         modal === 'advanced' && __React.createElement(Ui_1.Modal, { title: "\u041F\u043E\u043B\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438 \u043F\u043B\u0430\u043D\u0430", wide: true, onClose: () => setModal(null) },
             __React.createElement(Ui_1.Notice, null, "\u0412\u0441\u0435 \u0438\u0441\u0445\u043E\u0434\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438 \u0434\u043E\u0441\u0442\u0443\u043F\u043D\u044B \u043E\u0442\u0434\u0435\u043B\u044C\u043D\u043E. \u0414\u0443\u0431\u043B\u0438 \u0438 \u0440\u0430\u0441\u0448\u0438\u0440\u0435\u043D\u043D\u044B\u0435 \u043F\u043E\u043B\u044F \u043D\u0435 \u043E\u0431\u044A\u0435\u0434\u0438\u043D\u044F\u044E\u0442\u0441\u044F \u043C\u0430\u0442\u0440\u0438\u0446\u0435\u0439."),
             __React.createElement(PlanEditor_1.PlanEditor, { w: w })),
@@ -241,6 +237,8 @@ function App() {
             __React.createElement(DataCatalog_1.DataCatalog, { w: w, onImport: importFile })),
         modal === 'results' && __React.createElement(Ui_1.Modal, { title: "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442 \u043F\u043E\u0434\u0440\u043E\u0431\u043D\u043E", wide: true, onClose: () => setModal(null) },
             __React.createElement(ResultDetails_1.ResultDetails, { w: w })),
+        modal === 'risk' && __React.createElement(Ui_1.Modal, { title: "\u0410\u043D\u0430\u043B\u0438\u0437 \u0440\u0438\u0441\u043A\u043E\u0432", wide: true, onClose: () => setModal(null) },
+            __React.createElement(RiskPanel_1.RiskPanel, { w: w })),
         modal === 'compare' && __React.createElement(Ui_1.Modal, { title: "\u0421\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u0435 \u0441\u043E\u0445\u0440\u0430\u043D\u0451\u043D\u043D\u044B\u0445 \u043F\u043B\u0430\u043D\u043E\u0432", wide: true, onClose: () => setModal(null) },
             __React.createElement(Compare_1.Compare, { w: w })),
         source && __React.createElement(Ui_1.Modal, { title: source.label, onClose: () => setSource(null) },
@@ -250,13 +248,13 @@ function App() {
                 __React.createElement("dd", null, v || 'Не задано'))))),
         modal === 'help' && __React.createElement(Ui_1.Modal, { title: "\u041A\u043E\u043D\u0442\u0443\u0440 2035", onClose: () => setModal(null) },
             __React.createElement("div", { className: "help-steps" },
-                __React.createElement("p", null, "\u0421\u043B\u0435\u0432\u0430 \u0432\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0438\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0443. \u0412 \u043C\u0430\u0442\u0440\u0438\u0446\u0435 \u0437\u0430\u0434\u0430\u0439\u0442\u0435 \u0437\u0430\u043A\u0430\u0437 \u0438 \u0431\u0440\u043E\u043D\u044C; \u0432\u044B\u0431\u0440\u0430\u043D\u043D\u0443\u044E \u044F\u0447\u0435\u0439\u043A\u0443 \u043C\u043E\u0436\u043D\u043E \u043C\u0435\u043D\u044F\u0442\u044C \u043F\u043E\u043B\u0437\u0443\u043D\u043A\u0430\u043C\u0438 \u0438 \u0441\u0442\u0440\u0435\u043B\u043A\u0430\u043C\u0438. \u00AB\u0420\u0430\u0441\u0441\u0447\u0438\u0442\u0430\u0442\u044C\u00BB \u0441\u043E\u0445\u0440\u0430\u043D\u044F\u0435\u0442 \u043F\u043B\u0430\u043D \u0438 \u043E\u0431\u043D\u043E\u0432\u043B\u044F\u0435\u0442 \u0433\u0440\u0430\u0444\u0438\u043A\u0438 \u0441\u043F\u0440\u0430\u0432\u0430."),
-                __React.createElement("p", null, "BASE \u2014 \u043E\u0431\u044B\u0447\u043D\u044B\u0435 \u0443\u0441\u043B\u043E\u0432\u0438\u044F. STRESS \u2014 \u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u0441\u0442\u0440\u0435\u0441\u0441. \u00AB\u041E\u0431\u0430\u00BB \u0440\u0430\u0441\u0441\u0447\u0438\u0442\u044B\u0432\u0430\u0435\u0442 \u043E\u0434\u0438\u043D\u0430\u043A\u043E\u0432\u044B\u0435 \u0440\u0435\u0448\u0435\u043D\u0438\u044F \u0432 \u0434\u0432\u0443\u0445 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u044F\u0445 \u0431\u0435\u0437 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u044F \u043B\u0438\u0448\u043D\u0438\u0445 \u043F\u0440\u043E\u0435\u043A\u0442\u043E\u0432. \u0412\u0442\u043E\u0440\u043E\u0439 \u0432\u0430\u0440\u0438\u0430\u043D\u0442 \u043C\u043E\u0436\u043D\u043E \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u00AB\u0421\u043A\u0430\u0447\u0430\u0442\u044C\u2026\u00BB."),
+                __React.createElement("p", null, "\u0412 \u043C\u0430\u0442\u0440\u0438\u0446\u0435 \u0437\u0430\u0434\u0430\u0439\u0442\u0435 \u0437\u0430\u043A\u0430\u0437 \u0438 \u0431\u0440\u043E\u043D\u044C \u0437\u0430 \u043B\u044E\u0431\u043E\u0439 \u0433\u043E\u0434. \u0413\u0440\u0430\u0444\u0438\u043A \u043F\u0435\u0440\u0435\u0441\u0447\u0438\u0442\u044B\u0432\u0430\u0435\u0442\u0441\u044F \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438. \u041D\u0430\u0436\u043C\u0438\u0442\u0435 \u043D\u0430 \u0434\u0435\u043D\u044C \u0434\u043B\u044F \u043F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0441\u0442\u0435\u0439. \u00AB\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C\u00BB \u0444\u0438\u043A\u0441\u0438\u0440\u0443\u0435\u0442 \u043F\u043B\u0430\u043D \u0438 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442, \u00AB\u0410\u043D\u0430\u043B\u0438\u0437 \u0440\u0438\u0441\u043A\u043E\u0432\u00BB \u043E\u0442\u0434\u0435\u043B\u044C\u043D\u043E \u0437\u0430\u043F\u0443\u0441\u043A\u0430\u0435\u0442 \u041C\u043E\u043D\u0442\u0435-\u041A\u0430\u0440\u043B\u043E."),
+                __React.createElement("p", null, "BASE \u2014 \u043E\u0431\u044B\u0447\u043D\u044B\u0435 \u0443\u0441\u043B\u043E\u0432\u0438\u044F. STRESS \u2014 \u043E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\u044C\u043D\u044B\u0439 \u0441\u0442\u0440\u0435\u0441\u0441. \u00AB\u041E\u0431\u0430\u00BB \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438 \u0440\u0430\u0441\u0441\u0447\u0438\u0442\u044B\u0432\u0430\u0435\u0442 \u043E\u0434\u0438\u043D\u0430\u043A\u043E\u0432\u044B\u0435 \u0440\u0435\u0448\u0435\u043D\u0438\u044F \u0432 \u0434\u0432\u0443\u0445 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u044F\u0445 \u0431\u0435\u0437 \u0441\u043E\u0437\u0434\u0430\u043D\u0438\u044F \u043B\u0438\u0448\u043D\u0438\u0445 \u043F\u0440\u043E\u0435\u043A\u0442\u043E\u0432. \u0412\u0442\u043E\u0440\u043E\u0439 \u0432\u0430\u0440\u0438\u0430\u043D\u0442 \u043C\u043E\u0436\u043D\u043E \u0441\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0447\u0435\u0440\u0435\u0437 \u00AB\u0421\u043A\u0430\u0447\u0430\u0442\u044C\u2026\u00BB."),
                 __React.createElement("p", null,
                     "\u0426\u0435\u043D\u0430, \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u044C \u0438 \u0435\u0434\u0438\u043D\u0438\u0446\u044B \u0432\u0437\u044F\u0442\u044B \u0438\u0437 \u0442\u0435\u043A\u0443\u0449\u0435\u0433\u043E API, \u0430 \u043D\u0435 \u0438\u0437 \u0438\u0437\u043E\u0431\u0440\u0430\u0436\u0435\u043D\u0438\u044F-\u043F\u0440\u0438\u043C\u0435\u0440\u0430. \u00AB\u0413\u043E\u0434 \u043C\u043E\u0434\u0435\u043B\u0438\u00BB \u043F\u0435\u0440\u0435\u0434\u0430\u0451\u0442 \u043F\u043E\u043B\u0435 ",
                     __React.createElement("code", null, "year"),
                     " \u043A\u0430\u043A \u0435\u0441\u0442\u044C; \u043E\u0442\u0434\u0435\u043B\u044C\u043D\u044B\u0435 \u0434\u0430\u0442\u044B \u0444\u0438\u043D\u0430\u043D\u0441\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F \u0438 \u0432\u0432\u043E\u0434\u0430 \u0442\u0435\u043A\u0443\u0449\u0438\u0439 DTO \u043D\u0435 \u0440\u0430\u0437\u043B\u0438\u0447\u0430\u0435\u0442."),
-                __React.createElement(Ui_1.Notice, { tone: "warning" }, "\u0412 \u043F\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043D\u043E\u043C \u0430\u0440\u0445\u0438\u0432\u0435 \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0451\u043D \u0438\u0441\u0445\u043E\u0434\u043D\u044B\u0439 \u0440\u0430\u0441\u0447\u0451\u0442\u043D\u044B\u0439 \u043F\u0440\u043E\u0442\u043E\u0442\u0438\u043F. \u041D\u043E\u0432\u044B\u0439 \u043A\u043E\u0434 \u043C\u043E\u0434\u0435\u043B\u0438 \u0438 \u0432\u0435\u0440\u043E\u044F\u0442\u043D\u043E\u0441\u0442\u043D\u044B\u0435 \u0440\u0430\u0441\u0447\u0451\u0442\u044B \u043D\u0435 \u043F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u044B. \u041C\u043E\u043D\u0442\u0435-\u041A\u0430\u0440\u043B\u043E \u0438 \u0432\u044B\u043C\u044B\u0448\u043B\u0435\u043D\u043D\u044B\u0435 \u043F\u0440\u0435\u0441\u0435\u0442\u044B \u043D\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u044B."),
+                __React.createElement(Ui_1.Notice, { tone: "warning" }, "\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0451\u043D \u0434\u043D\u0435\u0432\u043D\u043E\u0439 SimulationEngine. \u041C\u0430\u0442\u0435\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u043F\u0440\u0438\u0451\u043C\u043A\u0430 \u043E\u0441\u0442\u0430\u0451\u0442\u0441\u044F \u0443 \u043A\u043E\u043C\u0430\u043D\u0434\u044B \u043C\u043E\u0434\u0435\u043B\u0438. \u0413\u043E\u0434 \u043C\u043E\u0434\u0435\u043B\u0438 \u0441\u043E\u0434\u0435\u0440\u0436\u0438\u0442 365 \u0434\u043D\u0435\u0439. \u041C\u043E\u043D\u0442\u0435-\u041A\u0430\u0440\u043B\u043E \u0432\u043E\u0437\u0432\u0440\u0430\u0449\u0430\u0435\u0442 \u0441\u0432\u043E\u0434\u043A\u0443, \u0431\u0435\u0437 \u0438\u0441\u0442\u043E\u0440\u0438\u0439 \u043E\u0442\u0434\u0435\u043B\u044C\u043D\u044B\u0445 \u0430\u0432\u0430\u0440\u0438\u0439."),
                 __React.createElement("p", { className: "help" }, "\u0412\u0435\u0431-\u0442\u0435\u0441\u0442\u044B \u043F\u0440\u043E\u0432\u0435\u0440\u044F\u044E\u0442 \u0438\u043D\u0442\u0435\u0440\u0444\u0435\u0439\u0441 \u0438 API, \u0430 \u043D\u0435 \u043C\u0430\u0442\u0435\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0443\u044E \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u043E\u0441\u0442\u044C. \u041D\u0430\u0447\u0430\u043B\u044C\u043D\u044B\u0439 \u0437\u0430\u043F\u0430\u0441 \u043D\u0435 \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044F \u0431\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u044B\u043C. \u041F\u043E\u043B\u043D\u0430\u044F \u043F\u0440\u0438\u0451\u043C\u043A\u0430 \u043C\u043E\u0434\u0435\u043B\u0438 \u2014 \u0437\u0430\u0434\u0430\u0447\u0430 \u0435\u0451 \u0432\u043B\u0430\u0434\u0435\u043B\u044C\u0446\u0435\u0432."))));
 }
 
@@ -343,6 +341,7 @@ async function download(path, fallback, init) {
 }
 exports.api = {
     simulate: (plan) => json('/calc', body(plan)),
+    analyzeRisk: (plan) => json('/calc/risk', body(plan)),
     meta: () => json('/meta'), catalog: () => json('/catalog'), template: () => json('/calc/template'),
     async list() {
         const all = [];
@@ -388,6 +387,7 @@ exports.ServiceRing = ServiceRing;
 const react_1 = require("react");
 const format_1 = require("../lib/format");
 const plot_1 = require("../lib/plot");
+const useMotion_1 = require("./useMotion");
 exports.palette = { blue: '#72cfff', green: '#7de0bc', amber: '#edbe77', purple: '#b1a3fa', muted: '#889bab', red: '#f0a395' };
 const finite = (n) => typeof n === 'number' && Number.isFinite(n);
 function usePlotSize() {
@@ -413,31 +413,49 @@ function AnalyticsChart({ years, series, unit, selected, onSelect }) {
     const uid = (0, react_1.useId)().replace(/:/g, ''), [hover, setHover] = (0, react_1.useState)(null);
     const { ref, width, height } = usePlotSize(), pad = { left: 42, right: 16, top: 20, bottom: 26 };
     const values = series.flatMap(s => s.values.filter(finite));
-    if (!years.length || !values.length)
-        return __React.createElement("div", { className: "chart-empty" }, "\u041C\u043E\u0434\u0435\u043B\u044C \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043B\u0430 \u0440\u044F\u0434 \u0434\u043B\u044F \u044D\u0442\u043E\u0433\u043E \u0433\u0440\u0430\u0444\u0438\u043A\u0430.");
     const low = Math.min(0, ...values), high = Math.max(1, ...values), span = high - low;
     const min = low < 0 ? low - span * .06 : 0, max = high + span * .13;
     const x = (i) => pad.left + (width - pad.left - pad.right) * (years.length === 1 ? .5 : i / (years.length - 1));
     const y = (v) => height - pad.bottom - (v - min) / (max - min) * (height - pad.top - pad.bottom);
-    const index = hover ?? Math.max(0, years.indexOf(selected));
+    const index = hover ?? years.indexOf(selected);
+    const yearX = years.map((_, i) => x(i));
+    const gridValues = [0, 1, 2, 3].map(i => min + (max - min) * i / 3);
+    const selectionLeft = index >= 0 ? Math.max(pad.left, x(index) - 17) : pad.left;
+    const selectionWidth = index >= 0 ? Math.min(width - pad.right, x(index) + 17) - selectionLeft : 0;
+    const geometry = (0, useMotion_1.useMotionNumbers)([
+        ...yearX,
+        ...gridValues.map(y),
+        y(0),
+        selectionLeft,
+        selectionWidth,
+        ...series.flatMap(s => s.values.filter(finite).map(y)),
+    ], `${years.join(',')}|${series.map(s => `${s.key}:${s.values.map(v => finite(v) ? '1' : '0').join('')}`).join('|')}`);
+    let cursor = 0;
+    const drawnX = geometry.slice(cursor, cursor += years.length);
+    const drawnGridY = geometry.slice(cursor, cursor += gridValues.length);
+    const drawnZeroY = geometry[cursor++];
+    const drawnSelectionLeft = geometry[cursor++], drawnSelectionWidth = geometry[cursor++];
+    const drawnSeriesY = series.map(s => s.values.map(value => finite(value) ? geometry[cursor++] : undefined));
+    if (!years.length || !values.length)
+        return __React.createElement("div", { className: "chart-empty" }, "\u041C\u043E\u0434\u0435\u043B\u044C \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043B\u0430 \u0440\u044F\u0434 \u0434\u043B\u044F \u044D\u0442\u043E\u0433\u043E \u0433\u0440\u0430\u0444\u0438\u043A\u0430.");
     return __React.createElement("div", { className: "analytics-chart", onMouseLeave: () => setHover(null) },
         __React.createElement("div", { className: "plot-svg-frame", ref: ref },
             __React.createElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": `${unit}: ${series.map(s => s.label).join(', ')}` },
                 __React.createElement("defs", null, series.map(s => __React.createElement("linearGradient", { key: s.key, id: `${uid}-${s.key}`, x1: "0", y1: "0", x2: "0", y2: "1" },
                     __React.createElement("stop", { offset: "0%", stopColor: s.color, stopOpacity: ".24" }),
                     __React.createElement("stop", { offset: "100%", stopColor: s.color, stopOpacity: ".015" })))),
-                [0, 1, 2, 3].map(i => { const v = min + (max - min) * i / 3; return __React.createElement("g", { key: i },
-                    __React.createElement("line", { x1: pad.left, x2: width - pad.right, y1: y(v), y2: y(v), stroke: "var(--grid)", strokeDasharray: "3 5" }),
-                    __React.createElement("text", { x: pad.left - 9, y: y(v) + 4, textAnchor: "end", className: "axis-label" }, (0, format_1.number)(Math.round(v)))); }),
+                gridValues.map((v, i) => __React.createElement("g", { key: i },
+                    __React.createElement("line", { x1: pad.left, x2: width - pad.right, y1: drawnGridY[i], y2: drawnGridY[i], stroke: "var(--grid)", strokeDasharray: "3 5" }),
+                    __React.createElement("text", { x: pad.left - 9, y: drawnGridY[i] + 4, textAnchor: "end", className: "axis-label" }, (0, format_1.number)(Math.round(v))))),
                 __React.createElement("text", { x: pad.left, y: 10, className: "axis-label" }, unit),
-                __React.createElement("rect", { x: Math.max(pad.left, x(index) - 17), y: pad.top, width: Math.min(width - pad.right, x(index) + 17) - Math.max(pad.left, x(index) - 17), height: height - pad.top - pad.bottom, fill: "var(--chart-selection)", rx: "8" }),
-                series.map(s => {
+                index >= 0 && __React.createElement("rect", { x: drawnSelectionLeft, y: pad.top, width: drawnSelectionWidth, height: height - pad.top - pad.bottom, fill: "var(--chart-selection)", rx: "8" }),
+                series.map((s, seriesIndex) => {
                     const segments = [];
                     let points = [];
                     years.forEach((_, i) => {
                         const v = s.values[i];
                         if (finite(v))
-                            points.push({ x: x(i), y: y(v) });
+                            points.push({ x: drawnX[i], y: drawnSeriesY[seriesIndex][i] });
                         else {
                             if (points.length)
                                 segments.push(points);
@@ -448,15 +466,15 @@ function AnalyticsChart({ years, series, unit, selected, onSelect }) {
                         segments.push(points);
                     return __React.createElement("g", { key: s.key },
                         segments.map((pts, j) => { const d = pts.map((p, i) => `${i ? 'L' : 'M'}${p.x},${p.y}`).join(' '); return __React.createElement("g", { key: j },
-                            s.area && pts.length > 1 && __React.createElement("path", { d: `${d} L${pts.at(-1).x},${y(0)} L${pts[0].x},${y(0)} Z`, fill: `url(#${uid}-${s.key})` }),
+                            s.area && pts.length > 1 && __React.createElement("path", { d: `${d} L${pts.at(-1).x},${drawnZeroY} L${pts[0].x},${drawnZeroY} Z`, fill: `url(#${uid}-${s.key})` }),
                             __React.createElement("path", { d: d, stroke: s.color, strokeWidth: s.dashed ? 1.8 : 2.6, strokeLinecap: "round", strokeLinejoin: "round", fill: "none", strokeDasharray: s.dashed ? '5 6' : undefined })); }),
                         years.map((_, i) => finite(s.values[i]) ? __React.createElement("g", { key: i },
-                            i === index && __React.createElement("circle", { cx: x(i), cy: y(s.values[i]), r: "8", fill: s.color, opacity: ".12" }),
-                            __React.createElement("circle", { cx: x(i), cy: y(s.values[i]), r: i === index ? 3.8 : 2.4, fill: "var(--panel)", stroke: s.color, strokeWidth: "2" })) : null));
+                            i === index && __React.createElement("circle", { cx: drawnX[i], cy: drawnSeriesY[seriesIndex][i], r: "8", fill: s.color, opacity: ".12" }),
+                            __React.createElement("circle", { cx: drawnX[i], cy: drawnSeriesY[seriesIndex][i], r: i === index ? 3.8 : 2.4, fill: "var(--panel)", stroke: s.color, strokeWidth: "2" })) : null));
                 }),
                 years.map((year, i) => __React.createElement("g", { key: year },
-                    __React.createElement("text", { x: x(i), y: height - 5, textAnchor: "middle", className: `axis-label ${year === selected ? 'selected-axis' : ''}` }, year),
-                    __React.createElement("rect", { className: "chart-hit", x: x(i) - 20, y: pad.top, width: "40", height: height - pad.top, fill: "transparent", role: "button", "aria-label": `Показатели за ${year}`, tabIndex: 0, onMouseEnter: () => setHover(i), onFocus: () => setHover(i), onBlur: () => setHover(null), onClick: () => onSelect(year), onKeyDown: e => {
+                    __React.createElement("text", { x: drawnX[i], y: height - 5, textAnchor: "middle", className: `axis-label ${year === selected ? 'selected-axis' : ''}` }, year),
+                    __React.createElement("rect", { className: "chart-hit", x: drawnX[i] - 20, y: pad.top, width: "40", height: height - pad.top, fill: "transparent", role: "button", "aria-label": `Показатели за ${year}`, tabIndex: 0, onMouseEnter: () => setHover(i), onFocus: () => setHover(i), onBlur: () => setHover(null), onClick: () => onSelect(year), onKeyDown: e => {
                             if (e.key === 'Enter' || e.key === ' ') {
                                 e.preventDefault();
                                 onSelect(year);
@@ -476,26 +494,41 @@ exports.costNames = ['Закупка', 'Бронь', 'Хранение', 'CAPEX'
 exports.costColors = [exports.palette.blue, exports.palette.purple, exports.palette.green, exports.palette.amber, exports.palette.muted];
 function FinanceChart({ rows, selected, onSelect }) {
     const { ref, width, height } = usePlotSize();
-    if (!rows.length)
-        return __React.createElement("div", { className: "chart-empty" }, "\u041C\u043E\u0434\u0435\u043B\u044C \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043B\u0430 \u0440\u0430\u0441\u0445\u043E\u0434\u044B.");
     const left = 42, right = 16, top = 22, bottom = 27;
     // This sum only positions stacked rectangles. Displayed total remains the API total.
     const stacks = rows.map(row => (0, plot_1.signedStack)(exports.costKeys.map(k => row[k])));
-    const min = Math.min(0, ...stacks.map(s => s.min)) * 1.1, max = Math.max(1, ...stacks.map(s => s.max)) * 1.1, cell = (width - left - right) / rows.length, bw = Math.min(36, cell * .62), h = height - top - bottom;
+    const min = Math.min(0, ...stacks.map(s => s.min)) * 1.1, max = Math.max(1, ...stacks.map(s => s.max)) * 1.1, cell = (width - left - right) / Math.max(1, rows.length), bw = Math.min(36, cell * .62), h = height - top - bottom;
     const y = (value) => height - bottom - (value - min) / (max - min) * h;
-    const current = rows.find(f => f.year === selected) || rows[0];
+    const gridValues = [0, 1, 2, 3].map(i => min + (max - min) * i / 3);
+    const geometry = (0, useMotion_1.useMotionNumbers)([
+        ...gridValues.map(y), cell, bw, h,
+        ...rows.flatMap((_, i) => {
+            const rowX = left + cell * (i + .5);
+            return [rowX, ...stacks[i].segments.flatMap(({ from, to }) => [Math.min(y(from), y(to)), Math.abs(y(from) - y(to))])];
+        }),
+    ], rows.map((row, i) => `${row.year}:${stacks[i].segments.map(segment => segment.index).join(',')}`).join('|'));
+    let cursor = 0;
+    const drawnGridY = geometry.slice(cursor, cursor += gridValues.length);
+    const drawnCell = geometry[cursor++], drawnBw = geometry[cursor++], drawnH = geometry[cursor++];
+    const drawnRows = rows.map((_, i) => ({
+        x: geometry[cursor++],
+        segments: stacks[i].segments.map(() => ({ y: geometry[cursor++], height: geometry[cursor++] })),
+    }));
+    if (!rows.length)
+        return __React.createElement("div", { className: "chart-empty" }, "\u041C\u043E\u0434\u0435\u043B\u044C \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043B\u0430 \u0440\u0430\u0441\u0445\u043E\u0434\u044B.");
+    const current = rows.find(f => f.year === selected);
     return __React.createElement("div", { className: "analytics-chart" },
         __React.createElement("div", { className: "plot-svg-frame", ref: ref },
             __React.createElement("svg", { viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": "\u0421\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0440\u0430\u0441\u0445\u043E\u0434\u043E\u0432 \u043F\u043E \u0433\u043E\u0434\u0430\u043C, \u043C\u043B\u043D \u0443.\u0435." },
-                [0, 1, 2, 3].map(i => { const v = min + (max - min) * i / 3, py = y(v); return __React.createElement("g", { key: i },
-                    __React.createElement("line", { x1: left, x2: width - right, y1: py, y2: py, stroke: "var(--grid)", strokeDasharray: "3 5" }),
-                    __React.createElement("text", { className: "axis-label", x: left - 9, y: py + 4, textAnchor: "end" }, (0, format_1.number)(Math.round(v)))); }),
+                gridValues.map((v, i) => __React.createElement("g", { key: i },
+                    __React.createElement("line", { x1: left, x2: width - right, y1: drawnGridY[i], y2: drawnGridY[i], stroke: "var(--grid)", strokeDasharray: "3 5" }),
+                    __React.createElement("text", { className: "axis-label", x: left - 9, y: drawnGridY[i] + 4, textAnchor: "end" }, (0, format_1.number)(Math.round(v))))),
                 __React.createElement("text", { x: left, y: "10", className: "axis-label" }, "\u043C\u043B\u043D \u0443.\u0435."),
                 rows.map((row, i) => {
-                    const x = left + cell * (i + .5);
+                    const drawn = drawnRows[i];
                     return __React.createElement("g", { key: row.year },
-                        row.year === selected && __React.createElement("rect", { x: x - bw / 2 - 5, y: top - 5, width: bw + 10, height: h + 6, rx: "7", fill: "var(--chart-selection)" }),
-                        stacks[i].segments.map(({ index: k, from, to }) => { const key = exports.costKeys[k], rh = Math.abs(y(from) - y(to)); return __React.createElement("rect", { key: key, x: x - bw / 2, y: Math.min(y(from), y(to)), width: bw, height: rh, fill: exports.costColors[k], rx: "2", opacity: row.year === selected ? 1 : .76 },
+                        row.year === selected && __React.createElement("rect", { x: drawn.x - drawnBw / 2 - 5, y: top - 5, width: drawnBw + 10, height: drawnH + 6, rx: "7", fill: "var(--chart-selection)" }),
+                        stacks[i].segments.map(({ index: k }, segmentIndex) => { const key = exports.costKeys[k], segment = drawn.segments[segmentIndex]; return __React.createElement("rect", { key: key, x: drawn.x - drawnBw / 2, y: segment.y, width: drawnBw, height: segment.height, fill: exports.costColors[k], rx: "2", opacity: row.year === selected ? 1 : .76 },
                             __React.createElement("title", null,
                                 row.year,
                                 " \u00B7 ",
@@ -503,8 +536,8 @@ function FinanceChart({ rows, selected, onSelect }) {
                                 ": ",
                                 (0, format_1.number)(row[key]),
                                 " \u043C\u043B\u043D \u0443.\u0435.")); }),
-                        __React.createElement("text", { className: "axis-label", x: x, y: height - 5, textAnchor: "middle" }, row.year),
-                        __React.createElement("rect", { role: "button", tabIndex: 0, className: "chart-hit", "aria-label": `Расходы за ${row.year}`, x: x - cell / 2, y: top, width: cell, height: h + 25, fill: "transparent", onClick: () => onSelect(row.year), onKeyDown: e => {
+                        __React.createElement("text", { className: "axis-label", x: drawn.x, y: height - 5, textAnchor: "middle" }, row.year),
+                        __React.createElement("rect", { role: "button", tabIndex: 0, className: "chart-hit", "aria-label": `Расходы за ${row.year}`, x: drawn.x - drawnCell / 2, y: top, width: drawnCell, height: drawnH + 25, fill: "transparent", onClick: () => onSelect(row.year), onKeyDown: e => {
                                 if (['Enter', ' '].includes(e.key)) {
                                     e.preventDefault();
                                     onSelect(row.year);
@@ -514,15 +547,19 @@ function FinanceChart({ rows, selected, onSelect }) {
         __React.createElement("div", { className: "plot-legend costs" }, exports.costKeys.map((key, i) => __React.createElement("span", { key: key },
             __React.createElement("i", { style: { background: exports.costColors[i] } }),
             exports.costNames[i],
-            __React.createElement("strong", null, (0, format_1.number)(current[key]))))));
+            __React.createElement("strong", null, (0, format_1.number)(current?.[key]))))));
 }
 function ServiceRing({ total, critical }) {
     const radius = 32, circ = 2 * Math.PI * radius;
+    const geometry = (0, useMotion_1.useMotionNumbers)([
+        finite(total) ? Math.max(0, Math.min(1, total)) : 0,
+        finite(critical) ? Math.max(0, Math.min(1, critical)) : 0,
+    ], `${finite(total) ? 1 : 0}${finite(critical) ? 1 : 0}`);
     return __React.createElement("svg", { className: "service-ring", width: "86", height: "86", viewBox: "0 0 86 86", role: "img", "aria-label": "\u041E\u0431\u0449\u0438\u0439 \u0438 \u043A\u0440\u0438\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0441\u0435\u0440\u0432\u0438\u0441" },
         __React.createElement("circle", { cx: "43", cy: "43", r: radius, fill: "none", stroke: "var(--track)", strokeWidth: "4" }),
         __React.createElement("circle", { cx: "43", cy: "43", r: "23", fill: "none", stroke: "var(--track)", strokeWidth: "4" }),
-        finite(total) && __React.createElement("circle", { cx: "43", cy: "43", r: radius, fill: "none", stroke: exports.palette.blue, strokeWidth: "4", strokeLinecap: "round", strokeDasharray: `${Math.max(0, Math.min(1, total)) * circ} ${circ}`, transform: "rotate(-90 43 43)" }),
-        finite(critical) && __React.createElement("circle", { cx: "43", cy: "43", r: "23", fill: "none", stroke: exports.palette.green, strokeWidth: "4", strokeLinecap: "round", strokeDasharray: `${Math.max(0, Math.min(1, critical)) * 2 * Math.PI * 23} ${2 * Math.PI * 23}`, transform: "rotate(-90 43 43)" }),
+        finite(total) && __React.createElement("circle", { cx: "43", cy: "43", r: radius, fill: "none", stroke: exports.palette.blue, strokeWidth: "4", strokeLinecap: "round", strokeDasharray: `${geometry[0] * circ} ${circ}`, transform: "rotate(-90 43 43)" }),
+        finite(critical) && __React.createElement("circle", { cx: "43", cy: "43", r: "23", fill: "none", stroke: exports.palette.green, strokeWidth: "4", strokeLinecap: "round", strokeDasharray: `${geometry[1] * 2 * Math.PI * 23} ${2 * Math.PI * 23}`, transform: "rotate(-90 43 43)" }),
         __React.createElement("path", { d: "M37 43h12 M43 37v12", stroke: "var(--muted)", strokeWidth: "1.4" }));
 }
 
@@ -622,6 +659,202 @@ function Toggle({ label, checked, onChange, disabled = false }) {
 }
 
 },
+"src/components/DailyChart.tsx":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DailyChart = DailyChart;
+const react_1 = require("react");
+const daily_1 = require("../lib/daily");
+const format_1 = require("../lib/format");
+const useMotion_1 = require("./useMotion");
+function usePlotSize() {
+    const [node, setNode] = (0, react_1.useState)(null);
+    const [size, setSize] = (0, react_1.useState)({ width: 760, height: 300 });
+    (0, react_1.useLayoutEffect)(() => {
+        if (!node)
+            return;
+        const observer = new ResizeObserver(entries => {
+            const rect = entries[0]?.contentRect;
+            if (!rect)
+                return;
+            const width = Math.max(320, Math.round(rect.width));
+            const height = Math.max(210, Math.round(rect.height));
+            setSize(previous => previous.width === width && previous.height === height ? previous : { width, height });
+        });
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, [node]);
+    return { ref: setNode, ...size };
+}
+function finite(value) {
+    return typeof value === 'number' && Number.isFinite(value);
+}
+function scenarioLabel(result) {
+    return result.scenario_id === 'BASE' ? 'BASE' : result.scenario_id === 'MANDATORY_STRESS' ? 'STRESS' : result.scenario_id;
+}
+function segments(rows, drawnY, x) {
+    const result = [];
+    let points = [];
+    let previousDay = null;
+    for (const row of rows) {
+        const y = drawnY.get(row.day);
+        if (y === undefined || (previousDay !== null && row.day !== previousDay + 1)) {
+            if (points.length)
+                result.push(points.join(' '));
+            points = [];
+        }
+        if (y !== undefined) {
+            points.push(`${points.length ? 'L' : 'M'}${x(row.day)},${y}`);
+            previousDay = row.day;
+        }
+        else {
+            previousDay = null;
+        }
+    }
+    if (points.length)
+        result.push(points.join(' '));
+    return result;
+}
+function DailyChart({ result, other = null, year, onSelectDay, onProposeDeliveryDate, range, selectedDay = null }) {
+    const [drag, setDrag] = (0, react_1.useState)(null);
+    const [focusedDay, setFocusedDay] = (0, react_1.useState)(1);
+    const primarySupported = (0, format_1.supportedUnits)(result.units);
+    const primary = primarySupported ? (0, daily_1.projectDailyTrace)(result, year, range) : [];
+    const secondary = primarySupported && other && (0, format_1.supportedUnits)(other.units) ? (0, daily_1.projectDailyTrace)(other, year, range) : [];
+    const [start, end] = (0, daily_1.modelDayRange)(range);
+    const ticks = (0, daily_1.modelWeekTicks)([start, end]);
+    const { ref, width, height } = usePlotSize();
+    const pad = { left: 48, right: 18, top: 24, bottom: 48 };
+    const values = [...primary, ...secondary].map(row => row.closing_inventory_t).filter(finite);
+    const max = Math.max(1, ...values) * 1.08;
+    const x = (day) => pad.left + (width - pad.left - pad.right) * (end === start ? .5 : (day - start) / (end - start));
+    const y = (value) => height - pad.bottom - value / max * (height - pad.top - pad.bottom);
+    const gridValues = [0, .25, .5, .75, 1].map(part => max * part);
+    const primaryFinite = primary.filter(row => finite(row.closing_inventory_t));
+    const secondaryFinite = secondary.filter(row => finite(row.closing_inventory_t));
+    const targetGeometry = [
+        ...gridValues.map(y),
+        ...primaryFinite.map(row => y(row.closing_inventory_t)),
+        ...secondaryFinite.map(row => y(row.closing_inventory_t)),
+    ];
+    const topology = `${year}|${start}:${end}|${primary.map(row => `${row.day}:${finite(row.closing_inventory_t) ? 1 : 0}`).join(',')}|${secondary.map(row => `${row.day}:${finite(row.closing_inventory_t) ? 1 : 0}`).join(',')}`;
+    const geometry = (0, useMotion_1.useMotionNumbers)(targetGeometry, topology);
+    let cursor = 0;
+    const drawnGrid = geometry.slice(cursor, cursor += gridValues.length);
+    const primaryY = new Map(primaryFinite.map(row => [row.day, geometry[cursor++]]));
+    const secondaryY = new Map(secondaryFinite.map(row => [row.day, geometry[cursor++]]));
+    const selected = selectedDay === null ? primary.at(-1) : (0, daily_1.dailyRecordAt)(result, year, selectedDay);
+    if (!primarySupported)
+        return __React.createElement("div", { className: "daily-chart chart-empty", "data-testid": "daily-chart" }, "\u0415\u0434\u0438\u043D\u0438\u0446\u044B \u0434\u043D\u0435\u0432\u043D\u043E\u0433\u043E \u0440\u044F\u0434\u0430 \u043D\u0435 \u043F\u043E\u0434\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u044E\u0442\u0441\u044F.");
+    if (!values.length)
+        return __React.createElement("div", { className: "daily-chart chart-empty", "data-testid": "daily-chart" },
+            "\u041C\u043E\u0434\u0435\u043B\u044C \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043B\u0430 \u0434\u043D\u0435\u0432\u043D\u043E\u0439 \u0437\u0430\u043F\u0430\u0441 \u0437\u0430 ",
+            year,
+            ".");
+    const hitWidth = Math.max(2, (width - pad.left - pad.right) / Math.max(1, end - start + 1));
+    return __React.createElement("div", { className: "daily-chart", "data-testid": "daily-chart" },
+        __React.createElement("div", { className: "daily-chart-frame", ref: ref },
+            __React.createElement("svg", { className: "daily-chart-svg", viewBox: `0 0 ${width} ${height}`, role: "img", "aria-label": `Дневной запас за ${year}, дни модели ${start}–${end}` },
+                drawnGrid.map((gridY, index) => __React.createElement("g", { key: index },
+                    __React.createElement("line", { className: "daily-grid", x1: pad.left, x2: width - pad.right, y1: gridY, y2: gridY }),
+                    __React.createElement("text", { className: "daily-axis-label", x: pad.left - 8, y: gridY + 4, textAnchor: "end" }, (0, format_1.number)(gridValues[index])))),
+                __React.createElement("text", { className: "daily-axis-label", x: pad.left, y: 13 }, "\u0442"),
+                ticks.map(day => __React.createElement("g", { key: day },
+                    __React.createElement("line", { className: "daily-grid daily-week-grid", x1: x(day), x2: x(day), y1: pad.top, y2: height - pad.bottom }),
+                    __React.createElement("text", { className: "daily-axis-label", x: x(day), y: height - 10, textAnchor: "end", transform: `rotate(-55 ${x(day)} ${height - 10})` }, day))),
+                primary.filter(row => finite(row.shortage_t) && row.shortage_t > 0).map(row => __React.createElement("rect", { key: `shortage-${row.day}`, className: "daily-shortage-band", x: x(row.day) - hitWidth / 2, y: pad.top, width: hitWidth, height: height - pad.top - pad.bottom })),
+                secondary.length > 0 && segments(secondary, secondaryY, x).map((path, index) => __React.createElement("path", { key: index, className: "daily-inventory-line other", d: path })),
+                segments(primary, primaryY, x).map((path, index) => __React.createElement("path", { key: index, className: "daily-inventory-line", d: path })),
+                primary.filter(row => finite(row.delivered_t) && row.delivered_t > 0).map(row => {
+                    const cy = primaryY.get(row.day) ?? pad.top + 8;
+                    return __React.createElement("path", { key: `receipt-${row.day}`, className: "daily-receipt-marker", d: `M${x(row.day)},${cy - 6} l6,6 -6,6 -6,-6 Z` },
+                        __React.createElement("title", null,
+                            "\u0414\u0435\u043D\u044C ",
+                            row.day,
+                            ": \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 ",
+                            (0, format_1.number)(row.delivered_t),
+                            " \u0442"));
+                }),
+                selectedDay !== null && selectedDay >= start && selectedDay <= end && __React.createElement("line", { className: "daily-selected", x1: x(selectedDay), x2: x(selectedDay), y1: pad.top, y2: height - pad.bottom }),
+                onSelectDay && primary.map(row => __React.createElement("rect", { key: `hit-${row.day}`, className: "daily-hit", x: x(row.day) - hitWidth / 2, y: pad.top, width: hitWidth, height: height - pad.top - pad.bottom, fill: "transparent", role: "button", tabIndex: row.day === (primary.some(p => p.day === focusedDay) ? focusedDay : primary[0]?.day) ? 0 : -1, onFocus: () => setFocusedDay(row.day), "aria-label": `День модели ${row.day}`, onClick: () => onSelectDay(row.day), onKeyDown: event => {
+                        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                            event.preventDefault();
+                            const next = primary[primary.indexOf(row) + (event.key === 'ArrowRight' ? 1 : -1)];
+                            if (next) {
+                                setFocusedDay(next.day);
+                                event.currentTarget.ownerSVGElement?.querySelector(`[aria-label="День модели ${next.day}"]`)?.focus();
+                            }
+                        }
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            onSelectDay(row.day);
+                        }
+                    } },
+                    __React.createElement("title", null,
+                        "\u0414\u0435\u043D\u044C ",
+                        row.day,
+                        ": \u0437\u0430\u043F\u0430\u0441 ",
+                        (0, format_1.number)(row.closing_inventory_t),
+                        " \u0442; \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 ",
+                        (0, format_1.number)(row.delivered_t),
+                        " \u0442; \u0434\u0435\u0444\u0438\u0446\u0438\u0442 ",
+                        (0, format_1.number)(row.shortage_t),
+                        " \u0442"))),
+                onProposeDeliveryDate && primary.filter(row => finite(row.delivered_t) && row.delivered_t > 0).map(row => __React.createElement("circle", { key: `drag-${row.day}`, className: "delivery-drag", cx: x(row.day), cy: primaryY.get(row.day) ?? pad.top + 8, r: 10, role: "button", tabIndex: 0, "aria-label": `Перенести поступление: день ${row.day}`, onPointerDown: event => { event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); setDrag({ from: row.day, to: row.day }); }, onPointerMove: event => {
+                        if (!event.currentTarget.hasPointerCapture(event.pointerId))
+                            return;
+                        const bounds = event.currentTarget.ownerSVGElement.getBoundingClientRect();
+                        const px = (event.clientX - bounds.left) * width / bounds.width;
+                        const day = Math.max(start, Math.min(end, Math.round(start + (px - pad.left) / (width - pad.left - pad.right) * (end - start))));
+                        setDrag({ from: row.day, to: day });
+                    }, onPointerUp: event => { if (event.currentTarget.hasPointerCapture(event.pointerId))
+                        event.currentTarget.releasePointerCapture(event.pointerId); if (drag && drag.to !== drag.from)
+                        onProposeDeliveryDate(drag.from, drag.to);
+                    else
+                        onSelectDay?.(row.day); setDrag(null); }, onPointerCancel: () => setDrag(null), onKeyDown: event => { if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        onProposeDeliveryDate(row.day, row.day);
+                    } } },
+                    __React.createElement("title", null, "\u041F\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u044C \u0434\u0430\u0442\u0443 \u0434\u043B\u044F \u0441\u043E\u0433\u043B\u0430\u0441\u043E\u0432\u0430\u043D\u0438\u044F"))),
+                drag && __React.createElement("g", { className: "delivery-drag-preview" },
+                    __React.createElement("line", { x1: x(drag.to), x2: x(drag.to), y1: pad.top, y2: height - pad.bottom }),
+                    __React.createElement("text", { x: Math.min(width - 90, Math.max(pad.left, x(drag.to) + 8)), y: pad.top + 14 },
+                        "\u0414\u0435\u043D\u044C ",
+                        drag.to)))),
+        __React.createElement("div", { className: "daily-legend" },
+            __React.createElement("span", { className: "daily-legend-item" },
+                "\u0414\u0435\u043D\u044C \u043C\u043E\u0434\u0435\u043B\u0438 ",
+                __React.createElement("strong", null, selected?.day ?? '—')),
+            __React.createElement("span", { className: "daily-legend-item" },
+                __React.createElement("i", { className: "daily-inventory-line" }),
+                scenarioLabel(result),
+                " ",
+                __React.createElement("strong", null,
+                    (0, format_1.number)(selected?.closing_inventory_t),
+                    " \u0442")),
+            other && secondary.length > 0 && __React.createElement("span", { className: "daily-legend-item" },
+                __React.createElement("i", { className: "daily-inventory-line other" }),
+                scenarioLabel(other),
+                " ",
+                __React.createElement("strong", null,
+                    (0, format_1.number)(selectedDay === null ? secondary.at(-1)?.closing_inventory_t : (0, daily_1.dailyRecordAt)(other, year, selectedDay)?.closing_inventory_t),
+                    " \u0442")),
+            __React.createElement("span", { className: "daily-legend-item" },
+                __React.createElement("i", { className: "daily-receipt-marker" }),
+                "\u041F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 ",
+                __React.createElement("strong", null,
+                    (0, format_1.number)(selected?.delivered_t),
+                    " \u0442")),
+            __React.createElement("span", { className: "daily-legend-item" },
+                __React.createElement("i", { className: "daily-shortage-band" }),
+                "\u0414\u0435\u0444\u0438\u0446\u0438\u0442 ",
+                __React.createElement("strong", null,
+                    (0, format_1.number)(selected?.shortage_t),
+                    " \u0442"))));
+}
+
+},
 "src/components/Icon.tsx":(module,exports,require)=>{
 const __React=require('react');
 "use strict";
@@ -710,6 +943,79 @@ function NumericInput({ value, onChange, label, integer = false }) {
     return __React.createElement("span", { className: "numeric-field" },
         __React.createElement("input", { "aria-label": label, type: "number", inputMode: integer ? 'numeric' : 'decimal', autoComplete: "off", min: integer ? 1 : 0, step: integer ? 1 : 'any', required: true, value: Number.isFinite(value) ? value : '', onChange: e => onChange(e.currentTarget.value === '' ? NaN : e.currentTarget.valueAsNumber), "aria-invalid": !valid }),
         !valid && __React.createElement("span", { className: "field-error" }, integer ? 'Укажите целый год' : 'Число ≥ 0'));
+}
+
+},
+"src/components/useMotion.ts":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.useMotionNumbers = useMotionNumbers;
+const react_1 = require("react");
+const motion_1 = require("../lib/motion");
+const DURATION_MS = 120;
+function sameNumbers(left, right) {
+    return left.length === right.length && left.every((value, index) => Object.is(value, right[index]));
+}
+function numberToken(value) {
+    if (Number.isNaN(value))
+        return 'nan';
+    if (value === Infinity)
+        return 'inf';
+    if (value === -Infinity)
+        return '-inf';
+    if (Object.is(value, -0))
+        return '-0';
+    return String(value);
+}
+function useReducedMotion() {
+    const [reduced, setReduced] = (0, react_1.useState)(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false);
+    (0, react_1.useEffect)(() => {
+        if (typeof window === 'undefined' || typeof window.matchMedia !== 'function')
+            return;
+        const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const update = () => setReduced(query.matches);
+        update();
+        query.addEventListener('change', update);
+        return () => query.removeEventListener('change', update);
+    }, []);
+    return reduced;
+}
+/** Smooths geometry only. Change key whenever the represented topology changes. */
+function useMotionNumbers(target, key = '') {
+    const reduced = useReducedMotion();
+    const topology = `${key}\u0000${target.length}`;
+    const signature = target.map(numberToken).join('\u0001');
+    const [drawn, setDrawn] = (0, react_1.useState)(() => target.slice());
+    const current = (0, react_1.useRef)(drawn);
+    const currentTopology = (0, react_1.useRef)(topology);
+    const compatible = currentTopology.current === topology && current.current.length === target.length;
+    (0, react_1.useLayoutEffect)(() => {
+        const destination = target.slice();
+        if (reduced || currentTopology.current !== topology || current.current.length !== destination.length) {
+            currentTopology.current = topology;
+            current.current = destination;
+            setDrawn(destination);
+            return;
+        }
+        if (sameNumbers(current.current, destination))
+            return;
+        const origin = current.current.slice();
+        let startedAt = null;
+        return motion_1.sharedMotionScheduler.subscribe(timestamp => {
+            if (startedAt === null)
+                startedAt = timestamp;
+            const progress = Math.min(1, (timestamp - startedAt) / DURATION_MS);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const next = destination.map((value, index) => origin[index] + (value - origin[index]) * eased);
+            current.current = next;
+            setDrawn(next);
+            return progress < 1;
+        });
+    }, [reduced, signature, topology]);
+    return reduced || !compatible ? target : drawn;
 }
 
 },
@@ -900,11 +1206,7 @@ const Icon_1 = require("../components/Icon");
 const Controls_1 = require("../components/Controls");
 const matrix_1 = require("../lib/matrix");
 const format_1 = require("../lib/format");
-const definitions = [
-    { id: 'ZBO', name: 'Хранилище ZBO', subtitle: 'Модернизация', icon: 'box', defaultYear: 2036 },
-    { id: 'LUNAR_ISRU', name: 'Lunar-ISRU', subtitle: 'Лунное производство', icon: 'moon', defaultYear: 2038 },
-    { id: 'EARTH_NEW', name: 'Earth-New', subtitle: 'Новый поставщик', icon: 'globe', defaultYear: 2036 },
-];
+const storageInvestment = { id: 'ZBO', defaultYear: 2036 };
 function Infrastructure({ w, onAdvanced, onData }) {
     if (!w.draft)
         return null;
@@ -912,48 +1214,235 @@ function Infrastructure({ w, onAdvanced, onData }) {
     const investments = w.catalog?.tables.find(t => t.table_id === 'investment_options')?.rows || [];
     const storage = w.catalog?.tables.find(t => t.table_id === 'storage_options')?.rows || [];
     const cap = Number(storage[0]?.capacity_t) || 70;
+    const records = plan.decisions.investments.filter(r => r.investment_id === storageInvestment.id);
+    const row = records[0];
+    const reference = investments.find(r => r.investment_id === storageInvestment.id);
+    const years = [...new Set([...(0, matrix_1.matrixYears)(plan, w.catalog), storageInvestment.defaultYear, ...records.map(r => r.year)])].sort((a, b) => a - b);
     const changeInventory = (v) => w.setDraft({ ...plan, decisions: { ...plan.decisions, inventory_policy: { ...plan.decisions.inventory_policy, initial_inventory_t: v } } });
     return __React.createElement("aside", { className: "infrastructure panel", "aria-label": "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430" },
         __React.createElement("div", { className: "panel-heading" },
-            __React.createElement("h2", null, "\u0418\u043D\u0444\u0440\u0430\u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430"),
+            __React.createElement("h2", null, "\u0425\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435"),
             __React.createElement("button", { type: "button", className: "icon-button", title: "\u0421\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0438\u043A\u0438 \u0438 \u043F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u044B", "aria-label": "\u0418\u0441\u0445\u043E\u0434\u043D\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435", onClick: onData },
                 __React.createElement(Icon_1.Icon, { name: "info", size: 16 }))),
-        __React.createElement("fieldset", { disabled: !!w.busy },
+        __React.createElement("fieldset", { disabled: !!w.busy, className: "storage-controls" },
             __React.createElement("div", { className: "inventory-control" },
                 __React.createElement("label", null,
                     "\u041D\u0430\u0447\u0430\u043B\u044C\u043D\u044B\u0439 \u0437\u0430\u043F\u0430\u0441 ",
                     __React.createElement("span", null, "\u0442")),
-                __React.createElement(Controls_1.StepNumber, { value: inventory, label: "\u041D\u0430\u0447\u0430\u043B\u044C\u043D\u044B\u0439 \u0437\u0430\u043F\u0430\u0441, \u0442", onChange: changeInventory, step: 1 }),
+                __React.createElement("div", null,
+                    __React.createElement(Controls_1.StepNumber, { value: inventory, label: "\u041D\u0430\u0447\u0430\u043B\u044C\u043D\u044B\u0439 \u0437\u0430\u043F\u0430\u0441, \u0442", onChange: changeInventory, step: 1 })),
                 __React.createElement(Controls_1.Range, { value: inventory, max: cap, label: "\u0418\u0437\u043C\u0435\u043D\u0438\u0442\u044C \u043D\u0430\u0447\u0430\u043B\u044C\u043D\u044B\u0439 \u0437\u0430\u043F\u0430\u0441", onChange: changeInventory, step: .01 }),
                 __React.createElement("div", { className: "range-scale" },
-                    __React.createElement("span", null, "0 \u0442"),
+                    __React.createElement("span", null, "0"),
                     __React.createElement("span", null,
                         (0, format_1.number)(cap),
                         " \u0442")),
                 (!Number.isFinite(inventory) || inventory < 0) && __React.createElement("p", { className: "field-error" }, "\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0437\u0430\u043F\u0430\u0441 \u043D\u0435 \u043C\u0435\u043D\u044C\u0448\u0435 \u043D\u0443\u043B\u044F.")),
-            __React.createElement("div", { className: "investments-label" }, "\u0418\u043D\u0432\u0435\u0441\u0442\u0438\u0446\u0438\u0438"),
-            definitions.map(def => {
-                const records = plan.decisions.investments.filter(r => r.investment_id === def.id), row = records[0], reference = investments.find(r => r.investment_id === def.id);
-                const years = [...new Set([...(0, matrix_1.matrixYears)(plan, w.catalog), def.defaultYear, ...records.map(r => r.year)])].sort((a, b) => a - b);
-                return __React.createElement("div", { key: def.id, className: `investment ${row ? 'enabled' : ''}` },
-                    __React.createElement("div", { className: "investment-top" },
-                        __React.createElement(Icon_1.Icon, { name: def.icon, size: 19 }),
-                        __React.createElement("span", null,
-                            __React.createElement("strong", null, def.name),
-                            __React.createElement("small", null, def.subtitle)),
-                        records.length > 1 ? __React.createElement("button", { type: "button", className: "text-button", onClick: onAdvanced },
-                            records.length,
-                            " \u0437\u0430\u043F\u0438\u0441\u0438") : __React.createElement(Controls_1.Toggle, { label: `Включить ${def.id}`, checked: !!row, onChange: yes => w.setDraft((0, matrix_1.setInvestment)(plan, def.id, yes ? def.defaultYear : null)) })),
-                    __React.createElement("div", { className: "investment-bottom" },
-                        __React.createElement("span", { title: reference?.commissioning_rule }, "\u0413\u043E\u0434 \u043C\u043E\u0434\u0435\u043B\u0438"),
-                        __React.createElement("select", { "aria-label": `Год ${def.id}`, disabled: !row || records.length > 1, value: row?.year || def.defaultYear, onChange: e => w.setDraft((0, matrix_1.setInvestment)(plan, def.id, Number(e.target.value))) }, years.map(y => __React.createElement("option", { key: y }, y)))),
-                    __React.createElement("p", { className: "investment-price" },
-                        "CAPEX ",
-                        __React.createElement("strong", null, reference ? (0, format_1.number)(Number(reference.total_capex_mln)) : '—'),
-                        __React.createElement("span", null, "\u043C\u043B\u043D \u0443.\u0435.")));
-            })),
-        __React.createElement("div", { className: "infra-footer" },
-            __React.createElement("p", null, "\u0414\u0430\u0442\u044B \u0438 \u043E\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D\u0438\u044F \u043F\u0440\u043E\u0432\u0435\u0440\u044F\u0435\u0442 \u043C\u043E\u0434\u0435\u043B\u044C.")));
+            __React.createElement("div", { className: `storage-investment ${row ? 'enabled' : ''}` },
+                __React.createElement("div", { className: "storage-investment-name" },
+                    __React.createElement(Icon_1.Icon, { name: "box", size: 17 }),
+                    __React.createElement("strong", null, "ZBO")),
+                records.length > 1 ? __React.createElement("button", { type: "button", className: "text-button", onClick: onAdvanced },
+                    records.length,
+                    " \u0437\u0430\u043F\u0438\u0441\u0438") : __React.createElement(Controls_1.Toggle, { label: "\u0412\u043A\u043B\u044E\u0447\u0438\u0442\u044C ZBO", checked: !!row, onChange: yes => w.setDraft((0, matrix_1.setInvestment)(plan, storageInvestment.id, yes ? storageInvestment.defaultYear : null)) }),
+                __React.createElement("select", { title: reference?.commissioning_rule, "aria-label": "\u0413\u043E\u0434 ZBO", disabled: !row || records.length > 1, value: row?.year || storageInvestment.defaultYear, onChange: e => w.setDraft((0, matrix_1.setInvestment)(plan, storageInvestment.id, Number(e.target.value))) }, years.map(y => __React.createElement("option", { key: y }, y))),
+                __React.createElement("span", { className: "storage-capex" },
+                    "CAPEX ",
+                    __React.createElement("strong", null, reference ? (0, format_1.number)(Number(reference.total_capex_mln)) : '—'),
+                    " \u043C\u043B\u043D"))));
+}
+
+},
+"src/features/Overview.tsx":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Overview = Overview;
+const react_1 = require("react");
+const Ui_1 = require("../components/Ui");
+const Icon_1 = require("../components/Icon");
+const Chart_1 = require("../components/Chart");
+const format_1 = require("../lib/format");
+const label = { BASE_CRITICAL_SERVICE: 'Критический спрос', BASE_TOTAL_SERVICE: 'Общий спрос', RESERVE_45D: 'Резерв на 45 дней', STRESS_LOSS_LIMIT: 'Потери в стрессе', CAPEX_2037: 'CAPEX до 2037', CAPEX_2040: 'CAPEX до 2040', EMERGENCY_BASE_STREAK: 'Использование Emergency' };
+const numericRows = [['demand_total_t', 'Общий спрос, т'], ['demand_critical_t', 'Критический спрос, т'], ['delivered_t', 'Фактическая поставка, т'], ['served_t', 'Обслуженный спрос, т'], ['shortage_t', 'Дефицит, т'], ['losses_t', 'Потери, т'], ['opening_inventory_t', 'Начальный запас, т'], ['closing_inventory_t', 'Конечный запас, т'], ['reserve_45d_target_t', 'Целевой резерв, т'], ['service_level_total', 'Обслуживание общего спроса', true], ['service_level_critical', 'Обслуживание критического спроса', true]];
+function Overview({ w }) {
+    const [year, setYear] = (0, react_1.useState)(null);
+    const [chart, setChart] = (0, react_1.useState)('supply');
+    if (!w.current || !w.project?.last_run) {
+        const stale = w.project?.last_run;
+        return __React.createElement("section", { className: "page-enter" },
+            __React.createElement("div", { className: "page-intro" },
+                __React.createElement("div", null,
+                    __React.createElement("h1", null, "\u041E\u0431\u0437\u043E\u0440 \u043F\u043B\u0430\u043D\u0430"),
+                    __React.createElement("p", null, "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0438, \u0441\u043F\u0440\u043E\u0441 \u0438 \u0441\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u043D\u0430 \u043E\u0434\u043D\u043E\u043C \u044D\u043A\u0440\u0430\u043D\u0435."))),
+            __React.createElement(Ui_1.Empty, { title: stale ? 'План изменился' : 'Результатов пока нет', action: __React.createElement(Ui_1.Button, { kind: "primary", disabled: !!w.busy || !w.draft, onClick: () => void w.calculate() },
+                    __React.createElement(Icon_1.Icon, { name: "play" }),
+                    "\u0420\u0430\u0441\u0441\u0447\u0438\u0442\u0430\u0442\u044C \u043F\u043B\u0430\u043D") }, stale ? 'Пересчитайте план, чтобы увидеть актуальные значения. Старые результаты не подставляются вместо новых.' : 'Проверьте решения на вкладке «План» и запустите расчёт. Здесь появится ответ вашей модели.'));
+    }
+    const run = w.project.last_run, result = run.result;
+    if (!(0, format_1.supportedUnits)(result.units))
+        return __React.createElement("section", null,
+            __React.createElement("h1", null, "\u041E\u0431\u0437\u043E\u0440 \u043F\u043B\u0430\u043D\u0430"),
+            __React.createElement(Ui_1.Notice, { tone: "warning" },
+                "\u041C\u043E\u0434\u0435\u043B\u044C \u043F\u0435\u0440\u0435\u0434\u0430\u043B\u0430 \u0434\u0440\u0443\u0433\u0438\u0435 \u0435\u0434\u0438\u043D\u0438\u0446\u044B \u0438\u0437\u043C\u0435\u0440\u0435\u043D\u0438\u044F: ",
+                JSON.stringify(result.units),
+                ". \u042D\u0442\u043E\u0442 \u0438\u043D\u0442\u0435\u0440\u0444\u0435\u0439\u0441 \u043F\u043E\u0434\u043F\u0438\u0441\u044B\u0432\u0430\u0435\u0442 \u0442\u043E\u043D\u043D\u044B \u0438 \u043C\u043B\u043D \u0443.\u0435. \u2014 \u0447\u0438\u0441\u043B\u043E\u0432\u044B\u0435 \u0433\u0440\u0430\u0444\u0438\u043A\u0438 \u0441\u043A\u0440\u044B\u0442\u044B, \u0447\u0442\u043E\u0431\u044B \u043D\u0435 \u043C\u0435\u043D\u044F\u0442\u044C \u0441\u043C\u044B\u0441\u043B \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u0430. \u0418\u0441\u0445\u043E\u0434\u043D\u044B\u0439 JSON \u0434\u043E\u0441\u0442\u0443\u043F\u0435\u043D \u0432 \u043C\u0435\u043D\u044E \u0432\u044B\u0433\u0440\u0443\u0437\u043A\u0438."));
+    const balances = result.yearly_balance || [];
+    const years = balances.map(b => b.year);
+    const selected = balances.find(b => b.year === year) || balances[0];
+    const financial = (result.financial_breakdown || []).find(f => f.year === selected?.year);
+    const checks = result.constraint_checks || [];
+    const failed = checks.filter(c => !c.passed);
+    const series = chart === 'supply' ? [
+        { key: 'demand', label: 'Общий спрос', values: balances.map(b => b.demand_total_t), color: '#b3bdcc', dashed: true },
+        { key: 'delivered', label: 'Поставлено', values: balances.map(b => b.delivered_t), color: '#a9c9ff' },
+        { key: 'served', label: 'Обслужено', values: balances.map(b => b.served_t), color: '#83c9b2' },
+    ] : chart === 'inventory' ? [
+        { key: 'opening', label: 'Запас на начало', values: balances.map(b => b.opening_inventory_t), color: '#a9c9ff' },
+        { key: 'closing', label: 'Запас на конец', values: balances.map(b => b.closing_inventory_t), color: '#83c9b2' },
+        { key: 'target', label: 'Целевой резерв', values: balances.map(b => b.reserve_45d_target_t), color: '#b3bdcc', dashed: true },
+    ] : [{ key: 'cost', label: 'Годовые расходы', values: years.map(y => result.financial_breakdown?.find(f => f.year === y)?.total), color: '#a9c9ff' }];
+    return __React.createElement("section", { className: "page-enter", "aria-labelledby": "overview-title" },
+        __React.createElement("div", { className: "page-intro" },
+            __React.createElement("div", null,
+                __React.createElement("h1", { id: "overview-title" }, "\u041E\u0431\u0437\u043E\u0440 \u043F\u043B\u0430\u043D\u0430"),
+                __React.createElement("p", null,
+                    (0, format_1.scenario)(result.scenario_id),
+                    " \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u0439 ",
+                    __React.createElement("span", { className: "text-separator" }, "/"),
+                    " ",
+                    years.length ? `${years[0]}–${years.at(-1)}` : 'Годы не переданы')),
+            __React.createElement("label", { className: "year-control" },
+                "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u0438 \u0437\u0430",
+                __React.createElement("select", { "aria-label": "\u0413\u043E\u0434 \u043F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u0435\u0439", value: selected?.year || '', onChange: e => setYear(Number(e.target.value)) }, years.map(y => __React.createElement("option", { key: y }, y))))),
+        run.origin === 'imported' && __React.createElement(Ui_1.Notice, { tone: "warning" }, "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442 \u0438\u043C\u043F\u043E\u0440\u0442\u0438\u0440\u043E\u0432\u0430\u043D \u0438\u0437 \u0444\u0430\u0439\u043B\u0430 \u0438 \u0435\u0449\u0451 \u043D\u0435 \u043F\u0435\u0440\u0435\u0441\u0447\u0438\u0442\u0430\u043D \u043D\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0435."),
+        __React.createElement("div", { className: "metric-strip" },
+            __React.createElement("div", null,
+                __React.createElement("span", null, "\u041E\u0431\u0449\u0438\u0439 \u0441\u043F\u0440\u043E\u0441"),
+                __React.createElement("strong", null, (0, format_1.percent)(selected?.service_level_total)),
+                __React.createElement("small", null,
+                    "\u043E\u0431\u0441\u043B\u0443\u0436\u0438\u0432\u0430\u043D\u0438\u0435 \u0437\u0430 ",
+                    selected?.year || '—')),
+            __React.createElement("div", null,
+                __React.createElement("span", null, "\u041A\u0440\u0438\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0441\u043F\u0440\u043E\u0441"),
+                __React.createElement("strong", null, (0, format_1.percent)(selected?.service_level_critical)),
+                __React.createElement("small", null, "\u043F\u043E\u043A\u0430\u0437\u0430\u043D \u043E\u0442\u0434\u0435\u043B\u044C\u043D\u043E \u043E\u0442 \u043E\u0431\u0449\u0435\u0433\u043E")),
+            __React.createElement("div", null,
+                __React.createElement("span", null, "\u0413\u043E\u0434\u043E\u0432\u044B\u0435 \u0440\u0430\u0441\u0445\u043E\u0434\u044B"),
+                __React.createElement("strong", null,
+                    (0, format_1.number)(financial?.total),
+                    __React.createElement("em", null, "\u043C\u043B\u043D \u0443.\u0435.")),
+                __React.createElement("small", null,
+                    "\u0437\u0430 \u0432\u0435\u0441\u044C \u0433\u043E\u0440\u0438\u0437\u043E\u043D\u0442: ",
+                    (0, format_1.number)(result.total_cost_mln),
+                    " \u043C\u043B\u043D \u0443.\u0435."))),
+        __React.createElement("div", { className: "chart-section" },
+            __React.createElement("div", { className: "section-heading" },
+                __React.createElement("h2", null, chart === 'supply' ? 'Спрос и поставки' : chart === 'inventory' ? 'Запасы и резерв' : 'Расходы по годам'),
+                __React.createElement("div", { className: "segmented compact", "aria-label": "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u044C \u0433\u0440\u0430\u0444\u0438\u043A\u0430" }, [['supply', 'Поставки'], ['inventory', 'Запасы'], ['cost', 'Расходы']].map(([k, v]) => __React.createElement("button", { type: "button", key: k, "aria-pressed": chart === k, onClick: () => setChart(k) }, v)))),
+            __React.createElement(Chart_1.Chart, { years: years, series: series, unit: chart === 'cost' ? 'млн у.е.' : 'т' })),
+        __React.createElement("div", { className: "checks-block" },
+            __React.createElement("div", { className: "section-heading" },
+                __React.createElement("h2", null, "\u041E\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D\u0438\u044F"),
+                __React.createElement("span", { className: failed.length ? 'warning-text' : 'muted' }, !checks.length ? 'Модель не передала проверки' : failed.length ? `${failed.length} нарушений в ответе модели` : 'Нет нарушений в переданных проверках')),
+            failed.length > 0 ? __React.createElement("div", { className: "table-wrap" },
+                __React.createElement("table", { className: "checks-table" },
+                    __React.createElement("thead", null,
+                        __React.createElement("tr", null,
+                            __React.createElement("th", null, "\u0413\u043E\u0434"),
+                            __React.createElement("th", null, "\u041F\u0440\u043E\u0432\u0435\u0440\u043A\u0430"),
+                            __React.createElement("th", null, "\u041F\u0440\u0438\u0447\u0438\u043D\u0430"),
+                            __React.createElement("th", { className: "numeric" }, "\u041E\u0442\u043A\u043B\u043E\u043D\u0435\u043D\u0438\u0435*"))),
+                    __React.createElement("tbody", null, failed.map((c, i) => __React.createElement("tr", { key: i },
+                        __React.createElement("td", null,
+                            __React.createElement("span", { className: "year-warning" },
+                                __React.createElement(Icon_1.Icon, { name: "alert", size: 14 }),
+                                c.year)),
+                        __React.createElement("td", null, label[c.constraint_id] || c.constraint_id),
+                        __React.createElement("td", null, c.detail),
+                        __React.createElement("td", { className: "numeric" }, (0, format_1.number)(c.excess)))))),
+                __React.createElement("p", { className: "help" }, "* \u0427\u0438\u0441\u043B\u043E \u043F\u0435\u0440\u0435\u0434\u0430\u043D\u043E \u043C\u043E\u0434\u0435\u043B\u044C\u044E. \u0415\u0434\u0438\u043D\u0438\u0446\u0430 \u043E\u0442\u043A\u043B\u043E\u043D\u0435\u043D\u0438\u044F \u043D\u0435 \u0432\u044B\u0434\u0435\u043B\u0435\u043D\u0430 \u0432 \u0442\u0435\u043A\u0443\u0449\u0435\u043C DTO; \u0441\u043C\u043E\u0442\u0440\u0438\u0442\u0435 \u043F\u043E\u044F\u0441\u043D\u0435\u043D\u0438\u0435 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438.")) : __React.createElement("p", { className: "help" }, checks.length ? 'Этот вывод относится только к проверкам текущего прототипа, не к полной приёмке модели.' : 'Отсутствие проверок не подтверждает исполнимость плана.')),
+        __React.createElement("details", { className: "disclosure" },
+            __React.createElement("summary", null,
+                "\u0411\u0430\u043B\u0430\u043D\u0441 \u043F\u043E \u0433\u043E\u0434\u0430\u043C",
+                __React.createElement(Icon_1.Icon, { name: "chevron", size: 16 })),
+            __React.createElement("div", { className: "disclosure-body" },
+                __React.createElement("div", { className: "table-wrap" },
+                    __React.createElement("table", { className: "matrix" },
+                        __React.createElement("thead", null,
+                            __React.createElement("tr", null,
+                                __React.createElement("th", null, "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u044C"),
+                                years.map(y => __React.createElement("th", { key: y, className: "numeric" }, y)))),
+                        __React.createElement("tbody", null,
+                            numericRows.map(([key, title, pct]) => __React.createElement("tr", { key: key },
+                                __React.createElement("th", { scope: "row" }, title),
+                                balances.map(b => __React.createElement("td", { key: b.year, className: "numeric" }, pct ? (0, format_1.percent)(b[key]) : (0, format_1.number)(b[key]))))),
+                            __React.createElement("tr", null,
+                                __React.createElement("th", { scope: "row" }, "\u0420\u0435\u0437\u0435\u0440\u0432 \u043F\u043E \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0435 \u043C\u043E\u0434\u0435\u043B\u0438"),
+                                balances.map(b => __React.createElement("td", { key: b.year }, b.reserve_45d_met ? 'Выполнен' : 'Не выполнен')))))))),
+        __React.createElement("details", { className: "disclosure" },
+            __React.createElement("summary", null,
+                "\u0421\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0430 \u0440\u0430\u0441\u0445\u043E\u0434\u043E\u0432",
+                __React.createElement(Icon_1.Icon, { name: "chevron", size: 16 })),
+            __React.createElement("div", { className: "disclosure-body" },
+                __React.createElement("div", { className: "table-wrap" },
+                    __React.createElement("table", null,
+                        __React.createElement("thead", null,
+                            __React.createElement("tr", null,
+                                __React.createElement("th", null, "\u0413\u043E\u0434"),
+                                __React.createElement("th", null, "\u0417\u0430\u043A\u0443\u043F\u043A\u0430"),
+                                __React.createElement("th", null, "\u0420\u0435\u0437\u0435\u0440\u0432"),
+                                __React.createElement("th", null, "\u0425\u0440\u0430\u043D\u0435\u043D\u0438\u0435"),
+                                __React.createElement("th", null, "CAPEX"),
+                                __React.createElement("th", null, "OPEX"),
+                                __React.createElement("th", null, "\u0412\u0441\u0435\u0433\u043E"))),
+                        __React.createElement("tbody", null, (result.financial_breakdown || []).map(f => __React.createElement("tr", { key: f.year },
+                            __React.createElement("th", { scope: "row" }, f.year),
+                            ['procurement', 'reservation', 'holding', 'capex', 'opex', 'total'].map(k => __React.createElement("td", { key: k, className: "numeric" }, (0, format_1.number)(f[k])))))))),
+                __React.createElement("p", { className: "help" }, "\u041C\u043B\u043D \u0443\u0441\u043B\u043E\u0432\u043D\u044B\u0445 \u0434\u0435\u043D\u0435\u0436\u043D\u044B\u0445 \u0435\u0434\u0438\u043D\u0438\u0446. \u042D\u0442\u043E \u0440\u0430\u0441\u0445\u043E\u0434\u044B, \u043D\u0435 \u043F\u0440\u0438\u0431\u044B\u043B\u044C. \u041E\u0442\u0434\u0435\u043B\u044C\u043D\u044B\u0435 \u0434\u0438\u0441\u043A\u043E\u043D\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u044B\u0435 \u0440\u0430\u0441\u0445\u043E\u0434\u044B \u0438 \u0441\u0442\u0430\u0432\u043A\u0430 \u0432 \u0442\u0435\u043A\u0443\u0449\u0435\u043C DTO \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u044E\u0442\u0441\u044F."))),
+        __React.createElement("details", { className: "disclosure" },
+            __React.createElement("summary", null,
+                "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0438 \u043F\u043E \u0438\u0441\u0442\u043E\u0447\u043D\u0438\u043A\u0430\u043C",
+                __React.createElement(Icon_1.Icon, { name: "chevron", size: 16 })),
+            __React.createElement("div", { className: "disclosure-body" },
+                __React.createElement("div", { className: "table-wrap" },
+                    __React.createElement("table", null,
+                        __React.createElement("thead", null,
+                            __React.createElement("tr", null,
+                                __React.createElement("th", null, "\u0413\u043E\u0434"),
+                                __React.createElement("th", null, "\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A"),
+                                __React.createElement("th", null, "\u0420\u0435\u0437\u0435\u0440\u0432, \u0442/\u0433\u043E\u0434"),
+                                __React.createElement("th", null, "\u0417\u0430\u043A\u0430\u0437, \u0442"),
+                                __React.createElement("th", null, "\u041F\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043E, \u0442"))),
+                        __React.createElement("tbody", null, (result.source_schedule || []).map((s, i) => __React.createElement("tr", { key: i },
+                            __React.createElement("td", null, s.year),
+                            __React.createElement("td", null, s.source_id),
+                            __React.createElement("td", { className: "numeric" }, (0, format_1.number)(s.reserved_capacity_t)),
+                            __React.createElement("td", { className: "numeric" }, (0, format_1.number)(s.ordered_t)),
+                            __React.createElement("td", { className: "numeric" }, (0, format_1.number)(s.delivered_t))))))))),
+        __React.createElement("details", { className: "disclosure" },
+            __React.createElement("summary", null,
+                "\u041F\u0440\u043E\u0438\u0441\u0445\u043E\u0436\u0434\u0435\u043D\u0438\u0435 \u0438 \u0434\u043E\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435",
+                __React.createElement(Icon_1.Icon, { name: "chevron", size: 16 })),
+            __React.createElement("div", { className: "disclosure-body" },
+                __React.createElement("p", null,
+                    "\u0420\u0430\u0441\u0447\u0451\u0442: ",
+                    (0, format_1.date)(run.created_at),
+                    ". \u0420\u0435\u0432\u0438\u0437\u0438\u044F \u0432\u0445\u043E\u0434\u043E\u0432: ",
+                    run.input_revision,
+                    ". \u041C\u043E\u0434\u0443\u043B\u044C: ",
+                    __React.createElement("code", null, run.engine.engine_id),
+                    "."),
+                __React.createElement("p", { className: "help" },
+                    "\u0414\u043E\u043F\u0443\u0449\u0435\u043D\u0438\u044F \u043F\u0435\u0440\u0435\u0434\u0430\u043D\u044B \u043C\u043E\u0434\u0435\u043B\u044C\u044E: ",
+                    __React.createElement("code", null, typeof result.assumptions_reference === 'string' ? result.assumptions_reference : JSON.stringify(result.assumptions_reference)),
+                    ". \u042D\u0442\u043E \u0441\u0441\u044B\u043B\u043A\u0430 \u0438\u0437 \u043E\u0442\u0432\u0435\u0442\u0430, \u043D\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D\u0438\u0435 \u043D\u0430\u043B\u0438\u0447\u0438\u044F \u0434\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u0430."),
+                [['inventory_trace', 'Внутригодовые запасы'], ['risk_register', 'Реестр рисков']].map(([key, title]) => __React.createElement("div", { key: key },
+                    __React.createElement("h3", null, title),
+                    result[key]?.length ? __React.createElement("pre", null, JSON.stringify(result[key], null, 2)) : __React.createElement("p", { className: "help" }, "\u041C\u043E\u0434\u0435\u043B\u044C \u043F\u043E\u043A\u0430 \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043B\u0430 \u044D\u0442\u0438 \u0434\u0430\u043D\u043D\u044B\u0435. \u0418\u0445 \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u043D\u0435 \u043E\u0437\u043D\u0430\u0447\u0430\u0435\u0442 \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0438\u0435 \u0440\u0438\u0441\u043A\u0430 \u0438\u043B\u0438 \u0434\u0435\u0444\u0438\u0446\u0438\u0442\u0430."))),
+                __React.createElement("details", { className: "sub-details" },
+                    __React.createElement("summary", null, "\u0412\u0441\u0435 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u043C\u043E\u0434\u0435\u043B\u0438"),
+                    __React.createElement("pre", null, JSON.stringify(checks, null, 2))))));
 }
 
 },
@@ -1089,7 +1578,7 @@ const format_1 = require("../lib/format");
 const Ui_1 = require("../components/Ui");
 function ResultDetails({ w }) {
     const [tab, setTab] = (0, react_1.useState)('checks');
-    const run = w.current ? w.project?.last_run : null, r = run?.result;
+    const run = w.current && !w.preview ? w.project?.last_run : null, r = w.displayResult;
     if (!r)
         return __React.createElement(Ui_1.Notice, null, "\u0421\u043D\u0430\u0447\u0430\u043B\u0430 \u043F\u0435\u0440\u0435\u0441\u0447\u0438\u0442\u0430\u0439\u0442\u0435 \u043F\u043B\u0430\u043D. \u0423\u0441\u0442\u0430\u0440\u0435\u0432\u0448\u0438\u0439 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442 \u043D\u0435 \u043E\u0442\u043E\u0431\u0440\u0430\u0436\u0430\u0435\u0442\u0441\u044F.");
     if (!(0, format_1.supportedUnits)(r.units))
@@ -1148,13 +1637,8 @@ function ResultDetails({ w }) {
                         ['procurement', 'reservation', 'holding', 'capex', 'opex', 'total'].map(k => __React.createElement("td", { key: k, className: "numeric" }, (0, format_1.number)(f[k]))))))))),
         tab === 'source' && __React.createElement(__React.Fragment, null,
             __React.createElement("p", { className: "help" },
-                (0, format_1.date)(run.created_at),
-                " \u00B7 ",
-                run.engine.engine_id,
-                " \u00B7 ",
-                run.engine.version,
-                " \u00B7 \u0440\u0435\u0432\u0438\u0437\u0438\u044F \u0432\u0445\u043E\u0434\u043E\u0432 ",
-                run.input_revision),
+                run ? `${(0, format_1.date)(run.created_at)} · ${run.engine.engine_id} · ${run.engine.version} · ревизия ${run.input_revision}` : `Предпросмотр /api/calc · ${(0, format_1.date)(w.preview?.createdAt || '')}`,
+                " "),
             __React.createElement(Ui_1.Notice, null, "\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0441\u044F \u0438\u043C\u0435\u044E\u0449\u0435\u0435\u0441\u044F \u0432 \u0430\u0440\u0445\u0438\u0432\u0435 \u044F\u0434\u0440\u043E. \u0415\u0433\u043E \u043C\u0430\u0442\u0435\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0430\u044F \u043F\u0440\u0438\u0451\u043C\u043A\u0430 \u043D\u0435 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0430\u0435\u0442\u0441\u044F \u0438\u043D\u0442\u0435\u0440\u0444\u0435\u0439\u0441\u043E\u043C \u0438\u043B\u0438 \u0432\u0435\u0431-\u0442\u0435\u0441\u0442\u0430\u043C\u0438."),
             __React.createElement("p", { className: "help" },
                 "\u0421\u0441\u044B\u043B\u043A\u0430 \u043D\u0430 \u0434\u043E\u043F\u0443\u0449\u0435\u043D\u0438\u044F \u0438\u0437 \u043E\u0442\u0432\u0435\u0442\u0430: ",
@@ -1178,71 +1662,72 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResultPanel = ResultPanel;
 const react_1 = require("react");
 const AnalyticsChart_1 = require("../components/AnalyticsChart");
+const DailyChart_1 = require("../components/DailyChart");
 const Icon_1 = require("../components/Icon");
+const Ui_1 = require("../components/Ui");
+const daily_1 = require("../lib/daily");
 const format_1 = require("../lib/format");
 const Controls_1 = require("../components/Controls");
 const checkLabels = { RESERVE_45D: 'Резерв на 45 дней', BASE_CRITICAL_SERVICE: 'Критический сервис', BASE_TOTAL_SERVICE: 'Общий сервис', CAPACITY_EXCEEDED: 'Мощность источника', STORAGE_OVERFLOW: 'Переполнение', CAPEX_2037: 'CAPEX до 2037', CAPEX_2040: 'CAPEX до 2040', STRESS_LOSS_LIMIT: 'Потери', EMERGENCY_BASE_STREAK: 'Роль Emergency' };
+const dailyFields = [
+    ['opening_inventory_t', 'Запас на начало', 'т'],
+    ['closing_inventory_t', 'Запас на конец', 'т'],
+    ['delivered_t', 'Поступление', 'т'],
+    ['demand_total_t', 'Спрос', 'т'],
+    ['served_total_t', 'Обслужено', 'т'],
+    ['losses_t', 'Потери', 'т'],
+    ['shortage_t', 'Дефицит', 'т'],
+];
 function ResultPanel({ w, onDetails }) {
-    const [selected, setSelected] = (0, react_1.useState)(null), [chart, setChart] = (0, react_1.useState)('supply');
-    const run = w.current ? w.project?.last_run : null, result = run?.result;
+    const selected = w.selection?.year ?? null;
+    const setSelected = (year) => w.setSelection({ source: w.selection?.source || 'Earth-Core', year });
+    const [proposal, setProposal] = (0, react_1.useState)(null);
+    const [chart, setChart] = (0, react_1.useState)('inventory');
+    const [selectedDay, setSelectedDay] = (0, react_1.useState)(null);
+    const [detailSide, setDetailSide] = (0, react_1.useState)('primary');
+    const result = w.displayResult;
     if (!result)
         return __React.createElement("section", { className: "result-panel panel result-empty", "aria-label": "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442 \u0440\u0430\u0441\u0447\u0451\u0442\u0430" },
             __React.createElement("div", { className: "panel-heading" },
-                __React.createElement("h2", null, "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442"),
-                __React.createElement(Icon_1.Icon, { name: "chart", size: 17 })),
+                __React.createElement("h2", null, "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442")),
             __React.createElement("div", { className: "empty-result-body" },
-                __React.createElement("svg", { width: "172", height: "138", viewBox: "0 0 172 138", "aria-hidden": "true" },
-                    __React.createElement("defs", null,
-                        __React.createElement("linearGradient", { id: "emptyRing" },
-                            __React.createElement("stop", { stopColor: "#72cfff" }),
-                            __React.createElement("stop", { offset: "1", stopColor: "#7de0bc" }))),
-                    __React.createElement("circle", { cx: "86", cy: "68", r: "41", fill: "none", stroke: "var(--grid)" }),
-                    __React.createElement("ellipse", { cx: "86", cy: "68", rx: "77", ry: "27", fill: "none", stroke: "var(--grid)", transform: "rotate(-24 86 68)" }),
-                    __React.createElement("path", { d: "M45 68a41 41 0 0 1 71-28", stroke: "url(#emptyRing)", strokeWidth: "2.5", fill: "none" }),
-                    __React.createElement("circle", { cx: "116", cy: "40", r: "4", fill: "#7de0bc" }),
-                    __React.createElement("path", { d: "M74 76V58h11M81 68h13M88 61l7 7-7 7", stroke: "#72cfff", strokeWidth: "2", fill: "none", strokeLinecap: "round" })),
-                __React.createElement("h3", null, w.project?.last_run ? 'План изменён' : 'Решения слева. Эффект здесь.'),
-                __React.createElement("p", null, w.project?.last_run ? 'Пересчитайте: прежние графики скрыты, чтобы не смешивать разные входы.' : 'Заполните матрицу и нажмите «Рассчитать». Модель вернёт поставки, затраты и ограничения.'),
-                __React.createElement("div", { className: "empty-result-labels" },
-                    __React.createElement("span", null, "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0438"),
-                    __React.createElement("span", null, "\u0417\u0430\u043F\u0430\u0441\u044B"),
-                    __React.createElement("span", null, "\u0417\u0430\u0442\u0440\u0430\u0442\u044B"))),
-            __React.createElement("div", { className: "result-footer" }, "\u0411\u0435\u0437 \u043F\u043E\u0434\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u043D\u044B\u0445 \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u043E\u0432"));
+                __React.createElement("h3", null, "\u041D\u0435\u0442 \u0440\u0430\u0441\u0447\u0451\u0442\u0430")));
     if (!(0, format_1.supportedUnits)(result.units))
         return __React.createElement("section", { className: "panel result-panel" },
             __React.createElement("div", { className: "panel-heading" },
                 __React.createElement("h2", null, "\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442")),
             __React.createElement("p", { className: "inline-warning" }, "\u0415\u0434\u0438\u043D\u0438\u0446\u044B \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u0430 \u043E\u0442\u043B\u0438\u0447\u0430\u044E\u0442\u0441\u044F \u043E\u0442 \u0442 / \u043C\u043B\u043D \u0443.\u0435. \u0413\u0440\u0430\u0444\u0438\u043A\u0438 \u0441\u043A\u0440\u044B\u0442\u044B; \u0438\u0441\u0445\u043E\u0434\u043D\u044B\u0439 \u043E\u0442\u0432\u0435\u0442 \u0441\u043E\u0445\u0440\u0430\u043D\u0451\u043D \u0432 JSON."),
             __React.createElement("button", { className: "text-button", onClick: onDetails }, "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u043E\u0442\u0432\u0435\u0442"));
-    const balances = result.yearly_balance || [], years = balances.map(b => b.year), year = years.includes(selected || -1) ? selected : years[0];
-    const row = balances.find(b => b.year === year), financial = result.financial_breakdown?.find(f => f.year === year);
-    const index = years.indexOf(year), pair = w.both ? w.pair : null;
-    const other = pair && (0, format_1.supportedUnits)(pair.other.units) ? pair.other : undefined;
-    const otherRow = other?.yearly_balance?.find(b => b.year === year);
-    const pairCompatible = other && (0, format_1.supportedUnits)(other.units);
-    const series = other && pairCompatible ? [
-        { key: 'base', label: result.scenario_id === 'BASE' ? 'BASE' : 'STRESS', color: AnalyticsChart_1.palette.blue, area: true, values: years.map(y => valueAt(result, y, chart)) },
-        { key: 'other', label: other.scenario_id === 'BASE' ? 'BASE' : 'STRESS', color: AnalyticsChart_1.palette.amber, dashed: true, values: years.map(y => valueAt(other, y, chart)) },
-    ] : chart === 'supply' ? [
-        { key: 'delivered', label: 'Поставка', values: balances.map(b => b.delivered_t), color: AnalyticsChart_1.palette.blue, area: true },
-        { key: 'demand', label: 'Спрос', values: balances.map(b => b.demand_total_t), color: AnalyticsChart_1.palette.muted, dashed: true },
-        { key: 'served', label: 'Выдано', values: balances.map(b => b.served_t), color: AnalyticsChart_1.palette.green },
-    ] : [
-        { key: 'opening', label: 'На начало', values: balances.map(b => b.opening_inventory_t), color: AnalyticsChart_1.palette.blue, area: true },
-        { key: 'closing', label: 'На конец', values: balances.map(b => b.closing_inventory_t), color: AnalyticsChart_1.palette.green },
-        { key: 'target', label: 'Резерв', values: balances.map(b => b.reserve_45d_target_t), color: AnalyticsChart_1.palette.amber, dashed: true },
-    ];
-    const checks = result.constraint_checks || [], failed = checks.filter(c => !c.passed), yearFails = failed.filter(c => c.year === year);
+    const balances = result.yearly_balance || [];
+    const years = balances.map(balance => balance.year);
+    const year = selected ?? years[0];
+    const row = balances.find(balance => balance.year === year);
+    const financial = result.financial_breakdown?.find(entry => entry.year === year);
+    const index = years.indexOf(year);
+    const previousYear = years.filter(value => value < year).at(-1);
+    const nextYear = years.find(value => value > year);
+    const other = w.displayOther && (0, format_1.supportedUnits)(w.displayOther.units) ? w.displayOther : undefined;
+    const otherRow = other?.yearly_balance?.find(balance => balance.year === year);
+    const costSeries = other ? [
+        { key: 'primary-cost', label: scenarioCode(result), color: AnalyticsChart_1.palette.muted, values: years.map(value => valueAt(result, value)) },
+        { key: 'other-cost', label: scenarioCode(other), color: AnalyticsChart_1.palette.green, dashed: true, values: years.map(value => valueAt(other, value)) },
+    ] : [];
+    const checks = result.constraint_checks || [];
+    const failed = checks.filter(check => !check.passed);
+    const yearFails = failed.filter(check => check.year === year);
+    const detailResult = detailSide === 'other' && other ? other : result;
+    const detailOther = detailResult === result ? other : result;
+    const detailRecord = selectedDay === null ? undefined : (0, daily_1.dailyRecordAt)(detailResult, year, selectedDay);
     return __React.createElement("section", { className: "result-panel panel", "aria-labelledby": "result-title" },
         __React.createElement("div", { className: "panel-heading" },
             __React.createElement("h2", { id: "result-title" }, other ? 'Сравнение сценариев' : 'Результат'),
             __React.createElement("div", { className: "year-nav" },
-                __React.createElement("button", { type: "button", className: "icon-button", "aria-label": "\u041F\u0440\u0435\u0434\u044B\u0434\u0443\u0449\u0438\u0439 \u0433\u043E\u0434", disabled: index <= 0, onClick: () => setSelected(years[index - 1]) },
+                __React.createElement("button", { type: "button", className: "icon-button", "aria-label": "\u041F\u0440\u0435\u0434\u044B\u0434\u0443\u0449\u0438\u0439 \u0433\u043E\u0434", disabled: previousYear === undefined, onClick: () => previousYear !== undefined && setSelected(previousYear) },
                     __React.createElement(Icon_1.Icon, { name: "left", size: 14 })),
                 __React.createElement("strong", null, year || '—'),
-                __React.createElement("button", { type: "button", className: "icon-button", "aria-label": "\u0421\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0439 \u0433\u043E\u0434", disabled: index === years.length - 1, onClick: () => setSelected(years[index + 1]) },
+                __React.createElement("button", { type: "button", className: "icon-button", "aria-label": "\u0421\u043B\u0435\u0434\u0443\u044E\u0449\u0438\u0439 \u0433\u043E\u0434", disabled: nextYear === undefined, onClick: () => nextYear !== undefined && setSelected(nextYear) },
                     __React.createElement(Icon_1.Icon, { name: "right", size: 14 })))),
-        __React.createElement("div", { className: "result-metrics page-enter", key: run?.run_id },
+        __React.createElement("div", { className: "result-metrics" },
             __React.createElement(AnalyticsChart_1.ServiceRing, { total: row?.service_level_total, critical: row?.service_level_critical }),
             __React.createElement("div", { className: "service-values" },
                 __React.createElement("div", null,
@@ -1260,17 +1745,27 @@ function ResultPanel({ w, onDetails }) {
                     (0, format_1.percent)(otherRow.service_level_total),
                     " / ",
                     (0, format_1.percent)(otherRow.service_level_critical)))),
-        __React.createElement("div", { className: "chart-mode", "aria-label": "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u044C \u0433\u0440\u0430\u0444\u0438\u043A\u0430" }, [['supply', 'Поток'], ['inventory', 'Запас'], ['cost', 'Затраты']].map(([key, title]) => __React.createElement("button", { type: "button", "aria-pressed": chart === key, key: key, onClick: () => setChart(key) }, title))),
-        pair && !other && __React.createElement("p", { className: "comparison-caption" }, "\u0412\u0442\u043E\u0440\u043E\u0439 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u0439 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442 \u0434\u0440\u0443\u0433\u0438\u0435 \u0435\u0434\u0438\u043D\u0438\u0446\u044B. \u0421\u043E\u043F\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0441\u043A\u0440\u044B\u0442\u043E."),
-        other && __React.createElement("p", { className: "comparison-caption" },
-            "\u041E\u0434\u043D\u0438 \u0440\u0435\u0448\u0435\u043D\u0438\u044F \u00B7 ",
-            chart === 'supply' ? 'фактическая поставка' : chart === 'inventory' ? 'запас на начало' : 'годовые расходы'),
-        chart === 'cost' && !other ? __React.createElement(AnalyticsChart_1.FinanceChart, { key: "finance", rows: result.financial_breakdown || [], selected: year, onSelect: setSelected }) : __React.createElement(AnalyticsChart_1.AnalyticsChart, { key: chart + (other ? "-comparison" : ""), years: years, series: series, unit: chart === 'cost' ? 'млн у.е.' : 'т', selected: year, onSelect: setSelected }),
-        years.length > 1 && __React.createElement("div", { className: "year-slider" },
-            __React.createElement(Controls_1.Range, { label: "\u0413\u043E\u0434 \u043F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u0435\u0439", value: index, max: years.length - 1, onChange: i => setSelected(years[i]) }),
+        __React.createElement("div", { className: "chart-mode", "aria-label": "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u044C \u0433\u0440\u0430\u0444\u0438\u043A\u0430" },
+            __React.createElement("button", { type: "button", "aria-pressed": chart === 'inventory', onClick: () => setChart('inventory') }, "\u0417\u0430\u043F\u0430\u0441 \u043F\u043E \u0434\u043D\u044F\u043C"),
+            __React.createElement("button", { type: "button", "aria-pressed": chart === 'cost', onClick: () => setChart('cost') }, "\u0417\u0430\u0442\u0440\u0430\u0442\u044B")),
+        w.displayOther && !other && __React.createElement("p", { className: "comparison-caption" }, "\u0412\u0442\u043E\u0440\u043E\u0439 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u0439 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442 \u0434\u0440\u0443\u0433\u0438\u0435 \u0435\u0434\u0438\u043D\u0438\u0446\u044B. \u0421\u043E\u043F\u043E\u0441\u0442\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0441\u043A\u0440\u044B\u0442\u043E."),
+        other && chart === 'inventory' && __React.createElement("div", { className: "daily-detail-switch", "aria-label": "\u0421\u0446\u0435\u043D\u0430\u0440\u0438\u0439 \u0434\u043D\u0435\u0432\u043D\u044B\u0445 \u0441\u043E\u0431\u044B\u0442\u0438\u0439" },
+            __React.createElement("span", null, "\u041F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u044F \u0438 \u0434\u0435\u0444\u0438\u0446\u0438\u0442:"),
+            __React.createElement("button", { type: "button", "aria-pressed": detailSide === 'primary', onClick: () => setDetailSide('primary') }, scenarioCode(result)),
+            __React.createElement("button", { type: "button", "aria-pressed": detailSide === 'other', onClick: () => setDetailSide('other') }, scenarioCode(other))),
+        __React.createElement("div", { className: "result-chart-area" }, chart === 'inventory' && typeof year === 'number'
+            ? __React.createElement(DailyChart_1.DailyChart, { result: detailResult, other: detailOther, year: year, selectedDay: selectedDay, onSelectDay: setSelectedDay, onProposeDeliveryDate: (from, to) => setProposal({ year, from, to, scenario: detailResult.scenario_id, volume: (0, daily_1.dailyRecordAt)(detailResult, year, from)?.delivered_t }) })
+            : chart === 'cost' && other
+                ? __React.createElement(AnalyticsChart_1.AnalyticsChart, { years: years, series: costSeries, unit: "\u043C\u043B\u043D \u0443.\u0435.", selected: year, onSelect: setSelected })
+                : __React.createElement(AnalyticsChart_1.FinanceChart, { rows: result.financial_breakdown || [], selected: year, onSelect: setSelected })),
+        years.length > 1 && index >= 0 && __React.createElement("div", { className: "year-slider" },
+            __React.createElement(Controls_1.Range, { label: "\u0413\u043E\u0434 \u043F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u0435\u0439", value: index, max: years.length - 1, onChange: value => setSelected(years[value]) }),
             __React.createElement("div", null,
                 __React.createElement("span", null, years[0]),
                 __React.createElement("span", null, years.at(-1)))),
+        !row && __React.createElement("p", { className: "inline-warning" },
+            "\u041D\u0435\u0442 \u0434\u0430\u043D\u043D\u044B\u0445 \u0437\u0430 ",
+            year),
         __React.createElement("div", { className: "result-numbers" },
             __React.createElement("div", null,
                 __React.createElement("span", null, "\u0414\u0435\u0444\u0438\u0446\u0438\u0442"),
@@ -1291,23 +1786,122 @@ function ResultPanel({ w, onDetails }) {
             __React.createElement("button", { type: "button", className: "check-summary", onClick: onDetails },
                 __React.createElement("span", null,
                     __React.createElement(Icon_1.Icon, { name: failed.length ? 'alert' : 'check', size: 15 }),
-                    checks.length ? (failed.length ? `${failed.length} нарушений за горизонт` : 'Переданные проверки выполнены') : 'Проверки не переданы'),
+                    checks.length ? (failed.length ? `${failed.length} нарушений за горизонт` : 'Нет нарушений в ответе') : 'Проверки не переданы'),
                 __React.createElement(Icon_1.Icon, { name: "right", size: 15 })),
-            __React.createElement("div", { className: "check-preview" },
-                yearFails.slice(0, 2).map((c, i) => __React.createElement("p", { key: i, title: c.detail },
-                    __React.createElement("b", null, c.year),
-                    __React.createElement("span", null, checkLabels[c.constraint_id] || c.constraint_id),
-                    __React.createElement("small", null, c.excess == null ? '' : (0, format_1.number)(c.excess)))),
-                !yearFails.length && __React.createElement("p", { className: "quiet-check" }, checks.length ? 'За выбранный год нарушений не передано.' : 'Отсутствие проверок не означает выполнимость.'))),
+            __React.createElement("div", { className: "check-preview" }, yearFails.slice(0, 2).map((check, checkIndex) => __React.createElement("p", { key: checkIndex, title: check.detail },
+                __React.createElement("b", null, check.year),
+                __React.createElement("span", null, checkLabels[check.constraint_id] || check.constraint_id),
+                __React.createElement("small", null, check.excess == null ? '' : (0, format_1.number)(check.excess)))))),
         __React.createElement("div", { className: "result-footer" },
-            __React.createElement("span", null, run?.origin === 'imported' ? 'Импортированный результат' : w.both && !pair ? 'Второй сценарий ещё не рассчитан' : `${(0, format_1.scenario)(result.scenario_id)} · ответ модели`),
+            __React.createElement("span", null, (0, format_1.scenario)(result.scenario_id)),
             __React.createElement("button", { className: "text-button", type: "button", onClick: onDetails },
                 "\u0412\u0441\u0435 \u0437\u043D\u0430\u0447\u0435\u043D\u0438\u044F",
-                __React.createElement(Icon_1.Icon, { name: "right", size: 12 }))));
+                __React.createElement(Icon_1.Icon, { name: "right", size: 12 }))),
+        proposal && __React.createElement(Ui_1.Modal, { title: "\u041F\u0440\u0435\u0434\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u0435\u0440\u0435\u043D\u043E\u0441\u0430 \u043F\u043E\u0441\u0442\u0430\u0432\u043A\u0438", onClose: () => setProposal(null) },
+            __React.createElement("div", { className: "delivery-proposal" },
+                __React.createElement(Ui_1.Notice, null, "\u041C\u0430\u043A\u0435\u0442 \u0434\u043B\u044F \u0441\u043E\u0433\u043B\u0430\u0441\u043E\u0432\u0430\u043D\u0438\u044F \u0441 \u0431\u044D\u043A\u043E\u043C. \u041F\u0435\u0440\u0435\u043D\u043E\u0441 \u043D\u0435 \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0438 \u043D\u0435 \u043C\u0435\u043D\u044F\u0435\u0442 \u0440\u0430\u0441\u0447\u0451\u0442."),
+                __React.createElement("div", { className: "daily-detail-grid" },
+                    __React.createElement("div", null,
+                        __React.createElement("span", null, "\u0421\u0446\u0435\u043D\u0430\u0440\u0438\u0439 / \u0433\u043E\u0434 \u043C\u043E\u0434\u0435\u043B\u0438"),
+                        __React.createElement("strong", null,
+                            (0, format_1.scenario)(proposal.scenario),
+                            " / ",
+                            proposal.year)),
+                    __React.createElement("div", null,
+                        __React.createElement("span", null, "\u0422\u0435\u043A\u0443\u0449\u0438\u0439 \u0434\u0435\u043D\u044C"),
+                        __React.createElement("strong", null, proposal.from)),
+                    __React.createElement("div", null,
+                        __React.createElement("span", null, "\u041F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435, \u0442"),
+                        __React.createElement("strong", null, (0, format_1.number)(proposal.volume)))),
+                __React.createElement("label", null,
+                    "\u041F\u0440\u0435\u0434\u043B\u043E\u0436\u0435\u043D\u043D\u044B\u0439 \u0434\u0435\u043D\u044C \u043C\u043E\u0434\u0435\u043B\u0438 ",
+                    __React.createElement("input", { type: "number", min: 1, max: 365, value: proposal.to, onChange: event => { const value = event.target.valueAsNumber; if (Number.isInteger(value) && value >= 1 && value <= 365)
+                            setProposal({ ...proposal, to: value }); } })),
+                __React.createElement("input", { type: "range", "aria-label": "\u041F\u0440\u0435\u0434\u043B\u043E\u0436\u0435\u043D\u043D\u0430\u044F \u0434\u0430\u0442\u0430 \u043F\u043E\u0441\u0442\u0430\u0432\u043A\u0438", value: proposal.to, min: 1, max: 365, onChange: event => setProposal({ ...proposal, to: event.target.valueAsNumber }) }),
+                __React.createElement("p", null, "\u0421\u0432\u043E\u0434\u043D\u043E\u0435 \u043F\u043E\u0441\u0442\u0443\u043F\u043B\u0435\u043D\u0438\u0435 \u0437\u0430 \u0434\u0435\u043D\u044C. \u041E\u0442\u0434\u0435\u043B\u044C\u043D\u044B\u0435 \u0437\u0430\u044F\u0432\u043A\u0438 \u0438 \u043F\u043E\u0441\u0442\u0430\u0432\u0449\u0438\u043A\u0438 \u0432 \u0434\u043D\u0435\u0432\u043D\u043E\u043C \u043E\u0442\u0432\u0435\u0442\u0435 \u043C\u043E\u0434\u0435\u043B\u0438 \u043F\u043E\u043A\u0430 \u043D\u0435 \u0432\u044B\u0434\u0435\u043B\u0435\u043D\u044B."),
+                __React.createElement("button", { type: "button", className: "text-button", onClick: () => setProposal(null) }, "\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u043F\u0440\u0435\u0434\u043B\u043E\u0436\u0435\u043D\u0438\u0435"))),
+        selectedDay !== null && __React.createElement(Ui_1.Modal, { title: `День модели ${selectedDay}`, wide: true, onClose: () => setSelectedDay(null) },
+            __React.createElement("div", { className: "daily-detail", "data-testid": "daily-detail" },
+                other && __React.createElement("div", { className: "daily-detail-switch", "aria-label": "\u0421\u0446\u0435\u043D\u0430\u0440\u0438\u0439 \u043F\u043E\u0434\u0440\u043E\u0431\u043D\u043E\u0441\u0442\u0435\u0439" },
+                    __React.createElement("span", null, "\u0421\u0446\u0435\u043D\u0430\u0440\u0438\u0439:"),
+                    __React.createElement("button", { type: "button", "aria-pressed": detailSide === 'primary', onClick: () => setDetailSide('primary') }, scenarioCode(result)),
+                    __React.createElement("button", { type: "button", "aria-pressed": detailSide === 'other', onClick: () => setDetailSide('other') }, scenarioCode(other))),
+                __React.createElement(DailyChart_1.DailyChart, { result: detailResult, other: detailOther, year: year, range: [selectedDay - 14, selectedDay + 14], selectedDay: selectedDay, onSelectDay: setSelectedDay }),
+                __React.createElement("div", { className: "daily-detail-grid" }, dailyFields.map(([field, label, unit]) => __React.createElement("div", { key: field },
+                    __React.createElement("span", null, label),
+                    __React.createElement("strong", null,
+                        (0, format_1.number)(detailRecord?.[field]),
+                        __React.createElement("small", null,
+                            " ",
+                            unit))))),
+                !detailRecord && __React.createElement("p", { className: "inline-warning" }, "\u0417\u0430 \u044D\u0442\u043E\u0442 \u0434\u0435\u043D\u044C \u0432\u044B\u0431\u0440\u0430\u043D\u043D\u044B\u0439 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u0439 \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043B \u0434\u0430\u043D\u043D\u044B\u0435."))));
 }
-function valueAt(result, year, chart) {
-    const b = result.yearly_balance?.find(b => b.year === year);
-    return chart === 'supply' ? b?.delivered_t : chart === 'inventory' ? b?.opening_inventory_t : result.financial_breakdown?.find(f => f.year === year)?.total;
+function valueAt(result, year) {
+    return result.financial_breakdown?.find(row => row.year === year)?.total;
+}
+function scenarioCode(result) {
+    return result.scenario_id === 'BASE' ? 'BASE' : result.scenario_id === 'MANDATORY_STRESS' ? 'STRESS' : result.scenario_id;
+}
+
+},
+"src/features/RiskPanel.tsx":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RiskPanel = RiskPanel;
+const react_1 = require("react");
+const Ui_1 = require("../components/Ui");
+const format_1 = require("../lib/format");
+const plan_1 = require("../lib/plan");
+const DailyChart_1 = require("../components/DailyChart");
+function RiskPanel({ w }) {
+    const [selectedScenario, setSelectedScenario] = (0, react_1.useState)(null);
+    const [selectedYear, setSelectedYear] = (0, react_1.useState)(null);
+    const analysis = w.risk;
+    const run = analysis?.runs.find(r => r.plan.scenario_id === selectedScenario) || analysis?.runs[0];
+    const years = run?.result.yearly_balance?.map(row => row.year) || [];
+    const year = selectedYear !== null && years.includes(selectedYear) ? selectedYear : years[0];
+    const changed = !!analysis && (!!w.draft && !(0, plan_1.samePlan)(analysis.basis, w.draft) || analysis.both !== w.both);
+    const fields = [
+        ['iterations', 'Прогоны'], ['seed', 'Seed'], ['probability_of_zero_shortage', 'Успешные прогоны'],
+        ['median_shortage_t', 'Медианный дефицит, т'], ['p95_shortage_t', '95-й процентиль дефицита, т'], ['max_shortage_t', 'Максимальный дефицит, т'],
+    ];
+    return __React.createElement("div", { className: "risk-panel" },
+        __React.createElement("div", { className: "risk-toolbar" },
+            __React.createElement("span", null, analysis ? `План: ${analysis.basis.plan_id}` : 'Текущие решения'),
+            __React.createElement(Ui_1.Button, { disabled: w.riskBusy || !!w.busy, onClick: () => void w.analyzeRisk() }, "\u0417\u0430\u043F\u0443\u0441\u0442\u0438\u0442\u044C \u0437\u0430\u043D\u043E\u0432\u043E")),
+        w.riskBusy && __React.createElement("div", { className: "risk-progress", role: "status" },
+            __React.createElement(Ui_1.Spinner, null),
+            "\u0410\u043D\u0430\u043B\u0438\u0437 ",
+            (0, format_1.scenario)(w.riskStage),
+            "\u2026"),
+        w.riskError && __React.createElement(Ui_1.Notice, { tone: "error" }, w.riskError),
+        changed && __React.createElement(Ui_1.Notice, { tone: "warning" }, "\u0420\u0435\u0448\u0435\u043D\u0438\u044F \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u044B. \u042D\u0442\u043E\u0442 \u0430\u043D\u0430\u043B\u0438\u0437 \u043E\u0442\u043D\u043E\u0441\u0438\u0442\u0441\u044F \u043A \u043F\u0440\u0435\u0436\u043D\u0435\u043C\u0443 \u0441\u043D\u0438\u043C\u043A\u0443 \u043F\u043B\u0430\u043D\u0430."),
+        !!analysis?.runs.length && __React.createElement(__React.Fragment, null,
+            __React.createElement("div", { className: "table-wrap" },
+                __React.createElement("table", { className: "risk-summary" },
+                    __React.createElement("caption", null, "\u041C\u043E\u043D\u0442\u0435-\u041A\u0430\u0440\u043B\u043E: \u0441\u0432\u043E\u0434\u043A\u0430 \u0441\u043B\u0443\u0447\u0430\u0439\u043D\u044B\u0445 \u043F\u0440\u043E\u0433\u043E\u043D\u043E\u0432"),
+                    __React.createElement("thead", null,
+                        __React.createElement("tr", null,
+                            __React.createElement("th", null, "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0435\u043B\u044C"),
+                            analysis.runs.map(item => __React.createElement("th", { key: item.plan.scenario_id }, (0, format_1.scenario)(item.plan.scenario_id))))),
+                    __React.createElement("tbody", null, fields.map(([key, label]) => __React.createElement("tr", { key: key },
+                        __React.createElement("th", null, label),
+                        analysis.runs.map(item => {
+                            const summary = item.result.risk_register?.find(r => r.risk_id === 'R_LAUNCH_FAILURE_MONTE_CARLO');
+                            const value = summary?.[key], numeric = typeof value === 'number' && Number.isFinite(value) ? value : undefined;
+                            return __React.createElement("td", { key: item.plan.scenario_id }, key === 'probability_of_zero_shortage' ? (0, format_1.percent)(numeric) : (0, format_1.number)(numeric));
+                        })))))),
+            __React.createElement("p", { className: "help" }, "\u00AB\u0423\u0441\u043F\u0435\u0448\u043D\u044B\u0435 \u043F\u0440\u043E\u0433\u043E\u043D\u044B\u00BB \u2014 \u0434\u043E\u043B\u044F \u043F\u0440\u043E\u0433\u043E\u043D\u043E\u0432 \u0431\u0435\u0437 \u0434\u0435\u0444\u0438\u0446\u0438\u0442\u0430 \u0438 \u0434\u0440\u0443\u0433\u0438\u0445 \u043D\u0430\u0440\u0443\u0448\u0435\u043D\u0438\u0439 \u043F\u043E \u043A\u0440\u0438\u0442\u0435\u0440\u0438\u044F\u043C \u043C\u043E\u0434\u0435\u043B\u0438. 95-\u0439 \u043F\u0440\u043E\u0446\u0435\u043D\u0442\u0438\u043B\u044C \u2014 \u0443\u0440\u043E\u0432\u0435\u043D\u044C \u0434\u0435\u0444\u0438\u0446\u0438\u0442\u0430, \u043D\u0435 \u043F\u0440\u0435\u0432\u044B\u0448\u0435\u043D\u043D\u044B\u0439 \u043F\u0440\u0438\u043C\u0435\u0440\u043D\u043E \u0432 95% \u043F\u0440\u043E\u0433\u043E\u043D\u043E\u0432."),
+            analysis.runs.some(item => !item.result.risk_register?.some(r => r.risk_id === 'R_LAUNCH_FAILURE_MONTE_CARLO')) && __React.createElement(Ui_1.Notice, null, "\u041C\u043E\u0434\u0435\u043B\u044C \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u043B\u0430 \u0441\u0432\u043E\u0434\u043A\u0443 \u0440\u0438\u0441\u043A\u043E\u0432 \u0434\u043B\u044F \u043E\u0434\u043D\u043E\u0433\u043E \u0438\u0437 \u0441\u0446\u0435\u043D\u0430\u0440\u0438\u0435\u0432."),
+            __React.createElement("div", { className: "risk-chart-heading" },
+                __React.createElement("h3", null, "\u0414\u043D\u0435\u0432\u043D\u0430\u044F \u0434\u0438\u043D\u0430\u043C\u0438\u043A\u0430 \u043E\u0431\u044B\u0447\u043D\u043E\u0433\u043E \u0440\u0430\u0441\u0447\u0451\u0442\u0430"),
+                __React.createElement("div", { className: "segmented" }, analysis.runs.map(item => __React.createElement("button", { type: "button", key: item.plan.scenario_id, "aria-pressed": item === run, onClick: () => setSelectedScenario(item.plan.scenario_id) }, (0, format_1.scenario)(item.plan.scenario_id)))),
+                __React.createElement("label", null,
+                    "\u0413\u043E\u0434 ",
+                    __React.createElement("select", { value: year, onChange: e => setSelectedYear(Number(e.target.value)) }, years.map(y => __React.createElement("option", { key: y }, y))))),
+            run && year !== undefined && __React.createElement(DailyChart_1.DailyChart, { result: run.result, year: year }),
+            __React.createElement("p", { className: "help" }, "\u042D\u0442\u0430 \u043B\u0438\u043D\u0438\u044F \u043F\u043E\u043A\u0430\u0437\u044B\u0432\u0430\u0435\u0442 \u043E\u0431\u044B\u0447\u043D\u044B\u0439 \u0440\u0430\u0441\u0447\u0451\u0442 \u043F\u043B\u0430\u043D\u0430. \u0418\u0441\u0442\u043E\u0440\u0438\u0438 \u043E\u0442\u0434\u0435\u043B\u044C\u043D\u044B\u0445 \u0441\u043B\u0443\u0447\u0430\u0439\u043D\u044B\u0445 \u043F\u0440\u043E\u0433\u043E\u043D\u043E\u0432 \u0438 \u0430\u0432\u0430\u0440\u0438\u0439 \u043C\u043E\u0434\u0435\u043B\u044C \u043F\u043E\u043A\u0430 \u043D\u0435 \u043F\u0435\u0440\u0435\u0434\u0430\u0451\u0442.")));
 }
 
 },
@@ -1316,20 +1910,23 @@ const __React=require('react');
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SupplyMatrix = SupplyMatrix;
-const react_1 = require("react");
 const matrix_1 = require("../lib/matrix");
 const format_1 = require("../lib/format");
 const Controls_1 = require("../components/Controls");
 const Icon_1 = require("../components/Icon");
-const labels = { 'Earth-Core': 'Основной канал', 'Earth-Flex': 'Гибкие поставки', Emergency: 'Аварийный канал', 'Lunar-ISRU': 'Лунный источник', 'Earth-New': 'Новый поставщик' };
 const colorClass = { 'Earth-Core': 'core', 'Earth-Flex': 'flex', Emergency: 'emergency', 'Lunar-ISRU': 'lunar', 'Earth-New': 'new' };
+const sourceInvestments = {
+    'Lunar-ISRU': { id: 'LUNAR_ISRU', defaultYear: 2038 },
+    'Earth-New': { id: 'EARTH_NEW', defaultYear: 2036 },
+};
 function SupplyMatrix({ w, onAdvanced, onSource }) {
-    const [selected, setSelected] = (0, react_1.useState)(null);
+    const selected = w.selection, setSelected = w.setSelection;
     if (!w.draft)
         return null;
     const plan = w.draft, sources = (0, matrix_1.matrixSources)(plan, w.catalog), years = (0, matrix_1.matrixYears)(plan, w.catalog);
-    const s = sources.find(r => r.key === selected?.source) || sources[0], year = years.includes(selected?.year || -1) ? selected.year : years[0];
-    const editing = s && year !== undefined ? { source: s, year } : null;
+    const investments = w.catalog?.tables.find(t => t.table_id === 'investment_options')?.rows || [];
+    const s = selected ? sources.find(r => r.key === selected.source) : sources[0], year = selected?.year ?? years[0];
+    const editing = s && years.includes(year) ? { source: s, year } : null;
     const focus = (source, y) => setSelected({ source: source.key, year: y });
     function inactive(source, y) {
         const required = source.key === 'Lunar-ISRU' ? 'LUNAR_ISRU' : source.key === 'Earth-New' ? 'EARTH_NEW' : null;
@@ -1341,15 +1938,14 @@ function SupplyMatrix({ w, onAdvanced, onSource }) {
         return '';
     }
     function change(key, source, y, value) { w.setDraft((0, matrix_1.writeCell)(plan, key, source, y, value)); }
-    const cellOrder = editing ? (0, matrix_1.readCell)(plan, 'supply_orders', s, year) : null;
-    const cellReserve = editing ? (0, matrix_1.readCell)(plan, 'capacity_reservations', s, year) : null;
-    const warning = editing && inactive(s, year);
+    const cellOrder = editing ? (0, matrix_1.readCell)(plan, 'supply_orders', editing.source, year) : null;
+    const cellReserve = editing ? (0, matrix_1.readCell)(plan, 'capacity_reservations', editing.source, year) : null;
+    const warning = editing && inactive(editing.source, year);
     const over = cellOrder?.value !== null && cellReserve?.value !== null && s?.key !== 'Lunar-ISRU' && (cellOrder?.value || 0) > (cellReserve?.value || 0);
     return __React.createElement("section", { className: "supply-panel panel", "aria-labelledby": "matrix-title" },
         __React.createElement("div", { className: "panel-heading" },
             __React.createElement("div", null,
-                __React.createElement("h2", { id: "matrix-title" }, "\u041C\u0430\u0442\u0440\u0438\u0446\u0430 \u0441\u043D\u0430\u0431\u0436\u0435\u043D\u0438\u044F"),
-                __React.createElement("p", null, "\u0417\u0430\u043A\u0430\u0437 \u0438 \u0431\u0440\u043E\u043D\u044C \u043C\u043E\u0449\u043D\u043E\u0441\u0442\u0438 \u043F\u043E \u0433\u043E\u0434\u0430\u043C")),
+                __React.createElement("h2", { id: "matrix-title" }, "\u041C\u0430\u0442\u0440\u0438\u0446\u0430 \u0441\u043D\u0430\u0431\u0436\u0435\u043D\u0438\u044F")),
             __React.createElement("span", { className: "horizon" },
                 years[0],
                 __React.createElement("span", null, "\u2014"),
@@ -1372,35 +1968,50 @@ function SupplyMatrix({ w, onAdvanced, onSource }) {
                         __React.createElement("tr", null,
                             __React.createElement("th", { scope: "col" }, "\u0418\u0441\u0442\u043E\u0447\u043D\u0438\u043A"),
                             years.map(y => __React.createElement("th", { key: y, scope: "col", className: editing?.year === y ? 'selected-year' : '' }, y)))),
-                    __React.createElement("tbody", null, sources.map(source => __React.createElement("tr", { key: source.key },
-                        __React.createElement("th", { scope: "row" },
-                            __React.createElement("button", { type: "button", className: `source-label ${colorClass[source.key] || 'custom'}`, onClick: () => onSource(source) },
-                                __React.createElement("i", null),
-                                __React.createElement("span", null,
-                                    __React.createElement("strong", null, source.label),
-                                    __React.createElement("small", null, labels[source.key] || 'Источник из плана')))),
-                        years.map(y => {
-                            const a = (0, matrix_1.readCell)(plan, 'supply_orders', source, y), b = (0, matrix_1.readCell)(plan, 'capacity_reservations', source, y), locked = inactive(source, y);
-                            const hasRecords = a.indices.length > 0 || b.indices.length > 0;
-                            const disabled = !!locked && !hasRecords;
-                            const collision = a.indices.length > 1 || b.indices.length > 1;
-                            const excess = source.key !== 'Lunar-ISRU' && a.value !== null && b.value !== null && a.value > b.value;
-                            const active = editing?.source.key === source.key && editing.year === y;
-                            return __React.createElement("td", { key: y, className: `${active ? 'active-cell' : ''} ${disabled ? 'locked-cell' : ''} ${excess ? 'warning-cell' : ''}`, onFocus: () => focus(source, y) }, collision ? __React.createElement("button", { type: "button", className: "collision-button", title: "\u0417\u0430\u043F\u0438\u0441\u0438 \u043D\u0435 \u043E\u0431\u044A\u0435\u0434\u0438\u043D\u044F\u044E\u0442\u0441\u044F. \u041E\u0442\u043A\u0440\u043E\u0439\u0442\u0435 \u0434\u043B\u044F \u0440\u0430\u0437\u0434\u0435\u043B\u044C\u043D\u043E\u0433\u043E \u0440\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F.", onClick: onAdvanced },
-                                __React.createElement(Icon_1.Icon, { name: "alert", size: 12 }),
-                                Math.max(a.indices.length, b.indices.length),
-                                " \u0437\u0430\u043F\u0438\u0441\u0438") : __React.createElement("div", { className: "cell-pair", title: locked || (excess ? 'Заказ превышает бронь. Проверьте условия канала.' : '') },
-                                __React.createElement("div", { className: "order-input" },
-                                    __React.createElement("i", null),
-                                    __React.createElement(Controls_1.StepNumber, { compact: true, value: a.value, disabled: disabled, label: `Заказ ${source.label} ${y}`, onFocus: () => focus(source, y), onChange: v => change('supply_orders', source, y, v) })),
-                                __React.createElement("div", { className: "reserve-input" },
-                                    __React.createElement("i", null),
-                                    __React.createElement(Controls_1.StepNumber, { compact: true, value: b.value, disabled: disabled, label: `Бронь ${source.label} ${y}`, onFocus: () => focus(source, y), onChange: v => change('capacity_reservations', source, y, v) }))));
-                        }))))))),
+                    __React.createElement("tbody", null, sources.map(source => {
+                        const definition = sourceInvestments[source.key];
+                        const records = definition ? plan.decisions.investments.filter(r => r.investment_id === definition.id) : [];
+                        const investment = records[0];
+                        const reference = definition ? investments.find(r => r.investment_id === definition.id) : undefined;
+                        const investmentYears = definition ? [...new Set([...years, definition.defaultYear, ...records.map(r => r.year)])].sort((a, b) => a - b) : [];
+                        return __React.createElement("tr", { key: source.key },
+                            __React.createElement("th", { scope: "row" },
+                                __React.createElement("div", { className: "matrix-source-cell" },
+                                    __React.createElement("button", { type: "button", className: `source-label ${colorClass[source.key] || 'custom'}`, onClick: () => onSource(source) },
+                                        __React.createElement("i", null),
+                                        __React.createElement("span", null,
+                                            __React.createElement("strong", null, source.label))),
+                                    definition && __React.createElement("div", { className: `source-investment ${investment ? 'enabled' : ''}` },
+                                        records.length > 1 ? __React.createElement("button", { type: "button", className: "text-button", onClick: onAdvanced },
+                                            records.length,
+                                            " \u0437\u0430\u043F\u0438\u0441\u0438") : __React.createElement(Controls_1.Toggle, { label: `Включить инвестицию ${source.label}`, checked: !!investment, onChange: yes => w.setDraft((0, matrix_1.setInvestment)(plan, definition.id, yes ? definition.defaultYear : null)) }),
+                                        __React.createElement("select", { title: reference?.commissioning_rule, "aria-label": `Год инвестиции ${source.label}`, disabled: !investment || records.length > 1, value: investment?.year || definition.defaultYear, onChange: e => w.setDraft((0, matrix_1.setInvestment)(plan, definition.id, Number(e.target.value))) }, investmentYears.map(y => __React.createElement("option", { key: y }, y))),
+                                        __React.createElement("span", null,
+                                            "CAPEX ",
+                                            __React.createElement("strong", null, reference ? (0, format_1.number)(Number(reference.total_capex_mln)) : '—'))))),
+                            years.map(y => {
+                                const a = (0, matrix_1.readCell)(plan, 'supply_orders', source, y), b = (0, matrix_1.readCell)(plan, 'capacity_reservations', source, y), locked = inactive(source, y);
+                                const hasRecords = a.indices.length > 0 || b.indices.length > 0;
+                                const disabled = !!locked && !hasRecords;
+                                const collision = a.indices.length > 1 || b.indices.length > 1;
+                                const excess = source.key !== 'Lunar-ISRU' && a.value !== null && b.value !== null && a.value > b.value;
+                                const active = editing?.source.key === source.key && editing.year === y;
+                                return __React.createElement("td", { key: y, className: `${active ? 'active-cell' : ''} ${disabled ? 'locked-cell' : ''} ${excess ? 'warning-cell' : ''}`, onFocus: () => focus(source, y) }, collision ? __React.createElement("button", { type: "button", className: "collision-button", title: "\u0417\u0430\u043F\u0438\u0441\u0438 \u043D\u0435 \u043E\u0431\u044A\u0435\u0434\u0438\u043D\u044F\u044E\u0442\u0441\u044F. \u041E\u0442\u043A\u0440\u043E\u0439\u0442\u0435 \u0434\u043B\u044F \u0440\u0430\u0437\u0434\u0435\u043B\u044C\u043D\u043E\u0433\u043E \u0440\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F.", onClick: onAdvanced },
+                                    __React.createElement(Icon_1.Icon, { name: "alert", size: 12 }),
+                                    Math.max(a.indices.length, b.indices.length),
+                                    " \u0437\u0430\u043F\u0438\u0441\u0438") : __React.createElement("div", { className: "cell-pair", title: locked || (excess ? 'Заказ превышает бронь. Проверьте условия канала.' : '') },
+                                    __React.createElement("div", { className: "order-input" },
+                                        __React.createElement("i", null),
+                                        __React.createElement(Controls_1.StepNumber, { compact: true, value: a.value, disabled: disabled, label: `Заказ ${source.label} ${y}`, onFocus: () => focus(source, y), onChange: v => change('supply_orders', source, y, v) })),
+                                    __React.createElement("div", { className: "reserve-input" },
+                                        __React.createElement("i", null),
+                                        __React.createElement(Controls_1.StepNumber, { compact: true, value: b.value, disabled: disabled, label: `Бронь ${source.label} ${y}`, onFocus: () => focus(source, y), onChange: v => change('capacity_reservations', source, y, v) }))));
+                            }));
+                    }))))),
         editing && __React.createElement("div", { className: "cell-inspector" },
             __React.createElement("div", { className: "inspector-heading" },
                 __React.createElement("span", null,
-                    __React.createElement("strong", null, s.label),
+                    __React.createElement("strong", null, editing.source.label),
                     __React.createElement("span", { className: "muted" },
                         " / ",
                         year)),
@@ -1409,8 +2020,8 @@ function SupplyMatrix({ w, onAdvanced, onSource }) {
                     warning) : over ? __React.createElement(__React.Fragment, null,
                     __React.createElement(Icon_1.Icon, { name: "alert", size: 11 }),
                     "\u0417\u0430\u043A\u0430\u0437 \u0432\u044B\u0448\u0435 \u0431\u0440\u043E\u043D\u0438") : __React.createElement(__React.Fragment, null,
-                    "\u041C\u043E\u0449\u043D\u043E\u0441\u0442\u044C \u043F\u043E \u0441\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0438\u043A\u0443: ",
-                    (0, format_1.number)(Number(s.reference?.capacity_t_per_year) || undefined),
+                    "\u041C\u043E\u0449\u043D\u043E\u0441\u0442\u044C: ",
+                    (0, format_1.number)(Number(editing.source.reference?.capacity_t_per_year) || undefined),
                     " \u0442/\u0433\u043E\u0434"))),
             __React.createElement("fieldset", { disabled: !!w.busy },
                 __React.createElement("div", { className: "inspector-controls" }, [['supply_orders', 'Заказ', 'т', cellOrder], ['capacity_reservations', 'Бронь', 'т/год', cellReserve]].map(([key, title, unit, cell]) => __React.createElement("div", { className: "inspector-control", key: key },
@@ -1418,11 +2029,16 @@ function SupplyMatrix({ w, onAdvanced, onSource }) {
                         title,
                         __React.createElement("span", null, unit)),
                     cell && cell.indices.length <= 1 ? __React.createElement(__React.Fragment, null,
-                        __React.createElement(Controls_1.StepNumber, { value: cell.value, label: `${title} выбранной ячейки`, disabled: !!warning && cellOrder?.indices.length === 0 && cellReserve?.indices.length === 0, onChange: v => change(key, s, year, v) }),
-                        __React.createElement(Controls_1.Range, { value: cell.value, max: Number(s.reference?.capacity_t_per_year) || 500, label: `${title}: ползунок`, disabled: !!warning && cellOrder?.indices.length === 0 && cellReserve?.indices.length === 0, onChange: v => change(key, s, year, v) })) : __React.createElement("button", { className: "text-button", type: "button", onClick: onAdvanced }, "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0437\u0430\u043F\u0438\u0441\u0438")))))),
-        __React.createElement("div", { className: "matrix-footnote" },
-            __React.createElement(Icon_1.Icon, { name: "info", size: 13 }),
-            __React.createElement("span", null, "\u0411\u0440\u043E\u043D\u044C \u2014 \u043F\u0440\u0430\u0432\u043E \u043D\u0430 \u043F\u043E\u0441\u0442\u0430\u0432\u043A\u0443, \u043D\u0435 \u0444\u0438\u0437\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0437\u0430\u043F\u0430\u0441. \u0414\u043E\u0441\u0442\u0443\u043F\u043D\u043E\u0441\u0442\u044C \u043F\u043E \u0441\u0440\u043E\u043A\u0430\u043C \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0430\u0435\u0442 \u043C\u043E\u0434\u0435\u043B\u044C.")));
+                        __React.createElement(Controls_1.StepNumber, { value: cell.value, label: `${title} выбранной ячейки`, disabled: !!warning && cellOrder?.indices.length === 0 && cellReserve?.indices.length === 0, onChange: v => change(key, editing.source, year, v) }),
+                        __React.createElement(Controls_1.Range, { value: cell.value, max: Number(editing.source.reference?.capacity_t_per_year) || 500, label: `${title}: ползунок`, disabled: !!warning && cellOrder?.indices.length === 0 && cellReserve?.indices.length === 0, onChange: v => change(key, editing.source, year, v) })) : __React.createElement("button", { className: "text-button", type: "button", onClick: onAdvanced }, "\u041E\u0442\u043A\u0440\u044B\u0442\u044C \u0437\u0430\u043F\u0438\u0441\u0438")))))),
+        !editing && selected && __React.createElement("div", { className: "cell-inspector" },
+            __React.createElement("div", { className: "inspector-heading" },
+                __React.createElement("strong", null,
+                    selected.source,
+                    " / ",
+                    selected.year),
+                __React.createElement("span", null, "\u041D\u0435\u0442 \u0437\u0430\u043F\u0438\u0441\u0438 \u0432 \u043F\u043B\u0430\u043D\u0435")),
+            __React.createElement("button", { type: "button", className: "text-button", onClick: onAdvanced }, "\u041F\u043E\u043B\u043D\u044B\u0435 \u0437\u0430\u043F\u0438\u0441\u0438")));
 }
 
 },
@@ -1471,6 +2087,80 @@ function comparabilityWarnings(comparison) {
     if (comparison.items.some(i => i.run.origin === 'imported'))
         issues.push('Есть импортированные результаты без повторного расчёта на сервере.');
     return issues;
+}
+
+},
+"src/lib/daily.ts":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MODEL_DAYS_PER_YEAR = void 0;
+exports.modelDayRange = modelDayRange;
+exports.projectDailyTrace = projectDailyTrace;
+exports.dailyRecordAt = dailyRecordAt;
+exports.modelWeekTicks = modelWeekTicks;
+exports.MODEL_DAYS_PER_YEAR = 365;
+const measurementFields = [
+    'opening_inventory_t',
+    'delivered_t',
+    'losses_t',
+    'demand_total_t',
+    'served_total_t',
+    'shortage_t',
+    'closing_inventory_t',
+];
+function finite(value) {
+    return typeof value === 'number' && Number.isFinite(value);
+}
+function record(value) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value)
+        ? value
+        : null;
+}
+function modelDayRange(range) {
+    if (!range)
+        return [1, exports.MODEL_DAYS_PER_YEAR];
+    const left = Number.isFinite(range[0]) ? Math.trunc(range[0]) : 1;
+    const right = Number.isFinite(range[1]) ? Math.trunc(range[1]) : exports.MODEL_DAYS_PER_YEAR;
+    const start = Math.max(1, Math.min(exports.MODEL_DAYS_PER_YEAR, Math.min(left, right)));
+    const end = Math.max(1, Math.min(exports.MODEL_DAYS_PER_YEAR, Math.max(left, right)));
+    return [start, end];
+}
+/** Reads model output as-is. It only validates coordinates and finite measurements. */
+function projectDailyTrace(result, year, range) {
+    if (!Number.isInteger(year))
+        return [];
+    const [start, end] = modelDayRange(range);
+    const trace = Array.isArray(result.inventory_trace) ? result.inventory_trace : [];
+    return trace.flatMap((value) => {
+        const source = record(value);
+        if (!source || source.year !== year || !Number.isInteger(source.day_of_year))
+            return [];
+        const day = source.day_of_year;
+        if (day < start || day > end || day < 1 || day > exports.MODEL_DAYS_PER_YEAR)
+            return [];
+        const point = { year, day };
+        if (finite(source.day))
+            point.absolute_day = source.day;
+        for (const field of measurementFields) {
+            if (finite(source[field]))
+                point[field] = source[field];
+        }
+        return [point];
+    }).sort((left, right) => left.day - right.day);
+}
+function dailyRecordAt(result, year, day) {
+    if (!Number.isInteger(day))
+        return undefined;
+    return projectDailyTrace(result, year, [day, day])[0];
+}
+function modelWeekTicks(range) {
+    const [start, end] = modelDayRange(range);
+    const first = 1 + Math.ceil((start - 1) / 7) * 7;
+    const ticks = [];
+    for (let day = first; day <= end; day += 7)
+        ticks.push(day);
+    return ticks;
 }
 
 },
@@ -1533,6 +2223,87 @@ function supportedUnits(units) {
     const u = units;
     return u.fuel === 't' && u.currency === 'mln_units';
 }
+
+},
+"src/lib/live.ts":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LatestCalculation = void 0;
+exports.calculatePreview = calculatePreview;
+const matrix_js_1 = require("./matrix.js");
+async function calculatePreview(input, simulate) {
+    const otherPlan = input.both ? (0, matrix_js_1.otherScenario)(input.plan) : undefined;
+    // Await every request, including the surviving half of a failed pair.
+    const replies = await Promise.allSettled([simulate(input.plan), ...(otherPlan ? [simulate(otherPlan)] : [])]);
+    const failure = replies.find(r => r.status === 'rejected');
+    if (failure?.status === 'rejected')
+        throw failure.reason;
+    const results = replies.map(r => r.value);
+    return { basis: input.plan, primary: results[0], otherPlan, other: results[1], createdAt: new Date().toISOString() };
+}
+const clock = { now: () => performance.now(), set: (fn, ms) => setTimeout(fn, ms), clear: timer => clearTimeout(timer) };
+/** One active cycle and one replaceable pending snapshot. Never retries a failed input. */
+class LatestCalculation {
+    run;
+    publish;
+    fail;
+    time;
+    generation = 0;
+    pending = null;
+    running = false;
+    timer = null;
+    lastStart = -Infinity;
+    stopped = false;
+    waiters = [];
+    constructor(run, publish, fail, time = clock) {
+        this.run = run;
+        this.publish = publish;
+        this.fail = fail;
+        this.time = time;
+    }
+    update(input) {
+        if (this.stopped)
+            return;
+        this.generation++;
+        this.pending = input === null ? null : { input, generation: this.generation };
+        if (this.timer !== null) {
+            this.time.clear(this.timer);
+            this.timer = null;
+        }
+        this.schedule();
+    }
+    schedule() {
+        if (this.stopped || this.running || !this.pending || this.timer !== null)
+            return;
+        this.timer = this.time.set(() => { this.timer = null; void this.start(); }, Math.max(0, 100 - (this.time.now() - this.lastStart)));
+    }
+    async start() {
+        const job = this.pending;
+        if (!job || this.stopped)
+            return;
+        this.pending = null;
+        this.running = true;
+        this.lastStart = this.time.now();
+        try {
+            const output = await this.run(job.input);
+            if (!this.stopped && job.generation === this.generation)
+                this.publish(output);
+        }
+        catch (error) {
+            if (!this.stopped && job.generation === this.generation)
+                this.fail(error);
+        }
+        finally {
+            this.running = false;
+            this.waiters.splice(0).forEach(resolve => resolve());
+            this.schedule();
+        }
+    }
+    pause() { this.update(null); return this.running ? new Promise(resolve => this.waiters.push(resolve)) : Promise.resolve(); }
+    dispose() { this.update(null); this.stopped = true; }
+}
+exports.LatestCalculation = LatestCalculation;
 
 },
 "src/lib/matrix.ts":(module,exports,require)=>{
@@ -1600,6 +2371,66 @@ function otherScenario(plan) {
         throw new Error('Для сравнения обоих режимов выберите BASE или STRESS.');
     return { ...plan, scenario_id: plan.scenario_id === 'BASE' ? 'MANDATORY_STRESS' : 'BASE' };
 }
+
+},
+"src/lib/motion.ts":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.sharedMotionScheduler = void 0;
+exports.createMotionScheduler = createMotionScheduler;
+const FRAME_INTERVAL_MS = 1000 / 60;
+const FRAME_TOLERANCE_MS = .5;
+/** A single demand-driven frame queue shared by every animated component. */
+function createMotionScheduler(driver) {
+    const steps = new Set();
+    let frame = null;
+    let nextUpdate = null;
+    const requestNext = () => {
+        if (frame === null && steps.size)
+            frame = driver.requestFrame(runFrame);
+    };
+    const runFrame = timestamp => {
+        frame = null;
+        if (!steps.size) {
+            nextUpdate = null;
+            return;
+        }
+        if (nextUpdate === null || timestamp + FRAME_TOLERANCE_MS >= nextUpdate) {
+            nextUpdate = nextUpdate === null ? timestamp + FRAME_INTERVAL_MS : nextUpdate + FRAME_INTERVAL_MS;
+            if (nextUpdate < timestamp)
+                nextUpdate = timestamp + FRAME_INTERVAL_MS;
+            for (const step of [...steps]) {
+                if (steps.has(step) && !step(timestamp))
+                    steps.delete(step);
+            }
+        }
+        if (steps.size)
+            requestNext();
+        else
+            nextUpdate = null;
+    };
+    return {
+        subscribe(step) {
+            steps.add(step);
+            requestNext();
+            return () => {
+                steps.delete(step);
+                if (!steps.size) {
+                    nextUpdate = null;
+                    if (frame !== null) {
+                        driver.cancelFrame(frame);
+                        frame = null;
+                    }
+                }
+            };
+        },
+    };
+}
+exports.sharedMotionScheduler = createMotionScheduler({
+    requestFrame: callback => requestAnimationFrame(callback),
+    cancelFrame: handle => cancelAnimationFrame(handle),
+});
 
 },
 "src/lib/pair.ts":(module,exports,require)=>{
@@ -1745,6 +2576,23 @@ function signedStack(values) {
 }
 
 },
+"src/lib/risk.ts":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.calculateRisks = calculateRisks;
+const matrix_js_1 = require("./matrix.js");
+/** Explicit request only: never used by the live preview scheduler. */
+async function calculateRisks(basis, both, calculate, publish, stage) {
+    const plans = both ? [basis, (0, matrix_js_1.otherScenario)(basis)] : [basis];
+    for (const plan of plans) {
+        stage(plan.scenario_id);
+        const result = await calculate(plan);
+        publish({ plan, result });
+    }
+}
+
+},
 "src/main.tsx":(module,exports,require)=>{
 const __React=require('react');
 "use strict";
@@ -1769,6 +2617,40 @@ class ErrorBoundary extends react_1.default.Component {
     __React.createElement(App_1.default, null)));
 
 },
+"src/state/useLivePreview.ts":(module,exports,require)=>{
+const __React=require('react');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.useLivePreview = useLivePreview;
+const react_1 = require("react");
+const client_1 = require("../api/client");
+const live_1 = require("../lib/live");
+const plan_1 = require("../lib/plan");
+function useLivePreview(plan, both, enabled, scope) {
+    const [value, setValue] = (0, react_1.useState)(null);
+    const [error, setError] = (0, react_1.useState)(null);
+    const completed = (0, react_1.useRef)(null);
+    const queue = (0, react_1.useRef)(null);
+    (0, react_1.useLayoutEffect)(() => {
+        const instance = new live_1.LatestCalculation(async (input) => ({ scope: input.scope, result: await (0, live_1.calculatePreview)(input, client_1.api.simulate) }), result => { completed.current = result; setValue(result); setError(null); }, setError);
+        queue.current = instance;
+        return () => { instance.dispose(); queue.current = null; };
+    }, []);
+    (0, react_1.useLayoutEffect)(() => {
+        setError(null);
+        const previous = completed.current;
+        const matches = previous?.scope === scope && !!plan && (0, plan_1.samePlan)(previous.result.basis, plan) && !!previous.result.other === both;
+        queue.current?.update(enabled && plan && !matches && !(0, plan_1.validateDraft)('preview', plan).length ? { plan, both, scope } : null);
+        if (enabled && matches)
+            setValue(previous);
+    }, [plan, both, enabled, scope]);
+    const displayed = value?.scope === scope ? value.result : null;
+    const fresh = !!displayed && !!plan && (0, plan_1.samePlan)(displayed.basis, plan) && !!displayed.other === both;
+    const accept = (result) => { const next = { scope, result }; completed.current = next; setValue(next); setError(null); };
+    return { displayed, fresh, error, accept, clearError: () => setError(null), invalidate: () => queue.current?.update(null), pause: () => queue.current?.pause() ?? Promise.resolve() };
+}
+
+},
 "src/state/useWorkspace.ts":(module,exports,require)=>{
 const __React=require('react');
 "use strict";
@@ -1778,6 +2660,8 @@ const react_1 = require("react");
 const client_1 = require("../api/client");
 const plan_1 = require("../lib/plan");
 const matrix_1 = require("../lib/matrix");
+const useLivePreview_1 = require("./useLivePreview");
+const risk_1 = require("../lib/risk");
 function initialView() { const v = new URLSearchParams(location.search).get('view'); return ['overview', 'plan', 'compare', 'data'].includes(v || '') ? v : 'plan'; }
 function urlUpdate(view, id) {
     const u = new URL(location.href);
@@ -1789,7 +2673,9 @@ function urlUpdate(view, id) {
     history.replaceState(null, '', u);
 }
 function useWorkspace() {
-    const [both, setBoth] = (0, react_1.useState)(false);
+    const [both, setBothState] = (0, react_1.useState)(false);
+    const [scope, setScope] = (0, react_1.useState)(0);
+    const [selection, setSelection] = (0, react_1.useState)(null);
     const [pair, setPair] = (0, react_1.useState)(null);
     const [view, setViewState] = (0, react_1.useState)(initialView);
     const [project, setProject] = (0, react_1.useState)(null);
@@ -1803,7 +2689,18 @@ function useWorkspace() {
     const [busy, setBusy] = (0, react_1.useState)('');
     const [error, setError] = (0, react_1.useState)(null);
     const [message, setMessage] = (0, react_1.useState)('');
+    const [risk, setRisk] = (0, react_1.useState)(null);
+    const [riskBusy, setRiskBusy] = (0, react_1.useState)(false), [riskStage, setRiskStage] = (0, react_1.useState)('');
+    const [riskError, setRiskError] = (0, react_1.useState)('');
+    const riskLock = (0, react_1.useRef)(false), mounted = (0, react_1.useRef)(true);
+    (0, react_1.useEffect)(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
     const lock = (0, react_1.useRef)(false);
+    const live = (0, useLivePreview_1.useLivePreview)(draft, both, !loading && !busy && !riskBusy, scope);
+    const setBoth = (value) => { if (value !== both) {
+        live.invalidate();
+        setBothState(value);
+    } };
+    const resetPreview = () => { live.invalidate(); setScope(v => v + 1); setSelection(null); };
     const inputChanged = !!draft && (project ? !(0, plan_1.samePlan)(draft, project.plan) : edited);
     const dirty = !!draft && (project ? (inputChanged || name !== project.name) : edited);
     const current = !!project && project.result_state === 'current' && !inputChanged;
@@ -1864,13 +2761,14 @@ function useWorkspace() {
         return () => clearTimeout(timer);
     }, [message]);
     async function execute(label, work) {
-        if (lock.current)
+        if (lock.current || riskLock.current)
             return;
         lock.current = true;
         setBusy(label);
         setError(null);
         setMessage('');
         try {
+            await live.pause();
             return await work();
         }
         catch (e) {
@@ -1906,7 +2804,35 @@ function useWorkspace() {
             setMessage('Изменение сохранено. Не удалось обновить список планов.');
         }
     }
-    async function save() { return execute('Сохраняем…', async () => { const p = await persist(); await listAfterSuccess(); setMessage('План сохранён'); return p; }); }
+    async function save() {
+        return execute('Сохраняем…', async () => {
+            const saved = await persist();
+            const calculated = saved.result_state === 'current' ? saved : await client_1.api.calculate(saved.project_id, saved.revision);
+            adopt(calculated);
+            const basis = (0, plan_1.normalizedPlan)(calculated.plan);
+            const createdAt = calculated.last_run?.created_at || new Date().toISOString();
+            if (calculated.last_run) {
+                if (both) {
+                    const otherPlan = (0, matrix_1.otherScenario)(basis);
+                    let other;
+                    try {
+                        other = await client_1.api.simulate(otherPlan);
+                    }
+                    catch (error) {
+                        live.accept({ basis, primary: calculated.last_run.result, createdAt });
+                        throw error;
+                    }
+                    setPair({ basis, otherPlan, other, createdAt });
+                    live.accept({ basis, primary: calculated.last_run.result, otherPlan, other, createdAt });
+                }
+                else
+                    live.accept({ basis, primary: calculated.last_run.result, createdAt });
+            }
+            setMessage('План и результат сохранены');
+            await listAfterSuccess();
+            return calculated;
+        });
+    }
     async function calculate() {
         return execute('Рассчитываем…', async () => {
             const saved = await persist();
@@ -1924,11 +2850,12 @@ function useWorkspace() {
             setMessage(both ? 'Оба сценария рассчитаны' : 'Результат получен');
         });
     }
-    async function load(id) { return execute('Открываем…', async () => { adopt(await client_1.api.project(id)); }); }
+    async function load(id) { return execute('Открываем…', async () => { const loaded = await client_1.api.project(id); resetPreview(); adopt(loaded); }); }
     async function newPlan() {
         return execute('Создаём…', async () => {
-            setPair(null);
             const p = (0, plan_1.normalizedPlan)(await client_1.api.template());
+            resetPreview();
+            setPair(null);
             setProject(null);
             setNameState('Новый план');
             setDraftState({ ...p, plan_id: (0, plan_1.newPlanId)() });
@@ -1941,9 +2868,10 @@ function useWorkspace() {
         return execute('Создаём копию…', async () => {
             const p = assertValid();
             const saved = await client_1.api.create(copyName.trim(), { ...p, plan_id: (0, plan_1.newPlanId)(), scenario_id: scenarioId });
+            resetPreview();
             adopt(saved);
             await listAfterSuccess();
-            setMessage('Копия создана. Рассчитайте её для сравнения.');
+            setMessage('Копия создана');
             return saved;
         });
     }
@@ -1953,6 +2881,7 @@ function useWorkspace() {
                 return;
             await client_1.api.remove(project.project_id, project.revision);
             const list = await client_1.api.list();
+            resetPreview();
             setProjects(list);
             if (list.length)
                 adopt(await client_1.api.project(list[0].project_id));
@@ -1982,6 +2911,7 @@ function useWorkspace() {
             }
             if (probe && typeof probe === 'object' && 'schema_version' in probe && 'project_id' in probe) {
                 const imported = await client_1.api.importProject(file);
+                resetPreview();
                 adopt(imported);
                 urlUpdate('plan', imported.project_id);
                 await listAfterSuccess();
@@ -1989,6 +2919,7 @@ function useWorkspace() {
             }
             else {
                 const p = await client_1.api.importPlan(file);
+                resetPreview();
                 setProject(null);
                 setNameState(file.name.replace(/\.json$/i, '').slice(0, 140));
                 setDraftState((0, plan_1.normalizedPlan)(p.plan));
@@ -1998,6 +2929,42 @@ function useWorkspace() {
             }
             setViewState('plan');
         });
+    }
+    async function analyzeRisk() {
+        if (riskLock.current || lock.current)
+            return;
+        let basis;
+        try {
+            basis = structuredClone(assertValid());
+        }
+        catch (error) {
+            setRiskError((0, client_1.errorText)(error));
+            return;
+        }
+        const pairMode = both;
+        riskLock.current = true;
+        setRiskBusy(true);
+        setRiskError('');
+        setRisk({ basis, both: pairMode, runs: [], createdAt: new Date().toISOString() });
+        try {
+            await live.pause();
+            if (!mounted.current)
+                return;
+            await (0, risk_1.calculateRisks)(basis, pairMode, client_1.api.analyzeRisk, run => { if (mounted.current)
+                setRisk(previous => previous ? { ...previous, runs: [...previous.runs, run] } : previous); }, scenario => { if (mounted.current)
+                setRiskStage(scenario); });
+        }
+        catch (error) {
+            if (mounted.current)
+                setRiskError((0, client_1.errorText)(error));
+        }
+        finally {
+            riskLock.current = false;
+            if (mounted.current) {
+                setRiskBusy(false);
+                setRiskStage('');
+            }
+        }
     }
     async function saveOther() {
         return execute('Сохраняем второй сценарий…', async () => {
@@ -2026,11 +2993,15 @@ function useWorkspace() {
             await client_1.api.exportResult(project.project_id, kind);
         });
     }
-    return { both, setBoth, pair: pair && draft && (0, plan_1.samePlan)(pair.basis, draft) ? pair : null, saveOther, view, setView, project, draft, name, projects, catalog, meta, loading, busy, error, message, dirty, inputChanged, current,
-        setDraft: (p) => { setDraftState(p); setEdited(true); setError(null); },
+    const displayed = live.displayed;
+    const displayResult = displayed?.primary ?? (current ? project?.last_run?.result : null) ?? null;
+    const displayOther = both ? displayed?.other ?? null : null;
+    const reportedError = error || live.error;
+    return { risk, riskBusy, riskStage, riskError, analyzeRisk, displayResult, displayOther, preview: displayed, previewFresh: live.fresh, selection, setSelection, both, setBoth, pair: pair && draft && (0, plan_1.samePlan)(pair.basis, draft) ? pair : null, saveOther, view, setView, project, draft, name, projects, catalog, meta, loading, busy, error, message, dirty, inputChanged, current,
+        setDraft: (p) => { live.invalidate(); setDraftState(p); setEdited(true); setError(null); },
         setName: (v) => { setNameState(v); setEdited(true); },
-        setError, clearError: () => setError(null), setMessage, execute, save, calculate, load, newPlan, copy, remove, importFile, exportFile, refreshList,
-        errorMessage: error ? (0, client_1.errorText)(error) : '', requestId: error instanceof client_1.ApiError ? error.requestId : '', };
+        setError, clearError: () => { setError(null); live.clearError(); }, setMessage, execute, save, calculate, load, newPlan, copy, remove, importFile, exportFile, refreshList,
+        errorMessage: reportedError ? (0, client_1.errorText)(reportedError) : '', requestId: reportedError instanceof client_1.ApiError ? reportedError.requestId : '', };
 }
 
 }};

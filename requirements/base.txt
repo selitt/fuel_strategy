@@ -1,5 +1,5 @@
 # Exact versions observed and dependency-checked in the test environment.
-# Not a network-resolved uv.lock; see API_README.md (installation limitations).
+# Not a network-resolved uv.lock; see docs/api/README.md (installation limitations).
 annotated-doc==0.0.4
 annotated-types==0.7.0
 anyio==4.13.0

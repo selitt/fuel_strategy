@@ -59,5 +59,6 @@ def catalog(settings: SettingsDep):
                  for name in ("base.yaml", "mandatory_stress.yaml")]
     return CatalogDTO(tables=tables, scenarios=scenarios, notes=[
         "CSV-значения переданы строками без изменения исходных значений, единиц и notes.",
-        "Это справочники для UI. Текущий pseudo_engine использует собственные константы; API их не переписывает.",
+        "Расчётный SimulationEngine читает эти CSV через общий CaseCatalog; API не переписывает значения.",
+        "Сценарные YAML доступны UI, но соответствие поведения движка этим файлам требует математической приёмки.",
     ])

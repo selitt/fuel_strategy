@@ -1,9 +1,9 @@
 # Portable bundle supplied with this archive. No npm needed for this image.
-# Rebuild with Dockerfile.web or scripts/build-portable.mjs after UI changes.
+# Rebuild with Dockerfile or scripts/build-portable.mjs after UI changes.
 FROM python:3.13-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_DISABLE_PIP_VERSION_CHECK=1     FUEL_DATA_DIR=/data/projects FUEL_FRONTEND_DIR=/app/frontend/prebuilt
 WORKDIR /app
-COPY requirements.txt ./
+COPY requirements/base.txt ./requirements.txt
 RUN python -m pip install --no-cache-dir -r requirements.txt     && groupadd --gid 10001 fuel     && useradd --uid 10001 --gid 10001 --no-create-home fuel     && mkdir -p /data/projects     && chown -R 10001:10001 /data
 COPY src ./src
 COPY data ./data

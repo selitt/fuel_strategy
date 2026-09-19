@@ -71,7 +71,7 @@ class WorkspaceChecks(unittest.TestCase):
         self.assertFailure("empty")
 
     def test_broken_local_navigation_is_rejected(self):
-        with (self.root / "START_HERE.md").open("a", encoding="utf-8") as handle:
+        with (self.root / "README.md").open("a", encoding="utf-8") as handle:
             handle.write("\n[broken](docs/no-such-file.md)\n")
         self.assertFailure("broken local link")
 

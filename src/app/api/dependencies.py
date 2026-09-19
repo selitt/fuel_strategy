@@ -16,6 +16,7 @@ logger = logging.getLogger("fuel.api")
 class CalculationBackend(Protocol):
     def get_template_plan(self) -> ParticipantPlanDTO: ...
     def calculate(self, request: ParticipantPlanDTO) -> ResultExportEnvelopeDTO: ...
+    def calculate_risk(self, request: ParticipantPlanDTO) -> ResultExportEnvelopeDTO: ...
 
 
 def get_settings(request: Request) -> Settings:
@@ -74,6 +75,37 @@ def call_calculation(service: CalculationBackend, plan: ParticipantPlanDTO) -> R
         # ValidationError here is an OUTPUT/programming error, not a client's 422.
         logger.exception("Calculation failed")
         raise ApiProblem(500, "CALCULATION_FAILED", "Расчёт завершился ошибкой; результат не заменён") from exc
+
+
+def call_risk_calculation(service: CalculationBackend, plan: ParticipantPlanDTO) -> ResultExportEnvelopeDTO:
+    check_plan_finite(plan)
+    runner = getattr(service, "calculate_risk", None)
+    if not callable(runner):
+        raise ApiProblem(
+            503,
+            "RISK_ANALYSIS_NOT_AVAILABLE",
+            "Анализ рисков не поддерживается подключённым расчётным сервисом",
+        )
+    try:
+        result = validate_result(runner(plan.model_copy(deep=True)))
+        if result.plan_id != plan.plan_id or result.scenario_id != plan.scenario_id:
+            raise ValueError("Risk result identity does not match input")
+        return result
+    except ApiProblem:
+        raise
+    except (NotImplementedError, ImportError) as exc:
+        raise ApiProblem(
+            503,
+            "RISK_ANALYSIS_NOT_AVAILABLE",
+            "Анализ рисков не поддерживается подключённым расчётным сервисом",
+        ) from exc
+    except Exception as exc:
+        logger.exception("Risk calculation failed")
+        raise ApiProblem(
+            500,
+            "RISK_ANALYSIS_FAILED",
+            "Анализ рисков завершился ошибкой; результат не заменён",
+        ) from exc
 
 
 def get_project_service(request: Request):

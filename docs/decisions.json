@@ -26,12 +26,12 @@
           "SQL database"
         ]
       },
-      "rationale": "Выбор команды: Python + React; рабочий вариант и границы зафиксированы в plans/README.md и START_HERE.md.",
+      "rationale": "Выбор команды: Python + React; рабочий вариант и границы зафиксированы в plans/README.md и README.md.",
       "approved_by": "team",
       "evidence": [
         "plans/README.md",
         "plans/README.md",
-        "START_HERE.md"
+        "README.md"
       ]
     },
     {

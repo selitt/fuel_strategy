@@ -1,6 +1,6 @@
 # Exact versions observed and dependency-checked in the test environment.
-# Not a network-resolved uv.lock; see API_README.md (installation limitations).
--r requirements.txt
+# Not a network-resolved uv.lock; see docs/api/README.md (installation limitations).
+-r base.txt
 attrs==26.1.0
 certifi==2026.5.20
 httpcore==1.0.9

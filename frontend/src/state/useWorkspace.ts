@@ -3,6 +3,9 @@ import { api, ApiError, errorText } from '../api/client';
 import type { Catalog, Meta, Plan, Project, Result, Summary } from '../api/types';
 import { normalizedPlan, samePlan, validateDraft, newPlanId } from '../lib/plan';
 import { otherScenario } from '../lib/matrix';
+import { useLivePreview } from './useLivePreview';
+import { calculateRisks } from '../lib/risk';
+import type { RiskRun } from '../lib/risk';
 export type ScenarioPair = {
     basis: Plan;
     otherPlan: Plan;
@@ -16,7 +19,9 @@ function urlUpdate(view: View, id?: string) { const u = new URL(location.href); 
 else
     u.searchParams.delete('project'); history.replaceState(null, '', u); }
 export function useWorkspace() {
-    const [both, setBoth] = useState(false);
+    const [both, setBothState] = useState(false);
+    const [scope, setScope] = useState(0);
+    const [selection, setSelection] = useState<{source: string; year: number} | null>(null);
     const [pair, setPair] = useState<ScenarioPair | null>(null);
     const [view, setViewState] = useState<View>(initialView);
     const [project, setProject] = useState<Project | null>(null);
@@ -30,7 +35,15 @@ export function useWorkspace() {
     const [busy, setBusy] = useState('');
     const [error, setError] = useState<unknown>(null);
     const [message, setMessage] = useState('');
+    const [risk, setRisk] = useState<{basis: Plan; both: boolean; runs: RiskRun[]; createdAt: string} | null>(null);
+    const [riskBusy, setRiskBusy] = useState(false), [riskStage, setRiskStage] = useState('');
+    const [riskError, setRiskError] = useState('');
+    const riskLock = useRef(false), mounted = useRef(true);
+    useEffect(() => { mounted.current = true; return () => {mounted.current = false;}; }, []);
     const lock = useRef(false);
+    const live = useLivePreview(draft, both, !loading && !busy && !riskBusy, scope);
+    const setBoth = (value: boolean) => { if (value !== both) { live.invalidate(); setBothState(value); } };
+    const resetPreview = () => { live.invalidate(); setScope(v => v + 1); setSelection(null); };
     const inputChanged = !!draft && (project ? !samePlan(draft, project.plan) : edited);
     const dirty = !!draft && (project ? (inputChanged || name !== project.name) : edited);
     const current = !!project && project.result_state === 'current' && !inputChanged;
@@ -81,13 +94,14 @@ export function useWorkspace() {
     useEffect(() => { if (!message)
         return; const timer = setTimeout(() => setMessage(''), 4500); return () => clearTimeout(timer); }, [message]);
     async function execute<T>(label: string, work: () => Promise<T>): Promise<T | undefined> {
-        if (lock.current)
+        if (lock.current || riskLock.current)
             return;
         lock.current = true;
         setBusy(label);
         setError(null);
         setMessage('');
         try {
+            await live.pause();
             return await work();
         }
         catch (e) {
@@ -116,7 +130,26 @@ export function useWorkspace() {
     catch {
         setMessage('Изменение сохранено. Не удалось обновить список планов.');
     } }
-    async function save() { return execute('Сохраняем…', async () => { const p = await persist(); await listAfterSuccess(); setMessage('План сохранён'); return p; }); }
+    async function save() {
+        return execute('Сохраняем…', async () => {
+            const saved = await persist();
+            const calculated = saved.result_state === 'current' ? saved : await api.calculate(saved.project_id, saved.revision);
+            adopt(calculated);
+            const basis = normalizedPlan(calculated.plan);
+            const createdAt = calculated.last_run?.created_at || new Date().toISOString();
+            if (calculated.last_run) {
+                if (both) {
+                    const otherPlan = otherScenario(basis);
+                    let other: Result;
+                    try { other = await api.simulate(otherPlan); }
+                    catch (error) { live.accept({basis, primary: calculated.last_run.result, createdAt}); throw error; }
+                    setPair({ basis, otherPlan, other, createdAt });
+                    live.accept({basis, primary: calculated.last_run.result, otherPlan, other, createdAt});
+                } else live.accept({basis, primary: calculated.last_run.result, createdAt});
+            }
+            setMessage('План и результат сохранены'); await listAfterSuccess(); return calculated;
+        });
+    }
     async function calculate() {
         return execute('Рассчитываем…', async () => {
             const saved = await persist();
@@ -134,11 +167,11 @@ export function useWorkspace() {
             setMessage(both ? 'Оба сценария рассчитаны' : 'Результат получен');
         });
     }
-    async function load(id: string) { return execute('Открываем…', async () => { adopt(await api.project(id)); }); }
+    async function load(id: string) { return execute('Открываем…', async () => { const loaded = await api.project(id); resetPreview(); adopt(loaded); }); }
     async function newPlan() {
         return execute('Создаём…', async () => {
-            setPair(null);
             const p = normalizedPlan(await api.template());
+            resetPreview(); setPair(null);
             setProject(null);
             setNameState('Новый план');
             setDraftState({ ...p, plan_id: newPlanId() });
@@ -151,9 +184,9 @@ export function useWorkspace() {
         return execute('Создаём копию…', async () => {
             const p = assertValid();
             const saved = await api.create(copyName.trim(), { ...p, plan_id: newPlanId(), scenario_id: scenarioId });
-            adopt(saved);
+            resetPreview(); adopt(saved);
             await listAfterSuccess();
-            setMessage('Копия создана. Рассчитайте её для сравнения.');
+            setMessage('Копия создана');
             return saved;
         });
     }
@@ -163,7 +196,7 @@ export function useWorkspace() {
                 return;
             await api.remove(project.project_id, project.revision);
             const list = await api.list();
-            setProjects(list);
+            resetPreview(); setProjects(list);
             if (list.length)
                 adopt(await api.project(list[0].project_id));
             else {
@@ -192,14 +225,14 @@ export function useWorkspace() {
             }
             if (probe && typeof probe === 'object' && 'schema_version' in probe && 'project_id' in probe) {
                 const imported = await api.importProject(file);
-                adopt(imported);
+                resetPreview(); adopt(imported);
                 urlUpdate('plan', imported.project_id);
                 await listAfterSuccess();
                 setMessage('Проект импортирован отдельной копией');
             }
             else {
                 const p = await api.importPlan(file);
-                setProject(null);
+                resetPreview(); setProject(null);
                 setNameState(file.name.replace(/\.json$/i, '').slice(0, 140));
                 setDraftState(normalizedPlan(p.plan));
                 setEdited(true);
@@ -208,6 +241,23 @@ export function useWorkspace() {
             }
             setViewState('plan');
         });
+    }
+    async function analyzeRisk() {
+        if (riskLock.current || lock.current) return;
+        let basis: Plan;
+        try { basis = structuredClone(assertValid()); }
+        catch (error) { setRiskError(errorText(error)); return; }
+        const pairMode = both;
+        riskLock.current = true; setRiskBusy(true); setRiskError('');
+        setRisk({basis, both: pairMode, runs: [], createdAt: new Date().toISOString()});
+        try {
+            await live.pause();
+            if (!mounted.current) return;
+            await calculateRisks(basis, pairMode, api.analyzeRisk,
+                run => {if (mounted.current) setRisk(previous => previous ? {...previous, runs: [...previous.runs, run]} : previous);},
+                scenario => {if (mounted.current) setRiskStage(scenario);});
+        } catch (error) { if (mounted.current) setRiskError(errorText(error)); }
+        finally { riskLock.current = false; if (mounted.current) {setRiskBusy(false);setRiskStage('');} }
     }
     async function saveOther() {
         return execute('Сохраняем второй сценарий…', async () => {
@@ -236,11 +286,15 @@ export function useWorkspace() {
             await api.exportResult(project.project_id, kind);
         });
     }
-    return { both, setBoth, pair: pair && draft && samePlan(pair.basis, draft) ? pair : null, saveOther, view, setView, project, draft, name, projects, catalog, meta, loading, busy, error, message, dirty, inputChanged, current,
-        setDraft: (p: Plan) => { setDraftState(p); setEdited(true); setError(null); },
+    const displayed = live.displayed;
+    const displayResult = displayed?.primary ?? (current ? project?.last_run?.result : null) ?? null;
+    const displayOther = both ? displayed?.other ?? null : null;
+    const reportedError = error || live.error;
+    return { risk, riskBusy, riskStage, riskError, analyzeRisk, displayResult, displayOther, preview: displayed, previewFresh: live.fresh, selection, setSelection, both, setBoth, pair: pair && draft && samePlan(pair.basis, draft) ? pair : null, saveOther, view, setView, project, draft, name, projects, catalog, meta, loading, busy, error, message, dirty, inputChanged, current,
+        setDraft: (p: Plan) => { live.invalidate(); setDraftState(p); setEdited(true); setError(null); },
         setName: (v: string) => { setNameState(v); setEdited(true); },
-        setError, clearError: () => setError(null), setMessage, execute, save, calculate, load, newPlan, copy, remove, importFile, exportFile, refreshList,
-        errorMessage: error ? errorText(error) : '', requestId: error instanceof ApiError ? error.requestId : '',
+        setError, clearError: () => { setError(null); live.clearError(); }, setMessage, execute, save, calculate, load, newPlan, copy, remove, importFile, exportFile, refreshList,
+        errorMessage: reportedError ? errorText(reportedError) : '', requestId: reportedError instanceof ApiError ? reportedError.requestId : '',
     };
 }
 export type Workspace = ReturnType<typeof useWorkspace>;

@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 manifest_path = ROOT / 'frontend/prebuilt/build-manifest.json'
 if not manifest_path.exists():
-    sys.exit('No prebuilt manifest. Build the frontend: cd frontend && npm install && npm run build')
+    sys.exit('No prebuilt manifest. Build the frontend: cd frontend && npm ci && npm run build')
 manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
 errors = []
 for relative, expected in {**manifest['source_sha256'], **manifest['asset_sha256']}.items():
@@ -18,5 +18,5 @@ actual = {str(p.relative_to(ROOT)) for p in (ROOT/'frontend/src').rglob('*') if 
 known = {p for p in manifest['source_sha256'] if p.startswith('frontend/src/')}
 errors.extend(sorted(actual - known))
 if errors:
-    sys.exit('Supplied frontend is stale: ' + ', '.join(errors) + '\nRun: cd frontend && npm install && npm run build')
+    sys.exit('Supplied frontend is stale: ' + ', '.join(errors) + '\nRun: cd frontend && npm ci && npm run build')
 print('Prebuilt bundle matches the supplied UI sources and asset hashes')

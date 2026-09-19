@@ -1,3 +1,7 @@
+> **Актуальный срез:** [дневной интерфейс, SimulationEngine и анализ рисков](DAILY_ENGINE_REPORT.md). Ниже — история предыдущих поставок.
+
+> **Актуальный этап 19.09.2026:** [живой предпросмотр, лента и фактические проверки](LIVE_PREVIEW_REPORT.md). Ниже сохранён прежний срез; ручной расчёт и скрытие графиков после правки заменены автоматическим предпросмотром.
+
 # Передача компактного интерфейса / Codex
 
 ## Срез
@@ -27,32 +31,31 @@
 | Типы OpenAPI | `tools/generate_frontend_types.py` → `frontend/src/api/schema.d.ts` |
 | Пересборка offline-пакета | `frontend/scripts/build-portable.mjs` |
 
-Бывший `features/Overview.tsx` удалён. Устаревшие названия View в hook оставлены для совместимости служебных редакторов, но не создают страницы/меню.
+Бывший `features/Overview.tsx` пока присутствует, но основной `App` его не подключает. Его удаление относится к следующему этапу frontend. Устаревшие названия View в hook оставлены для совместимости служебных редакторов, но не создают страницы/меню.
 
-## Первая проверка в обычной сетевой среде
+## Проверка в обычной сетевой среде
 
 ```bash
 cd frontend
-npm install
+npm ci
 npm test
-npm run typecheck
 npm run build
-# Зафиксировать полученный package-lock.json; далее npm ci.
+# build включает полный typecheck; package-lock.json уже в репозитории.
 cd ..
 python -m pytest -q
 python tools/export_openapi.py --check
 python tools/generate_frontend_types.py --check
-python -m pip install -r requirements-browser.txt
+python -m pip install -r requirements/browser.txt
 python -m playwright install chromium
 python tests/web/compact_smoke.py --site frontend/dist
 python tests/web/launch_smoke.py
-docker compose build
-docker compose up -d
+docker compose --env-file docker/.env -f docker/compose.yaml build
+docker compose --env-file docker/.env -f docker/compose.yaml up -d
 ```
 
 `compact_smoke.py` по умолчанию использует обычную browser navigation. `--inline` — явно обозначенный fallback среды проверки, не подтверждение browser-network/deploy пути. Скрипт создаёт временное хранилище. После обычной сборки указывать `--site frontend/dist`; без флага проверяется `frontend/prebuilt`. Старое имя `browser_smoke.py` делегирует новому сценарию.
 
-В поставке реально проверены 154 backend/packaging-теста, 38 frontend-тестов, 74 assertions настоящего React UI с HTTP relay, 7 native HTTP/launch-проверок и строгая проверка pure-TS модулей. Полный TSX typecheck, Vite и Docker здесь недоступны. Не лечить их возможные ошибки отключением strict. См. TEST_REPORT.md.
+В исходной offline-поставке были проверены 154 backend/packaging-теста, 38 frontend-тестов, 74 assertions настоящего React UI с HTTP relay, 7 native HTTP/launch-проверок и строгая проверка pure-TS модулей. Полный TSX typecheck, Vite и Docker в той среде были недоступны. Не лечить ошибки отключением strict. Исторические результаты — в TEST_REPORT.md; новые проверки обвязки — в [текущей передаче](../maintenance/HANDOFF.md).
 
 ## Инварианты редактирования
 

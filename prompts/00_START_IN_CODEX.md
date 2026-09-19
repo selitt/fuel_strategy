@@ -3,11 +3,11 @@
 Работаем в корне проекта «Топливный космоконтур 2035», команда из5 человек.
 Сейчас нужна ориентация и согласованный старт, не решение кейса целиком.
 
-Прочитай AGENTS.md, START_HERE.md, docs/PRODUCT.md, tasks/T00_START_AND_DECISIONS.md.
+Прочитай AGENTS.md, README.md, docs/PRODUCT.md, tasks/T00_START_AND_DECISIONS.md.
 Проверь фактические файлы, а не полагайся на названия. Выполни:
 `python3 tools/workspace.py check`
 `python3 -m unittest discover -s tests/workspace -v`
-На Windows используй `py -3`. Эти проверки относятся только к каркасу.
+Эти проверки относятся только к каркасу.
 
 Укажи:
 1. Какую проблему оператора решаем и что должен делать будущий продукт.

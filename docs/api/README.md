@@ -1,51 +1,16 @@
-# Backend → FastAPI → UI
+# HTTP API
 
-Это инструкция рабочего HTTP-слоя. Математика находится за адаптером; здесь нет второй реализации расчёта. `frontend/` пока содержит только инструкцию для разработчика.
+FastAPI предоставляет расчётный адаптер, сохранение проектов и JSON/CSV-выгрузки. React-интерфейс уже реализован; математическая приёмка отдельно.
 
-Текущая передача и ограничения: [HANDOFF](docs/api/HANDOFF.md).
+Сервер запускается вместе с UI по [общей инструкции](../../README.md) и [инструкции деплоя](../DEPLOYMENT.md). Swagger — `/docs`, схема — `/openapi.json`, health — `/api/health`. Один worker и одно общее JSON-хранилище. Для публичного сервера используется общий Basic-доступ за HTTPS.
 
-## Запуск
-
-Из корня проекта, Docker Compose:
-
-```bash
-docker compose -f docker/compose.yaml up --build -d backend
-docker compose -f docker/compose.yaml logs -f backend
-```
-
-`http://127.0.0.1:8000/docs` — Swagger, `/openapi.json` — схема, `/api/health` — состояние HTTP.
-Compose поднимает только backend на loopback. Один worker: JSON-store использует блокировку внутри процесса. Не запускайте несколько процессов backend на одном каталоге проектов.
-
-Изменение порта/CORS/лимитов: скопировать `docker/.env.example` в `docker/.env`, отредактировать и пересоздать контейнер. Проекты лежат в volume `project_data`; не применять `docker compose -f docker/compose.yaml down -v`, если их нужно сохранить.
-
-Без Docker, Linux/WSL (Python 3.12–3.13):
+Отдельный запуск API для диагностики на Linux из корня:
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements-dev.txt
-python -m uvicorn src.app.api.main:app --reload --host 127.0.0.1 --port 8000
+.venv/bin/python -m pip install -r requirements/dev.txt
+.venv/bin/python -m uvicorn src.app.api.main:app --host 127.0.0.1 --port 8000
 ```
-
-Windows PowerShell, без обязательной активации окружения:
-
-```powershell
-py -3 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
-.\.venv\Scripts\python.exe -m uvicorn src.app.api.main:app --reload --host 127.0.0.1 --port 8000
-```
-
-Проверить версию выбранного Python перед созданием окружения. Локальное приложение не читает `.env` автоматически: переменные `FUEL_DATA_DIR`, `FUEL_CORS_ORIGINS`, `FUEL_MAX_REQUEST_BYTES`, `FUEL_MAX_UPLOAD_BYTES` задаются в окружении процесса. По умолчанию проекты сохраняются в `.local/projects`.
-
-Существующие bootstrap-скрипты теперь поддерживают отдельный backend:
-
-```bash
-bash depend.sh --backend-only --check
-bash depend.sh --backend-only --full-check
-```
-
-PowerShell: `./depend.ps1 --backend-only --check` или `./depend.ps1 --backend-only --full-check`.
-`--check` не устанавливает зависимости. Без `--check` скрипт может установить выбранные версии host tools. Backend-only не требует Node/Docker. При наличии `uv.lock` используется `uv sync --locked`; пока lock отсутствует — `uv pip sync` по зафиксированному `requirements-dev.txt` в локальное `.venv`. Отсутствие React-манифестов не блокирует backend-тесты.
 
 ## Проверка и схема
 
@@ -62,7 +27,7 @@ python3 tools/export_openapi.py
 python3 -m pytest -q
 ```
 
-Полный контракт: [docs/api/openapi.json](docs/api/openapi.json). Он сравнивается тестом с работающим приложением. Базовые две операции Васи остаются в `src/app/api/KosmoAPI.yaml`; запросы, успешные ответы и `operationId` проверяются на совместимость. `/hello` удалён и не должен использоваться.
+Полный контракт: [docs/api/openapi.json](openapi.json). Он сравнивается тестом с работающим приложением. Базовые две операции Васи остаются в `src/app/api/KosmoAPI.yaml`; запросы, успешные ответы и `operationId` проверяются на совместимость. `/hello` удалён и не должен использоваться.
 
 ## Группы операций
 
@@ -131,10 +96,10 @@ JSON-проект импортируется как новая копия, а е
 
 Адаптер может сообщать ожидаемую ошибку через `ApiProblem`: FastAPI сохранит код/статус/диагностику. Исключения программирования скрываются за безопасным `500`; `NotImplementedError` и отсутствие реализации дают `503`. Доменную ошибку следует переводить в публичную диагностику в адаптере, а не помещать HTTP-зависимости в математическое ядро.
 
-[Разделение ответственности и последовательность](docs/api/TEAM_AND_NEXT.md).
+[Разделение ответственности и последовательность](TEAM_AND_NEXT.md).
 
 ## Чего это не подтверждает
 
 Здесь не исправлены мощности, сроки, финансы или риск-модель `pseudo_engine`. Произвольные поля сохраняются согласно DTO, но могут не использоваться текущим адаптером. Проверка плана — `structure_only`, не проверка исполнимости.
 
-Нет frontend, авторизации, разделения пользователей, фоновых заданий, процентов прогресса и полноценной истории запусков. Общий локальный workspace нельзя без защиты публиковать в интернете. Проверки передачи и ограничения среды — [HANDOFF](docs/api/HANDOFF.md).
+Нет разделения пользователей, фоновых заданий, процентов прогресса и полноценной истории запусков. UI и общий Basic-доступ реализованы в веб-поставке. Общий локальный workspace нельзя без защиты публиковать в интернете. Проверки передачи и ограничения среды — [HANDOFF](HANDOFF.md).

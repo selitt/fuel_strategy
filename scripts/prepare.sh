@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-ROOT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+ROOT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
 VERSION_FILE="$ROOT_DIR/tools/tool-versions.env"
 MODE=install
 FULL_CHECK=0
@@ -10,13 +10,12 @@ BACKEND_ONLY=0
 BACKEND_READY=0
 FRONTEND_READY=0
 BLOCKED=0
-G0_PENDING=0
 GROUP_RELOAD_NEEDED=0
 DOCKER_READY=0
 
 usage() {
     cat <<'EOF'
-Usage: ./depend.sh [options]
+Usage: ./scripts/prepare.sh [options]
 
 Prepare the local development tools for the Kosmo Piter project.
 
@@ -26,8 +25,8 @@ Options:
   --backend-only  prepare/test Python API without Node or Docker
   --help        show this help
 
-The script never starts application services. Docker Desktop licensing and
-administrator prompts remain with the machine owner.
+Linux only (Ubuntu, Debian, Fedora). The script never starts services.
+Without --check it may install host tools and change user configuration.
 EOF
 }
 
@@ -54,15 +53,12 @@ for argument in "$@"; do
     esac
 done
 
-if [[ "${OSTYPE:-}" == msys* || "${OSTYPE:-}" == cygwin* || "${OSTYPE:-}" == win32* ]]; then
-    if command -v powershell.exe >/dev/null 2>&1; then
-        exec powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$ROOT_DIR/depend.ps1" "$@"
-    fi
-    printf 'BLOCKED: native Windows requires PowerShell; powershell.exe was not found.\n' >&2
+if [[ "$(uname -s)" != Linux ]]; then
+    printf 'BLOCKED: server preparation supports Linux only.\n' >&2
     exit 2
 fi
 
-if [[ ! -f "$ROOT_DIR/START_HERE.md" || ! -d "$ROOT_DIR/tasks" || ! -d "$ROOT_DIR/src" ]]; then
+if [[ ! -f "$ROOT_DIR/README.md" || ! -d "$ROOT_DIR/tasks" || ! -d "$ROOT_DIR/src" ]]; then
     printf 'BLOCKED: run this script from the command repository root.\n' >&2
     exit 2
 fi
@@ -76,9 +72,12 @@ fi
 # shellcheck disable=SC1090
 source "$VERSION_FILE"
 
-PYTHON_TARGET="${PYTHON_VERSION:-3.12}"
-NODE_TARGET="${NODE_VERSION:-24.21.0}"
+PYTHON_TARGET="${PYTHON_VERSION:-3.13}"
+NODE_TARGET="${NODE_VERSION:-22.16.0}"
 UV_TARGET="${UV_VERSION:-0.12.17}"
+
+PYTHON_PINNED=0
+NODE_PINNED=0
 
 trim_first_line() {
     tr -d '\r' < "$1" | sed -n '1p' | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//'
@@ -88,6 +87,7 @@ if [[ -f "$ROOT_DIR/.python-version" ]]; then
     candidate=$(trim_first_line "$ROOT_DIR/.python-version")
     if [[ "$candidate" =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
         PYTHON_TARGET="$candidate"
+        PYTHON_PINNED=1
     else
         printf 'WARN: ignoring invalid .python-version value: %s\n' "$candidate"
     fi
@@ -98,6 +98,7 @@ if [[ -f "$ROOT_DIR/.node-version" ]]; then
     candidate=${candidate#v}
     if [[ "$candidate" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
         NODE_TARGET="$candidate"
+        NODE_PINNED=1
     else
         printf 'WARN: ignoring non-exact .node-version value: %s\n' "$candidate"
     fi
@@ -125,6 +126,27 @@ version_matches() {
     fi
 }
 
+# Supported ranges mirror pyproject.toml and frontend/package.json.
+# Explicit version files keep their existing strict pin semantics.
+python_usable() {
+    if [[ "${PYTHON_PINNED:-0}" == 1 ]]; then
+        version_matches "$1" "$PYTHON_TARGET"
+    else
+        [[ "$1" =~ ^3\.(12|13)(\.|$) ]]
+    fi
+}
+
+node_usable() {
+    if [[ "${NODE_PINNED:-0}" == 1 ]]; then
+        version_matches "$1" "$NODE_TARGET"
+    elif [[ "$1" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+        local major="${BASH_REMATCH[1]}" minor="${BASH_REMATCH[2]}"
+        (( (major == 22 && minor >= 12) || major == 23 || major == 24 ))
+    else
+        return 1
+    fi
+}
+
 sudo_run() {
     if ! sudo -v; then
         blocked "sudo authentication failed or is unavailable"
@@ -135,12 +157,7 @@ sudo_run() {
 
 persist_path() {
     local line='export PATH="$HOME/.local/node/bin:$HOME/.local/bin:$PATH"'
-    local profile
-    if [[ "$(uname -s)" == Darwin ]]; then
-        profile="$HOME/.zprofile"
-    else
-        profile="$HOME/.profile"
-    fi
+    local profile="$HOME/.profile"
     if ! grep -Fqx "$line" "$profile" 2>/dev/null; then
         printf '\n%s\n' "$line" >> "$profile"
         info "added user-local Node/uv PATH to $profile"
@@ -184,12 +201,6 @@ install_base_packages() {
                 return 1
                 ;;
         esac
-    elif [[ "$os" == Darwin ]]; then
-        if ! command_exists brew; then
-            blocked "Homebrew is absent; install Git/curl from the official macOS tools first"
-            return 1
-        fi
-        brew install git curl
     else
         blocked "unsupported POSIX operating system: $os"
         return 1
@@ -262,13 +273,13 @@ ensure_python() {
     if command_exists python3; then
         actual=$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:3])))' 2>/dev/null || true)
     fi
-    if [[ -n "$actual" ]] && version_matches "$actual" "$PYTHON_TARGET"; then
+    if [[ -n "$actual" ]] && python_usable "$actual"; then
         pass "Python $actual"
         return 0
     fi
     if [[ "$MODE" == check ]]; then
         if [[ -n "$actual" ]]; then
-            blocked "Python $actual found; expected $PYTHON_TARGET"
+            blocked "Python $actual is outside the supported range or explicit pin; install target $PYTHON_TARGET"
         else
             blocked "python3 is missing"
         fi
@@ -295,7 +306,7 @@ ensure_node() {
     if command_exists node; then
         actual=$(node --version 2>/dev/null | sed 's/^v//' || true)
     fi
-    if [[ -n "$actual" ]] && version_matches "$actual" "$NODE_TARGET"; then
+    if [[ -n "$actual" ]] && node_usable "$actual"; then
         if command_exists npm; then
             pass "Node $actual / npm $(npm --version)"
         else
@@ -306,7 +317,7 @@ ensure_node() {
     fi
     if [[ "$MODE" == check ]]; then
         if [[ -n "$actual" ]]; then
-            blocked "Node $actual found; expected $NODE_TARGET"
+            blocked "Node $actual is outside the supported range or explicit pin; install target $NODE_TARGET"
         else
             blocked "Node.js is missing"
         fi
@@ -324,7 +335,6 @@ ensure_node() {
     arch=$(uname -m)
     case "$os" in
         Linux) node_os=linux ;;
-        Darwin) node_os=darwin ;;
         *) blocked "unsupported POSIX platform for official Node archive: $os"; return 1 ;;
     esac
     case "$arch" in
@@ -426,12 +436,6 @@ ensure_docker() {
                 blocked "Docker installation failed; use the official distro instructions"
                 return 1
             fi
-        elif [[ "$os" == Darwin ]]; then
-            blocked "install and accept Docker Desktop for macOS, then rerun this script"
-            return 1
-        else
-            blocked "install Docker Desktop for this platform, then rerun this script"
-            return 1
         fi
     fi
     if ! command_exists docker; then
@@ -512,17 +516,17 @@ run_workspace_check() {
 }
 
 sync_project_if_ready() {
-    # Backend is independently usable while the frontend is not published yet.
+    # Backend-only mode remains available independently of the web delivery.
     if [[ ! -f "$ROOT_DIR/pyproject.toml" ]]; then
         blocked "pyproject.toml is missing"
         return 0
     fi
     if [[ "$MODE" == check ]]; then
-        if [[ -f "$ROOT_DIR/uv.lock" || -f "$ROOT_DIR/requirements-dev.txt" ]]; then
+        if [[ -f "$ROOT_DIR/uv.lock" || -f "$ROOT_DIR/requirements/dev.txt" ]]; then
             BACKEND_READY=1
             pass "backend manifests present (dependencies not installed in check mode)"
         else
-            blocked "backend requires uv.lock or requirements-dev.txt"
+            blocked "backend requires uv.lock or requirements/dev.txt"
         fi
     elif ! command_exists uv; then
         blocked "uv is unavailable; backend dependencies were not installed"
@@ -533,27 +537,26 @@ sync_project_if_ready() {
         else
             blocked "uv sync --locked failed"
         fi
-    elif [[ -f "$ROOT_DIR/requirements-dev.txt" ]]; then
+    elif [[ -f "$ROOT_DIR/requirements/dev.txt" ]]; then
         # Until a network-resolved uv.lock is published, use the existing exact
         # requirements pins in a project-local venv, never global site-packages.
         if [[ ! -d "$ROOT_DIR/.venv" ]] && ! uv venv --python "$PYTHON_TARGET" "$ROOT_DIR/.venv"; then
             blocked "could not create the project-local Python environment"
-        elif (cd "$ROOT_DIR" && uv pip sync --python "$ROOT_DIR/.venv/bin/python" requirements-dev.txt); then
+        elif (cd "$ROOT_DIR" && uv pip sync --python "$ROOT_DIR/.venv/bin/python" requirements/dev.txt); then
             BACKEND_READY=1
-            pass "Python dependencies synced from requirements-dev.txt"
+            pass "Python dependencies synced from requirements/dev.txt"
         else
             blocked "could not sync the project-local Python environment"
         fi
     else
-        blocked "backend requires uv.lock or requirements-dev.txt"
+        blocked "backend requires uv.lock or requirements/dev.txt"
     fi
 
     if [[ "$BACKEND_ONLY" == 1 ]]; then
         return 0
     fi
     if [[ ! -f "$ROOT_DIR/frontend/package.json" || ! -f "$ROOT_DIR/frontend/package-lock.json" ]]; then
-        G0_PENDING=1
-        warn "G0_PENDING: frontend manifests not published; backend checks remain available"
+        blocked "frontend requires package.json and package-lock.json"
     elif [[ "$MODE" == check ]]; then
         pass "frontend manifests present (dependencies not installed in check mode)"
     elif npm --prefix "$ROOT_DIR/frontend" ci; then
@@ -562,23 +565,17 @@ sync_project_if_ready() {
     else
         blocked "npm ci failed"
     fi
-    local compose_file=""
-    if [[ -f "$ROOT_DIR/docker/compose.yaml" ]]; then
-        compose_file="$ROOT_DIR/docker/compose.yaml"
-    elif [[ -f "$ROOT_DIR/compose.yaml" ]]; then
-        compose_file="$ROOT_DIR/compose.yaml"
-    elif [[ -f "$ROOT_DIR/docker-compose.yml" ]]; then
-        compose_file="$ROOT_DIR/docker-compose.yml"
-    fi
-    if [[ -n "$compose_file" ]]; then
-        if [[ "$DOCKER_READY" == 1 ]] && docker compose -f "$compose_file" config --quiet 2>/dev/null; then
+    local compose_file="$ROOT_DIR/docker/compose.yaml"
+    local compose_env="$ROOT_DIR/docker/.env"
+    if [[ ! -f "$compose_env" ]]; then compose_env="$ROOT_DIR/docker/.env.example"; fi
+    if [[ -f "$compose_file" ]]; then
+        if [[ "$DOCKER_READY" == 1 ]] && docker compose -f "$compose_file" --env-file "$compose_env" config --quiet 2>/dev/null; then
             pass "Docker Compose configuration"
         elif [[ "$DOCKER_READY" == 1 ]]; then
             blocked "Docker Compose configuration is invalid"
         fi
     else
-        G0_PENDING=1
-        warn "G0_PENDING: compose.yaml is not published yet"
+        blocked "Docker Compose manifest is missing"
     fi
 }
 
@@ -594,13 +591,17 @@ run_full_checks() {
         if ! (cd "$ROOT_DIR" && "$ROOT_DIR/.venv/bin/python" tools/export_openapi.py --check); then
             blocked "published OpenAPI is out of date"
         fi
+        if [[ "$BACKEND_ONLY" == 0 ]] && ! (cd "$ROOT_DIR" && "$ROOT_DIR/.venv/bin/python" tools/generate_frontend_types.py --check); then
+            blocked "frontend API types are out of date"
+        fi
     else
         blocked "backend tests cannot run without its dependencies"
     fi
     if [[ "$FRONTEND_READY" == 1 ]]; then
-        if grep -q '"typecheck"' "$ROOT_DIR/frontend/package.json" && ! npm --prefix "$ROOT_DIR/frontend" run typecheck; then
-            blocked "frontend typecheck failed"
+        if ! npm --prefix "$ROOT_DIR/frontend" test; then
+            blocked "frontend tests failed"
         fi
+        # npm run build includes the full TypeScript check.
         if grep -q '"build"' "$ROOT_DIR/frontend/package.json" && ! npm --prefix "$ROOT_DIR/frontend" run build; then
             blocked "frontend build failed"
         fi
@@ -631,8 +632,6 @@ if [[ "$BLOCKED" != 0 ]]; then
 fi
 if [[ "$BACKEND_ONLY" == 1 ]]; then
     printf 'RESULT: READY (backend tools/manifests; frontend and Docker not requested)\n'
-elif [[ "$G0_PENDING" == 1 ]]; then
-    printf 'RESULT: PROVISIONAL (host tools ready; waiting for W3 G0 manifests)\n'
 else
     printf 'RESULT: READY\n'
 fi

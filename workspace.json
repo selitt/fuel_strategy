@@ -13,7 +13,6 @@
   ],
   "required_paths": [
     "README.md",
-    "START_HERE.md",
     "AGENTS.md",
     "data/README.md",
     "data/constraints.csv",
@@ -51,9 +50,15 @@
     "tools/workspace.py",
     "docker/Dockerfile",
     "docker/compose.yaml",
-    "docker/Dockerfile.dockerignore"
+    "docker/Dockerfile.dockerignore",
+    "scripts/prepare.sh",
+    "requirements/base.txt",
+    "requirements/dev.txt",
+    "requirements/browser.txt",
+    "docker/.env.example",
+    "docs/api/README.md"
   ],
-  "note": "application_implemented относится к полной конкурсной модели и остаётся false. UI реализован; native production-сборка, Docker и полная математическая приёмка не подтверждены. Актуальная передача: docs/frontend/HANDOFF.md; проверки: docs/frontend/TEST_REPORT.md.",
+  "note": "application_implemented относится к полной конкурсной модели и остаётся false. Linux/server раскладка: README.md и docs/DEPLOYMENT.md; фактические проверки: docs/maintenance/HANDOFF.md.",
   "implemented_components": [
     "http_api",
     "project_storage",

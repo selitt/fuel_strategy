@@ -1,5 +1,6 @@
 """ASGI entrypoint. Build an independent application instance for each workspace/test."""
 import hashlib
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,6 +13,25 @@ from src.app.api.project_controller import router as project_router
 from src.app.persistence.project_store import ProjectStore
 from src.app.api.errors import ERROR_RESPONSES, install_error_handlers
 from src.app.api.middleware import RequestContextMiddleware
+
+
+def _default_engine_version(reference_dir: Path) -> str:
+    digest = hashlib.sha256()
+    files = [
+        *((ROOT / "src" / "engine").glob("*.py")),
+        *reference_dir.glob("*.csv"),
+        *(reference_dir / "scenarios").glob("*.yaml"),
+    ]
+    for path in sorted(files, key=lambda item: str(item)):
+        if path.is_relative_to(ROOT / "src" / "engine"):
+            label = f"engine/{path.name}"
+        else:
+            label = f"reference/{path.relative_to(reference_dir).as_posix()}"
+        digest.update(label.encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
 
 
 def create_app(
@@ -31,19 +51,22 @@ def create_app(
         version="1.1.0",
         responses=ERROR_RESPONSES,
     )
+    uses_default_service = calculation_service is None
+    if uses_default_service:
+        from src.app.service.calc_service import CalculationService
+        calculation_service = CalculationService(config.reference_dir)
     app.state.settings = config
     app.state.calculation_service = calculation_service
     app.state.project_store = ProjectStore(config.data_dir)
-    engine_path = ROOT / "src/engine/pseudo_engine.py"
-    version = hashlib.sha256(engine_path.read_bytes()).hexdigest() if engine_path.is_file() else "unavailable"
+    version = _default_engine_version(config.reference_dir) if uses_default_service else "unversioned"
     app.state.engine_info = engine_info.model_copy(deep=True) if engine_info is not None else EngineInfoDTO(
-        engine_id="pseudo_engine.run_pseudo_engine" if calculation_service is None else "injected_service",
-        version=version if calculation_service is None else "unversioned",
-        status="prototype" if calculation_service is None else "unverified",
+        engine_id="src.engine.engine.SimulationEngine" if uses_default_service else "injected_service",
+        version=version,
+        status="prototype" if uses_default_service else "unverified",
         limitations=[
             "API-тесты проверяют транспорт и сохранение, а не V01–V10/все ограничения кейса.",
-            "В исходном модуле годовой расчёт; внутригодовые сроки и полный регламент не подтверждены.",
-            "Пустые inventory_trace/risk_register не означают отсутствие риска или дефицита внутри года.",
+            "Посуточный календарь движка условно использует 365 дней в каждом году; полный регламент не подтверждён.",
+            "Монте-Карло возвращает только сводку и не передаёт историю отдельных аварий.",
             "assumptions_reference унаследован из engine и требует проверки владельцем модели.",
         ],
     )

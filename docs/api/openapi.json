@@ -220,6 +220,118 @@
         }
       }
     },
+    "/api/calc/risk": {
+      "post": {
+        "tags": [
+          "Моделирование снабжения"
+        ],
+        "summary": "Запустить отдельный анализ рисков Монте-Карло",
+        "description": "Возвращает обычный результат и сводку 100 прогонов с seed 42.",
+        "operationId": "calculate_risk_api_calc_risk_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipantPlanDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResultExportEnvelopeDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Некорректный HTTP-запрос",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Ресурс не найден",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Конфликт ревизии или неактуальный результат",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Превышен размер запроса или файла",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Неподдерживаемый формат файла или кодирование",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Внутренняя ошибка; используйте request_id для диагностики",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Расчётный сервис не подключён",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/health": {
       "get": {
         "tags": [
