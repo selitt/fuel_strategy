@@ -6,6 +6,27 @@
 
 Во всех командах ниже рабочий каталог — корень проекта, а основной Compose-файл — `docker/compose.yaml`.
 
+## Быстрый публичный запуск в GigaIDE
+
+```bash
+./scripts/prepare.sh
+./run.sh
+./run.sh status
+```
+
+`prepare.sh` устанавливает поддерживаемые инструменты, синхронизирует зависимости через `uv` и `npm ci`, затем собирает production frontend. `run.sh` собирает Docker-образ, запускает Compose в фоне на `0.0.0.0:8080` и ждёт успешный healthcheck.
+
+В панели портов GigaIDE найдите `8080`, переключите видимость в **Public** и откройте ссылку через **Open in new tab**. Встроенный Preview является iframe, а сайт намеренно запрещает такое встраивание. Видимость порта задаётся площадкой и не может быть переключена скриптом проекта.
+
+Без `docker/.env` используются значения из `docker/.env.example`, включая пустой логин и пароль. В таком режиме любой обладатель ссылки может менять общие проекты. Это временный режим для согласованного просмотра командой.
+
+```bash
+./run.sh logs
+./run.sh stop
+```
+
+`stop` останавливает сервис, но сохраняет named volume с проектами.
+
 ## Первая установка
 
 ```bash
@@ -13,7 +34,7 @@ cp docker/.env.example docker/.env
 chmod 600 docker/.env
 ```
 
-В `docker/.env` задайте оба значения `FUEL_HTTP_USER` и `FUEL_HTTP_PASSWORD`. Пароль храните только на сервере. Значения с `$` экранируйте для синтаксиса Compose. Оставьте `FUEL_BIND_HOST=127.0.0.1` и `FUEL_WEB_PORT=8080`, если reverse proxy работает на том же хосте.
+В `docker/.env` задайте оба значения `FUEL_HTTP_USER` и `FUEL_HTTP_PASSWORD`. Пароль храните только на сервере. Значения с `$` экранируйте для синтаксиса Compose. Для постоянного сервера с reverse proxy запускайте `FUEL_BIND_HOST=127.0.0.1 ./run.sh`; обычный `./run.sh` предназначен для публичного порта GigaIDE и использует `0.0.0.0`.
 
 ```bash
 docker compose --env-file docker/.env -f docker/compose.yaml config --quiet

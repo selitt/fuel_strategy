@@ -124,11 +124,135 @@ class DependBootstrapContractTests(unittest.TestCase):
             selected.write_text('#!/bin/sh\nprintf "%s\\n" "$@"\n')
             selected.chmod(0o755)
             result = subprocess.run(
-                ["bash", str(root / "run.sh")], capture_output=True, text=True,
+                ["bash", str(root / "run.sh"), "local"], capture_output=True, text=True,
                 env={**os.environ, "PYTHON": str(selected), "FUEL_FRONTEND_DIR": str(root)},
             )
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("src.app.web:create_web_app", result.stdout)
+
+    def test_run_starts_public_compose_and_waits_for_health(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            (root / "docker").mkdir()
+            (root / "docker/compose.yaml").touch()
+            (root / "docker/.env.example").touch()
+            (root / "bin").mkdir()
+            log = root / "docker.log"
+            docker = root / "bin/docker"
+            docker.write_text(
+                '#!/bin/sh\nprintf "%s|%s\\n" "$FUEL_BIND_HOST" "$*" >> "$TEST_LOG"\n'
+            )
+            docker.chmod(0o755)
+            env = {
+                **os.environ,
+                "PATH": str(root / "bin") + ":" + os.environ["PATH"],
+                "TEST_LOG": str(log),
+            }
+            env.pop("FUEL_BIND_HOST", None)
+            result = subprocess.run(
+                ["bash", str(root / "run.sh")],
+                cwd=root,
+                env=env,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(
+                log.read_text().splitlines(),
+                [
+                    "0.0.0.0|compose --env-file "
+                    + str(root / "docker/.env.example")
+                    + " -f "
+                    + str(root / "docker/compose.yaml")
+                    + " up --build -d --wait"
+                ],
+            )
+
+    def test_run_reports_web_logs_when_public_service_is_not_ready(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            (root / "docker").mkdir()
+            (root / "docker/compose.yaml").touch()
+            (root / "docker/.env.example").touch()
+            (root / "bin").mkdir()
+            log = root / "docker.log"
+            docker = root / "bin/docker"
+            docker.write_text(
+                '#!/bin/sh\nprintf "%s\\n" "$*" >> "$TEST_LOG"\n'
+                'case "$*" in *" up --build -d --wait") exit 9;; esac\n'
+            )
+            docker.chmod(0o755)
+            result = subprocess.run(
+                ["bash", str(root / "run.sh")],
+                cwd=root,
+                env={
+                    **os.environ,
+                    "PATH": str(root / "bin") + ":" + os.environ["PATH"],
+                    "TEST_LOG": str(log),
+                },
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("site did not become ready", result.stderr)
+            self.assertEqual(
+                log.read_text().splitlines()[-1],
+                "compose --env-file "
+                + str(root / "docker/.env.example")
+                + " -f "
+                + str(root / "docker/compose.yaml")
+                + " logs --tail=100 web",
+            )
+
+    def test_prepare_installs_and_builds_frontend_in_order(self):
+        script = self._read_required("scripts/prepare.sh")
+        function = "sync_project_if_ready()" + script.split("sync_project_if_ready()", 1)[1].split("run_full_checks()", 1)[0]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "frontend").mkdir()
+            (root / "docker").mkdir()
+            (root / "requirements").mkdir()
+            for name in (
+                "pyproject.toml",
+                "requirements/dev.txt",
+                "frontend/package.json",
+                "frontend/package-lock.json",
+                "docker/compose.yaml",
+                "docker/.env.example",
+            ):
+                (root / name).touch()
+            log = root / "npm.log"
+            harness = r'''
+MODE=install BACKEND_ONLY=0 BACKEND_READY=0 FRONTEND_READY=0 BLOCKED=0
+DOCKER_READY=0 PYTHON_TARGET=3.13
+command_exists() { return 0; }
+pass() { :; }
+warn() { :; }
+blocked() { BLOCKED=$((BLOCKED + 1)); }
+uv() { return 0; }
+npm() { printf '%s\n' "$*" >> "$TEST_LOG"; }
+'''
+            result = subprocess.run(
+                ["bash", "-c", harness + function + '\nsync_project_if_ready\nexit "$BLOCKED"'],
+                env={**os.environ, "ROOT_DIR": directory, "TEST_LOG": str(log)},
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(
+                log.read_text().splitlines(),
+                [
+                    f"--prefix {root / 'frontend'} ci",
+                    f"--prefix {root / 'frontend'} run build",
+                ],
+            )
 
     def test_dev_launcher_stops_both_children_on_term(self):
         import shutil
