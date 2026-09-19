@@ -1,14 +1,16 @@
 from pathlib import Path
 import importlib.util
 from fastapi.testclient import TestClient
-from src.app.api.main import create_app
+from src.app.main import create_app
 
 ROOT = Path(__file__).resolve().parents[2]
 
-def test_413_descriptions_are_explicit_and_portable():
+def test_413_responses_are_documented_with_the_standard_fastapi_description():
     schema = create_app().openapi()
     for route in ('validate', 'import', 'export'):
-        assert schema['paths'][f'/api/plans/{route}']['post']['responses']['413']['description'] == 'Превышен размер запроса или файла'
+        response = schema['paths'][f'/api/plans/{route}']['post']['responses']['413']
+        assert response['description'] == 'Request Entity Too Large'
+        assert response['content']['application/json']['schema']['$ref'].endswith('/ErrorDTO')
 
 def test_frontend_delivery_entrypoint_exists():
     assert importlib.util.find_spec('src.app.web') is not None

@@ -23,6 +23,7 @@ Thumbs.db
 .codex/
 .local/
 
+
 # Operator UI
 frontend/node_modules/
 frontend/dist/

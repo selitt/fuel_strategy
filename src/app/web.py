@@ -12,7 +12,7 @@ from fastapi import FastAPI
 from starlette.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 
-from src.app.api.main import create_app
+from src.app.main import create_app
 from src.app.config import ROOT
 
 
@@ -40,7 +40,7 @@ class SharedAccessGate:
             pass
         if not valid:
             response = JSONResponse(
-                {'code': 'ACCESS_REQUIRED', 'detail': 'Требуется доступ к рабочему пространству', 'request_id': ''},
+                {'detail': 'Требуется доступ к рабочему пространству'},
                 status_code=401,
                 headers={'WWW-Authenticate': 'Basic realm="Fuel workspace", charset="UTF-8"',
                          'Cache-Control': 'no-store'},

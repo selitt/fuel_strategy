@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
-from src.app.api.dependencies import (
+from src.app.api.deps import (
     CalculationBackend,
     call_calculation,
     call_risk_calculation,

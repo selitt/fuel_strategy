@@ -28,15 +28,18 @@ def test_json_import_preserves_plan_and_is_not_a_calculation(client, plan):
     assert response.json()["model_checked"] is False
 
 
-@pytest.mark.parametrize("filename,contents,status", [
-    ("script.py", b"{}", 415), ("plan.json", b"not json", 422),
-    ("plan.json", b'{"decisions": []}', 422),
-    ("plan.json", b'{"decisions": {}, "decisions": {}}', 422),
+@pytest.mark.parametrize("filename,contents,status,cause", [
+    ("script.py", b"{}", 415, "Поддерживается JSON-файл"),
+    ("plan.json", b"not json", 422, "Ожидается корректный JSON"),
+    ("plan.json", b'{"decisions": []}', 422, "decisions"),
+    ("plan.json", b'{"decisions": {}, "decisions": {}}', 422, "повторяющееся имя поля"),
 ])
-def test_invalid_uploads_have_user_facing_errors(client, filename, contents, status):
+def test_invalid_uploads_have_user_facing_errors(client, filename, contents, status, cause):
     response = client.post("/api/plans/import", files={"file": (filename, contents)})
     assert response.status_code == status, response.text
-    assert response.json()["request_id"]
+    assert set(response.json()) == {"detail"}
+    assert cause in str(response.json()["detail"])
+    assert response.headers["x-request-id"]
 
 
 def test_uploaded_file_limit_is_separate_from_total_request_limit(client_factory):
@@ -198,5 +201,5 @@ def test_corrupt_saved_file_is_not_replaced_by_an_empty_project(client_factory, 
     (directory / f'{project["project_id"]}.json').write_text("private broken text")
     response = client.get(f'/api/projects/{project["project_id"]}')
     assert response.status_code == 500
-    assert response.json()["code"] == "PROJECT_STORAGE_INVALID"
+    assert response.json() == {"detail": "Сохранённый проект повреждён или несовместим; файл не изменён"}
     assert "private broken text" not in response.text

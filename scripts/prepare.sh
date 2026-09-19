@@ -560,8 +560,13 @@ sync_project_if_ready() {
     elif [[ "$MODE" == check ]]; then
         pass "frontend manifests present (dependencies not installed in check mode)"
     elif npm --prefix "$ROOT_DIR/frontend" ci; then
-        FRONTEND_READY=1
         pass "frontend dependencies synced from package-lock.json"
+        if npm --prefix "$ROOT_DIR/frontend" run build; then
+            FRONTEND_READY=1
+            pass "frontend production bundle built"
+        else
+            blocked "frontend production build failed"
+        fi
     else
         blocked "npm ci failed"
     fi
@@ -600,10 +605,6 @@ run_full_checks() {
     if [[ "$FRONTEND_READY" == 1 ]]; then
         if ! npm --prefix "$ROOT_DIR/frontend" test; then
             blocked "frontend tests failed"
-        fi
-        # npm run build includes the full TypeScript check.
-        if grep -q '"build"' "$ROOT_DIR/frontend/package.json" && ! npm --prefix "$ROOT_DIR/frontend" run build; then
-            blocked "frontend build failed"
         fi
     fi
 }

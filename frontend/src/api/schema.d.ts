@@ -11,7 +11,7 @@ export interface schemas {
   "ComparisonRequestDTO": { "project_ids": Array<string>; };
   "ConstraintCheckDTO": { "constraint_id": string; "year": number; "passed": boolean; "detail": string; "excess"?: (number | null); [key: string]: unknown; };
   "EngineInfoDTO": { "engine_id": string; "version": string; "status": "prototype" | "unverified" | "unavailable"; "model_verified"?: false; "limitations": Array<string>; };
-  "ErrorDTO": { "code": string; "detail": (string | Array<{ [key: string]: unknown; }>); "request_id": string; };
+  "ErrorDTO": { "detail": (string | Array<{ [key: string]: unknown; }>); };
   "ExportMetadataDTO": { "schema_version": 1; "project_id": string; "project_revision": number; "run_id": string; "input_revision": number; "input_hash": string; "plan_id": string; "scenario_id": string; "created_at": string; "units": { [key: string]: string; }; "assumptions_reference": (string | { [key: string]: unknown; }); "engine": schemas["EngineInfoDTO"]; "origin": "server" | "imported"; "table_rows": { [key: string]: number; }; "warnings": Array<string>; };
   "FinancialBreakdownDTO": { "year": number; "procurement": number; "reservation": number; "holding": number; "capex": number; "opex": number; "total": number; [key: string]: unknown; };
   "HealthDTO": { "status"?: "ok"; "api_version": string; "engine": schemas["EngineInfoDTO"]; };

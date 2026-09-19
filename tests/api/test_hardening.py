@@ -11,7 +11,7 @@ def test_incomplete_service_result_cannot_become_default_green_numbers(client_fa
             return {"plan_id": request.plan_id, "scenario_id": request.scenario_id}
     response = client_factory(calculation_service=IncompleteService()).post("/api/calc", json=plan)
     assert response.status_code == 500
-    assert response.json()["code"] == "CALCULATION_FAILED"
+    assert response.json() == {"detail": "Расчёт завершился ошибкой; результат не заменён"}
 
 
 def test_typed_but_incomplete_result_is_also_not_a_success(client_factory, plan):

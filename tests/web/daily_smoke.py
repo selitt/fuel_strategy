@@ -43,7 +43,7 @@ async def main():
       try:
        await asyncio.sleep(.35)
        if fail_second and item['plan']['scenario_id']=='MANDATORY_STRESS':
-        await route.fulfill(status=503,json={'code':'ENGINE_NOT_READY','detail':'Тест: второй анализ недоступен'});item['error']=True
+        await route.fulfill(status=503,json={'detail':'Тест: второй анализ недоступен'});item['error']=True
        else:
         response=await route.fetch(timeout=120000);item['result']=await response.json();await route.fulfill(response=response)
       finally:risk_active-=1

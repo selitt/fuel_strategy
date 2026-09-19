@@ -47,7 +47,7 @@ def main() -> None:
         with httpx.Client(base_url=base, timeout=30) as client:
             for iteration in range(2):
                 with (out / f'process-{iteration}.log').open('w') as log:
-                    proc = subprocess.Popen(['bash', 'run.sh'], cwd=ROOT, env=env,
+                    proc = subprocess.Popen(['bash', 'run.sh', 'local'], cwd=ROOT, env=env,
                                             stdout=log, stderr=log)
                     try:
                         for _ in range(150):
@@ -62,7 +62,7 @@ def main() -> None:
                         else:
                             raise TimeoutError('Entrypoint did not become ready')
                         html = client.get('/')
-                        verify(f'Process {iteration}: HTML served by bash run.sh', html.status_code == 200 and '<div id="root"' in html.text)
+                        verify(f'Process {iteration}: HTML served by bash run.sh local', html.status_code == 200 and '<div id="root"' in html.text)
                         if iteration == 0:
                             assets = re.findall(r'(?:src|href)="(/assets/[^\"]+)"', html.text)
                             verify('Production assets served through native HTTP', bool(assets) and all(client.get(a).status_code == 200 for a in assets))

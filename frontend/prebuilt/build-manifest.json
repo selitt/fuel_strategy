@@ -4,8 +4,8 @@
   "command": "cd frontend && node scripts/build-portable.mjs",
   "source_sha256": {
     "frontend/src/App.tsx": "60e379860697a89b778fea6f61e7c06565f667e17fefa7f55f0f0f601280bfb4",
-    "frontend/src/api/client.ts": "6a41cf0bc31a5e03bd950631ff6ee56acc6d72ca4bd5901d66411293967bd6dc",
-    "frontend/src/api/schema.d.ts": "fbf1852028a620aca07a1c49278acd6c8abec6ca4049c7e23fa7173bc4858c47",
+    "frontend/src/api/client.ts": "0494992fdb315b129fe1c6d28214076317b961528496485da0f678573f6cf898",
+    "frontend/src/api/schema.d.ts": "c4eeb9e333d2c65e4b7a6df8116b899033019c5db3fbe5f5996530849d2a216a",
     "frontend/src/api/types.ts": "2954f3105c7460838958742a7c0bfd7bb40f0cf581a039e362199c43d727bc31",
     "frontend/src/components/AnalyticsChart.tsx": "6ac0f20a69ceb20188b407298f4b7f1e963720dea0feb8d9e858d5d4fc412871",
     "frontend/src/components/Chart.tsx": "c732f3fe052fb7b7d69af4a46626441d2927a1b476dd7139305cb0a86ee32711",
@@ -47,9 +47,9 @@
   },
   "asset_sha256": {
     "frontend/prebuilt/THIRD_PARTY_NOTICES.txt": "f9183ea1059e4abe1d061ac5fc8734b5849b4ce452bef45b81ede92e964115fd",
-    "frontend/prebuilt/assets/app.c59062c8bb87.js": "c59062c8bb8716296657a3a99c155cebbcc5f927d8f2373b1728dff7416f577e",
+    "frontend/prebuilt/assets/app.1b803481900d.js": "1b803481900d28d42ffbf252c0d590ba6d83ddfdf6ea2485d12eef8d7648a466",
     "frontend/prebuilt/assets/app.cca91e59d63b.css": "cca91e59d63b23ca3243c35fcc4ad0f2f5edfc013f9a35b8c55af91575ac7aef",
     "frontend/prebuilt/favicon.svg": "22229ef001b736a6cfbc392305c18ad9d41a4472db141ff7cf19254147a9d717",
-    "frontend/prebuilt/index.html": "88757711110166157b03666c7dd3680747e1a2b9f1c480140dca844f2790de76"
+    "frontend/prebuilt/index.html": "2b1831f1de5e21d7f0e35b795ae3d3e230110758e0a9f5eeac1b3defbc7652c5"
   }
 }

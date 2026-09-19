@@ -6,6 +6,7 @@ from uuid import uuid4
 
 from starlette.datastructures import Headers, MutableHeaders
 from starlette.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 
 from src.app.service.json_io import InvalidJSON, loads
 
@@ -13,7 +14,15 @@ logger = logging.getLogger("fuel.api")
 _SAFE_ID = re.compile(r"^[A-Za-z0-9._-]{1,80}$")
 
 
-class RequestContextMiddleware:
+async def validation_error_response(request, exc: RequestValidationError):
+    # Raw input/context may contain bytes or exception objects that FastAPI's
+    # JSON encoder cannot serialize. Keep the standard diagnostic fields only.
+    detail = [{key: error[key] for key in ("loc", "msg", "type")}
+              for error in exc.errors()]
+    return JSONResponse(status_code=422, content={"detail": detail})
+
+
+class RequestBoundaryMiddleware:
     def __init__(self, app, max_request_bytes: int):
         self.app = app
         self.limit = max_request_bytes
@@ -42,14 +51,14 @@ class RequestContextMiddleware:
                 output_headers["X-Model-Verified"] = "false"
             await send(message)
 
-        async def reject(status_code, code, detail):
+        async def reject(status_code, detail):
             await JSONResponse(status_code=status_code, content={
-                "code": code, "detail": detail, "request_id": request_id,
+                "detail": detail,
             })(scope, receive, observed_send)
 
         try:
             if headers.get("content-encoding", "identity").lower() != "identity":
-                return await reject(415, "UNSUPPORTED_ENCODING", "Сжатые тела запросов не поддерживаются")
+                return await reject(415, "Сжатые тела запросов не поддерживаются")
             declared = headers.get("content-length")
             if declared is not None:
                 try:
@@ -57,9 +66,9 @@ class RequestContextMiddleware:
                     if length < 0:
                         raise ValueError
                 except ValueError:
-                    return await reject(400, "INVALID_CONTENT_LENGTH", "Некорректный Content-Length")
+                    return await reject(400, "Некорректный Content-Length")
                 if length > self.limit:
-                    return await reject(413, "REQUEST_TOO_LARGE", "Запрос превышает разрешённый размер")
+                    return await reject(413, "Запрос превышает разрешённый размер")
             parts = []
             size = 0
             while True:
@@ -69,7 +78,7 @@ class RequestContextMiddleware:
                 part = message.get("body", b"")
                 size += len(part)
                 if size > self.limit:
-                    return await reject(413, "REQUEST_TOO_LARGE", "Запрос превышает разрешённый размер")
+                    return await reject(413, "Запрос превышает разрешённый размер")
                 parts.append(part)
                 if not message.get("more_body", False):
                     break
@@ -81,7 +90,7 @@ class RequestContextMiddleware:
                 try:
                     loads(body)
                 except InvalidJSON as exc:
-                    return await reject(422, "VALIDATION_ERROR", [{
+                    return await reject(422, [{
                         "loc": ["body"], "msg": str(exc), "type": "json_invalid",
                     }])
             consumed = False
@@ -98,7 +107,7 @@ class RequestContextMiddleware:
             logger.exception("Unhandled HTTP failure request_id=%s", request_id)
             if response_started:
                 raise
-            await reject(500, "INTERNAL_ERROR", "Внутренняя ошибка API; используйте request_id для диагностики")
+            await reject(500, "Внутренняя ошибка API; используйте X-Request-ID для диагностики")
         finally:
             logger.info("%s %s status=%s elapsed_ms=%.1f request_id=%s",
                         scope["method"], scope["path"], status,

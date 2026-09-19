@@ -1,11 +1,14 @@
 import unittest
 from fastapi.testclient import TestClient
-from src.app.api.main import app
+from src.app.main import create_app
 
 
 class TestCalcApi(unittest.TestCase):
     def setUp(self):
-        self.client = TestClient(app)
+        self.client = TestClient(create_app())
+
+    def tearDown(self):
+        self.client.close()
 
     def test_get_template(self):
         """Проверка эндпоинта получения шаблона плана."""
@@ -58,6 +61,9 @@ class TestCalcApi(unittest.TestCase):
         payload = {"plan_id": "broken", "decisions": "not_an_object"}
         response = self.client.post("/api/calc", json=payload)
         self.assertEqual(response.status_code, 422)
+        self.assertEqual(set(response.json()), {"detail"})
+        self.assertEqual(response.json()["detail"][0]["loc"], ["body", "decisions"])
+        self.assertTrue(response.headers["x-request-id"])
 
 
 if __name__ == "__main__":

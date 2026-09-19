@@ -1,12 +1,14 @@
 """Exports values already returned by the model. No physics/finance recomputation."""
 import csv
+from datetime import datetime
 from io import BytesIO, StringIO
 import json
 from typing import Any
 import zipfile
 
+from fastapi import HTTPException
+
 from src.app.dto.web_dto import ProjectDTO
-from src.app.errors import ApiProblem
 from src.app.service.json_io import dumps
 
 TABLES = ("yearly_balance", "source_schedule", "inventory_trace", "financial_breakdown",
@@ -30,7 +32,7 @@ def csv_cell(value: Any):
 def metadata(project: ProjectDTO) -> dict:
     run = project.last_run
     if run is None:
-        raise ApiProblem(409, "RESULT_NOT_AVAILABLE", "Проект ещё не рассчитан")
+        raise HTTPException(status_code=409, detail="Проект ещё не рассчитан")
     value = run.result.model_dump(mode="json")
     return {
         "schema_version": 1,
@@ -38,7 +40,7 @@ def metadata(project: ProjectDTO) -> dict:
         "run_id": str(run.run_id), "input_revision": run.input_revision,
         "input_hash": run.input_hash, "plan_id": run.result.plan_id,
         "scenario_id": run.result.scenario_id,
-        "created_at": run.created_at.isoformat(), "units": run.result.units,
+        "created_at": datetime.isoformat(run.created_at), "units": run.result.units,
         "assumptions_reference": run.result.assumptions_reference,
         "engine": run.engine.model_dump(mode="json"), "origin": run.origin,
         "table_rows": {name: len(value[name]) for name in TABLES},
@@ -54,7 +56,7 @@ def metadata(project: ProjectDTO) -> dict:
 def result_document(project: ProjectDTO) -> dict:
     result = project.last_run.result.model_dump(mode="json")
     if "_web_export" in result:
-        raise ApiProblem(500, "EXPORT_METADATA_CONFLICT", "Результат использует зарезервированное поле _web_export")
+        raise HTTPException(status_code=500, detail="Результат использует зарезервированное поле _web_export")
     # Official export.schema.json explicitly permits additionalProperties.
     result["_web_export"] = metadata(project)
     return result

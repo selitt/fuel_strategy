@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from uuid import uuid4
 
 import pytest
 import yaml
@@ -77,13 +78,40 @@ def test_catalog_reads_source_files_with_provenance(client):
     assert {item["scenario_id"] for item in data["scenarios"]} == {"BASE", "MANDATORY_STRESS"}
 
 
-def test_validation_errors_keep_fastapi_detail_shape(client):
-    response = client.post("/api/calc", json={"decisions": "broken"})
-    assert response.status_code == 422
-    assert isinstance(response.json()["detail"], list)
-    assert response.json()["detail"][0]["loc"] == ["body", "decisions"]
-    assert response.json()["code"] == "VALIDATION_ERROR"
-    assert response.json()["request_id"] == response.headers["x-request-id"]
+def test_standard_error_envelope_preserves_cause_and_request_id_header(client, client_factory, plan):
+    project = client.post("/api/projects", json={"name": "Revision", "plan": plan}).json()
+
+    class BrokenService:
+        def calculate(self, request):
+            raise RuntimeError("SECRET_TOKEN=/private/path")
+
+    missing_adapter = client_factory()
+    missing_adapter.app.state.calculation_service = None
+
+    responses = [
+        (client.get(f"/api/projects/{uuid4()}"), 404, "Проект не найден"),
+        (client.put(
+            f'/api/projects/{project["project_id"]}',
+            json={"name": "Conflict", "plan": plan, "expected_revision": 9},
+        ), 409, "Проект изменился. Загрузите актуальную ревизию перед повтором операции"),
+        (client.post("/api/calc", json={"decisions": "broken"}), 422, list),
+        (client_factory(calculation_service=BrokenService()).post("/api/calc", json=plan),
+         500, "Расчёт завершился ошибкой; результат не заменён"),
+        (missing_adapter.post("/api/calc", json=plan),
+         503, "Расчётный сервис ещё не подключён"),
+    ]
+
+    for response, status, expected_detail in responses:
+        assert response.status_code == status, response.text
+        assert set(response.json()) == {"detail"}
+        if expected_detail is list:
+            detail = response.json()["detail"]
+            assert isinstance(detail, list)
+            assert detail[0]["loc"] == ["body", "decisions"]
+        else:
+            assert response.json()["detail"] == expected_detail
+        assert response.headers["x-request-id"]
+    assert "SECRET_TOKEN" not in responses[3][0].text
 
 
 @pytest.mark.parametrize("value", [float("nan"), float("inf"), -float("inf"), "Infinity"])
@@ -113,38 +141,17 @@ def test_request_size_limit_is_enforced_before_parsing(client_factory):
     client = client_factory(max_request_bytes=128, max_upload_bytes=64)
     response = client.post("/api/calc", content=b"x" * 129)
     assert response.status_code == 413
-    assert response.json()["code"] == "REQUEST_TOO_LARGE"
+    assert response.json() == {"detail": "Запрос превышает разрешённый размер"}
     assert response.headers["x-request-id"]
 
 
-def test_service_failure_is_safe_json_and_not_a_synthetic_success(client_factory, plan):
-    class BrokenService:
-        def calculate(self, request):
-            raise RuntimeError("SECRET_TOKEN=/private/path")
-    client = client_factory(calculation_service=BrokenService())
-    response = client.post("/api/calc", json=plan)
-    assert response.status_code == 500
-    assert response.json()["code"] == "CALCULATION_FAILED"
-    assert "SECRET_TOKEN" not in response.text
-    assert response.headers["x-request-id"] == response.json()["request_id"]
-
-
-def test_unavailable_model_is_explicit_503(client_factory, plan):
-    class NotReadyService:
-        def calculate(self, request):
-            raise NotImplementedError("not connected")
-    response = client_factory(calculation_service=NotReadyService()).post("/api/calc", json=plan)
-    assert response.status_code == 503
-    assert response.json()["code"] == "ENGINE_NOT_READY"
-
-
 def test_application_factory_exists():
-    from src.app.api import main
+    from src.app import main
     assert callable(getattr(main, "create_app", None)), "HTTP app factory is missing"
 
 
 def test_default_app_exposes_health():
     from fastapi.testclient import TestClient
-    from src.app.api.main import app
+    from src.app.main import app
     with TestClient(app) as session:
         assert session.get("/api/health").status_code == 200

@@ -5,7 +5,7 @@ import shutil
 
 from fastapi.testclient import TestClient
 
-from src.app.api.main import create_app
+from src.app.main import create_app
 from src.app.config import Settings
 from src.engine.engine import SimulationEngine
 from src.engine.loader import CaseCatalog
@@ -60,7 +60,70 @@ def test_risk_route_is_503_when_injected_adapter_has_no_risk_method(client_facto
     )
 
     assert response.status_code == 503
-    assert response.json()["code"] == "RISK_ANALYSIS_NOT_AVAILABLE"
+    assert response.json() == {"detail": "Анализ рисков не подключён"}
+
+
+def test_two_app_instances_calculate_from_their_own_reference_directories(tmp_path, plan):
+    first_reference = tmp_path / "first-reference"
+    second_reference = tmp_path / "second-reference"
+    shutil.copytree(ROOT / "data", first_reference)
+    shutil.copytree(ROOT / "data", second_reference)
+    second_demand = second_reference / "demand.csv"
+    second_demand.write_text(
+        second_demand.read_text(encoding="utf-8").replace("2035,100,80", "2035,101,80", 1),
+        encoding="utf-8",
+    )
+
+    first_app = create_app(settings=Settings(
+        data_dir=tmp_path / "first-projects", reference_dir=first_reference,
+    ))
+    second_app = create_app(settings=Settings(
+        data_dir=tmp_path / "second-projects", reference_dir=second_reference,
+    ))
+
+    with TestClient(first_app) as first, TestClient(second_app) as second:
+        first_result = first.post("/api/calc", json=plan)
+        second_result = second.post("/api/calc", json=plan)
+        first_again = first.post("/api/calc", json=plan)
+
+    assert first_result.status_code == 200, first_result.text
+    assert second_result.status_code == 200, second_result.text
+    assert first_again.status_code == 200, first_again.text
+    assert first_result.json()["yearly_balance"][0]["demand_total_t"] == 100
+    assert second_result.json()["yearly_balance"][0]["demand_total_t"] == 101
+    assert first_again.json()["yearly_balance"][0]["demand_total_t"] == 100
+
+
+def test_default_engine_version_hashes_adapter_engine_and_reference_inputs(tmp_path, monkeypatch):
+    from src.app import main
+
+    root = tmp_path / "root"
+    tracked = {
+        root / "src/engine/engine.py": "engine-v1\n",
+        root / "src/app/service/calc_service.py": "adapter-v1\n",
+        root / "src/app/dto/calc_dto.py": "contract-v1\n",
+        root / "reference/demand.csv": "year,base_total_t\n2035,100\n",
+        root / "reference/scenarios/base.yaml": "scenario_id: BASE\n",
+    }
+    for path, contents in tracked.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(contents, encoding="utf-8")
+    monkeypatch.setattr(main, "ROOT", root)
+    reference_dir = root / "reference"
+    baseline = main._default_engine_version(reference_dir)
+
+    for path in (
+        root / "src/engine/engine.py",
+        root / "src/app/service/calc_service.py",
+        root / "src/app/dto/calc_dto.py",
+        reference_dir / "demand.csv",
+        reference_dir / "scenarios/base.yaml",
+    ):
+        original = path.read_text(encoding="utf-8")
+        path.write_text(original + "changed\n", encoding="utf-8")
+        assert main._default_engine_version(reference_dir) != baseline, path
+        path.write_text(original, encoding="utf-8")
+        assert main._default_engine_version(reference_dir) == baseline, path
 
 
 def test_default_engine_version_includes_reference_data_and_marks_saved_run_stale(tmp_path, plan):

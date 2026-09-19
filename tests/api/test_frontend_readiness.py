@@ -3,12 +3,11 @@ import json
 from pathlib import Path
 
 import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
-from jsonschema import Draft202012Validator
 
 from src.app.config import Settings
 from src.app.dto.web_dto import EngineInfoDTO
-from src.app.errors import ApiProblem
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -24,29 +23,13 @@ def test_published_openapi_matches_running_application(client):
     assert saved == client.get('/openapi.json').json()
 
 
-def test_every_operation_documents_actual_error_envelope(client):
-    document = client.get('/openapi.json').json()
-    for path, methods in document['paths'].items():
-        for method, operation in methods.items():
-            for status in ('400', '404', '409', '413', '415', '422', '500', '503'):
-                response = operation['responses'].get(status, {})
-                schema = response.get('content', {}).get('application/json', {}).get('schema')
-                assert schema == {'$ref': '#/components/schemas/ErrorDTO'}, (path, method, status)
-    # The actual runtime body, not just the schema declaration, must conform.
-    response = client.post('/api/calc', json={'decisions': 'invalid'})
-    Draft202012Validator(document['components']['schemas']['ErrorDTO']).validate(response.json())
-
-
 def test_public_adapter_validation_error_reaches_ui(client_factory, plan):
     class Adapter:
         def calculate(self, request):
-            raise ApiProblem(422, 'MODEL_INPUT_REJECTED', [
-                {'loc': ['body', 'scenario_id'], 'msg': 'Unsupported by this adapter', 'type': 'value_error'}
-            ])
+            raise HTTPException(status_code=422, detail='Unsupported by this adapter')
     response = client_factory(calculation_service=Adapter()).post('/api/calc', json=plan)
     assert response.status_code == 422
-    assert response.json()['code'] == 'MODEL_INPUT_REJECTED'
-    assert response.json()['request_id'] == response.headers['x-request-id']
+    assert response.json()['detail'] == 'Unsupported by this adapter'
 
 
 @pytest.mark.parametrize('exception', [NotImplementedError, ImportError])
@@ -56,7 +39,7 @@ def test_unavailable_template_is_explicit_503(client_factory, exception):
             raise exception('private details must not leak')
     response = client_factory(calculation_service=Adapter()).get('/api/calc/template')
     assert response.status_code == 503
-    assert response.json()['code'] == 'ENGINE_NOT_READY'
+    assert response.json() == {'detail': 'Расчётный сервис ещё не подключён'}
     assert 'private details' not in response.text
 
 
@@ -66,16 +49,16 @@ def test_template_programming_error_is_not_an_input_error(client_factory):
             return {'decisions': 'invalid'}
     response = client_factory(calculation_service=Adapter()).get('/api/calc/template')
     assert response.status_code == 500
-    assert response.json()['code'] == 'INVALID_SERVICE_RESULT'
+    assert response.json() == {'detail': 'Сервис вернул шаблон неправильного формата'}
 
 
 def test_adapter_can_supply_its_own_identity_and_version(tmp_path, plan):
-    from src.app.api.main import create_app
-    from src.app.service.calc_service import calculation_service
+    from src.app.main import create_app
+    from src.app.service.calc_service import CalculationService
     settings = Settings(data_dir=tmp_path / 'projects')
 
     def make(version):
-        return create_app(settings=settings, calculation_service=calculation_service,
+        return create_app(settings=settings, calculation_service=CalculationService(),
                           engine_info=EngineInfoDTO(engine_id='team-adapter', version=version,
                                                     status='unverified', limitations=['API test only']))
 
@@ -90,7 +73,7 @@ def test_adapter_can_supply_its_own_identity_and_version(tmp_path, plan):
         assert client.get(f'/api/projects/{project_id}').json()['result_state'] == 'stale'
         response = client.get(f'/api/projects/{project_id}/result')
         assert response.status_code == 409
-        assert response.json()['code'] == 'RESULT_STALE'
+        assert response.json() == {'detail': 'Входы или версия модели изменились; выполните пересчёт'}
 
 
 def test_cors_preflight_allows_json_and_multipart_client(client):

@@ -52,9 +52,7 @@ class CatalogDTO(WebDTO):
 
 
 class ErrorDTO(WebDTO):
-    code: str
     detail: str | list[dict[str, Any]]
-    request_id: str
 
 
 ProjectName = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=140)]

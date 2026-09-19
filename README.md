@@ -2,6 +2,8 @@
 
 Одностраничное приложение для кейса **«Топливный космоконтур 2035»**: React-интерфейс, HTTP API на FastAPI и исходный прототип расчётного движка. Интерфейс и API работают, но математическая приёмка модели ещё не завершена. API подключён к существующему `SimulationEngine`; `pseudo_engine` удалён. Дневной график и отдельный анализ рисков описаны в [актуальной передаче](docs/frontend/DAILY_ENGINE_REPORT.md).
 
+Объединение с новым FastAPI: [передача интеграции](docs/maintenance/INTEGRATION_D79C681.md).
+
 ## С чего начать
 
 1. Прочитать [описание продукта](docs/PRODUCT.md) и выбрать одну карточку из [списка задач](tasks/README.md).
@@ -13,19 +15,26 @@
 
 ## Запуск на Linux-сервере
 
-Основной способ запуска — Docker Compose. Из корня проекта:
+Из корня проекта выполните:
 
 ```bash
-cp docker/.env.example docker/.env
-chmod 600 docker/.env
-# заполнить FUEL_HTTP_USER и FUEL_HTTP_PASSWORD
-docker compose --env-file docker/.env -f docker/compose.yaml config --quiet
-docker compose --env-file docker/.env -f docker/compose.yaml up --build -d
-docker compose --env-file docker/.env -f docker/compose.yaml ps
-docker compose --env-file docker/.env -f docker/compose.yaml logs -f web
+./scripts/prepare.sh
+./run.sh
 ```
 
-По умолчанию сайт доступен на `http://127.0.0.1:8080`. Контейнер работает не от root, использует один worker и хранит проекты в named volume. Для внешнего доступа оставьте приложение привязанным к loopback и поставьте перед ним HTTPS reverse proxy. Подробности, backup, восстановление и откат — в [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+Подготовка устанавливает поддерживаемые инструменты, синхронизирует Python- и npm-зависимости и собирает production frontend. `run.sh` собирает Docker-образ, запускает сайт и API в фоне и ждёт успешный healthcheck. В GigaIDE откройте порт `8080`, задайте видимость **Public** и выберите **Open in new tab**. Встроенный Preview не подходит: политика сайта запрещает встраивание в iframe.
+
+Пока `FUEL_HTTP_USER` и `FUEL_HTTP_PASSWORD` пустые, любой обладатель публичной ссылки может смотреть, рассчитывать, сохранять и изменять общие проекты. Для постоянного публичного сервера настройте пароль и HTTPS по [инструкции деплоя](docs/DEPLOYMENT.md).
+
+Управление запущенным контейнером:
+
+```bash
+./run.sh status
+./run.sh logs
+./run.sh stop
+```
+
+Контейнер работает не от root, использует один worker и хранит проекты в named volume.
 
 Обычный образ собирает frontend через npm, TypeScript и Vite. Если на сервере нужен поставленный portable-пакет, задайте в `docker/.env`:
 
@@ -43,7 +52,7 @@ Portable-вариант не заменяет полноценную frontend-с
 ./scripts/prepare.sh --check
 ```
 
-Запуск `./scripts/prepare.sh` без `--check` может установить недостающие host-инструменты и зависимости; используйте его только явно на подготовляемом Linux-хосте. Скрипт не запускает приложение.
+Запуск `./scripts/prepare.sh` без `--check` может установить недостающие host-инструменты и зависимости, выполнить `npm ci` и собрать frontend; используйте его только явно на подготовляемом Linux-хосте. Скрипт не запускает приложение.
 
 Для ручной установки Python-части рекомендуются Python 3.13 и отдельная `.venv`:
 
@@ -51,10 +60,10 @@ Portable-вариант не заменяет полноценную frontend-с
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements/base.txt
-./run.sh
+./run.sh local
 ```
 
-Готовый сайт откроется на `http://127.0.0.1:8080`. `run.sh` использует `frontend/dist`, а при его отсутствии проверяет и запускает `frontend/prebuilt`.
+Готовый сайт откроется на `http://127.0.0.1:8080`. `run.sh local` использует `frontend/dist`, а при его отсутствии проверяет и запускает `frontend/prebuilt`.
 
 Для разработки frontend нужен Node.js >=22.12,<25 (рекомендуется ветка 22):
 

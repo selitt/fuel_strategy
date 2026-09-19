@@ -11,8 +11,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 @pytest.fixture
 def plan():
-    from src.app.service.calc_service import calculation_service
-    value = calculation_service.get_template_plan().model_dump(mode="json")
+    from src.app.service.calc_service import CalculationService
+    value = CalculationService().get_template_plan().model_dump(mode="json")
     value["plan_id"] = "integration-plan"
     value["team_notes"] = {"text": "Входы сохраняются без потерь", "seed": 42}
     return deepcopy(value)
@@ -20,7 +20,7 @@ def plan():
 
 @pytest.fixture
 def client_factory(tmp_path):
-    from src.app.api import main
+    from src.app import main
     assert callable(getattr(main, "create_app", None)), "HTTP app factory is not implemented"
     from src.app.config import Settings
     with ExitStack() as stack:

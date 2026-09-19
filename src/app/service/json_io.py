@@ -24,7 +24,7 @@ def _pairs(pairs):
     return result
 
 
-def _constant(value):
+def _constant(_):
     raise InvalidJSON("NaN и Infinity не являются допустимыми числами JSON")
 
 
@@ -68,6 +68,20 @@ def loads(data: bytes | str) -> Any:
 
 
 def dumps(value: Any, *, pretty: bool = False) -> bytes:
-    return json.dumps(value, ensure_ascii=False, allow_nan=False,
-                      indent=2 if pretty else None,
-                      separators=None if pretty else (",", ":")).encode("utf-8")
+    return json.dumps(
+        value,
+        ensure_ascii=False,
+        allow_nan=False,
+        default=lambda o: o.isoformat() if hasattr(o, "isoformat") else str(o),
+        indent=2 if pretty else None,
+        separators=None if pretty else (",", ":"),
+    ).encode("utf-8")
+
+
+def plan_hash(plan: Any) -> str:
+    """Вычисляет детерминированный SHA-256 хэш плана решений."""
+    import hashlib
+    ensure_finite(plan.model_dump(mode="python"))
+    value = plan.model_dump(mode="python")
+    canonical = json.dumps(value, sort_keys=True, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
