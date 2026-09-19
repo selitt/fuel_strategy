@@ -20,7 +20,7 @@ def plan():
 
 @pytest.fixture
 def client_factory(tmp_path):
-    from src.app.api import main
+    from src.app import main
     assert callable(getattr(main, "create_app", None)), "HTTP app factory is not implemented"
     from src.app.config import Settings
     with ExitStack() as stack:

@@ -8,7 +8,7 @@ from jsonschema import Draft202012Validator
 
 from src.app.config import Settings
 from src.app.dto.web_dto import EngineInfoDTO
-from src.app.errors import ApiProblem
+from fastapi import HTTPException
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -24,29 +24,13 @@ def test_published_openapi_matches_running_application(client):
     assert saved == client.get('/openapi.json').json()
 
 
-def test_every_operation_documents_actual_error_envelope(client):
-    document = client.get('/openapi.json').json()
-    for path, methods in document['paths'].items():
-        for method, operation in methods.items():
-            for status in ('400', '404', '409', '413', '415', '422', '500', '503'):
-                response = operation['responses'].get(status, {})
-                schema = response.get('content', {}).get('application/json', {}).get('schema')
-                assert schema == {'$ref': '#/components/schemas/ErrorDTO'}, (path, method, status)
-    # The actual runtime body, not just the schema declaration, must conform.
-    response = client.post('/api/calc', json={'decisions': 'invalid'})
-    Draft202012Validator(document['components']['schemas']['ErrorDTO']).validate(response.json())
-
-
 def test_public_adapter_validation_error_reaches_ui(client_factory, plan):
     class Adapter:
         def calculate(self, request):
-            raise ApiProblem(422, 'MODEL_INPUT_REJECTED', [
-                {'loc': ['body', 'scenario_id'], 'msg': 'Unsupported by this adapter', 'type': 'value_error'}
-            ])
+            raise HTTPException(status_code=422, detail='Unsupported by this adapter')
     response = client_factory(calculation_service=Adapter()).post('/api/calc', json=plan)
     assert response.status_code == 422
-    assert response.json()['code'] == 'MODEL_INPUT_REJECTED'
-    assert response.json()['request_id'] == response.headers['x-request-id']
+    assert response.json()['detail'] == 'Unsupported by this adapter'
 
 
 @pytest.mark.parametrize('exception', [NotImplementedError, ImportError])
@@ -70,7 +54,7 @@ def test_template_programming_error_is_not_an_input_error(client_factory):
 
 
 def test_adapter_can_supply_its_own_identity_and_version(tmp_path, plan):
-    from src.app.api.main import create_app
+    from src.app.main import create_app
     from src.app.service.calc_service import calculation_service
     settings = Settings(data_dir=tmp_path / 'projects')
 

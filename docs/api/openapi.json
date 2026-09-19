@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Топливный космоконтур 2035 — REST API",
-    "description": "Совместимый API Васи + отдельные веб-операции. Расчётный модуль — prototype, не подтверждённая конкурсная модель.",
+    "description": "REST API для управления проектами и расчётами материального баланса.",
     "version": "1.1.0"
   },
   "paths": {
@@ -20,87 +20,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ParticipantPlanDTO"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
+                  "$ref": "#/components/schemas/ParticipantPlanDTO-Output"
                 }
               }
             }
@@ -120,7 +40,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ParticipantPlanDTO"
+                "$ref": "#/components/schemas/ParticipantPlanDTO-Input"
               }
             }
           },
@@ -137,82 +57,12 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
+            "description": "Validation Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -237,86 +87,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
           }
         }
       }
@@ -335,86 +105,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MetaDTO"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
             }
@@ -455,82 +145,12 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
+            "description": "Validation Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -555,86 +175,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
           }
         }
       }
@@ -650,7 +190,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ParticipantPlanDTO"
+                "$ref": "#/components/schemas/ParticipantPlanDTO-Input"
               }
             }
           },
@@ -667,38 +207,8 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "413": {
-            "description": "Request Entity Too Large",
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
@@ -718,31 +228,11 @@
             }
           },
           "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
+            "description": "Validation Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -778,38 +268,8 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "413": {
-            "description": "Request Entity Too Large",
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
@@ -829,31 +289,11 @@
             }
           },
           "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
+            "description": "Validation Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -872,7 +312,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ParticipantPlanDTO"
+                "$ref": "#/components/schemas/ParticipantPlanDTO-Input"
               }
             }
           },
@@ -884,43 +324,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ParticipantPlanDTO"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Ресурс не найден",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Конфликт ревизии или неактуальный результат",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
+                  "$ref": "#/components/schemas/ParticipantPlanDTO-Output"
                 }
               }
             }
           },
           "413": {
-            "description": "Request Entity Too Large",
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
@@ -940,31 +350,11 @@
             }
           },
           "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
+            "description": "Validation Error",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Внутренняя ошибка; используйте request_id для диагностики",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Расчётный сервис не подключён",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -1000,16 +390,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -1030,36 +410,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -1079,6 +429,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       },
@@ -1124,16 +484,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -1154,36 +504,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -1203,6 +523,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -1237,16 +567,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -1267,36 +587,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -1316,6 +606,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       },
@@ -1358,16 +658,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -1388,36 +678,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -1437,6 +697,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       },
@@ -1472,16 +742,6 @@
           "204": {
             "description": "Successful Response"
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -1502,36 +762,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -1551,6 +781,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -1595,16 +835,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -1625,36 +855,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -1674,6 +874,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -1708,16 +918,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -1738,36 +938,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -1787,6 +957,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -1819,16 +999,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -1841,36 +1011,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
             "content": {
               "application/json": {
                 "schema": {
@@ -1895,6 +1035,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -1930,16 +1080,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -1952,36 +1092,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
             "content": {
               "application/json": {
                 "schema": {
@@ -2006,6 +1116,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -2043,16 +1163,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -2073,36 +1183,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -2122,6 +1202,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -2176,16 +1266,6 @@
               }
             }
           },
-          "400": {
-            "description": "Некорректный HTTP-запрос",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "404": {
             "content": {
               "application/json": {
@@ -2206,36 +1286,6 @@
             },
             "description": "Conflict"
           },
-          "413": {
-            "description": "Превышен размер запроса или файла",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "415": {
-            "description": "Неподдерживаемый формат файла или кодирование",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Ошибка структуры ввода или явный отказ расчётного адаптера",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorDTO"
-                }
-              }
-            }
-          },
           "500": {
             "content": {
               "application/json": {
@@ -2255,6 +1305,16 @@
               }
             },
             "description": "Service Unavailable"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
         }
       }
@@ -2722,6 +1782,19 @@
         "title": "FinancialBreakdownDTO",
         "description": "Финансовая разбивка затрат за год (в млн у.е.)."
       },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
       "HealthDTO": {
         "properties": {
           "status": {
@@ -2851,7 +1924,36 @@
         ],
         "title": "MetaDTO"
       },
-      "ParticipantPlanDTO": {
+      "ParticipantPlanDTO-Input": {
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Plan Id",
+            "description": "Идентификатор плана",
+            "default": "plan-base"
+          },
+          "scenario_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Scenario Id",
+            "description": "Идентификатор сценария: BASE или MANDATORY_STRESS",
+            "default": "BASE"
+          },
+          "decisions": {
+            "$ref": "#/components/schemas/PlanDecisionsDTO",
+            "description": "Решения оператора"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "decisions"
+        ],
+        "title": "ParticipantPlanDTO",
+        "description": "Входной контракт: план участника (по plan.schema.json)."
+      },
+      "ParticipantPlanDTO-Output": {
         "properties": {
           "plan_id": {
             "type": "string",
@@ -2931,7 +2033,7 @@
             "default": false
           },
           "plan": {
-            "$ref": "#/components/schemas/ParticipantPlanDTO"
+            "$ref": "#/components/schemas/ParticipantPlanDTO-Output"
           },
           "normalized": {
             "type": "boolean",
@@ -2963,7 +2065,7 @@
             "title": "Name"
           },
           "plan": {
-            "$ref": "#/components/schemas/ParticipantPlanDTO"
+            "$ref": "#/components/schemas/ParticipantPlanDTO-Input"
           }
         },
         "additionalProperties": false,
@@ -2999,7 +2101,7 @@
             "title": "Revision"
           },
           "plan": {
-            "$ref": "#/components/schemas/ParticipantPlanDTO"
+            "$ref": "#/components/schemas/ParticipantPlanDTO-Output"
           },
           "created_at": {
             "type": "string",
@@ -3142,7 +2244,7 @@
             "title": "Name"
           },
           "plan": {
-            "$ref": "#/components/schemas/ParticipantPlanDTO"
+            "$ref": "#/components/schemas/ParticipantPlanDTO-Input"
           },
           "expected_revision": {
             "type": "integer",
@@ -3412,7 +2514,7 @@
             "title": "Input Hash"
           },
           "plan_snapshot": {
-            "$ref": "#/components/schemas/ParticipantPlanDTO"
+            "$ref": "#/components/schemas/ParticipantPlanDTO-Output"
           },
           "result": {
             "$ref": "#/components/schemas/ResultExportEnvelopeDTO"
@@ -3517,6 +2619,39 @@
         ],
         "title": "SupplyOrderDTO",
         "description": "Заказ топлива у канала снабжения."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
       },
       "YearlyBalanceDTO": {
         "properties": {

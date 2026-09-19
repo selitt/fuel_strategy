@@ -1,6 +1,6 @@
 import unittest
 from fastapi.testclient import TestClient
-from src.app.api.main import app
+from src.app.main import app
 
 
 class TestCalcApi(unittest.TestCase):

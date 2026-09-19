@@ -10,13 +10,12 @@ import tempfile
 from threading import RLock
 from uuid import UUID, uuid4
 
+from fastapi import HTTPException
 from pydantic import ValidationError
 
 from src.app.dto.web_dto import ProjectDTO, RunRecordDTO
-from src.app.errors import ApiProblem
-from src.app.service.json_io import InvalidJSON, dumps, loads
-from src.app.service.plan_io import plan_hash
-from src.app.service.result_validation import validate_result
+from src.app.service.json_io import InvalidJSON, dumps, loads, plan_hash
+from src.app.service.calc_service import validate_result
 
 logger = logging.getLogger("fuel.api")
 
@@ -36,7 +35,7 @@ class ProjectStore:
     def _read(self, project_id: UUID) -> ProjectDTO:
         path = self._path(project_id)
         if path.is_symlink():
-            raise ApiProblem(500, "PROJECT_STORAGE_INVALID", "Файл проекта не может быть символической ссылкой")
+            raise HTTPException(status_code=500, detail="Файл проекта не может быть символической ссылкой")
         try:
             raw = path.read_bytes()
             project = ProjectDTO.model_validate(loads(raw))
@@ -49,19 +48,19 @@ class ProjectStore:
                     raise ValueError("Saved input hash mismatch")
             return project
         except FileNotFoundError as exc:
-            raise ApiProblem(404, "PROJECT_NOT_FOUND", "Проект не найден") from exc
+            raise HTTPException(status_code=404, detail="Проект не найден") from exc
         except (InvalidJSON, ValidationError, ValueError) as exc:
             logger.exception("Invalid saved project %s", project_id)
-            raise ApiProblem(500, "PROJECT_STORAGE_INVALID", "Сохранённый проект повреждён или несовместим; файл не изменён") from exc
+            raise HTTPException(status_code=500, detail="Сохранённый проект повреждён или несовместим; файл не изменён") from exc
         except OSError as exc:
             logger.exception("Cannot read project %s", project_id)
-            raise ApiProblem(500, "PROJECT_STORAGE_IO", "Не удалось прочитать сохранённый проект") from exc
+            raise HTTPException(status_code=500, detail="Не удалось прочитать сохранённый проект") from exc
 
     def _write(self, project: ProjectDTO) -> None:
         temporary = None
         try:
             self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
-            data = dumps(project.model_dump(mode="json"), pretty=True)
+            data = dumps(project.model_dump(mode="python"), pretty=True)
             with tempfile.NamedTemporaryFile(mode="wb", dir=self.directory, prefix=".project-", suffix=".tmp", delete=False) as handle:
                 temporary = Path(handle.name)
                 handle.write(data)
@@ -70,7 +69,7 @@ class ProjectStore:
             os.replace(temporary, self._path(project.project_id))
         except OSError as exc:
             logger.exception("Cannot save project %s", project.project_id)
-            raise ApiProblem(500, "PROJECT_STORAGE_IO", "Не удалось сохранить проект; проверьте доступ к хранилищу") from exc
+            raise HTTPException(status_code=500, detail="Не удалось сохранить проект; проверьте доступ к хранилищу") from exc
         finally:
             if temporary is not None:
                 temporary.unlink(missing_ok=True)
@@ -78,7 +77,7 @@ class ProjectStore:
     @staticmethod
     def require_revision(project: ProjectDTO, expected: int):
         if project.revision != expected:
-            raise ApiProblem(409, "REVISION_CONFLICT", "Проект изменился. Загрузите актуальную ревизию перед повтором операции")
+            raise HTTPException(status_code=409, detail="Проект изменился. Загрузите актуальную ревизию перед повтором операции")
 
     def create(self, name: str, plan, *, last_run: RunRecordDTO | None = None) -> ProjectDTO:
         with self.lock:
@@ -119,7 +118,7 @@ class ProjectStore:
             project = self._read(project_id)
             self.require_revision(project, expected_revision)
             if plan_hash(project.plan) != run.input_hash:
-                raise ApiProblem(409, "REVISION_CONFLICT", "Результат относится к другим входным данным")
+                raise HTTPException(status_code=409, detail="Результат относится к другим входным данным")
             project.last_run = run
             project.revision += 1
             project.updated_at = now()
@@ -133,4 +132,4 @@ class ProjectStore:
             try:
                 self._path(project_id).unlink()
             except OSError as exc:
-                raise ApiProblem(500, "PROJECT_STORAGE_IO", "Не удалось удалить проект") from exc
+                raise HTTPException(status_code=500, detail="Не удалось удалить проект") from exc

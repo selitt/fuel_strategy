@@ -139,12 +139,12 @@ def test_unavailable_model_is_explicit_503(client_factory, plan):
 
 
 def test_application_factory_exists():
-    from src.app.api import main
+    from src.app import main
     assert callable(getattr(main, "create_app", None)), "HTTP app factory is missing"
 
 
 def test_default_app_exposes_health():
     from fastapi.testclient import TestClient
-    from src.app.api.main import app
+    from src.app.main import app
     with TestClient(app) as session:
         assert session.get("/api/health").status_code == 200
