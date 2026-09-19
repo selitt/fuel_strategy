@@ -7,59 +7,149 @@ from typing import Dict, Any
 
 
 def get_earth_fortress_strategy() -> Dict[str, Any]:
-    """
-    Стратегия 1: «Земная крепость» (Консервативная).
-    - 100% опора на проверенные земные каналы (Earth-Core + Earth-Flex).
-    - Ранняя модернизация склада ZBO в 2036 году.
-    - Лунный завод не строится (нулевой риск сбоя Луны, экономия 1250 млн CAPEX).
-    """
-    orders = []
-    reservations = []
-
-    # 2035: спрос 100
-    orders.append({"year": 2035, "source_id": "Earth-Core", "order_volume_t": 100.0})
-    reservations.append({"year": 2035, "source_id": "Earth-Core", "reserved_capacity_t": 120.0})
-
-    # 2036: спрос 140
-    orders.append({"year": 2036, "source_id": "Earth-Core", "order_volume_t": 140.0})
-    reservations.append({"year": 2036, "source_id": "Earth-Core", "reserved_capacity_t": 160.0})
-
-    # 2037: спрос 190 (Core 190)
-    orders.append({"year": 2037, "source_id": "Earth-Core", "order_volume_t": 190.0})
-    reservations.append({"year": 2037, "source_id": "Earth-Core", "reserved_capacity_t": 190.0})
-
-    # 2038: спрос 250 (Core 190 + Flex 60)
-    orders.append({"year": 2038, "source_id": "Earth-Core", "order_volume_t": 190.0})
-    reservations.append({"year": 2038, "source_id": "Earth-Core", "reserved_capacity_t": 190.0})
-    orders.append({"year": 2038, "source_id": "Earth-Flex", "order_volume_t": 60.0})
-    reservations.append({"year": 2038, "source_id": "Earth-Flex", "reserved_capacity_t": 70.0})
-
-    # 2039: спрос 320 (Core 190 + Flex 110 + Emer 20)
-    orders.append({"year": 2039, "source_id": "Earth-Core", "order_volume_t": 190.0})
-    reservations.append({"year": 2039, "source_id": "Earth-Core", "reserved_capacity_t": 190.0})
-    orders.append({"year": 2039, "source_id": "Earth-Flex", "order_volume_t": 110.0})
-    reservations.append({"year": 2039, "source_id": "Earth-Flex", "reserved_capacity_t": 110.0})
-    orders.append({"year": 2039, "source_id": "Emergency", "order_volume_t": 20.0})
-    reservations.append({"year": 2039, "source_id": "Emergency", "reserved_capacity_t": 30.0})
-
-    # 2040: спрос 390 (Core 190 + Flex 110 + Emer 80 + остаток)
-    orders.append({"year": 2040, "source_id": "Earth-Core", "order_volume_t": 190.0})
-    reservations.append({"year": 2040, "source_id": "Earth-Core", "reserved_capacity_t": 190.0})
-    orders.append({"year": 2040, "source_id": "Earth-Flex", "order_volume_t": 110.0})
-    reservations.append({"year": 2040, "source_id": "Earth-Flex", "reserved_capacity_t": 110.0})
-    orders.append({"year": 2040, "source_id": "Emergency", "order_volume_t": 80.0})
-    reservations.append({"year": 2040, "source_id": "Emergency", "reserved_capacity_t": 80.0})
-
+    """Оптимизированная стратегия «Земная крепость» с высокой устойчивостью по Монте-Карло."""
     return {
-        "plan_id": "strategy_earth_fortress",
-        "description": "Стратегия 1: «Земная крепость» (Консервативная опора на Землю)",
+        "plan_id": "strategy_earth_fortress_optimized",
+        "description": "Оптимизированная стратегия «Земная крепость»",
         "investments": [
-            {"investment_id": "ZBO", "commissioning_year": 2036}
+            {
+                "investment_id": "ZBO",
+                "commissioning_year": 2036
+            }
         ],
-        "capacity_reservations": reservations,
-        "supply_orders": orders,
-        "inventory_policy": {"initial_inventory_t": 15.0}
+        "capacity_reservations": [
+            {
+                "year": 2035,
+                "source_id": "Earth-Core",
+                "reserved_capacity_t": 140.0
+            },
+            {
+                "year": 2036,
+                "source_id": "Earth-Core",
+                "reserved_capacity_t": 170.0
+            },
+            {
+                "year": 2037,
+                "source_id": "Earth-Core",
+                "reserved_capacity_t": 190.0
+            },
+            {
+                "year": 2037,
+                "source_id": "Earth-Flex",
+                "reserved_capacity_t": 31.6
+            },
+            {
+                "year": 2038,
+                "source_id": "Earth-Core",
+                "reserved_capacity_t": 190.0
+            },
+            {
+                "year": 2038,
+                "source_id": "Earth-Flex",
+                "reserved_capacity_t": 83.5
+            },
+            {
+                "year": 2039,
+                "source_id": "Earth-Core",
+                "reserved_capacity_t": 190.0
+            },
+            {
+                "year": 2039,
+                "source_id": "Earth-Flex",
+                "reserved_capacity_t": 110.0
+            },
+            {
+                "year": 2039,
+                "source_id": "Emergency",
+                "reserved_capacity_t": 32.0
+            },
+            {
+                "year": 2040,
+                "source_id": "Earth-Core",
+                "reserved_capacity_t": 190.0
+            },
+            {
+                "year": 2040,
+                "source_id": "Earth-Flex",
+                "reserved_capacity_t": 110.0
+            },
+            {
+                "year": 2040,
+                "source_id": "Emergency",
+                "reserved_capacity_t": 80.0
+            }
+        ],
+        "supply_orders": [
+            {
+                "year": 2035,
+                "source_id": "Earth-Core",
+                "order_volume_t": 124.4
+            },
+            {
+                "year": 2036,
+                "source_id": "Earth-Core",
+                "order_volume_t": 160.5
+            },
+            {
+                "year": 2037,
+                "source_id": "Earth-Core",
+                "order_volume_t": 188.5
+            },
+            {
+                "year": 2037,
+                "source_id": "Earth-Flex",
+                "order_volume_t": 21.6
+            },
+            {
+                "year": 2038,
+                "source_id": "Earth-Core",
+                "order_volume_t": 190.0
+            },
+            {
+                "year": 2038,
+                "source_id": "Earth-Flex",
+                "order_volume_t": 73.5
+            },
+            {
+                "year": 2039,
+                "source_id": "Earth-Core",
+                "order_volume_t": 190.0
+            },
+            {
+                "year": 2039,
+                "source_id": "Earth-Flex",
+                "order_volume_t": 106.6
+            },
+            {
+                "year": 2039,
+                "source_id": "Emergency",
+                "order_volume_t": 22.0
+            },
+            {
+                "year": 2040,
+                "source_id": "Earth-Core",
+                "order_volume_t": 190.0
+            },
+            {
+                "year": 2040,
+                "source_id": "Earth-Flex",
+                "order_volume_t": 108.2
+            },
+            {
+                "year": 2040,
+                "source_id": "Emergency",
+                "order_volume_t": 70.1
+            }
+        ],
+        "inventory_policy": {
+            "initial_inventory_t": 15.0
+        }
     }
+
+
+def get_optimized_earth_fortress_strategy() -> Dict[str, Any]:
+    """Оптимизированная стратегия «Земная крепость» с высокой устойчивостью по Монте-Карло."""
+    return get_earth_fortress_strategy()
 
 
 def get_lunar_pioneer_strategy() -> Dict[str, Any]:
