@@ -5,6 +5,8 @@
 .strategy-workspace.comparison-mode .plan-title,.strategy-workspace.comparison-mode .calculate-button,.strategy-workspace.comparison-mode .export-button,.strategy-workspace.comparison-mode>.operator-header>.scenario-switch,.strategy-workspace.comparison-mode>.operator-header>.header-actions{display:none}
 .strategy-workspace.comparison-mode .plan-toolbar{justify-content:flex-end}
 .strategy-workspace .strategy-import-report{flex:0 0 auto;max-height:80px;overflow:auto}
+.comparison-loading{display:flex;flex:1;align-items:center;justify-content:center;gap:10px;color:var(--muted)}
+.builtin-strategy-note{display:flex;flex:0 0 auto;align-items:center;justify-content:space-between;gap:12px;padding:7px 10px;border:1px solid #83c9b244;border-radius:5px;background:#83c9b20b}.builtin-strategy-note>div{display:grid;min-width:0;gap:2px}.builtin-strategy-note strong{font-size:12px}.builtin-strategy-note span{overflow:hidden;color:var(--muted);font-size:10px;text-overflow:ellipsis;white-space:nowrap}.builtin-strategy-note .button{flex:none;min-height:28px;padding:4px 8px;font-size:10px}
 @media(min-width:1200px) and (min-height:680px){
  .strategy-workspace.compact-desktop>.operator-grid{align-items:stretch;align-content:stretch}
  .strategy-workspace.compact-desktop .strategy-summary>.panel-heading h2,.strategy-workspace.compact-desktop .strategy-summary>.panel-heading button{white-space:nowrap}

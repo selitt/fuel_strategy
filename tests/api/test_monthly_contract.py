@@ -4,14 +4,20 @@ from io import StringIO
 from src.app.service.plan_tabular_io import parse_plan_file, PLAN_COLUMNS
 
 
-def test_new_plan_uses_explicit_monthly_example(client):
-    plan = client.get('/api/calc/template').json()
-    assert plan['template_kind'] == 'TEAM_DECISION_EXAMPLE'
-    assert len(plan['decisions']['supply_orders']) == 72
-    assert {row['delivery_date'][5:7] for row in plan['decisions']['supply_orders']} == {f'{m:02d}' for m in range(1,13)}
-    assert all(row['batch_id'] for row in plan['decisions']['supply_orders'])
+def test_new_plan_is_empty_and_can_be_calculated(client):
+    response = client.get('/api/calc/template')
+    assert response.status_code == 200, response.text
+    plan = response.json()
+    assert plan['decisions'] == {
+        'supply_orders': [],
+        'capacity_reservations': [],
+        'investments': [],
+        'inventory_policy': {'initial_inventory_t': 0.0},
+    }
+
     response = client.post('/api/calc', json=plan)
     assert response.status_code == 200, response.text[:300]
+    assert response.json()['plan_id'] == plan['plan_id']
 
 
 def test_calendar_fields_are_documented(client):

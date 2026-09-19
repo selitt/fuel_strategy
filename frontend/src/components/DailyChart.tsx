@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import type { Result } from '../api/types';
 import {
@@ -17,28 +17,9 @@ import {
 import type { DailyPoint } from '../lib/daily';
 import { number, supportedUnits } from '../lib/format';
 import { useMotionNumbers } from './useMotion';
+import { usePlotSize } from './usePlotSize';
 
 type ChartPoint = DailyPoint & { model_day?: number };
-
-function usePlotSize() {
-  const [node, setNode] = useState<HTMLDivElement | null>(null);
-  const [size, setSize] = useState({ width: 760, height: 300 });
-  useLayoutEffect(() => {
-    if (!node)
-      return;
-    const observer = new ResizeObserver(entries => {
-      const rect = entries[0]?.contentRect;
-      if (!rect)
-        return;
-      const width = Math.max(320, Math.round(rect.width));
-      const height = Math.max(210, Math.round(rect.height));
-      setSize(previous => previous.width === width && previous.height === height ? previous : { width, height });
-    });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [node]);
-  return { ref: setNode, ...size };
-}
 
 function finite(value: number | undefined): value is number {
   return typeof value === 'number' && Number.isFinite(value);
@@ -104,7 +85,9 @@ export function DailyChart({ result, other = null, year, timeline = false, onSel
     ? timeline ? projectTimelineTrace(other, range) : projectDailyTrace(other, activeYear, range)
     : [];
   const [start, end] = timeline ? modelTimelineRange(range) : modelDayRange(range);
-  const { ref, width, height } = usePlotSize();
+  const { ref, size } = usePlotSize(320, 210);
+  const width = size?.width ?? 320;
+  const height = size?.height ?? 210;
   const maxTicks = width < 480 ? 4 : width < 760 ? 6 : 8;
   const ticks = timeline ? modelTimelineTicks([start, end], maxTicks) : sparseWeekTicks([start, end], maxTicks);
   const timelineOverview = timeline && end - start + 1 > 365;
@@ -122,7 +105,7 @@ export function DailyChart({ result, other = null, year, timeline = false, onSel
     ...secondaryFinite.map(row => y(row.closing_inventory_t!)),
   ];
   const topology = `${timeline ? 'timeline' : activeYear}|${start}:${end}|${primary.map(row => `${coordinate(row, timeline)}:${finite(row.closing_inventory_t) ? 1 : 0}`).join(',')}|${secondary.map(row => `${coordinate(row, timeline)}:${finite(row.closing_inventory_t) ? 1 : 0}`).join(',')}`;
-  const geometry = useMotionNumbers(targetGeometry, topology);
+  const geometry = useMotionNumbers(targetGeometry, `${topology}|${size?.width ?? 0}x${size?.height ?? 0}`);
   let cursor = 0;
   const drawnGrid = geometry.slice(cursor, cursor += gridValues.length);
   const primaryY = new Map(primaryFinite.map(row => [coordinate(row, timeline), geometry[cursor++]]));
@@ -156,7 +139,7 @@ export function DailyChart({ result, other = null, year, timeline = false, onSel
 
   return <div className={`daily-chart ${timeline ? 'daily-chart-timeline' : ''}`} data-testid="daily-chart">
     <div className="daily-chart-frame" ref={ref}>
-      <svg className="daily-chart-svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Дневной запас: ${axisName}, дни ${start}–${end}`}>
+      <svg key={topology} className={`daily-chart-svg chart-plot ${size ? 'is-ready' : ''}`} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Дневной запас: ${axisName}, дни ${start}–${end}`}>
         {drawnGrid.map((gridY, index) => <g key={index}>
           <line className="daily-grid" x1={pad.left} x2={width - pad.right} y1={gridY} y2={gridY}/>
           <text className="daily-axis-label" x={pad.left - 8} y={gridY + 4} textAnchor="end">{number(gridValues[index])}</text>

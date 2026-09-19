@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, ApiError, errorText } from '../api/client';
-import type { Catalog, Meta, Plan, Project, Result, Summary } from '../api/types';
+import type { BuiltinStrategy, Catalog, Meta, Plan, Project, Result, Summary } from '../api/types';
 import { normalizedPlan, samePlan, validateDraft, newPlanId } from '../lib/plan';
+import { draftIssues } from '../lib/validation';
 import { otherScenario } from '../lib/matrix';
 import { calculateRisks } from '../lib/risk';
 import { inspectPlanImport, planImportName } from '../lib/import';
-import { makeStrategy, updateStrategy, strategyDirty, strategyRunFresh, scenarioPlan, importStrategyFiles, acceptStrategyRun, acceptSavedStrategy, savedStrategyIsCalculated } from '../lib/strategies';
+import { makeStrategy, makeBuiltinStrategy, updateStrategy, updateStrategyPlan, renameStrategy, removeStrategyTab, toggleStrategySelection, nextStrategyCopyName, strategyDirty, strategyRunFresh, scenarioPlan, importStrategyFiles, acceptStrategyRun, acceptSavedStrategy, savedStrategyIsCalculated } from '../lib/strategies';
 import type { StrategyTab } from '../lib/strategies';
 import { StrategyCalculationQueue } from '../lib/strategyQueue';
 import type { StrategyJob } from '../lib/strategyQueue';
@@ -14,6 +15,7 @@ import { comparisonEditorContext, updateEditorUi } from '../lib/comparisonView';
 export type ScenarioPair = {basis:Plan;otherPlan:Plan;other:Result;createdAt:string};
 export type View = 'overview' | 'plan' | 'compare' | 'data';
 export type ComparisonSettings = {year:number;scenario:'BASE'|'MANDATORY_STRESS';metric:'inventory'|'shortage'|'cost';range:'all'|'year';referenceId:string|null};
+type AddTabOptions = {builtin?:BuiltinStrategy;activate?:boolean;view?:View;select?:boolean};
 export function useWorkspace() {
  const [tabs,setTabsState]=useState<StrategyTab[]>([]), tabsRef=useRef<StrategyTab[]>([]);
  const [activeId,setActiveId]=useState(''), nextId=useRef(0);
@@ -29,33 +31,39 @@ export function useWorkspace() {
   const next=change(tabsRef.current);tabsRef.current=next;setTabsState(next);
  },[]);
  const patch=useCallback((id:string,change:(tab:StrategyTab)=>StrategyTab)=>changeTabs(tabs=>updateStrategy(tabs,id,change)),[changeTabs]);
- const addTab=useCallback((name:string,plan:Plan,project:Project|null=null)=>{
-  const existing=project&&tabsRef.current.find(tab=>tab.project?.project_id===project.project_id);
-  if(existing){setActiveId(existing.id);setViewState('plan');return existing.id;}
-  const id='strategy-'+nextId.current++;
-  changeTabs(tabs=>[...tabs,makeStrategy(id,name,normalizedPlan(plan),project)]);
-  setActiveId(id);setViewState('plan');return id;
+ const addTab=useCallback((name:string,plan:Plan,project:Project|null=null,options:AddTabOptions={})=>{
+  const existing=project?tabsRef.current.find(tab=>tab.project?.project_id===project.project_id):options.builtin?tabsRef.current.find(tab=>tab.builtin?.id===options.builtin?.id):undefined;
+  if(existing){if(options.select!==false)setSelectedIds(ids=>ids.includes(existing.id)?ids:[...ids,existing.id]);if(options.activate!==false){setActiveId(existing.id);setViewState(options.view??'plan');}return existing.id;}
+  const id=options.builtin?`builtin-${options.builtin.id}`:'strategy-'+nextId.current++;
+  const next=options.builtin?makeBuiltinStrategy(id,{...options.builtin,plan:normalizedPlan(options.builtin.plan as Plan)}):makeStrategy(id,name,normalizedPlan(plan),project);
+  changeTabs(tabs=>[...tabs,next]);
+  if(options.select!==false)setSelectedIds(ids=>ids.includes(id)?ids:[...ids,id]);
+  if(options.activate!==false){setActiveId(id);setViewState(options.view??'plan');}
+  return id;
  },[changeTabs]);
  const refreshList=useCallback(async()=>{setProjects(await api.list());},[]);
  useEffect(()=>{
   mounted.current=true;let active=true;let engine:Meta['engine']|undefined;
   const instance=new StrategyCalculationQueue(job=>api.simulate(job.plan),(job,result)=>{
    patch(job.tabId,tab=>acceptStrategyRun(tab,{basis:job.plan,result,createdAt:new Date().toISOString(),engine}));
-  },(job,cause)=>patch(job.tabId,tab=>samePlan(scenarioPlan(tab,job.plan.scenario_id),job.plan)?{...tab,errors:{...tab.errors,[job.plan.scenario_id]:{basis:job.plan,message:errorText(cause)}}}:tab));
+  },(job,cause)=>patch(job.tabId,tab=>samePlan(scenarioPlan(tab,job.plan.scenario_id),job.plan)?{...tab,errors:{...tab.errors,[job.plan.scenario_id]:{basis:job.plan,message:errorText(cause),issues:cause instanceof ApiError?cause.issues:[]}}}:tab));
   queue.current=instance;
   (async()=>{
    try{
-    const [m,c,list]=await Promise.all([api.meta(),api.catalog(),api.list()]);if(!active)return;
+    const [m,c,list,builtins]=await Promise.all([api.meta(),api.catalog(),api.list(),api.strategies()]);if(!active)return;
     engine=m.engine;setMeta(m);setCatalog(c);setProjects(list);
+    const builtinIds=builtins.map(item=>addTab(item.name,item.plan as Plan,null,{builtin:item,activate:false,select:true}));
+    if(builtinIds.length){setActiveId(builtinIds[0]);setViewState('compare');initializedComparison.current=true;}
     const requested=new URLSearchParams(location.search).get('project');
-    if(requested||list.length){const p=await api.project(requested||list[0].project_id);if(active)addTab(p.name,p.plan as Plan,p);}
-    else {const p=await api.template();if(active)addTab('Новая стратегия',p);}
+    if(requested){const p=await api.project(requested);if(active)addTab(p.name,p.plan as Plan,p);}
+    else if(!builtinIds.length){const p=await api.template();if(active)addTab('Новая стратегия',p);}
    }catch(cause){if(active)setError(cause);}finally{if(active)setLoading(false);}
   })();
   return()=>{active=false;mounted.current=false;instance.dispose();queue.current=null;};
  },[addTab,patch]);
  const tab=tabs.find(t=>t.id===activeId)??tabs[0];
- const project=tab?.project??null,draft=tab?.plan??null,name=tab?.name??'Новая стратегия',both=tab?.both??false;
+ const displayedScenario=tab?.viewScenario??tab?.plan.scenario_id;
+ const project=tab?.project??null,draft=tab?(displayedScenario===tab.plan.scenario_id?tab.plan:{...tab.plan,scenario_id:displayedScenario}):null,name=tab?.name??'Новая стратегия',both=tab?.both??false;
  const dirty=!!tab&&strategyDirty(tab),inputChanged=!!tab&&(!project||!samePlan(tab.plan,project.plan));
  const current=!!project&&project.result_state==='current'&&!inputChanged;
  useEffect(()=>{
@@ -77,7 +85,7 @@ export function useWorkspace() {
    if(item.id!==activeId&&!selected)continue;
    if(validateDraft('preview',item.plan).length)continue;
    const scenarios=new Set(selected?['BASE','MANDATORY_STRESS']:[]);
-   if(item.id===activeId){scenarios.add(item.plan.scenario_id);if(item.both)scenarios.add(otherScenario(item.plan).scenario_id);}
+   if(item.id===activeId){const activeScenario=item.viewScenario??item.plan.scenario_id;scenarios.add(activeScenario);if(item.both)scenarios.add(otherScenario(scenarioPlan(item,activeScenario)).scenario_id);}
    for(const scenario of scenarios){
     const plan=scenarioPlan(item,scenario),failure=item.errors[scenario];
     if(strategyRunFresh(item,scenario)||(failure&&samePlan(failure.basis,plan)))continue;
@@ -87,20 +95,21 @@ export function useWorkspace() {
   queue.current?.reconcile(jobs);
  },[tabs,activeId,selectedIds,loading,busy,riskBusy]);
  function activateTab(id:string){if(lock.current||!tabsRef.current.some(t=>t.id===id))return;setActiveId(id);setViewState('plan');setError(null);setRiskError('');}
- function editComparedTab(id:string){
+ function editComparedTab(id:string,scenario=comparison.scenario){
   if(lock.current)return;
-  patch(id,t=>({...t,both:true,ui:comparisonEditorContext(comparison,t.ui,t.plan.scenario_id)}));
+  patch(id,t=>({...t,both:true,ui:comparisonEditorContext({...comparison,scenario},t.ui,t.viewScenario??t.plan.scenario_id)}));
+  setComparisonState(old=>({...old,scenario}));
   activateTab(id);
  }
  function setView(value:View){
-  if(value==='compare'&&!initializedComparison.current){setSelectedIds(tabsRef.current.slice(0,6).map(t=>t.id));initializedComparison.current=true;}
+  if(value==='compare'&&!initializedComparison.current){setSelectedIds(tabsRef.current.map(t=>t.id));initializedComparison.current=true;}
   setViewState(value);
  }
- function toggleComparison(id:string){setSelectedIds(ids=>ids.includes(id)?ids.filter(i=>i!==id):ids.length<6?[...ids,id]:ids);}
+ function toggleComparison(id:string){setSelectedIds(ids=>toggleStrategySelection(ids,id));}
  function retryTab(id:string){patch(id,t=>({...t,errors:{}}));queue.current?.retry(id);}
  function closeTab(id:string){
   if(lock.current)return;
-  const left=tabsRef.current.filter(t=>t.id!==id);changeTabs(()=>left);setSelectedIds(ids=>ids.filter(i=>i!==id));
+  const left=removeStrategyTab(tabsRef.current,id);if(left===tabsRef.current)return;changeTabs(()=>left);setSelectedIds(ids=>ids.filter(i=>i!==id));
   if(id===activeId)setActiveId(left[0]?.id??'');
  }
  async function execute<T>(label:string,work:()=>Promise<T>):Promise<T|undefined>{
@@ -112,6 +121,7 @@ export function useWorkspace() {
  function requireTab(id=activeId){const t=tabsRef.current.find(t=>t.id===id);if(!t)throw new Error('Сначала создайте или откройте стратегию.');return t;}
  function assertValid(t:StrategyTab){const errors=validateDraft(t.name,t.plan);if(errors.length)throw new Error(errors.join('\n'));return t.plan;}
  async function persist(t:StrategyTab):Promise<Project>{
+  if(t.builtin)throw new Error('Готовую стратегию нельзя сохранить или изменить. Сначала создайте свою копию.');
   const plan=assertValid(t);
   if(t.project&&!strategyDirty(t))return t.project;
   const saved=t.project?await api.update(t.project.project_id,t.name.trim(),plan,t.project.revision):await api.create(t.name.trim(),plan);
@@ -127,7 +137,7 @@ export function useWorkspace() {
  async function calculate(){retryTab(activeId);}
  async function load(id:string){
   const existing=tabsRef.current.find(t=>t.project?.project_id===id);
-  if(existing){activateTab(existing.id);return existing.project;}
+  if(existing){setSelectedIds(ids=>ids.includes(existing.id)?ids:[...ids,existing.id]);activateTab(existing.id);return existing.project;}
   return execute('Открываем…',async()=>{const loaded=await api.project(id);addTab(loaded.name,loaded.plan as Plan,loaded);return loaded;});
  }
  async function reload(){return execute('Открываем версию с сервера…',async()=>{
@@ -138,6 +148,10 @@ export function useWorkspace() {
  async function newPlan(){return execute('Создаём…',async()=>{const p=normalizedPlan(await api.template());return addTab('Новая стратегия',{...p,plan_id:newPlanId()});});}
  async function copy(copyName:string,scenarioId:string){return execute('Создаём копию…',async()=>{
   const t=requireTab(),p=assertValid(t);return addTab(copyName.trim(),{...structuredClone(p),plan_id:newPlanId(),scenario_id:scenarioId});
+ });}
+ async function copyFrom(id:string){return execute('Создаём копию…',async()=>{
+  const t=requireTab(id),p=assertValid(t),scenario=t.viewScenario??p.scenario_id;
+  return addTab(nextStrategyCopyName(tabsRef.current,t.name).slice(0,140),{...structuredClone(p),plan_id:newPlanId(),scenario_id:scenario});
  });}
  async function remove(){return execute('Удаляем…',async()=>{
   const t=requireTab();if(!t.project)return;
@@ -159,7 +173,7 @@ export function useWorkspace() {
  });}
  async function downloadTemplate(format:'csv'|'xlsx'){return execute('Готовим шаблон…',()=>api.downloadPlanTemplate(format));}
  async function analyzeRisk(){return execute('Проверяем сбои…',async()=>{
-  const t=requireTab(),basis=structuredClone(assertValid(t)),pairMode=t.both;
+  const t=requireTab(),stored=assertValid(t),basis=structuredClone(scenarioPlan(t,t.viewScenario??stored.scenario_id)),pairMode=t.both;
   setRiskBusy(true);setRiskError('');patch(t.id,now=>({...now,risk:{basis,both:pairMode,runs:[],createdAt:new Date().toISOString()}}));
   try{await calculateRisks(basis,pairMode,api.analyzeRisk,run=>patch(t.id,now=>({...now,risk:now.risk?{...now.risk,runs:[...now.risk.runs,run]}:null})),setRiskStage);}
   catch(cause){setRiskError(errorText(cause));}
@@ -189,24 +203,26 @@ export function useWorkspace() {
  const displayResult=primary?.result??null;
  const displayOther=both?other?.result??null:null;
  const preview=primary?{basis:primary.basis,primary:primary.result,createdAt:primary.createdAt,other:both?other?.result:undefined,otherPlan:both?other?.basis:undefined}:null;
- const previewFresh=!!tab&&strategyRunFresh(tab,tab.plan.scenario_id)&&(!both||strategyRunFresh(tab,otherScenario(tab.plan).scenario_id));
+ const previewFresh=!!tab&&!!draft&&strategyRunFresh(tab,draft.scenario_id)&&(!both||strategyRunFresh(tab,otherScenario(draft).scenario_id));
  // The legacy single-plan export uses project.last_run as its primary record.
  // Do not pair that saved record with an unsaved preview of another revision.
  const savedPrimary=current&&project?.last_run&&primary&&samePlan(project.last_run.plan_snapshot,draft)&&samePlan(project.last_run.result,primary.result);
  const pair:ScenarioPair|null=savedPrimary&&previewFresh&&both&&other&&draft?{basis:draft,otherPlan:other.basis,other:other.result,createdAt:other.createdAt}:null;
- const currentFailure=tab&&[tab.plan.scenario_id,...(both?[otherScenario(tab.plan).scenario_id]:[])].map(s=>tab.errors[s]).find(e=>e&&samePlan(e.basis,scenarioPlan(tab,e.basis.scenario_id)));
+ const currentFailure=tab&&draft&&[draft.scenario_id,...(both?[otherScenario(draft).scenario_id]:[])].map(s=>tab.errors[s]).find(e=>e&&samePlan(e.basis,scenarioPlan(tab,e.basis.scenario_id)));
  const invalid=draft?validateDraft('preview',draft):[];
+ const localIssues=draft?draftIssues(draft):[];
+ const fieldIssues=[...localIssues,...(currentFailure?.issues??[]).filter(issue=>!localIssues.some(local=>JSON.stringify(local.loc)===JSON.stringify(issue.loc)))];
  const reportedError=error||currentFailure?.message||(invalid.length?invalid.join('\n'):null);
  function setUi<T>(key:string,value:T|((old:T)=>T),fallback:T){patch(activeId,t=>({...t,ui:updateEditorUi(t.ui,key,typeof value==='function'?(value as (old:T)=>T)((t.ui[key] as T)??fallback):value)}));}
  return {
   tabs,activeId,selectedIds,comparison,setComparison:(change:Partial<ComparisonSettings>)=>setComparisonState(old=>({...old,...change})),
   activateTab,editComparedTab,closeTab,toggleComparison,retryTab,imports,clearImports:()=>setImports([]),
-  ui:tab?.ui??{},setUi,
+  ui:tab?.ui??{},setUi,fieldIssues,
   risk:tab?.risk??null,riskBusy,riskStage,riskError,analyzeRisk,displayResult,displayOther,preview,previewFresh,displayRun:savedPrimary?project?.last_run:null,
   selection:tab?.selection??null,setSelection:(selection:StrategyTab['selection'])=>patch(activeId,t=>({...t,selection})),
-  both,setBoth:(value:boolean)=>patch(activeId,t=>({...t,both:value})),pair,saveOther,view,setView,project,draft,name,projects,catalog,meta,loading,busy,error,message,dirty,inputChanged,current,
-  setDraft:(plan:Plan)=>patch(activeId,t=>({...t,plan,edited:true})),setName:(value:string)=>patch(activeId,t=>({...t,name:value,edited:true})),
-  setError,clearError:()=>{setError(null);},setMessage,execute,save,calculate,load,reload,newPlan,copy,remove,importFiles,downloadTemplate,exportFile,refreshList,
+  both,setBoth:(value:boolean)=>patch(activeId,t=>({...t,both:value})),setScenario:(value:string)=>patch(activeId,t=>t.builtin?{...t,viewScenario:value}:updateStrategyPlan(t,{...t.plan,scenario_id:value})),pair,saveOther,view,setView,project,draft,name,builtin:tab?.builtin??null,immutable:!!tab?.builtin,projects,catalog,meta,loading,busy,error,message,dirty,inputChanged,current,
+  setDraft:(plan:Plan)=>patch(activeId,t=>updateStrategyPlan(t,plan)),setName:(value:string)=>patch(activeId,t=>renameStrategy(t,value)),
+  setError,clearError:()=>{setError(null);},setMessage,execute,save,calculate,load,reload,newPlan,copy,copyFrom,remove,importFiles,downloadTemplate,exportFile,refreshList,
   errorMessage:reportedError?errorText(reportedError):'',requestId:reportedError instanceof ApiError?reportedError.requestId:'',
  };
 }

@@ -24,3 +24,4 @@ export type Comparison = schemas['ComparisonDTO'];
 export type Run = schemas['RunRecordDTO'];
 export type ReferenceTable = schemas['ReferenceTableDTO'];
 export type Validation = schemas['PlanValidationDTO'];
+export type BuiltinStrategy = schemas['BuiltinStrategyDTO'];

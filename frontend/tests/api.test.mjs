@@ -27,6 +27,11 @@ test('successful non-JSON response is not accepted as a DTO',async t=>{t.mock.me
 test('transport failure has actionable network message',async t=>{t.mock.method(globalThis,'fetch',async()=>{throw new TypeError('fetch failed');});await assert.rejects(api.meta(),/Нет соединения/);});
 test('request timeout keeps its dedicated guidance',async t=>{t.mock.method(globalThis,'setTimeout',callback=>{callback();return 1;});t.mock.method(globalThis,'clearTimeout',()=>{});t.mock.method(globalThis,'fetch',async(_,init)=>{if(init.signal.aborted)throw new DOMException('aborted','AbortError');return response({});});await assert.rejects(api.meta(),/Сервер не ответил за 2 минуты/);});
 test('project pagination continues through all pages',async t=>{let n=0;t.mock.method(globalThis,'fetch',async url=>{n++;if(n===1)return response({items:[{project_id:'a'}],total:2});assert.ok(url.endsWith('offset=1'));return response({items:[{project_id:'b'}],total:2});});assert.deepEqual((await api.list()).map(x=>x.project_id),['a','b']);});
+test('built-in strategies use the read-only calculation catalog endpoint',async t=>{
+ let requested='';const builtins=[{id:'base',name:'Базовая',description:'Готовая',plan:{plan_id:'base'}}];
+ t.mock.method(globalThis,'fetch',async url=>{requested=String(url);return response(builtins);});
+ assert.deepEqual(await api.strategies(),builtins);assert.equal(requested,'/api/calc/strategies');
+});
 test('multipart import leaves the boundary to fetch',async t=>{t.mock.method(globalThis,'fetch',async(_,init)=>{assert.ok(init.body instanceof FormData);assert.equal(init.headers,undefined);assert.equal(init.body.get('file').name,'plan.json');return response({});});await api.importPlan(new File(['{}'],'plan.json',{type:'application/json'}));});
 test('plan template download uses the server format contract',async t=>{
  const previousDocument=globalThis.document,previousWindow=globalThis.window;
@@ -42,3 +47,8 @@ test('plan template download uses the server format contract',async t=>{
 const item=(id)=>({project_id:id,name:'Name '+id,run:{origin:'calculated',input_revision:3,input_hash:'sha',engine:{engine_id:'engine',version:'v1'},result:{plan_id:id,scenario_id:'BASE',units:{fuel:'t',currency:'mln_units'},assumptions_reference:'rules',total_cost_mln:10,yearly_balance:[{year:2035,demand_total_t:100,shortage_t:2,service_level_total:0.98}],financial_breakdown:[{year:2035,total:10}]}}});
 test('comparison CSV uses exact API numbers and includes provenance',()=>{const c={items:[item('a'),item('b')]};const csv=comparisonCsv(c);assert.ok(csv.startsWith('\uFEFFproject_id'));assert.ok(csv.includes('input_revision,input_hash,engine_id,engine_version,origin,units'));assert.ok(csv.includes('0.98'));assert.ok(csv.includes('2035,100'));assert.ok(csv.includes('mln_units'));});
 test('comparison flags heterogeneous units, horizons, engines and imports',()=>{const a=item('a'),b=item('b');b.run.origin='imported';b.run.engine.version='v2';b.run.result.units.fuel='kg';b.run.result.yearly_balance[0].year=2041;b.run.result.assumptions_reference='other';const warnings=comparabilityWarnings({items:[a,b]});assert.equal(warnings.length,5);assert.deepEqual(comparabilityWarnings({items:[a,item('c')]}),[]);});
+test('structured calculation errors retain field metadata and readable detail',async t=>{
+ const issues=[{code:'reservation_exceeded',message:'Увеличьте бронь или уменьшите поставки',loc:['decisions','supply_orders'],source_id:'Earth-Core',year:2035,actual:100,limit:90}];
+ t.mock.method(globalThis,'fetch',async()=>response({detail:'Заказ превышает бронь',issues},422));
+ await assert.rejects(api.simulate({}),e=>e instanceof ApiError&&e.message.includes('бронь')&&assert.deepEqual(e.issues,issues)===undefined);
+});

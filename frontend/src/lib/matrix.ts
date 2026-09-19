@@ -62,7 +62,7 @@ export function unscheduledSupplyIndices(plan: Plan, source: MatrixSource, year:
     return indices;
 }
 
-export function updateSupplyBatch(plan: Plan, index: number, patch: { delivery_date?: string; order_t?: number; batch_id?: string }): Plan {
+export function updateSupplyBatch(plan: Plan, index: number, patch: { delivery_date?: string; order_t?: number; batch_id?: string; source_id?: string }): Plan {
     const supply_orders = plan.decisions.supply_orders.map((row, rowIndex) => {
         if (rowIndex !== index)
             return row;

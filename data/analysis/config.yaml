@@ -1,0 +1,47 @@
+schema_version: 1
+classification: TEAM_ASSUMPTION
+notes:
+  - "Ranges and interpolation points are TEAM_ASSUMPTION; named endpoints remain CASE_INPUT."
+  - "Research scenarios are separate from BASE and MANDATORY_STRESS."
+sensitivity:
+  earth_core_price:
+    unit: mln_units_per_t
+    case_input_control: 6.2
+    comparison_pair: [earth_fortress, lunar_pioneer]
+    values: [6.0, 6.2, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0]
+  demand_interpolation:
+    unit: interpolation_share_low_to_high
+    case_input_endpoints: [low_total_t, high_total_t]
+    base_critical_unchanged: true
+    values: [0.0, 0.25, 0.5, 0.75, 1.0]
+  lunar_actual_share:
+    unit: delivered_share
+    years: [2038, 2039, 2040]
+    values: [0.0, 0.25, 0.5, 0.75, 1.0]
+  initial_stock_multiplier:
+    unit: multiplier_of_plan_initial_stock
+    values: [0.0, 0.5, 1.0, 1.5]
+refinement:
+  iterations: 12
+  value_tolerance: 0.0001
+research_risks:
+  - lunar_zero_2038
+  - core_flex_price_1_25
+  - core_flex_price_1_50
+  - monte_carlo_failures
+  - zbo_loss_equals_base
+  - low_demand
+prevention_measures:
+  - baseline_emergency_on
+  - emergency_off
+  - reserve_plus_20pct_capped
+  - initial_stock_plus_25pct
+monte_carlo:
+  iterations: 100
+  primary_seed: 42
+  seeds: [42, 43, 44]
+cost_comparison:
+  method: undiscounted_sum
+  discount_rate: 0.0
+  base_year: 2035
+  classification: TEAM_ASSUMPTION

@@ -1,0 +1,61 @@
+closing_inventory_t,failed_constraints,is_feasible,plan_id,scenario_id,selection_role,service_level_critical,service_level_total,shortage_t,spill_t,strategy_id,strategy_name,total_cost_mln,year,year_cost_mln
+10.5,,False,strategy_earth_fortress,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11005.06,2035,776.45
+9.51,RESERVE_45D,False,strategy_earth_fortress,BASE,evaluated_candidate,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11005.06,2036,1138.8
+7.39,RESERVE_45D,False,strategy_earth_fortress,BASE,evaluated_candidate,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11005.06,2037,1282.95
+10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,strategy_earth_fortress,BASE,evaluated_candidate,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11005.06,2038,1827.42
+9.04,RESERVE_45D,False,strategy_earth_fortress,BASE,evaluated_candidate,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11005.06,2039,2567.83
+0.0,RESERVE_45D,False,strategy_earth_fortress,BASE,evaluated_candidate,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11005.06,2040,3411.61
+10.5,,False,strategy_lunar_pioneer,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10011.17,2035,776.45
+5.46,RESERVE_45D,False,strategy_lunar_pioneer,BASE,evaluated_candidate,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,10011.17,2036,2191.59
+6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,strategy_lunar_pioneer,BASE,evaluated_candidate,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,10011.17,2037,1463.87
+7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,strategy_lunar_pioneer,BASE,evaluated_candidate,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,10011.17,2038,1320.79
+3.69,RESERVE_45D,False,strategy_lunar_pioneer,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10011.17,2039,1815.14
+0.0,RESERVE_45D,False,strategy_lunar_pioneer,BASE,evaluated_candidate,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,10011.17,2040,2443.33
+10.5,,False,strategy_balanced_dual,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,2035,783.45
+9.3,RESERVE_45D,False,strategy_balanced_dual,BASE,evaluated_candidate,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10490.38,2036,2751.84
+7.02,RESERVE_45D,False,strategy_balanced_dual,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,2037,1289.78
+8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,strategy_balanced_dual,BASE,evaluated_candidate,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,10490.38,2038,1425.9
+4.34,RESERVE_45D,False,strategy_balanced_dual,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,2039,1886.6
+0.0,RESERVE_45D,False,strategy_balanced_dual,BASE,evaluated_candidate,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,10490.38,2040,2352.81
+27.69,,True,strategy_optimal_resilient_mc90,BASE,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,2035,913.1
+50.71,,True,strategy_optimal_resilient_mc90,BASE,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,2036,1330.03
+56.33,,True,strategy_optimal_resilient_mc90,BASE,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,2037,1400.12
+60.25,,True,strategy_optimal_resilient_mc90,BASE,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,2038,1934.8
+66.29,,True,strategy_optimal_resilient_mc90,BASE,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,2039,2749.03
+45.8,,True,strategy_optimal_resilient_mc90,BASE,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,2040,3361.64
+37.12,,False,strategy_mandatory_stress_resilient,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,2035,978.3
+48.78,,False,strategy_mandatory_stress_resilient,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,2036,2866.88
+71.2,,False,strategy_mandatory_stress_resilient,BASE,evaluated_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,2037,1556.87
+108.36,STORAGE_OVERFLOW,False,strategy_mandatory_stress_resilient,BASE,evaluated_candidate,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,12912.74,2038,2106.87
+105.1,STORAGE_OVERFLOW,False,strategy_mandatory_stress_resilient,BASE,evaluated_candidate,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,12912.74,2039,2488.62
+101.84,STORAGE_OVERFLOW,False,strategy_mandatory_stress_resilient,BASE,evaluated_candidate,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,12912.74,2040,2915.2
+10.5,,False,strategy_earth_fortress,MANDATORY_STRESS,evaluated_candidate,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11964.76,2035,776.45
+9.51,RESERVE_45D,False,strategy_earth_fortress,MANDATORY_STRESS,evaluated_candidate,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11964.76,2036,1138.8
+7.39,RESERVE_45D,False,strategy_earth_fortress,MANDATORY_STRESS,evaluated_candidate,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11964.76,2037,1282.95
+7.21,RESERVE_45D,False,strategy_earth_fortress,MANDATORY_STRESS,evaluated_candidate,0.8628,0.8598,40.32,0.0,earth_fortress,Земная крепость,11964.76,2038,2253.99
+0.0,RESERVE_45D,False,strategy_earth_fortress,MANDATORY_STRESS,evaluated_candidate,0.8838,0.8787,44.63,0.0,earth_fortress,Земная крепость,11964.76,2039,3103.7
+0.0,RESERVE_45D,False,strategy_earth_fortress,MANDATORY_STRESS,evaluated_candidate,0.8499,0.8371,73.06,0.0,earth_fortress,Земная крепость,11964.76,2040,3408.87
+10.5,,False,strategy_lunar_pioneer,MANDATORY_STRESS,evaluated_candidate,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10506.46,2035,776.45
+5.46,RESERVE_45D,False,strategy_lunar_pioneer,MANDATORY_STRESS,evaluated_candidate,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,10506.46,2036,2191.59
+6.01,RESERVE_45D,False,strategy_lunar_pioneer,MANDATORY_STRESS,evaluated_candidate,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,10506.46,2037,1463.87
+0.0,RESERVE_45D,False,strategy_lunar_pioneer,MANDATORY_STRESS,evaluated_candidate,0.7015,0.6945,87.84,0.0,lunar_pioneer,Лунный прорыв,10506.46,2038,1516.39
+0.0,RESERVE_45D,False,strategy_lunar_pioneer,MANDATORY_STRESS,evaluated_candidate,0.7844,0.7786,81.48,0.0,lunar_pioneer,Лунный прорыв,10506.46,2039,2120.9
+0.0,RESERVE_45D,False,strategy_lunar_pioneer,MANDATORY_STRESS,evaluated_candidate,0.8633,0.8591,63.18,0.0,lunar_pioneer,Лунный прорыв,10506.46,2040,2437.26
+10.5,,False,strategy_balanced_dual,MANDATORY_STRESS,evaluated_candidate,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10938.94,2035,783.45
+9.3,RESERVE_45D,False,strategy_balanced_dual,MANDATORY_STRESS,evaluated_candidate,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10938.94,2036,2751.84
+7.02,RESERVE_45D,False,strategy_balanced_dual,MANDATORY_STRESS,evaluated_candidate,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10938.94,2037,1289.78
+0.0,RESERVE_45D,False,strategy_balanced_dual,MANDATORY_STRESS,evaluated_candidate,0.7348,0.7289,77.94,0.0,balanced,Сбалансированный контур,10938.94,2038,1660.97
+0.0,RESERVE_45D,False,strategy_balanced_dual,MANDATORY_STRESS,evaluated_candidate,0.7913,0.7853,79.01,0.0,balanced,Сбалансированный контур,10938.94,2039,2108.75
+0.0,RESERVE_45D,False,strategy_balanced_dual,MANDATORY_STRESS,evaluated_candidate,0.8643,0.8591,63.18,0.0,balanced,Сбалансированный контур,10938.94,2040,2344.15
+27.69,,False,strategy_optimal_resilient_mc90,MANDATORY_STRESS,evaluated_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,12588.43,2035,913.1
+50.71,,False,strategy_optimal_resilient_mc90,MANDATORY_STRESS,evaluated_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,12588.43,2036,1330.03
+56.33,,False,strategy_optimal_resilient_mc90,MANDATORY_STRESS,evaluated_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,12588.43,2037,1400.12
+22.75,,False,strategy_optimal_resilient_mc90,MANDATORY_STRESS,evaluated_candidate,1.0,1.0,0.0,0.0,base_builtin,Базовая,12588.43,2038,2364.83
+10.03,RESERVE_45D,False,strategy_optimal_resilient_mc90,MANDATORY_STRESS,evaluated_candidate,0.9223,0.9205,29.24,0.0,base_builtin,Базовая,12588.43,2039,3251.38
+9.87,RESERVE_45D,False,strategy_optimal_resilient_mc90,MANDATORY_STRESS,evaluated_candidate,0.8256,0.8242,78.83,0.0,base_builtin,Базовая,12588.43,2040,3328.97
+37.12,,True,strategy_mandatory_stress_resilient,MANDATORY_STRESS,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13543.48,2035,978.3
+48.78,,True,strategy_mandatory_stress_resilient,MANDATORY_STRESS,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13543.48,2036,2866.88
+71.2,,True,strategy_mandatory_stress_resilient,MANDATORY_STRESS,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13543.48,2037,1556.87
+71.21,,True,strategy_mandatory_stress_resilient,MANDATORY_STRESS,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13543.48,2038,2458.05
+68.77,,True,strategy_mandatory_stress_resilient,MANDATORY_STRESS,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13543.48,2039,2791.39
+69.81,,True,strategy_mandatory_stress_resilient,MANDATORY_STRESS,cheapest_feasible_candidate,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13543.48,2040,2891.99

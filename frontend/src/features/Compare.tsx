@@ -53,7 +53,7 @@ function finance(result: Result, year: number) {
 
 function violationCount(result: Result) {
   const checks = result.constraint_checks;
-  return Array.isArray(checks) ? checks.filter(check => check.passed === false).length : undefined;
+  return Array.isArray(checks)&&checks.length ? checks.filter(check => check.passed === false).length : undefined;
 }
 
 function currentError(tab: StrategyTab, scenarioId: ScenarioId) {
@@ -73,7 +73,7 @@ function statusFor(tab: StrategyTab, scenarioId: ScenarioId) {
     return { label: 'расчёт…', tone: 'missing', title: 'Стратегия поставлена в общую очередь расчёта.' };
   if (!strategyRunFresh(tab, scenarioId))
     return { label: 'устарел', tone: 'stale', title: 'Результат относится к предыдущим настройкам стратегии.' };
-  return { label: 'готово', tone: 'fresh', title: 'Результат соответствует текущим настройкам стратегии.' };
+  return { label: 'рассчитано', tone: 'fresh', title: 'Расчёт завершён. Выполнение условий модели показано отдельно в столбце нарушений.' };
 }
 
 function resultValue(tab: StrategyTab, scenarioId: ScenarioId, row: MetricRow) {
@@ -105,8 +105,29 @@ function ScenarioStatus({ tab, scenarioId }: { tab: StrategyTab; scenarioId: Sce
 
 export function Compare({ w }: { w: Workspace }) {
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [checksSelection,setChecksSelection]=useState<{tabId:string;scenarioId:ScenarioId}|null>(null);
   const selected = w.tabs.filter(tab => w.selectedIds.includes(tab.id));
   const selectedCount = selected.length;
+  const checksTab=w.tabs.find(tab=>tab.id===checksSelection?.tabId);
+  const checksRun=checksTab&&checksSelection?checksTab.results[checksSelection.scenarioId]:undefined;
+  const checks=checksRun?.result.constraint_checks;
+  const failedChecks=checks?.filter(check=>check.passed===false)??[];
+  const checkNames:Record<string,string>={
+    RESERVE_45D:'Физический резерв на 45 дней',STORAGE_OVERFLOW:'Переполнение хранилища',
+    BASE_CRITICAL_SERVICE:'Обеспечение критического спроса',BASE_TOTAL_SERVICE:'Обеспечение общего спроса',
+    CAPEX_2037:'Инвестиции до 2037 года',CAPEX_2040:'Инвестиции за весь горизонт',
+    EMERGENCY_BASE_STREAK:'Использование аварийного канала',STRESS_LOSS_LIMIT:'Потери топлива',
+  };
+  function checksButton(tab:StrategyTab,scenarioId:ScenarioId) {
+    const result=tab.results[scenarioId]?.result;
+    const count=result?violationCount(result):undefined;
+    return <button type="button" className={`comparison-checks-button ${count?'has-violations':''}`} disabled={count===undefined}
+      aria-label={`Нарушения ${tab.name}, ${scenarioNames[scenarioId]}: ${count??'нет результата'}`}
+      onClick={()=>{setDetailsOpen(false);setChecksSelection({tabId:tab.id,scenarioId});}}>
+      <strong>{number(count)}</strong><span>{count===undefined?'нет данных':count?'причины →':result?.is_feasible===false?'нет причин':'нет нарушений'}</span>
+    </button>;
+  }
+
   const year = w.comparison.year;
   const reference = selected.find(tab => tab.id === w.comparison.referenceId);
   const engines = new Set(selected.flatMap(tab => scenarios.flatMap(scenario => {
@@ -187,13 +208,13 @@ export function Compare({ w }: { w: Workspace }) {
     </header>
 
     <div className="comparison-selection" aria-label="Стратегии для сравнения">
-      <span className="comparison-selection-count">Стратегии · {selectedCount}/6</span>
+      <span className="comparison-selection-count">Стратегии · {selectedCount}</span>
       <div className="comparison-strategy-chips">
         {w.tabs.map(tab => {
           const checked = w.selectedIds.includes(tab.id);
           return <label key={tab.id} className={`comparison-strategy-chip ${checked ? 'is-selected' : ''}`} style={{ '--strategy-color': strategyColor(tab.id) } as CSSProperties}>
-            <input type="checkbox" checked={checked} disabled={!checked && selectedCount >= 6} onChange={() => w.toggleComparison(tab.id)}/>
-            <i/><span>{tab.name}</span>{strategyDirty(tab) && <b title="Есть несохранённые изменения">●</b>}
+            <input type="checkbox" checked={checked} onChange={() => w.toggleComparison(tab.id)}/>
+            <i/><span>{tab.name}</span>{tab.builtin&&<em>готовая</em>}{strategyDirty(tab) && <b title="Есть несохранённые изменения">●</b>}
           </label>;
         })}
       </div>
@@ -201,7 +222,7 @@ export function Compare({ w }: { w: Workspace }) {
     </div>
 
     {selectedCount < 2 ? <div className="comparison-empty">
-      <Icon name="compare" size={28}/><h2>Выберите минимум две стратегии</h2><p>Можно сравнить до шести открытых стратегий, включая несохранённые.</p>
+      <Icon name="compare" size={28}/><h2>Выберите минимум две стратегии</h2><p>Можно сравнивать сколько угодно открытых стратегий, включая несохранённые.</p>
     </div> : <div className="comparison-content">
       {(engines.size > 1 || invalidUnits.length > 0) && <div className="comparison-alerts">
         {engines.size > 1 && <Notice tone="warning">Результаты получены разными версиями модели или версия не указана.</Notice>}
@@ -235,13 +256,15 @@ export function Compare({ w }: { w: Workspace }) {
                   && validateDraft('preview', reference.plan).length === 0;
                 const delta = comparable ? deltaLabel(value, referenceValue) : null;
                 return <td key={`${row.key}-${scenarioId}`} className={`numeric ${row.emphasis ? `is-${row.emphasis}` : ''}`}>
-                  <strong>{resultCell(tab, scenarioId, row)}</strong>{delta && <small>{delta}</small>}
+                  {row.key==='violations'?checksButton(tab,scenarioId):<strong>{resultCell(tab, scenarioId, row)}</strong>}{delta && <small>{delta}</small>}
                 </td>;
               }))}
-              <td><button type="button" className="text-button comparison-edit" onClick={() => w.editComparedTab(tab.id)}>Открыть<Icon name="right" size={14}/></button></td>
+              <td><div className="comparison-row-actions"><button type="button" className="text-button comparison-edit" onClick={() => w.editComparedTab(tab.id)}>Открыть<Icon name="right" size={14}/></button>{tab.builtin&&<button type="button" className="text-button comparison-copy" disabled={!!w.busy} onClick={()=>void w.copyFrom(tab.id)}><Icon name="copy" size={13}/>Создать свою</button>}</div></td>
             </tr>)}</tbody>
           </table>
         </div>
+        <p className="comparison-checks-help">Нарушения — невыполненные условия модели, а не сбой расчёта. Нажмите число, чтобы увидеть причины по годам.</p>
+        {problems.length>0&&<details className="comparison-problems"><summary>Не удалось рассчитать: {problems.length}</summary><ul>{problems.map((problem,index)=><li key={index}>{problem}</li>)}</ul></details>}
         <div className="comparison-retry-row">
           {selected.map(tab => {
             const invalid = validateDraft('preview', tab.plan).length > 0;
@@ -284,16 +307,24 @@ export function Compare({ w }: { w: Workspace }) {
           <thead>
             <tr><th rowSpan={2} scope="col">Показатель</th>{selected.map(tab => <th key={tab.id} scope="colgroup" colSpan={2}>
               <span className="comparison-strategy-heading"><i style={{ background: strategyColor(tab.id) }}/><span>{tab.name}</span></span>
-              <button type="button" className="text-button" onClick={() => { setDetailsOpen(false); w.editComparedTab(tab.id); }}>Открыть в редакторе</button>
+              <button type="button" className="text-button" onClick={() => { setDetailsOpen(false); w.editComparedTab(tab.id); }}>Открыть в редакторе</button>{tab.builtin&&<button type="button" className="text-button" disabled={!!w.busy} onClick={()=>{setDetailsOpen(false);void w.copyFrom(tab.id);}}>Создать свою копию</button>}
             </th>)}</tr>
             <tr>{selected.flatMap(tab => scenarios.map(scenarioId => <th scope="col" key={`${tab.id}-${scenarioId}`}><strong>{scenarioNames[scenarioId]}</strong><ScenarioStatus tab={tab} scenarioId={scenarioId}/></th>))}</tr>
           </thead>
           <tbody>{detailRows.map(row => <tr key={row.key} className={row.emphasis ? `is-${row.emphasis}` : ''}>
             <th scope="row">{row.label}{row.unit && <small>{row.unit}</small>}</th>
-            {selected.flatMap(tab => scenarios.map(scenarioId => <td key={`${tab.id}-${scenarioId}`} className="numeric">{resultCell(tab, scenarioId, row)}</td>))}
+            {selected.flatMap(tab => scenarios.map(scenarioId => <td key={`${tab.id}-${scenarioId}`} className="numeric">{row.key==='violations'?checksButton(tab,scenarioId):resultCell(tab, scenarioId, row)}</td>))}
           </tr>)}</tbody>
         </table>
       </div>
+    </Modal>}
+    {checksTab&&checksSelection&&<Modal title={`${checksTab.name} · ${scenarioNames[checksSelection.scenarioId]}: условия модели`} onClose={()=>setChecksSelection(null)}>
+      {checksRun&&!strategyRunFresh(checksTab,checksSelection.scenarioId)&&<Notice tone="warning">Это результат предыдущих настроек. Дождитесь пересчёта для текущего плана.</Notice>}
+      {!checks?.length?<p>Модель не передала проверки для этого результата.</p>:failedChecks.length?<>
+        <p className="comparison-checks-intro">Расчёт выполнен. План не выполнил следующие условия модели:</p>
+        <ol className="comparison-checks-list">{failedChecks.map((check,index)=><li key={index}><strong>{check.year} · {checkNames[check.constraint_id]??check.constraint_id}</strong><p>{check.detail||'Модель не передала пояснение.'}</p></li>)}</ol>
+      </>:checksRun?.result.is_feasible===false?<Notice tone="warning">Модель пометила план невыполнимым, но не передала причины.</Notice>:<p>В этом сценарии модель не обнаружила нарушений проверенных условий за весь горизонт.</p>}
+      <div className="modal-actions"><Button onClick={()=>{setChecksSelection(null);w.editComparedTab(checksTab.id,checksSelection.scenarioId);}}>Открыть стратегию</Button><Button onClick={()=>setChecksSelection(null)}>Закрыть</Button></div>
     </Modal>}
   </section>;
 }

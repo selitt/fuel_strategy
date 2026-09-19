@@ -17,6 +17,14 @@ from typing import Dict, Any, List, Tuple
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.engine.engine import run_engine
+from src.engine.optimize import to_participant_plan
+from src.engine.strategies import make_monthly_batches
+
+
+def _format_metric(value: Any, suffix: str = "") -> str:
+    if not isinstance(value, (int, float)):
+        return "недоступно"
+    return f"{value:.2f}{suffix}"
 
 
 def decode_earth_fortress(params: List[float], plan_id: str = "strategy_earth_fortress_optimized") -> Dict[str, Any]:
@@ -30,19 +38,24 @@ def decode_earth_fortress(params: List[float], plan_id: str = "strategy_earth_fo
     """
     o35, o36, o37_c, o37_f, o38_f, o39_f, o39_e, o40_f, o40_e = params
 
+    annual_orders = [
+        (2035, "Earth-Core", round(o35, 1), "core"),
+        (2036, "Earth-Core", round(o36, 1), "core"),
+        (2037, "Earth-Core", round(o37_c, 1), "core"),
+        (2037, "Earth-Flex", round(o37_f, 1), "flex"),
+        (2038, "Earth-Core", 190.0, "core"),
+        (2038, "Earth-Flex", round(o38_f, 1), "flex"),
+        (2039, "Earth-Core", 190.0, "core"),
+        (2039, "Earth-Flex", round(o39_f, 1), "flex"),
+        (2039, "Emergency", round(o39_e, 1), "emer"),
+        (2040, "Earth-Core", 190.0, "core"),
+        (2040, "Earth-Flex", round(o40_f, 1), "flex"),
+        (2040, "Emergency", round(o40_e, 1), "emer"),
+    ]
     orders = [
-        {"year": 2035, "source_id": "Earth-Core", "order_volume_t": round(o35, 1)},
-        {"year": 2036, "source_id": "Earth-Core", "order_volume_t": round(o36, 1)},
-        {"year": 2037, "source_id": "Earth-Core", "order_volume_t": round(o37_c, 1)},
-        {"year": 2037, "source_id": "Earth-Flex", "order_volume_t": round(o37_f, 1)},
-        {"year": 2038, "source_id": "Earth-Core", "order_volume_t": 190.0},
-        {"year": 2038, "source_id": "Earth-Flex", "order_volume_t": round(o38_f, 1)},
-        {"year": 2039, "source_id": "Earth-Core", "order_volume_t": 190.0},
-        {"year": 2039, "source_id": "Earth-Flex", "order_volume_t": round(o39_f, 1)},
-        {"year": 2039, "source_id": "Emergency", "order_volume_t": round(o39_e, 1)},
-        {"year": 2040, "source_id": "Earth-Core", "order_volume_t": 190.0},
-        {"year": 2040, "source_id": "Earth-Flex", "order_volume_t": round(o40_f, 1)},
-        {"year": 2040, "source_id": "Emergency", "order_volume_t": round(o40_e, 1)},
+        batch
+        for year, source_id, volume_t, prefix in annual_orders
+        for batch in make_monthly_batches(year, source_id, volume_t, batch_prefix=prefix)
     ]
 
     reservations = [
@@ -63,7 +76,7 @@ def decode_earth_fortress(params: List[float], plan_id: str = "strategy_earth_fo
     return {
         "plan_id": plan_id,
         "description": "Оптимизированная стратегия «Земная крепость»",
-        "investments": [{"investment_id": "ZBO", "commissioning_year": 2036}],
+        "investments": [{"investment_id": "ZBO", "year": 2036}],
         "capacity_reservations": reservations,
         "supply_orders": orders,
         "inventory_policy": {"initial_inventory_t": 15.0},
@@ -82,21 +95,26 @@ def decode_lunar_dual(params: List[float], plan_id: str = "strategy_lunar_dual_o
     """
     o35, o36, o37_c, o37_f, o38_c, o38_l, o38_f, o39_c, o39_l, o39_f, o40_c, o40_l, o40_f, o40_e = params
 
+    annual_orders = [
+        (2035, "Earth-Core", round(o35, 1), "core"),
+        (2036, "Earth-Core", round(o36, 1), "core"),
+        (2037, "Earth-Core", round(o37_c, 1), "core"),
+        (2037, "Earth-Flex", round(o37_f, 1), "flex"),
+        (2038, "Earth-Core", round(o38_c, 1), "core"),
+        (2038, "Lunar-ISRU", round(o38_l, 1), "lunar"),
+        (2038, "Earth-Flex", round(o38_f, 1), "flex"),
+        (2039, "Earth-Core", round(o39_c, 1), "core"),
+        (2039, "Lunar-ISRU", round(o39_l, 1), "lunar"),
+        (2039, "Earth-Flex", round(o39_f, 1), "flex"),
+        (2040, "Earth-Core", round(o40_c, 1), "core"),
+        (2040, "Lunar-ISRU", round(o40_l, 1), "lunar"),
+        (2040, "Earth-Flex", round(o40_f, 1), "flex"),
+        (2040, "Emergency", round(o40_e, 1), "emer"),
+    ]
     orders = [
-        {"year": 2035, "source_id": "Earth-Core", "order_volume_t": round(o35, 1)},
-        {"year": 2036, "source_id": "Earth-Core", "order_volume_t": round(o36, 1)},
-        {"year": 2037, "source_id": "Earth-Core", "order_volume_t": round(o37_c, 1)},
-        {"year": 2037, "source_id": "Earth-Flex", "order_volume_t": round(o37_f, 1)},
-        {"year": 2038, "source_id": "Earth-Core", "order_volume_t": round(o38_c, 1)},
-        {"year": 2038, "source_id": "Lunar-ISRU", "order_volume_t": round(o38_l, 1)},
-        {"year": 2038, "source_id": "Earth-Flex", "order_volume_t": round(o38_f, 1)},
-        {"year": 2039, "source_id": "Earth-Core", "order_volume_t": round(o39_c, 1)},
-        {"year": 2039, "source_id": "Lunar-ISRU", "order_volume_t": round(o39_l, 1)},
-        {"year": 2039, "source_id": "Earth-Flex", "order_volume_t": round(o39_f, 1)},
-        {"year": 2040, "source_id": "Earth-Core", "order_volume_t": round(o40_c, 1)},
-        {"year": 2040, "source_id": "Lunar-ISRU", "order_volume_t": round(o40_l, 1)},
-        {"year": 2040, "source_id": "Earth-Flex", "order_volume_t": round(o40_f, 1)},
-        {"year": 2040, "source_id": "Emergency", "order_volume_t": round(o40_e, 1)},
+        batch
+        for year, source_id, volume_t, prefix in annual_orders
+        for batch in make_monthly_batches(year, source_id, volume_t, batch_prefix=prefix)
     ]
 
     reservations = [
@@ -122,8 +140,8 @@ def decode_lunar_dual(params: List[float], plan_id: str = "strategy_lunar_dual_o
         "plan_id": plan_id,
         "description": "Оптимизированная стратегия «Глобальный дуальный контур» (Земля + Луна ISRU)",
         "investments": [
-            {"investment_id": "ZBO", "commissioning_year": 2036},
-            {"investment_id": "LUNAR_ISRU", "commissioning_year": 2038, "capex_schedule": {2036: 450.0, 2037: 800.0}}
+            {"investment_id": "ZBO", "year": 2036},
+            {"investment_id": "LUNAR_ISRU", "year": 2036},
         ],
         "capacity_reservations": reservations,
         "supply_orders": orders,
@@ -249,7 +267,7 @@ def main():
     parser.add_argument("--archetype", choices=["earth_fortress", "lunar_dual"], default="earth_fortress", help="Архетип для оптимизации (earth_fortress или lunar_dual)")
     parser.add_argument("--iter", type=int, default=15, help="Число поколений эволюции (default: 15)")
     parser.add_argument("--pop", type=int, default=12, help="Размер популяции (default: 12)")
-    parser.add_argument("--output", type=str, default="plans/optimized_strategy.json", help="Путь для сохранения JSON-плана")
+    parser.add_argument("--output", type=str, default="data/optimized_strategy.json", help="Путь для сохранения JSON-плана")
     args = parser.parse_args()
 
     if args.archetype == "lunar_dual":
@@ -286,9 +304,9 @@ def main():
         ]
         x0 = [118.0, 165.0, 190.0, 8.0, 63.0, 110.0, 23.0, 110.0, 70.0]
 
-    print(f"=== Запуск оптимизации архетипа '{args.archetype}' ===")
-    print(f"Поколений: {args.iter}, Популяция: {args.pop}")
-    print(f"Инициализирован экспертный тёплый старт (Warm Start x0)...")
+    print(f"=== Запуск оптимизации архетипа '{args.archetype}' ===", file=sys.stderr)
+    print(f"Поколений: {args.iter}, Популяция: {args.pop}", file=sys.stderr)
+    print("Инициализирован экспертный тёплый старт (Warm Start x0)...", file=sys.stderr)
 
     def fit_call(params):
         return evaluate_candidate(params, decode_fn)
@@ -298,13 +316,21 @@ def main():
         from scipy.optimize import differential_evolution
         scipy_popsize = max(1, args.pop // len(bounds))
         total_pop = scipy_popsize * len(bounds)
-        print(f"Используется scipy.optimize.differential_evolution (популяция: {total_pop} особей)...")
+        print(
+            f"Используется scipy.optimize.differential_evolution "
+            f"(популяция: {total_pop} особей)...",
+            file=sys.stderr,
+        )
 
         gen_counter = 0
         def scipy_callback(xk, convergence=None):
             nonlocal gen_counter
             gen_counter += 1
-            print(f"Поколение {gen_counter:2d}/{args.iter} завершено...", flush=True)
+            print(
+                f"Поколение {gen_counter:2d}/{args.iter} завершено...",
+                flush=True,
+                file=sys.stderr,
+            )
 
         res_scipy = differential_evolution(
             func=lambda p: fit_call(p)[0],
@@ -321,17 +347,11 @@ def main():
             workers=1,
         )
         best_vec = list(res_scipy.x)
-    except ImportError as e:
-        print(f"scipy не найден в текущем интерпретаторе ({sys.executable}).")
-        print("Используется встроенный чистый Python DE...")
-        best_vec = run_pure_python_differential_evolution(
-            fitness_fn=fit_call,
-            bounds=bounds,
-            pop_size=args.pop,
-            max_iter=args.iter,
-            seed=42,
-            x0=x0,
-        )
+    except ImportError as exc:
+        raise RuntimeError(
+            "Для оптимизации требуется SciPy: установите зависимости проекта "
+            "с scipy и повторите запуск."
+        ) from exc
 
     # Итоговый детальный расчёт лучшего плана
     plan_name = f"strategy_{args.archetype}_optimized"
@@ -340,32 +360,47 @@ def main():
     mc = final_res["risk_register"][0] if final_res["risk_register"] else {}
     violations = [c for c in final_res["constraint_checks"] if not c["passed"]]
 
-    print("\n=======================================================")
-    print("                РЕЗУЛЬТАТ ОПТИМИЗАЦИИ                  ")
-    print("=======================================================")
-    print(f"План Feasible (Hard Constraints): {final_res['is_feasible']}")
-    print(f"Совокупные затраты (Total Cost):  {final_res['total_cost_mln']:.2f} млн у.е.")
-    print(f"Вероятность успеха Монте-Карло:    {mc.get('probability_of_zero_shortage', 0.0) * 100:.1f}%")
-    print(f"Медианный дефицит:                 {mc.get('median_shortage_t', 0.0):.2f} т")
-    print(f"P95 дефицит:                       {mc.get('p95_shortage_t', 0.0):.2f} т")
+    probability = mc.get("probability_of_no_shortage")
+    probability_text = (
+        _format_metric(probability * 100, "%")
+        if isinstance(probability, (int, float))
+        else "недоступно"
+    )
+    print("\n=======================================================", file=sys.stderr)
+    print("                РЕЗУЛЬТАТ ОПТИМИЗАЦИИ                  ", file=sys.stderr)
+    print("=======================================================", file=sys.stderr)
+    print(f"План Feasible (Hard Constraints): {final_res['is_feasible']}", file=sys.stderr)
+    print(
+        f"Совокупные затраты (Total Cost):  {final_res['total_cost_mln']:.2f} млн у.е.",
+        file=sys.stderr,
+    )
+    print(f"Вероятность нулевого дефицита MC: {probability_text}", file=sys.stderr)
+    print(
+        f"Медианный дефицит:                 {_format_metric(mc.get('median_shortage_t'), ' т')}",
+        file=sys.stderr,
+    )
+    print(
+        f"P95 дефицит:                       {_format_metric(mc.get('p95_shortage_t'), ' т')}",
+        file=sys.stderr,
+    )
     if violations:
-        print(f"Нарушения: {violations}")
+        print(f"Нарушения: {violations}", file=sys.stderr)
     else:
-        print("Нарушений (Violations):            0 (Все 7 Hard Constraints выполнены!)")
-    print("=======================================================\n")
+        print(
+            "Нарушений (Violations):            0 (Все 7 Hard Constraints выполнены!)",
+            file=sys.stderr,
+        )
+    print("=======================================================\n", file=sys.stderr)
 
     # Сохранение JSON
+    exported_plan = to_participant_plan(final_plan)
     out_dir = os.path.dirname(os.path.abspath(args.output))
     os.makedirs(out_dir, exist_ok=True)
     with open(args.output, "w", encoding="utf-8") as f:
-        json.dump(final_plan, f, ensure_ascii=False, indent=2)
-    print(f"JSON-план успешно сохранён в: {args.output}")
-
-    print(f"\nВы можете добавить эту функцию в 'src/engine/strategies.py':\n")
-    print(f"def get_optimized_{args.archetype}_strategy() -> Dict[str, Any]:")
-    print(f'    """Оптимизированная стратегия ({args.archetype}) с высокой устойчивостью по Монте-Карло."""')
-    print(f"    return {json.dumps(final_plan, ensure_ascii=False, indent=8)}")
+        json.dump(exported_plan, f, ensure_ascii=False, indent=2)
+    print(f"JSON-план успешно сохранён в: {args.output}", file=sys.stderr)
+    return exported_plan
 
 
 if __name__ == "__main__":
-    main()
+    print(json.dumps(main(), ensure_ascii=False, indent=2))

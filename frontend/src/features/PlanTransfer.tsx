@@ -66,7 +66,7 @@ export function ExportPlanDialog({w,onClose}:{w:Workspace;onClose:()=>void}){
  return <Modal title="Выгрузка" onClose={onClose}>
   {w.errorMessage&&<Notice tone="error">{w.errorMessage}</Notice>}
   <section className="transfer-group"><h3>Для переноса и продолжения работы</h3><div className="export-options export-options-single">
-   <ExportOption primary title={w.dirty?'Сохранить и выгрузить проект':'Выгрузить проект'} subtitle={w.dirty?'Сохранит план, пересчитает результат и скачает полную копию.':'План и сохранённый результат в одном JSON-файле.'} disabled={locked||!w.draft} onClick={()=>void w.exportFile('project')}/>
+   <ExportOption primary title={w.dirty?'Сохранить и выгрузить проект':'Выгрузить проект'} subtitle={w.immutable?'Сначала создайте свою копию готовой стратегии.':w.dirty?'Сохранит план, пересчитает результат и скачает полную копию.':'План и сохранённый результат в одном JSON-файле.'} disabled={locked||!w.draft||w.immutable} onClick={()=>void w.exportFile('project')}/>
    <ExportOption title="План JSON" subtitle="Только текущие решения; сохранение на сервере не требуется." disabled={locked||!w.draft} onClick={()=>void w.exportFile('plan')}/>
   </div></section>
   <section className="transfer-group"><h3>Результаты расчёта</h3><div className="export-options">

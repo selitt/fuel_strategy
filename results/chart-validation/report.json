@@ -1,0 +1,318 @@
+{
+  "checks": [
+    "Daily chart uses the surrounding card background",
+    "First visible frame already has coherent measured geometry",
+    "Chart fits at (1280, 720)",
+    "Chart fits at (1600, 1000)",
+    "Scenario control shares the same card background",
+    "Periods, years, scenarios and rapid chart switches remain usable",
+    "Negative fuel has an inline explanation and summary focuses the exact field",
+    "Annual reservation error highlights affected months and gives an actionable engine limit",
+    "Reservation above source capacity shows actual catalog limit",
+    "Total supply above annual source capacity is explained by the engine",
+    "Duplicate batch ID has an editable field and actionable explanation",
+    "Missing delivery date is visible, reachable and cleared after correction",
+    "Price explanation uses existing source catalog and separates reservation from fuel",
+    "Unavailable invested source explains the missing decision and focuses its switch",
+    "Late investment year is explained and links to the actual year control",
+    "Reduced motion disables plot animation",
+    "Unknown imported supply source leads to an editable source selector",
+    "Unknown imported reservation source is reachable in the advanced editor",
+    "No JavaScript runtime errors",
+    "No persistent writes or risk calls"
+  ],
+  "console_errors": [],
+  "requests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/assets/index-Ddrh-OR3.js"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/assets/index-B6bGFl6u.css"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/fonts/golos-text-400.ttf"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/fonts/golos-text-600.ttf"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/api/meta"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/api/catalog"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/api/projects?limit=100&offset=0"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/api/calc/strategies"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/plans/import"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/api/projects?limit=100&offset=0"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/plans/import"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/api/projects?limit=100&offset=0"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/plans/import"
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:48083/api/projects?limit=100&offset=0"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:48083/api/calc"
+    }
+  ],
+  "mount_frames": [
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    },
+    {
+      "h": 292,
+      "y": 238,
+      "box": "0 0 729 292"
+    }
+  ]
+}

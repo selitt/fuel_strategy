@@ -231,6 +231,8 @@ def main() -> None:
 
                     response = page.goto(public_url, wait_until="networkidle", timeout=120_000)
                     assert response is not None and response.ok
+                    expect(page.get_by_role('heading', name='Сравнение стратегий', exact=True)).to_be_visible()
+                    expect(page.get_by_role('tab')).to_have_count(2)
                     with httpx.Client(base_url=backend_url, auth=(USERNAME, PASSWORD)) as client:
                         import_plan = client.get("/api/calc/template").json()
                     upload_all_plan_formats(page, public_url, import_plan)

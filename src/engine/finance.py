@@ -9,6 +9,15 @@ from .models import FinancialBreakdownRecord, SourceScheduleRecord
 from .loader import CaseCatalog
 
 
+def reservation_payment(
+    reserved_capacity_t: float,
+    annual_rate: float,
+    period_fraction: float = 1.0,
+) -> float:
+    """Return the reservation payment for an explicit fraction of a year."""
+    return round(reserved_capacity_t * annual_rate * period_fraction, 2)
+
+
 def calculate_finances(
     catalog: CaseCatalog,
     source_schedules: List[SourceScheduleRecord],

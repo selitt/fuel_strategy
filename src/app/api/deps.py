@@ -6,6 +6,7 @@
 import logging
 from typing import Any, Protocol
 from fastapi import HTTPException, Request, Response, UploadFile
+from starlette.responses import JSONResponse
 
 from src.app.config.config import Settings
 from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
@@ -52,6 +53,16 @@ def check_plan_finite(plan: ParticipantPlanDTO) -> None:
         raise HTTPException(status_code=422, detail=[{"loc": ["body"], "msg": str(exc), "type": "value_error"}]) from exc
 
 
+async def plan_validation_error_response(
+    request: Request, exc: PlanValidationError
+) -> JSONResponse:
+    """Keep the legacy detail and add machine-readable field diagnostics."""
+    content: dict[str, Any] = {"detail": str(exc)}
+    if exc.issues:
+        content["issues"] = [issue.as_dict() for issue in exc.issues]
+    return JSONResponse(status_code=422, content=content)
+
+
 def call_template(service: CalculationBackend) -> ParticipantPlanDTO:
     """Безопасно запрашивает шаблон плана у сервиса расчёта."""
     try:
@@ -60,8 +71,8 @@ def call_template(service: CalculationBackend) -> ParticipantPlanDTO:
         return plan
     except HTTPException:
         raise
-    except PlanValidationError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except PlanValidationError:
+        raise
     except (NotImplementedError, ImportError) as exc:
         raise HTTPException(status_code=503, detail="Расчётный сервис ещё не подключён") from exc
     except Exception as exc:
@@ -79,8 +90,8 @@ def call_calculation(service: CalculationBackend, plan: ParticipantPlanDTO) -> R
         return result
     except HTTPException:
         raise
-    except PlanValidationError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except PlanValidationError:
+        raise
     except (NotImplementedError, ImportError) as exc:
         raise HTTPException(status_code=503, detail="Расчётный сервис ещё не подключён") from exc
     except Exception as exc:
@@ -103,8 +114,8 @@ def call_risk_calculation(service: CalculationBackend, plan: ParticipantPlanDTO)
         return result
     except HTTPException:
         raise
-    except PlanValidationError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except PlanValidationError:
+        raise
     except (NotImplementedError, ImportError) as exc:
         raise HTTPException(
             503,

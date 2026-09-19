@@ -81,6 +81,7 @@
 .comparison-strategy-chip > i { background: var(--strategy-color); opacity: .45; }
 .comparison-strategy-chip.is-selected > i { opacity: 1; box-shadow: 0 0 0 2px color-mix(in srgb, var(--strategy-color) 17%, transparent); }
 .comparison-strategy-chip > b { color: var(--amber); font-size: 9px; }
+.comparison-strategy-chip > em { flex:0 0 auto;color:#9dd6c4;font-size:9px;font-style:normal; }
 .comparison-strategy-chip:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 1px; }
 .comparison-selection-help { margin: 0; color: var(--muted); font-size: 11px; }
 
@@ -103,7 +104,7 @@
 .comparison-compact-table thead tr:first-child th { height: 22px; padding-top: 4px; padding-bottom: 2px; }
 .comparison-compact-table thead tr:nth-child(2) th { height: 19px; padding-top: 1px; padding-bottom: 3px; color: var(--muted); font-size: 9px; letter-spacing: .35px; }
 .comparison-compact-table thead tr:first-child > th:first-child { width: 224px; text-align: left; }
-.comparison-compact-table thead tr:first-child > th:last-child { width: 74px; }
+.comparison-compact-table thead tr:first-child > th:last-child { width: 132px; }
 .comparison-compact-table thead small { margin-left: 5px; color: #747d79; font-size: 9px; font-weight: 400; }
 .comparison-compact-table tbody th { background: #141819; text-align: left; font-size: 11px; font-weight: 500; }
 .comparison-compact-table tbody td { background: #171b1c; color: var(--text); text-align: right; }
@@ -121,6 +122,7 @@
 .comparison-run-status.is-stale,
 .comparison-run-status.is-error { color: var(--amber); }
 .comparison-edit { display: inline-flex; align-items: center; gap: 2px; font-size: 10px; white-space: nowrap; }
+.comparison-row-actions{display:flex;flex-direction:column;align-items:flex-start;gap:2px}.comparison-copy{display:inline-flex;align-items:center;gap:3px;color:#9dd6c4!important;font-size:10px;white-space:nowrap}
 .comparison-retry-row { flex-wrap: wrap; gap: 5px; padding: 5px 7px; border-top: 1px solid var(--border); }
 .comparison-retry-row:empty { display: none; }
 .comparison-retry-row .button { min-height: 25px; padding: 3px 7px; font-size: 10px; }
@@ -220,3 +222,19 @@
   .comparison-chart-controls .segmented { max-width: 100%; overflow-x: auto; }
   .comparison-equal-explanation { top: 82px; }
 }
+
+.comparison-checks-button{display:inline-flex;align-items:baseline;justify-content:flex-end;gap:6px;max-width:100%;padding:3px 0;border:0;background:transparent;color:var(--muted);font:inherit;cursor:pointer}
+.comparison-checks-button strong{font-size:12px;font-weight:500;color:var(--text)}
+.comparison-checks-button span{font-size:10px;white-space:nowrap}
+.comparison-checks-button.has-violations,.comparison-checks-button.has-violations strong{color:var(--amber)}
+.comparison-checks-button:hover:not(:disabled),.comparison-checks-button:focus-visible{text-decoration:underline}
+.comparison-checks-button:disabled{cursor:default}
+.comparison-checks-help{margin:0;padding:5px 8px;color:var(--muted);font-size:11px;border-top:1px solid var(--border)}
+.comparison-problems{padding:5px 8px;color:var(--amber);font-size:12px;max-height:90px;overflow:auto}
+.comparison-checks-intro{color:var(--muted)}
+.comparison-checks-list{padding-left:24px;max-height:55vh;overflow:auto}
+.comparison-checks-list li{padding:6px 0;border-bottom:1px solid var(--border)}
+.comparison-checks-list strong{font-size:13px}
+.comparison-checks-list p{margin:4px 0;color:var(--muted);font-size:13px}
+.comparison-run-status.is-fresh{color:var(--muted)}
+.comparison-compact-table .comparison-strategy-heading>span{white-space:normal;overflow-wrap:anywhere}

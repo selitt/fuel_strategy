@@ -42,8 +42,8 @@ class CalculationService:
         self.engine = SimulationEngine(CaseCatalog(reference_dir))
 
     def get_template_plan(self) -> ParticipantPlanDTO:
-        """Возвращает типовой базовый план (шаблон)."""
-        path = self.engine.catalog.data_root / "monthly_start_plan.json"
+        """Возвращает пустой план оператора для самостоятельного заполнения."""
+        path = self.engine.catalog.data_root / "examples" / "empty_plan.json"
         return ParticipantPlanDTO.model_validate_json(path.read_text(encoding="utf-8"))
 
     def calculate(self, request: ParticipantPlanDTO) -> ResultExportEnvelopeDTO:

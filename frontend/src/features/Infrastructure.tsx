@@ -29,7 +29,7 @@ export function Infrastructure({ w, onAdvanced, onData }: {
 
     return <aside className="infrastructure panel simple-storage" aria-labelledby="infrastructure-title">
       <div className="panel-heading"><h2 id="infrastructure-title"><button type="button" className="text-button" onClick={()=>setHelp(true)}>Запас и хранение ⓘ</button></h2><button type="button" className="text-button" onClick={onData}>Исходные данные →</button></div>
-      <fieldset disabled={!!w.busy} className="storage-inline">
+      <fieldset disabled={!!w.busy||w.immutable} className="storage-inline">
         <label className="stock-field">Начальный запас, т<input type="number" min={0} step="any" aria-label="Начальный запас топлива, т" aria-invalid={!Number.isFinite(inventory)||inventory<0} value={Number.isFinite(inventory)?inventory:''} onChange={e=>changeInventory(e.target.value===''?NaN:e.target.valueAsNumber)}/></label>
         <div className="storage-zbo"><div><span>Снижение потерь · ZBO</span>{records.length>1?<button type="button" className="text-button" onClick={onAdvanced}>{records.length} записи →</button>:<Toggle label="Включить снижение потерь (ZBO)" checked={!!row} onChange={yes=>w.setDraft(setInvestment(plan,storageInvestment.id,yes?storageInvestment.defaultYear:null))}/>}</div>
          <label>Год решения<select aria-label="Год решения ZBO" disabled={!row||records.length>1} value={row?.year??storageInvestment.defaultYear} onChange={e=>w.setDraft(setInvestment(plan,storageInvestment.id,Number(e.target.value)))}>{years.map(year=><option key={year}>{year}</option>)}</select><span>Вложения: {reference?number(Number(reference.total_capex_mln)):'—'} млн у.е.</span></label>

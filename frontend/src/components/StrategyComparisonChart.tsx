@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
 import type { Result } from '../api/types';
 import {
@@ -12,6 +12,7 @@ import {
   yearDayFromModelDay,
 } from '../lib/daily';
 import { number } from '../lib/format';
+import { usePlotSize } from './usePlotSize';
 
 export type ComparisonChartMetric = 'inventory' | 'shortage' | 'cost';
 
@@ -50,27 +51,6 @@ function uniquePoints(points: Point[]) {
   return [...grouped.values()].flatMap(matches => matches.length === 1 ? matches : []).sort((left, right) => left.x - right.x);
 }
 
-function usePlotSize() {
-  const [node, setNode] = useState<HTMLDivElement | null>(null);
-  const [size, setSize] = useState({ width: 1040, height: 240 });
-  useLayoutEffect(() => {
-    if (!node)
-      return;
-    const observer = new ResizeObserver(entries => {
-      const rect = entries[0]?.contentRect;
-      if (!rect)
-        return;
-      setSize({
-        width: Math.max(320, Math.round(rect.width)),
-        height: Math.max(150, Math.round(rect.height)),
-      });
-    });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [node]);
-  return { ref: setNode, ...size };
-}
-
 function lineSegments(points: Point[], x: (value: number) => number, y: (value: number) => number) {
   const paths: string[] = [];
   let path = '';
@@ -101,7 +81,9 @@ function tickLabel(metric: ComparisonChartMetric, value: number, range: 'all' | 
 export function StrategyComparisonChart({ series, metric, range, year }: Props) {
   const [hovered, setHovered] = useState<number | null>(null);
   const tooltipId = useId();
-  const { ref, width, height } = usePlotSize();
+  const { ref, size } = usePlotSize(320, 150);
+  const width = size?.width ?? 320;
+  const height = size?.height ?? 150;
   const daily = metric !== 'cost';
   const yearStart = modelDayFromYearDay(year, 1) ?? 1;
   const yearEnd = modelDayFromYearDay(year, 365) ?? MODEL_HORIZON_DAYS;
@@ -158,10 +140,11 @@ export function StrategyComparisonChart({ series, metric, range, year }: Props) 
   const tooltipTitle = cursor === null
     ? ''
     : metric === 'cost' ? String(cursor) : modelDayLabel(cursor);
+  const topology = `${metric}|${range}|${year}|${prepared.map(item => item.id).join(',')}`;
 
   return <div className="strategy-comparison-chart">
     <div className="comparison-chart-frame" ref={ref}>
-    <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${labels[metric]}, ${unit}. ${series.map(item => item.name).join(', ')}`} onPointerLeave={() => setHovered(null)}>
+    <svg key={topology} className={`chart-plot ${size ? 'is-ready' : ''}`} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${labels[metric]}, ${unit}. ${series.map(item => item.name).join(', ')}`} onPointerLeave={() => setHovered(null)}>
       {yTicks.map(value => <g key={value}>
         <line className="comparison-chart-grid" x1={pad.left} x2={width - pad.right} y1={y(value)} y2={y(value)}/>
         <text className="comparison-chart-axis" x={pad.left - 10} y={y(value) + 4} textAnchor="end">{number(value)}</text>

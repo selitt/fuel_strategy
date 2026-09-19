@@ -5,6 +5,8 @@
     "supply_orders": [],
     "capacity_reservations": [],
     "investments": [],
-    "inventory_policy": {}
+    "inventory_policy": {
+      "initial_inventory_t": 0
+    }
   }
 }

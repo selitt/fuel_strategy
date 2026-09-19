@@ -4,9 +4,10 @@
 для интеграции в сервисный слой, тесты или сценарии расчёта.
 """
 
-import sys
-import os
+from copy import deepcopy
+import json
 import random
+import sys
 from typing import Dict, Any, List, Tuple
 
 from src.engine.engine import run_engine, get_engine
@@ -29,6 +30,31 @@ PARAM_BOUNDS: List[Tuple[float, float]] = [
 
 # Базовое экспертное начальное приближение (Warm Start)
 WARM_START_X0: List[float] = [118.0, 165.0, 190.0, 8.0, 67.0, 110.0, 30.0, 110.0, 74.0]
+
+
+def to_participant_plan(
+    plan: Dict[str, Any], scenario_id: str = "BASE"
+) -> Dict[str, Any]:
+    """Оборачивает внутренние решения оптимизатора в переносимый ParticipantPlan."""
+    result = {
+        "plan_id": plan["plan_id"],
+        "scenario_id": scenario_id,
+        "decisions": {
+            "supply_orders": deepcopy(plan.get("supply_orders", [])),
+            "capacity_reservations": deepcopy(plan.get("capacity_reservations", [])),
+            "investments": deepcopy(plan.get("investments", [])),
+            "inventory_policy": deepcopy(plan.get("inventory_policy", {})),
+        },
+    }
+    if "description" in plan:
+        result["description"] = plan["description"]
+    return result
+
+
+def _format_metric(value: Any, suffix: str = "") -> str:
+    if not isinstance(value, (int, float)):
+        return "недоступно"
+    return f"{value:.2f}{suffix}"
 
 
 def decode_params_to_plan(params: List[float], plan_id: str = "strategy_de_optimal") -> Dict[str, Any]:
@@ -183,7 +209,7 @@ def optimize_strategy(
 ) -> Dict[str, Any]:
     """
     Основная точка входа для оптимизации стратегии.
-    Автоматически использует SciPy при наличии либо встроенный Python DE.
+    Использует scipy.optimize.differential_evolution с воспроизводимым seed.
     """
     initial_guess = x0 or WARM_START_X0
 
@@ -191,13 +217,21 @@ def optimize_strategy(
         from scipy.optimize import differential_evolution
         scipy_popsize = max(1, pop_size // len(PARAM_BOUNDS))
         total_pop = scipy_popsize * len(PARAM_BOUNDS)
-        print(f"Используется scipy.optimize.differential_evolution (популяция: {total_pop} особей)...")
+        print(
+            f"Используется scipy.optimize.differential_evolution "
+            f"(популяция: {total_pop} особей)...",
+            file=sys.stderr,
+        )
 
         gen_counter = 0
         def scipy_callback(xk, convergence=None):
             nonlocal gen_counter
             gen_counter += 1
-            print(f"Поколение {gen_counter:2d}/{max_iter} завершено...", flush=True)
+            print(
+                f"Поколение {gen_counter:2d}/{max_iter} завершено...",
+                flush=True,
+                file=sys.stderr,
+            )
 
         res_scipy = differential_evolution(
             func=evaluate_fitness,
@@ -214,29 +248,33 @@ def optimize_strategy(
             workers=1,
         )
         best_params = list(res_scipy.x)
-    except ImportError as e:
-        print(f"scipy не найден ({e}), используется встроенный DE на чистом Python...")
-        best_params = run_pure_python_de(
-            fitness_fn=evaluate_fitness,
-            bounds=PARAM_BOUNDS,
-            pop_size=pop_size,
-            max_gen=max_iter,
-            seed=seed,
-            x0=initial_guess,
-        )
+    except ImportError as exc:
+        raise RuntimeError(
+            "Для оптимизации требуется SciPy: установите зависимости проекта "
+            "с scipy и повторите запуск."
+        ) from exc
 
     # Финальная полная валидация на 100 прогонах Монте-Карло
     final_plan = decode_params_to_plan(best_params, plan_id="strategy_earth_fortress_optimized")
     final_res = run_engine(final_plan["plan_id"], "BASE", final_plan, run_risk_analysis=True)
     mc = final_res["risk_register"][0] if final_res["risk_register"] else {}
 
-    print("\n=== РЕЗУЛЬТАТ ОПТИМИЗАЦИИ ===")
-    print(f"План валиден (Feasible): {final_res['is_feasible']}")
-    print(f"Total Cost:              {final_res['total_cost_mln']:.2f} млн")
-    print(f"Вероятность успеха MC:   {mc.get('probability_of_zero_shortage', 0.0) * 100:.1f}%")
-    print(f"Медианный дефицит:        {mc.get('median_shortage_t', 0.0):.2f} т")
-    return final_plan
+    probability = mc.get("probability_of_no_shortage")
+    probability_text = (
+        _format_metric(probability * 100, "%")
+        if isinstance(probability, (int, float))
+        else "недоступно"
+    )
+    print("\n=== РЕЗУЛЬТАТ ОПТИМИЗАЦИИ ===", file=sys.stderr)
+    print(f"План валиден (Feasible): {final_res['is_feasible']}", file=sys.stderr)
+    print(f"Total Cost:              {final_res['total_cost_mln']:.2f} млн", file=sys.stderr)
+    print(f"Вероятность нулевого дефицита MC: {probability_text}", file=sys.stderr)
+    print(
+        f"Медианный дефицит:        {_format_metric(mc.get('median_shortage_t'), ' т')}",
+        file=sys.stderr,
+    )
+    return to_participant_plan(final_plan)
 
 
 if __name__ == "__main__":
-    optimize_strategy()
+    print(json.dumps(optimize_strategy(), ensure_ascii=False, indent=2))

@@ -82,6 +82,14 @@ class ParticipantPlanDTO(BaseModel):
 
 
 
+class BuiltinStrategyDTO(BaseModel):
+    """Неизменяемое решение команды; пользователь редактирует отдельную копию."""
+    id: str
+    name: str
+    description: str
+    plan: ParticipantPlanDTO
+
+
 # === ВЫХОДНЫЕ КОНТРАКТЫ (export.schema.json) ===
 
 class YearlyBalanceDTO(BaseModel):

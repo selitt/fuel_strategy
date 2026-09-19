@@ -17,6 +17,20 @@ export async function calculateRisks(
 export type RiskBin = {lower_t:number;upper_t:number;count:number};
 export type RiskDistribution = {samples:number[];bins:RiskBin[];iterations:number;median:number;p95:number;maximum:number};
 const finite = (v:unknown):v is number => typeof v==='number' && Number.isFinite(v) && v>=0;
+export const financialRiskFields = [
+ ['probability_of_all_constraints', 'Прогоны с выполнением всех применимых ограничений'],
+ ['mean_total_cost_mln', 'Средние затраты в случайных прогонах, млн у.е.'],
+ ['p95_total_cost_mln', '95%-уровень затрат, млн у.е.'],
+ ['mean_emergency_procurement_mln', 'Средняя стоимость аварийных закупок, млн у.е.'],
+ ['p95_emergency_procurement_mln', '95%-уровень аварийных закупок, млн у.е.'],
+] as const;
+type FinancialRiskKey = typeof financialRiskFields[number][0];
+export type RiskFinancialSummary = Record<FinancialRiskKey, number>;
+/** Missing historical evidence stays missing; no financial calculation in the UI. */
+export function riskFinancialSummary(value:Record<string,unknown>|undefined):RiskFinancialSummary|null {
+ if(!value || !financialRiskFields.every(([key])=>finite(value[key])) || (value.probability_of_all_constraints as number)>1)return null;
+ return Object.fromEntries(financialRiskFields.map(([key])=>[key,value[key]])) as RiskFinancialSummary;
+}
 /** Validate returned evidence; the browser never manufactures samples or statistics. */
 export function riskDistribution(value:Record<string,unknown>|undefined):RiskDistribution|null {
  if(!value)return null;

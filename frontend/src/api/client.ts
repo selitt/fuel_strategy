@@ -1,18 +1,20 @@
-import type { Catalog, Comparison, Meta, Plan, Project, Result, Summary, Validation } from './types';
+import type { BuiltinStrategy, Catalog, Comparison, Meta, Plan, Project, Result, Summary, Validation } from './types';
 import type { schemas } from './schema';
+import { readIssues } from '../lib/validation.js';
+import type { PlanIssue } from '../lib/validation';
 import { downloadBlob, safeFilename } from '../lib/format.js';
 
 type ConflictContext = 'revision' | 'result';
 
 export class ApiError extends Error {
-  constructor(public status: number, public code: string, message: string, public requestId = '', public conflictContext?: ConflictContext, public retryAfter?: number) { super(message); this.name='ApiError'; }
+  constructor(public status: number, public code: string, message: string, public requestId = '', public conflictContext?: ConflictContext, public retryAfter?: number, public issues: PlanIssue[] = []) { super(message); this.name='ApiError'; }
 }
 export function errorText(error: unknown): string {
   if(typeof error === 'string' && error.trim()) return error;
   if(error instanceof ApiError) {
     if(error.status===409 && error.conflictContext==='revision') return 'План изменён в другом окне. Откройте свежую версию или сохраните свои правки отдельной копией.';
     if(error.status===409 && error.conflictContext==='result') return 'Результат отсутствует или устарел. Выполните пересчёт для текущей версии плана и повторите выгрузку.';
-    return error.message;
+    return error.issues.length?error.issues.map(issue=>issue.message).join('\n'):error.message;
   }
   return error instanceof Error ? error.message : 'Не удалось выполнить действие. Повторите попытку.';
 }
@@ -30,7 +32,7 @@ async function checked(response: Response, conflictContext?: ConflictContext): P
   const retryAfter=retryHeader && /^\d+$/.test(retryHeader) ? Number(retryHeader) : undefined;
   if(response.status===429 && !detail) message='Слишком много попыток входа. Подождите и повторите позже.';
   if(response.status===403 && !detail) message='Запрос с этого адреса сайта запрещён. Откройте основную ссылку приложения.';
-  throw new ApiError(response.status,String(value.code||`HTTP_${response.status}`),message,String(value.request_id||response.headers.get('X-Request-ID')||''),conflictContext,retryAfter);
+  throw new ApiError(response.status,String(value.code||`HTTP_${response.status}`),message,String(value.request_id||response.headers.get('X-Request-ID')||''),conflictContext,retryAfter,readIssues(value.issues));
 }
 function apiPath(path: string): string {
   const baseUri=typeof document==='undefined'?'http://localhost/':document.baseURI;
@@ -62,6 +64,7 @@ export async function download(path:string,fallback:string,init?:RequestInit,con
 export const api = {
   simulate:(plan:Plan)=>json<Result>('/calc',body(plan)),
   analyzeRisk:(plan:Plan)=>json<Result>('/calc/risk',body(plan)),
+  strategies:()=>json<BuiltinStrategy[]>('/calc/strategies'),
   meta:()=>json<Meta>('/meta'), catalog:()=>json<Catalog>('/catalog'), template:()=>json<Plan>('/calc/template'),
   async list():Promise<Summary[]> {
     const all:Summary[]=[];let offset=0;

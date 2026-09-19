@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { makeStrategy, updateStrategy, strategyDirty, strategyRunFresh, strategyComparisonExport, strategyComparisonCsv, importStrategyFiles, acceptStrategyRun, acceptSavedStrategy, savedStrategyIsCalculated } from '../.test-build/lib/strategies.js';
+import { readFileSync } from 'node:fs';
+import { makeStrategy, makeBuiltinStrategy, updateStrategy, updateStrategyPlan, renameStrategy, removeStrategyTab, toggleStrategySelection, nextStrategyCopyName, strategyColor, strategyDirty, strategyRunFresh, strategyComparisonExport, strategyComparisonCsv, importStrategyFiles, acceptStrategyRun, acceptSavedStrategy, savedStrategyIsCalculated } from '../.test-build/lib/strategies.js';
 import { StrategyCalculationQueue } from '../.test-build/lib/strategyQueue.js';
 import { errorText } from '../.test-build/api/client.js';
 
@@ -15,6 +16,55 @@ test('save immediately after import cannot reuse a current imported snapshot',()
 });
 
 const plan = (id='p') => ({plan_id:id,scenario_id:'BASE',extra:{owner:'team'},decisions:{supply_orders:[],capacity_reservations:[],investments:[],inventory_policy:{initial_inventory_t:0}}});
+test('five built-in strategies have stable distinct chart colors without changing custom colors',()=>{
+ const builtins=['earth_fortress','lunar_pioneer','balanced_dual','optimal_resilient_mc90','mandatory_stress_resilient']
+  .map(id=>strategyColor(`builtin-strategy_${id}`));
+ assert.equal(new Set(builtins).size,5);
+ assert.deepEqual(builtins,['#83c9b2','#d9b990','#a9c9ff','#baabe0','#d49fa9']);
+ assert.deepEqual(['strategy-1','strategy-23','own-tab'].map(strategyColor),['#a9c9ff','#91c9d6','#83c9b2']);
+});
+test('five supplied calendars and an empty user plan coexist without changing builtins',()=>{
+ const kinds=['earth_fortress','lunar_pioneer','balanced','base','stress'];
+ const tabs=kinds.map((kind,index)=>{
+  const source=JSON.parse(readFileSync(new URL(`../../data/strategies/${kind}.json`,import.meta.url),'utf8'));
+  const {supply_orders,capacity_reservations,investments,inventory_policy}=source;
+  return makeBuiltinStrategy(`strategy-${index+1}`,{...source,plan:{plan_id:source.id,scenario_id:source.scenario_id,decisions:{supply_orders,capacity_reservations,investments,inventory_policy}}});
+ });
+ assert.equal(new Set(tabs.map(t=>t.plan.plan_id)).size,5);
+ assert.deepEqual(tabs.map(t=>t.name),['Земная крепость','Лунный прорыв','Сбалансированный контур','Базовая','Стресс-устойчивая']);
+ assert.ok(tabs.every(t=>t.plan.decisions.supply_orders.every(r=>r.delivery_date&&r.batch_id)));
+ const originals=structuredClone(tabs);
+ const own=makeStrategy('strategy-6','Моя стратегия',plan('own'));
+ const copied=makeStrategy('strategy-7','Моя копия',tabs[0].plan);
+ copied.plan.decisions.supply_orders[0].order_t+=1;
+ own.plan.extra.owner='user';
+ const exported=strategyComparisonExport([...tabs,own,copied],undefined);
+ assert.equal(exported.items.length,7);
+ assert.deepEqual(tabs,originals);
+ assert.deepEqual(own.plan.decisions.supply_orders,[]);
+ assert.ok(tabs.every(t=>!strategyDirty(t)));
+});
+test('built-in strategies stay clean and immutable while copies are independent',()=>{
+ const builtin=makeBuiltinStrategy('builtin-team',{id:'team',name:'Базовая',description:'Готовая стратегия команды',plan:plan('team')});
+ assert.equal(builtin.builtin.id,'team');assert.equal(builtin.edited,false);assert.equal(strategyDirty(builtin),false);
+ assert.equal(updateStrategyPlan(builtin,{...builtin.plan,extra:{owner:'changed'}}),builtin);
+ assert.equal(renameStrategy(builtin,'Другое имя'),builtin);
+ assert.deepEqual(removeStrategyTab([builtin,makeStrategy('own','Своя',plan('own'))],builtin.id).map(tab=>tab.id),['builtin-team','own']);
+ const copy=makeStrategy('copy','Базовая — копия',structuredClone(builtin.plan));
+ assert.equal(copy.builtin,null);assert.equal(strategyDirty(copy),true);
+ copy.plan.extra.owner='copy';assert.equal(builtin.plan.extra.owner,'team');
+});
+test('comparison selection has no six-strategy ceiling',()=>{
+ let selected=[];
+ for(let index=0;index<9;index++)selected=toggleStrategySelection(selected,`strategy-${index}`);
+ assert.equal(selected.length,9);
+ assert.deepEqual(toggleStrategySelection(selected,'strategy-3'),selected.filter(id=>id!=='strategy-3'));
+});
+test('repeated ready-strategy copies receive distinct readable names',()=>{
+ const tabs=[makeStrategy('a','Базовая — моя копия',plan('a')),makeStrategy('b','Базовая — моя копия (2)',plan('b'))];
+ assert.equal(nextStrategyCopyName(tabs,'Базовая'),'Базовая — моя копия (3)');
+ assert.equal(nextStrategyCopyName(tabs,'Стресс-устойчивая'),'Стресс-устойчивая — моя копия');
+});
 test('saved server runs are reusable but imported snapshots require a fresh calculation',()=>{
  const p=plan(),result={plan_id:'p',scenario_id:'BASE',total_cost_mln:10};
  const project={name:'A',plan:p,result_state:'current',last_run:{origin:'server',plan_snapshot:p,result,created_at:'now'}};

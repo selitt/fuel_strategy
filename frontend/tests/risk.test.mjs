@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {calculateRisks,riskDistribution} from '../.test-build/lib/risk.js';
+import * as riskModule from '../.test-build/lib/risk.js';
 test('risk analysis runs two scenarios sequentially on same decisions',async()=>{
  const basis={plan_id:'p',scenario_id:'BASE',decisions:{extra:{keep:1}}};
  const calls=[],received=[],stages=[];
@@ -28,6 +29,18 @@ test('risk evidence preserves samples and server bins, including zero distributi
 test('legacy or incomplete risk results cannot become invented distributions',()=>{
  assert.equal(riskDistribution(undefined),null);assert.equal(riskDistribution({iterations:100,median_shortage_t:1}),null);
  for(const patch of [{shortage_samples_t:[1,2]},{shortage_samples_t:[1,2,NaN,4]},{shortage_histogram:[{lower_t:4,upper_t:1,count:4}]},{shortage_histogram:[{lower_t:1,upper_t:4,count:3}]},{median_shortage_t:5},{iterations:0}])assert.equal(riskDistribution({...valid(),...patch}),null);
+});
+
+test('financial risk uses server evidence and does not turn old results into zero costs',()=>{
+ assert.equal(typeof riskModule.riskFinancialSummary,'function');
+ const read=riskModule.riskFinancialSummary;
+ assert.equal(read(undefined),null);
+ assert.equal(read({iterations:100,probability_of_no_shortage:1}),null);
+ const fields={probability_of_all_constraints:.75,mean_total_cost_mln:125,p95_total_cost_mln:140,mean_emergency_procurement_mln:5,p95_emergency_procurement_mln:20};
+ assert.deepEqual(read(fields),fields);
+ for(const patch of [{probability_of_all_constraints:1.01},{mean_total_cost_mln:NaN},{mean_emergency_procurement_mln:-1},{p95_emergency_procurement_mln:undefined}])assert.equal(read({...fields,...patch}),null);
+ // A rare expensive tail can put the mean above p95; do not reject valid statistics.
+ assert.ok(read({...fields,mean_emergency_procurement_mln:25,p95_emergency_procurement_mln:0}));
 });
 
 const paths = () => ({iterations:2,daily_trajectories:{
