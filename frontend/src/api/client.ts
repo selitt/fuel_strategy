@@ -5,7 +5,7 @@ import { downloadBlob, safeFilename } from '../lib/format.js';
 type ConflictContext = 'revision' | 'result';
 
 export class ApiError extends Error {
-  constructor(public status: number, public code: string, message: string, public requestId = '', public conflictContext?: ConflictContext) { super(message); this.name='ApiError'; }
+  constructor(public status: number, public code: string, message: string, public requestId = '', public conflictContext?: ConflictContext, public retryAfter?: number) { super(message); this.name='ApiError'; }
 }
 export function errorText(error: unknown): string {
   if(error instanceof ApiError) {
@@ -25,12 +25,21 @@ async function checked(response: Response, conflictContext?: ConflictContext): P
     return `${location ? location+': ' : ''}${e.msg||'Проверьте значение'}`;
   }).join('\n'):'';
   if(!message) message=({401:'Для доступа к рабочему пространству нужна авторизация.',413:'Файл или запрос слишком большой.',502:'Backend недоступен. Проверьте запуск сервера.',503:'Расчётный сервис недоступен. Повторите позже.'} as Record<number,string>)[response.status] || `Запрос не выполнен (HTTP ${response.status}).`;
-  throw new ApiError(response.status,String(value.code||`HTTP_${response.status}`),message,String(value.request_id||response.headers.get('X-Request-ID')||''),conflictContext);
+  const retryHeader=response.headers.get('Retry-After');
+  const retryAfter=retryHeader && /^\d+$/.test(retryHeader) ? Number(retryHeader) : undefined;
+  if(response.status===429 && !detail) message='Слишком много попыток входа. Подождите и повторите позже.';
+  if(response.status===403 && !detail) message='Запрос с этого адреса сайта запрещён. Откройте основную ссылку приложения.';
+  throw new ApiError(response.status,String(value.code||`HTTP_${response.status}`),message,String(value.request_id||response.headers.get('X-Request-ID')||''),conflictContext,retryAfter);
+}
+function apiPath(path: string): string {
+  const baseUri=typeof document==='undefined'?'http://localhost/':document.baseURI;
+  const url=new URL(`api${path}`,baseUri);
+  return `${url.pathname}${url.search}`;
 }
 async function request(path: string, init: RequestInit = {}, conflictContext?: ConflictContext): Promise<Response> {
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),120000);
-  try { return await checked(await fetch('/api'+path,{...init,signal:controller.signal,cache:'no-store'}),conflictContext); }
+  try { return await checked(await fetch(apiPath(path),{...init,signal:controller.signal,cache:'no-store'}),conflictContext); }
   catch(error) {
     if(error instanceof ApiError) throw error;
     if(controller.signal.aborted) throw new Error('Сервер не ответил за 2 минуты. Расчёт мог продолжиться — обновите проект перед повторной попыткой.');
@@ -65,6 +74,7 @@ export const api = {
   async remove(id:string,revision:number):Promise<void>{await request(`/projects/${encodeURIComponent(id)}?expected_revision=${revision}`,{method:'DELETE'},'revision');},
   importPlan:(file:File)=>upload<Validation>('/plans/import',file),
   importProject:(file:File)=>upload<Project>('/projects/import',file),
+  downloadPlanTemplate:(format:'csv'|'xlsx')=>download(`/plans/import/template?format=${format}`,`plan-template.${format}`),
   validate:(plan:Plan)=>json<Validation>('/plans/validate',body(plan)),
   compare:(ids:string[])=>json<Comparison>('/projects/compare',body({project_ids:ids})),
   exportPlan:(plan:Plan)=>download('/plans/export','plan.json',body(plan)),

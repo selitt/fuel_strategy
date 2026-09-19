@@ -21,8 +21,8 @@ async def main():
   assert value,label
   report['checks'].append(label);print('PASS',label,flush=True)
  with tempfile.TemporaryDirectory(dir=OUT) as data, (OUT/'server.log').open('w') as log:
-  env={**os.environ,'FUEL_DATA_DIR':data,'FUEL_FRONTEND_DIR':str(ROOT/'frontend/dist'),'FUEL_HTTP_USER':'','FUEL_HTTP_PASSWORD':''}
-  server=subprocess.Popen([sys.executable,'-m','uvicorn','src.app.web:create_web_app','--factory','--host','127.0.0.1','--port',str(port)],cwd=ROOT,env=env,stdout=log,stderr=log)
+  env={**os.environ,'FUEL_DATA_DIR':data,'FUEL_FRONTEND_DIR':str(ROOT/'frontend/dist'),'FUEL_HTTP_USER':'','FUEL_HTTP_PASSWORD':'','FUEL_PUBLIC_MODE':'0','FUEL_ALLOW_UNAUTHENTICATED_LOCAL':'1','FUEL_BIND_HOST':'127.0.0.1'}
+  server=subprocess.Popen([sys.executable,'-m','uvicorn','src.app.web:create_web_app','--factory','--host','127.0.0.1','--port',str(port),'--no-proxy-headers'],cwd=ROOT,env=env,stdout=log,stderr=log)
   try:
    async with httpx.AsyncClient(base_url=url) as client:
     for _ in range(100):

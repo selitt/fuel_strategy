@@ -11,8 +11,10 @@ from src.app.config.config import Settings
 from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
 from src.app.dto.web_dto import ProjectDTO
 from src.app.service.calc_service import validate_result
+from src.app.service.calculation_admission import AdmittedCalculationService
 from src.app.service.json_io import InvalidJSON, dumps, ensure_finite
 from src.app.service.project_service import ProjectService, parse_json_file
+from src.app.service.plan_tabular_io import parse_plan_file
 
 logger = logging.getLogger("fuel.api")
 
@@ -33,7 +35,7 @@ def get_calculation_service(request: Request) -> CalculationBackend:
     service = request.app.state.calculation_service
     if service is None:
         raise HTTPException(status_code=503, detail="Расчётный сервис ещё не подключён")
-    return service
+    return AdmittedCalculationService(service, request.app.state.calculation_admission)
 
 
 def get_project_service(request: Request) -> ProjectService:
@@ -135,5 +137,14 @@ def read_json_upload(file: UploadFile, settings: Settings) -> Any:
     try:
         contents = file.file.read(settings.max_upload_bytes + 1)
         return parse_json_file(contents, file.filename, settings.max_upload_bytes)
+    finally:
+        file.file.close()
+
+
+def read_plan_upload(file: UploadFile, settings: Settings) -> Any:
+    """Reads a bounded JSON/CSV/XLSX/XLS participant-plan upload."""
+    try:
+        contents = file.file.read(settings.max_upload_bytes + 1)
+        return parse_plan_file(contents, file.filename, settings.max_upload_bytes)
     finally:
         file.file.close()

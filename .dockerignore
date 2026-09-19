@@ -1,0 +1,15 @@
+**/.git
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.test-build
+**/.env
+**/.env.*
+!docker/.env.example
+.local
+.venv*
+frontend/dist
+coverage
+.coverage
+*.zip
+results

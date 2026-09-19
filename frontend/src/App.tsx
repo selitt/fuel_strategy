@@ -61,7 +61,7 @@ export default function App() {
      <button type="button" disabled={!!w.busy || w.riskBusy || !w.draft} onClick={() => menuAction(() => void w.save())}><Icon name="save"/>Сохранить<span className="key-hint">Ctrl S</span></button>
      <button type="button" disabled={!!w.busy || w.riskBusy || !w.draft} onClick={() => menuAction(showCopy)}><Icon name="copy"/>Создать копию</button>
      <div className="menu-divider"/>
-     <button type="button" disabled={!!w.busy || w.riskBusy} onClick={() => menuAction(importFile)}><Icon name="upload"/>Загрузить JSON</button>
+     <button type="button" disabled={!!w.busy || w.riskBusy} onClick={() => menuAction(importFile)}><Icon name="upload"/>Загрузить план</button>
      <button type="button" disabled={!!w.busy || w.riskBusy || !w.draft} onClick={() => menuAction(() => setModal('export'))}><Icon name="download"/>Скачать…</button>
      <button type="button" onClick={() => menuAction(() => setModal('compare'))}><Icon name="compare"/>Сравнить сохранённые планы</button>
      <button type="button" onClick={() => menuAction(() => setModal('help'))}><Icon name="info"/>О модели и интерфейсе</button>
@@ -74,7 +74,7 @@ export default function App() {
    {w.loading ? <div className="loading-state" role="status"><Spinner />Открываем план…</div> : <><StrategySummary w={w} onDetails={() => setModal('results')}/><div className="settings-column"><Infrastructure w={w} onAdvanced={advanced} onData={() => setModal('data')}/><SupplyMatrix w={w} onAdvanced={advanced} onSource={setSource}/></div><ResultPanel w={w} onDetails={() => setModal('results')} onRisk={() => {setModal('risk'); if (!w.riskBusy) void w.analyzeRisk();}}/></>}
   </main>
 
-  <input ref={file} className="sr-only" type="file" accept=".json,application/json" aria-label="Файл плана или проекта" onChange={e => { const f = e.currentTarget.files?.[0]; e.currentTarget.value = ''; if (f) {
+  <input ref={file} className="sr-only" type="file" accept=".json,.csv,.xlsx,.xls,application/json,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" aria-label="Файл плана или проекта" onChange={e => { const f = e.currentTarget.files?.[0]; e.currentTarget.value = ''; if (f) {
         setModal(null);
         void w.importFile(f);
     } }}/>
@@ -83,7 +83,7 @@ export default function App() {
         setPending(null);
         action();
     } }); }}>Сохранить и продолжить</Button></div></Modal>}
-  {modal === 'projects' && <Modal title="Сохранённые планы" onClose={() => setModal(null)}><div className="saved-plans">{w.projects.map(p => <button type="button" key={p.project_id} onClick={() => { setModal(null); guard(() => void w.load(p.project_id)); }}><Icon name="plan"/><span><strong>{p.name}</strong><small>{scenario(p.scenario_id)}</small></span><Icon name="right"/></button>)}{!w.projects.length && <p className="help">План появится здесь после сохранения или расчёта.</p>}</div><div className="modal-actions"><Button onClick={() => { setModal(null); importFile(); }}><Icon name="upload"/>Загрузить JSON</Button><Button kind="primary" onClick={() => { setModal(null); guard(() => void w.newPlan()); }}><Icon name="plus"/>Новый план</Button></div></Modal>}
+  {modal === 'projects' && <Modal title="Сохранённые планы" onClose={() => setModal(null)}><div className="saved-plans">{w.projects.map(p => <button type="button" key={p.project_id} onClick={() => { setModal(null); guard(() => void w.load(p.project_id)); }}><Icon name="plan"/><span><strong>{p.name}</strong><small>{scenario(p.scenario_id)}</small></span><Icon name="right"/></button>)}{!w.projects.length && <p className="help">План появится здесь после сохранения или расчёта.</p>}</div><div className="modal-actions"><Button onClick={() => { setModal(null); importFile(); }}><Icon name="upload"/>Загрузить план</Button><Button kind="primary" onClick={() => { setModal(null); guard(() => void w.newPlan()); }}><Icon name="plus"/>Новый план</Button></div></Modal>}
   {modal === 'copy' && <Modal title="Создать копию" onClose={() => setModal(null)}>{w.errorMessage && <Notice tone="error">{w.errorMessage}</Notice>}<form onSubmit={e => { e.preventDefault(); void w.copy(copyName, copyScenario).then(p => { if (p)
         setModal(null); }); }}><label className="field">Название копии<input required maxLength={140} autoComplete="off" value={copyName} onChange={e => setCopyName(e.target.value)}/></label><label className="field">Сценарий<select aria-label="Сценарий копии" value={copyScenario} onChange={e => setCopyScenario(e.target.value)}><option value="BASE">BASE</option><option value="MANDATORY_STRESS">STRESS</option>{!['BASE', 'MANDATORY_STRESS'].includes(copyScenario) && <option>{copyScenario}</option>}</select></label><div className="modal-actions"><Button type="submit" kind="primary" disabled={!!w.busy || !copyName.trim()}>Создать копию</Button></div></form></Modal>}
   {modal === 'delete' && <Modal title="Удалить план?" onClose={() => setModal(null)}><p>«{w.name}» и его сохранённый результат будут удалены. Скачанные файлы останутся.</p><div className="modal-actions"><Button onClick={() => setModal(null)}>Отмена</Button><Button kind="danger" onClick={() => { setModal(null); void w.remove(); }}>Удалить</Button></div></Modal>}

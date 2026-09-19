@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Modal } from '../components/Ui';
 import type { Workspace } from '../state/useWorkspace';
 import { Toggle } from '../components/Controls';
 import { matrixYears, setInvestment } from '../lib/matrix';
@@ -10,6 +12,7 @@ export function Infrastructure({ w, onAdvanced, onData }: {
     onAdvanced: () => void;
     onData: () => void;
 }) {
+    const [help,setHelp]=useState(false);
     if (!w.draft)
         return null;
     const plan = w.draft, inventory = plan.decisions.inventory_policy.initial_inventory_t;
@@ -24,15 +27,15 @@ export function Infrastructure({ w, onAdvanced, onData }: {
     const changeInventory = (value: number) => w.setDraft({ ...plan, decisions: { ...plan.decisions, inventory_policy: { ...plan.decisions.inventory_policy, initial_inventory_t: value } } });
 
     return <aside className="infrastructure panel simple-storage" aria-labelledby="infrastructure-title">
-      <div className="panel-heading"><h2 id="infrastructure-title">Запас и хранение</h2><button type="button" className="text-button" onClick={onData}>Исходные данные →</button></div>
+      <div className="panel-heading"><h2 id="infrastructure-title"><button type="button" className="text-button" onClick={()=>setHelp(true)}>Запас и хранение ⓘ</button></h2><button type="button" className="text-button" onClick={onData}>Исходные данные →</button></div>
       <fieldset disabled={!!w.busy} className="storage-inline">
         <label className="stock-field">Начальный запас, т<input type="number" min={0} step="any" aria-label="Начальный запас топлива, т" aria-invalid={!Number.isFinite(inventory)||inventory<0} value={Number.isFinite(inventory)?inventory:''} onChange={e=>changeInventory(e.target.value===''?NaN:e.target.valueAsNumber)}/></label>
-        <div className="storage-zbo"><div><span>Снижение потерь (ZBO)</span>{records.length>1?<button type="button" className="text-button" onClick={onAdvanced}>{records.length} записи →</button>:<Toggle label="Включить снижение потерь (ZBO)" checked={!!row} onChange={yes=>w.setDraft(setInvestment(plan,storageInvestment.id,yes?storageInvestment.defaultYear:null))}/>}</div>
+        <div className="storage-zbo"><div><span>Снижение потерь · ZBO</span>{records.length>1?<button type="button" className="text-button" onClick={onAdvanced}>{records.length} записи →</button>:<Toggle label="Включить снижение потерь (ZBO)" checked={!!row} onChange={yes=>w.setDraft(setInvestment(plan,storageInvestment.id,yes?storageInvestment.defaultYear:null))}/>}</div>
          <label>Год решения<select aria-label="Год решения ZBO" disabled={!row||records.length>1} value={row?.year??storageInvestment.defaultYear} onChange={e=>w.setDraft(setInvestment(plan,storageInvestment.id,Number(e.target.value)))}>{years.map(year=><option key={year}>{year}</option>)}</select><span>Вложения: {reference?number(Number(reference.total_capex_mln)):'—'} млн у.е.</span></label>
         </div>
       </fieldset>
       {(!Number.isFinite(inventory)||inventory<0)&&<p className="field-error">Начальный запас: введите число не меньше нуля.</p>}
       {inventory>cap&&<p className="field-error">Запас выше базовой ёмкости {number(cap)} т. Проверьте ограничения хранилища.</p>}
-      <details className="storage-help"><summary>Что означают эти настройки</summary><p>Начальный запас — топливо к началу первого года модели. Его источник и оплату нужно обосновать. ZBO — инвестиция в снижение потерь при хранении; текущая модель не обнуляет потери. Год решения не задаёт отдельные даты оплаты и ввода.</p></details>
+      {help && <Modal title="Запас и хранение" onClose={()=>setHelp(false)}><p>Начальный запас — топливо к началу первого года модели. Его источник и оплату нужно обосновать. ZBO — инвестиция в снижение потерь при хранении; текущая модель не обнуляет потери. Год решения не задаёт отдельные даты оплаты и ввода.</p></Modal>}
     </aside>;
 }

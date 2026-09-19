@@ -160,6 +160,8 @@ class DependBootstrapContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            (root / "tools").mkdir()
+            shutil.copyfile(ROOT / "tools/configure_access.py", root / "tools/configure_access.py")
             (root / "docker").mkdir()
             (root / "docker/compose.yaml").touch()
             (root / "docker/.env.example").touch()
@@ -167,7 +169,10 @@ class DependBootstrapContractTests(unittest.TestCase):
             log = root / "docker.log"
             docker = root / "bin/docker"
             docker.write_text(
-                '#!/bin/sh\nprintf "%s|%s\\n" "$FUEL_BIND_HOST" "$*" >> "$TEST_LOG"\n'
+                '#!/bin/sh\ncase "$*" in *"config --format json") '
+                'printf \'CONFIG\\n\' >> "$TEST_LOG"; printf \'%s\\n\' '
+                '\'{"services":{"web":{"environment":{"FUEL_HTTP_USER":"team","FUEL_HTTP_PASSWORD":"secret"}}}}\'; exit 0;; esac\n'
+                'printf "%s|%s\\n" "$FUEL_BIND_HOST" "$*" >> "$TEST_LOG"\n'
             )
             docker.chmod(0o755)
             env = {
@@ -188,6 +193,7 @@ class DependBootstrapContractTests(unittest.TestCase):
             self.assertEqual(
                 log.read_text().splitlines(),
                 [
+                    "CONFIG",
                     "0.0.0.0|compose --env-file "
                     + str(root / "docker/.env.example")
                     + " -f "
@@ -201,6 +207,8 @@ class DependBootstrapContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            (root / "tools").mkdir()
+            shutil.copyfile(ROOT / "tools/configure_access.py", root / "tools/configure_access.py")
             (root / "docker").mkdir()
             (root / "docker/compose.yaml").touch()
             (root / "docker/.env.example").touch()
@@ -208,7 +216,10 @@ class DependBootstrapContractTests(unittest.TestCase):
             log = root / "docker.log"
             docker = root / "bin/docker"
             docker.write_text(
-                '#!/bin/sh\nprintf "%s\\n" "$*" >> "$TEST_LOG"\n'
+                '#!/bin/sh\ncase "$*" in *"config --format json") '
+                'printf \'CONFIG\\n\' >> "$TEST_LOG"; printf \'%s\\n\' '
+                '\'{"services":{"web":{"environment":{"FUEL_HTTP_USER":"team","FUEL_HTTP_PASSWORD":"secret"}}}}\'; exit 0;; esac\n'
+                'printf "%s\\n" "$*" >> "$TEST_LOG"\n'
                 'case "$*" in *" up --build -d --wait") exit 9;; esac\n'
             )
             docker.chmod(0o755)
