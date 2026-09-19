@@ -211,3 +211,57 @@
     align-self: flex-start;
   }
 }
+.risk-histograms{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:16px;margin:16px 0}
+.risk-histogram{min-width:0;margin:0;padding:8px 0;border-block:1px solid var(--border)}
+.risk-histogram figcaption{font-size:14px;font-weight:600;margin-bottom:8px}
+.risk-histogram svg{display:block;width:100%;max-height:285px}
+.risk-axis{font-family:inherit;font-size:12px;fill:var(--muted)}
+.risk-grid{stroke:var(--border);stroke-dasharray:3 4}
+.risk-bin{fill:#78afa0;opacity:.85}
+.risk-bin:hover,.risk-bin:focus{fill:#a8dfcd;opacity:1;outline:2px solid #e2eee9;outline-offset:2px}
+.risk-marker{stroke:#e6edeb;stroke-width:2;stroke-dasharray:4 3;pointer-events:none}
+.risk-marker.p95{stroke:#ddb87f;stroke-dasharray:2 3}
+.risk-chart-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px}
+.risk-chart-legend span:first-child{color:#e6edeb}
+.risk-chart-legend span:last-child{color:#ddb87f}
+.risk-bin-detail{min-height:36px;font-size:13px;color:var(--muted);margin:5px 0 0}
+.risk-samples{margin-top:12px}
+.risk-samples .table-wrap{max-height:260px;overflow:auto}
+.risk-samples summary{cursor:pointer;font-size:13px}
+@media(max-width:600px){.risk-histograms{grid-template-columns:minmax(0,1fr)}}
+
+/* Monte Carlo terminal: one large daily view; aggregate details stay secondary. */
+.modal.wide:has(.risk-panel){width:min(96vw,1600px);max-height:94dvh}
+.risk-panel .risk-explanation{margin:8px 0;font-size:13px}
+.risk-path-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.risk-path-heading h3{font-size:17px;margin:0}
+.risk-terminal{margin-top:12px;border-block:1px solid var(--border);background:#0d1315}
+.risk-terminal-toolbar{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--border)}
+.risk-terminal button,.risk-path-heading button{border:1px solid transparent;background:transparent;color:var(--muted);padding:7px 10px;cursor:pointer;font:inherit;font-size:13px}
+.risk-terminal button:hover,.risk-path-heading button:hover{background:#ffffff0a;color:var(--text)}
+.risk-terminal button[aria-pressed=true],.risk-path-heading button[aria-pressed=true]{color:#c1f2e3;background:#477d6c30;border-color:#6b9e8950}
+.risk-run-select{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted)}
+.risk-run-select select{padding:5px 8px;background:#182023;border:1px solid var(--border);color:var(--text);font:inherit;min-width:115px}
+.risk-zoom-controls{margin-left:auto;display:flex;gap:4px}
+.risk-terminal-legend{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:12px 14px 0;font-size:13px;color:var(--muted)}
+.risk-terminal-legend strong{color:var(--text)}
+.fan-key:before,.median-key:before,.run-key:before{content:'';display:inline-block;width:18px;height:3px;margin-right:7px;vertical-align:middle;background:#87cfbc}
+.fan-key:before{height:10px;background:#6abda450;border:1px solid #6abda480}
+.median-key:before{background:#95dfcc}.run-key:before{background:#efc77f}
+.risk-chart-unit{margin-left:auto}
+.risk-terminal svg{display:block;width:100%;min-height:230px;touch-action:none;cursor:crosshair;outline-offset:-2px}
+.trajectory-grid{stroke:#ffffff0b;stroke-width:1}
+.trajectory-label{fill:#839694;font:13px 'Golos Text',sans-serif}
+.trajectory-fan{fill:#62b69b;fill-opacity:.2}
+.trajectory-bound{fill:none;stroke:#70bba2;stroke-opacity:.45;stroke-width:.8;vector-effect:non-scaling-stroke}
+.trajectory-median{fill:none;stroke:#a0e6d1;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.trajectory-run{fill:none;stroke:#efc77f;stroke-width:1.8;vector-effect:non-scaling-stroke}
+.trajectory-crosshair{stroke:#b5c6c580;stroke-dasharray:4 5;stroke-width:1;pointer-events:none}
+.trajectory-median-dot{fill:#a0e6d1}.trajectory-run-dot{fill:#efc77f}
+.risk-day-readout{display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-height:48px;padding:8px 14px;border-block:1px solid var(--border);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.risk-day-readout strong,.risk-day-readout b{color:var(--text);font-weight:500}
+.risk-chart-help{display:flex;justify-content:space-between;gap:12px;padding:9px 14px;color:var(--muted);font-size:11px}
+.risk-panel .risk-band-explanation{padding:0 14px;font-size:12px;color:var(--muted);margin:0 0 10px}
+.risk-distribution-details{margin-top:18px}
+.risk-distribution-details>summary{cursor:pointer;font-size:14px;color:var(--muted)}
+@media(max-width:700px){.risk-path-heading{align-items:flex-start;flex-direction:column}.risk-terminal-toolbar{gap:8px}.risk-zoom-controls{margin-left:0}.risk-terminal-legend{gap:8px}.risk-day-readout{min-height:90px}.risk-chart-help{flex-direction:column}.risk-chart-unit{margin-left:0}.modal.wide:has(.risk-panel){width:98vw}.risk-terminal svg{min-height:160px}}

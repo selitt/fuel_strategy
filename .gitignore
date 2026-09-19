@@ -1,5 +1,6 @@
 # Local and generated files.
 .venv/
+.venv-public-check/
 venv/
 node_modules/
 __pycache__/

@@ -12,6 +12,7 @@ from src.app.api.transport import RequestBoundaryMiddleware, validation_error_re
 from src.app.dto.web_dto import ErrorDTO
 from src.app.persistence.project_store import ProjectStore
 from src.app.service.calc_service import CalculationService
+from src.app.service.calculation_admission import CalculationAdmission
 
 
 def _default_engine_version(reference_dir: Path) -> str:
@@ -46,9 +47,13 @@ def create_app(
         title="Топливный космоконтур 2035 — REST API",
         description="REST API для управления проектами и расчётами материального баланса.",
         version="1.1.0",
-        responses={status: {"model": ErrorDTO} for status in (400, 404, 409, 413, 415, 422, 500, 503)},
+        responses={status: {"model": ErrorDTO, **({"headers": {"Retry-After": {
+            "description": "Секунды до повторной попытки при ограничении запросов или занятом расчётном сервисе",
+            "schema": {"type": "integer"},
+        }}} if status in (429, 503) else {})} for status in (400, 401, 403, 404, 409, 413, 415, 422, 429, 500, 503)},
     )
     application.state.settings = config
+    application.state.calculation_admission = CalculationAdmission()
     uses_default_service = calculation_service is None
     application.state.calculation_service = CalculationService(config.reference_dir) if uses_default_service else calculation_service
     application.state.project_store = ProjectStore(config.data_dir)

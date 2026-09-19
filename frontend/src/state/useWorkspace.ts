@@ -6,6 +6,7 @@ import { otherScenario } from '../lib/matrix';
 import { useLivePreview } from './useLivePreview';
 import { calculateRisks } from '../lib/risk';
 import type { RiskRun } from '../lib/risk';
+import { planImportKind, planImportName } from '../lib/import';
 export type ScenarioPair = {
     basis: Plan;
     otherPlan: Plan;
@@ -214,16 +215,21 @@ export function useWorkspace() {
         return execute('Импортируем…', async () => {
             if (file.size > (meta?.max_upload_bytes || 2097152))
                 throw new Error('Файл превышает допустимый размер ' + (meta?.max_upload_bytes || 2097152) + ' байт.');
-            if (!file.name.toLowerCase().endsWith('.json'))
-                throw new Error('Выберите JSON-план или JSON-проект. CSV/XLSX ещё не подключены к модели.');
-            let probe: unknown;
-            try {
-                probe = JSON.parse((await file.text()).replace(/^\uFEFF/, ''));
+            const kind = planImportKind(file.name);
+            if (!kind)
+                throw new Error('Выберите план JSON, CSV, XLSX или XLS.');
+            let projectSnapshot = false;
+            if (kind === 'json') {
+                let probe: unknown;
+                try {
+                    probe = JSON.parse((await file.text()).replace(/^\uFEFF/, ''));
+                }
+                catch {
+                    throw new Error('Не удалось прочитать JSON. Проверьте синтаксис файла.');
+                }
+                projectSnapshot = !!probe && typeof probe === 'object' && 'schema_version' in probe && 'project_id' in probe;
             }
-            catch {
-                throw new Error('Не удалось прочитать JSON. Проверьте синтаксис файла.');
-            }
-            if (probe && typeof probe === 'object' && 'schema_version' in probe && 'project_id' in probe) {
+            if (projectSnapshot) {
                 const imported = await api.importProject(file);
                 resetPreview(); adopt(imported);
                 urlUpdate('plan', imported.project_id);
@@ -233,7 +239,7 @@ export function useWorkspace() {
             else {
                 const p = await api.importPlan(file);
                 resetPreview(); setProject(null);
-                setNameState(file.name.replace(/\.json$/i, '').slice(0, 140));
+                setNameState(planImportName(file.name));
                 setDraftState(normalizedPlan(p.plan));
                 setEdited(true);
                 urlUpdate('plan');
@@ -241,6 +247,9 @@ export function useWorkspace() {
             }
             setViewState('plan');
         });
+    }
+    async function downloadTemplate(format: 'csv' | 'xlsx') {
+        return execute('Готовим шаблон…', async () => { await api.downloadPlanTemplate(format); });
     }
     async function analyzeRisk() {
         if (riskLock.current || lock.current) return;
@@ -293,7 +302,7 @@ export function useWorkspace() {
     return { risk, riskBusy, riskStage, riskError, analyzeRisk, displayResult, displayOther, preview: displayed, previewFresh: live.fresh, selection, setSelection, both, setBoth, pair: pair && draft && samePlan(pair.basis, draft) ? pair : null, saveOther, view, setView, project, draft, name, projects, catalog, meta, loading, busy, error, message, dirty, inputChanged, current,
         setDraft: (p: Plan) => { live.invalidate(); setDraftState(p); setEdited(true); setError(null); },
         setName: (v: string) => { setNameState(v); setEdited(true); },
-        setError, clearError: () => { setError(null); live.clearError(); }, setMessage, execute, save, calculate, load, newPlan, copy, remove, importFile, exportFile, refreshList,
+        setError, clearError: () => { setError(null); live.clearError(); }, setMessage, execute, save, calculate, load, newPlan, copy, remove, importFile, downloadTemplate, exportFile, refreshList,
         errorMessage: reportedError ? errorText(reportedError) : '', requestId: reportedError instanceof ApiError ? reportedError.requestId : '',
     };
 }
