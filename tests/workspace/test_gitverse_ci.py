@@ -24,13 +24,7 @@ def test_gitverse_ci_has_expected_triggers_and_job_graph() -> None:
         "integrity-contracts",
         "python-tests",
         "frontend",
-        "server-browser",
     }
-    assert workflow["jobs"]["server-browser"]["needs"] == [
-        "integrity-contracts",
-        "python-tests",
-        "frontend",
-    ]
     assert all(job["runs-on"] == "ubuntu-latest" for job in workflow["jobs"].values())
 
 
@@ -50,32 +44,10 @@ def test_gitverse_ci_runs_each_required_verification_and_cleanup() -> None:
     assert "npm --prefix frontend run build" in frontend
     assert "tools/verify_prebuilt.py" in frontend
 
-    server = commands(jobs["server-browser"])
-    assert "docker compose" in server
-    assert "tests/web/deployment_smoke.py" in server
-    assert "tests/web/daily_smoke.py" in server
-    assert any(
-        step.get("if") == "always()" and "down -v --remove-orphans" in step.get("run", "")
-        for step in jobs["server-browser"]["steps"]
-    )
-
-
-def test_gitverse_ci_transfers_frontend_and_keeps_failure_artifacts() -> None:
-    jobs = load_workflow()["jobs"]
-
-    assert any(
-        step.get("uses", "").startswith("actions/upload-artifact@")
-        and step.get("with", {}).get("name") == "frontend-dist"
-        for step in jobs["frontend"]["steps"]
-    )
-    assert any(
-        step.get("uses", "").startswith("actions/download-artifact@")
-        and step.get("with", {}).get("name") == "frontend-dist"
-        for step in jobs["server-browser"]["steps"]
-    )
-    assert any(
-        step.get("if") == "always()"
-        and step.get("uses", "").startswith("actions/upload-artifact@")
-        and step.get("with", {}).get("name") == "server-browser-artifacts"
-        for step in jobs["server-browser"]["steps"]
-    )
+    serialized = WORKFLOW.read_text(encoding="utf-8")
+    assert "docker compose" not in serialized
+    assert "playwright" not in serialized.lower()
+    assert "deployment_smoke.py" not in serialized
+    assert "daily_smoke.py" not in serialized
+    assert "upload-artifact" not in serialized
+    assert "download-artifact" not in serialized
