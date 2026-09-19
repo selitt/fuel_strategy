@@ -59,12 +59,11 @@ run_public() {
 run_local() {
   select_python
   if [[ -z "${FUEL_FRONTEND_DIR:-}" ]]; then
-    if [[ -f frontend/dist/index.html ]]; then
-      export FUEL_FRONTEND_DIR="$PWD/frontend/dist"
-    else
-      "$PYTHON" tools/verify_prebuilt.py
-      export FUEL_FRONTEND_DIR="$PWD/frontend/prebuilt"
+    if [[ ! -f frontend/dist/index.html ]]; then
+      printf 'ERROR: frontend/dist is missing. Run npm --prefix frontend run build.\n' >&2
+      exit 2
     fi
+    export FUEL_FRONTEND_DIR="$PWD/frontend/dist"
   fi
   exec "$PYTHON" -m uvicorn src.app.web:create_web_app --factory \
     --host "${FUEL_BIND_HOST:-127.0.0.1}" --port "${FUEL_WEB_PORT:-8080}" --workers 1

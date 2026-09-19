@@ -4,6 +4,7 @@
 стресс-тестирование, Монте-Карло и 3 стратегии развития.
 """
 
+from pathlib import Path
 import unittest
 from src.engine.loader import CaseCatalog
 from src.engine.engine import run_engine
@@ -30,6 +31,10 @@ class TestEngine(unittest.TestCase):
         self.assertIn("LUNAR_ISRU", self.catalog.investments)
         self.assertGreaterEqual(len(self.catalog.constraints), 7)
 
+    def test_default_catalog_uses_the_root_data_directory(self):
+        root = Path(__file__).resolve().parents[1]
+        self.assertEqual(self.catalog.data_root.resolve(), (root / "data").resolve())
+
     def test_earth_fortress_strategy_base(self):
         """Проверка стратегии 1 («Земная крепость») в сценарии BASE."""
         plan = get_earth_fortress_strategy()
@@ -41,6 +46,7 @@ class TestEngine(unittest.TestCase):
         self.assertEqual(len(result["yearly_balance"]), 6)
         self.assertEqual(len(result["inventory_trace"]), 2190)  # 6 лет * 365 дней
         self.assertGreater(result["total_cost_mln"], 0)
+        self.assertEqual(result["assumptions_reference"], "docs/MODEL.md")
 
         # Проверка отсутствия отрицательного запаса на всем горизонте
         for trace in result["inventory_trace"]:

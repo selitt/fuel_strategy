@@ -17,29 +17,21 @@ from .models import (
 
 
 def find_data_root() -> Path:
-    """Ищет каталог data/ в снимке кейса test_oil."""
+    """Возвращает единственный рабочий каталог data/ проекта."""
     current = Path(__file__).resolve().parent
     for parent in [current] + list(current.parents):
-        cand1 = parent / "fuel-hackathon" / "test_oil" / "data"
-        if cand1.is_dir():
-            return cand1
-        cand2 = parent / "data"
-        if cand2.is_dir() and (cand2 / "demand.csv").is_file():
-            return cand2
+        candidate = parent / "data"
+        if candidate.is_dir() and (candidate / "demand.csv").is_file():
+            return candidate
     raise FileNotFoundError("Не удалось найти каталог с данными кейса (data/*.csv).")
 
 
 def find_scenarios_root() -> Path:
-    """Ищет каталог scenarios/ в снимке кейса test_oil."""
-    current = Path(__file__).resolve().parent
-    for parent in [current] + list(current.parents):
-        cand1 = parent / "fuel-hackathon" / "test_oil" / "scenarios"
-        if cand1.is_dir():
-            return cand1
-        cand2 = parent / "scenarios"
-        if cand2.is_dir() and (cand2 / "base.yaml").is_file():
-            return cand2
-    raise FileNotFoundError("Не удалось найти каталог сценариев (scenarios/*.yaml).")
+    """Возвращает каталог сценариев внутри единственного рабочего data/."""
+    scenarios = find_data_root() / "scenarios"
+    if scenarios.is_dir() and (scenarios / "base.yaml").is_file():
+        return scenarios
+    raise FileNotFoundError("Не удалось найти каталог сценариев (data/scenarios/*.yaml).")
 
 
 def load_demand(data_root: Optional[Path] = None) -> Dict[int, DemandRecord]:

@@ -130,6 +130,31 @@ class DependBootstrapContractTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("src.app.web:create_web_app", result.stdout)
 
+    def test_local_run_requires_the_vite_dist_without_portable_fallback(self):
+        script = self._read_required("run.sh")
+        self.assertNotIn("prebuilt", script)
+        self.assertNotIn("verify_prebuilt", script)
+
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            selected = root / "selected-python"
+            selected.write_text("#!/bin/sh\nexit 99\n")
+            selected.chmod(0o755)
+            env = {**os.environ, "PYTHON": str(selected)}
+            env.pop("FUEL_FRONTEND_DIR", None)
+            result = subprocess.run(
+                ["bash", str(root / "run.sh"), "local"],
+                cwd=root,
+                env=env,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("npm --prefix frontend run build", result.stderr)
+
     def test_run_starts_public_compose_and_waits_for_health(self):
         import shutil
         with tempfile.TemporaryDirectory() as directory:
@@ -323,7 +348,7 @@ node() { echo "v$TEST_VERSION"; }
 npm() { echo 10.0.0; }
 '''
         with tempfile.TemporaryDirectory() as directory:
-            cases = [('python', '3.12.3', True), ('python', '3.13.5', True),
+            cases = [('python', '3.12.3', False), ('python', '3.13.5', True),
                      ('python', '3.14.0', False), ('node', '22.11.0', False),
                      ('node', '22.12.0', True), ('node', '22.17.0', True),
                      ('node', '24.21.0', True), ('node', '25.0.0', False)]

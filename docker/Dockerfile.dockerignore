@@ -9,5 +9,4 @@
 .venv
 frontend/dist
 *.zip
-fuel-hackathon
 results

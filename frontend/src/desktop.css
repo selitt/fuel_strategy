@@ -1,0 +1,81 @@
+/* Desktop workspace: one place to edit, one place to inspect the result. */
+.compact-desktop {font-size:13px}
+.compact-desktop .operator-header {height:60px;min-height:60px;padding:10px 20px}
+.compact-desktop .operator-grid {width:100%;max-width:1920px;grid-template-columns:minmax(760px,1fr) minmax(720px,1fr);gap:12px;padding:12px 20px;align-items:start}
+.compact-desktop .operator-grid>.strategy-summary {grid-column:1/-1;grid-row:1;padding:12px 16px}
+.compact-desktop .settings-column {grid-column:1;grid-row:2;display:grid;gap:12px;min-width:0}
+.compact-desktop .operator-grid>.result-panel {grid-column:2;grid-row:2;min-width:0;min-height:0}
+.compact-desktop .panel-heading {height:auto;min-height:40px;padding:10px 12px}
+.compact-desktop h2 {font-size:15px;margin:0}
+.compact-desktop button,.compact-desktop summary,.compact-desktop select,.compact-desktop input {font-size:13px}
+.compact-desktop .text-button {font-size:13px;line-height:1.4}
+.compact-desktop .strategy-summary {display:grid;grid-template-columns:260px minmax(0,1fr);gap:4px 20px}
+.compact-desktop .strategy-summary>.panel-heading {grid-column:1;grid-row:1;padding:0;display:block;margin:0}
+.compact-desktop .strategy-summary .panel-heading p {display:none}
+.compact-desktop .strategy-summary .panel-heading>.text-button {margin-top:7px}
+.compact-desktop .strategy-scenarios {grid-column:2;grid-row:1/4;align-items:start;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.compact-desktop .strategy-scenario {padding:8px 12px;position:relative}
+.compact-desktop .strategy-scenario-heading {gap:6px}
+.compact-desktop .strategy-scenario h3 {font-size:13px}
+.compact-desktop .strategy-cost {font-size:20px}
+.compact-desktop .strategy-cost small {font-size:13px}
+.compact-desktop .strategy-verdict,.compact-desktop .strategy-freshness,.compact-desktop .strategy-footnote {font-size:13px;line-height:1.4;margin:3px 0}
+.compact-desktop .strategy-freshness {grid-column:1;grid-row:2}
+.compact-desktop .strategy-footnote {grid-column:1;grid-row:3}
+.compact-desktop .strategy-checks,.compact-desktop .strategy-year-details {font-size:13px;line-height:1.4;margin:4px 0}
+.compact-desktop .strategy-summary details[open] {max-height:300px;overflow:auto}
+.compact-desktop .simple-storage {display:block;overflow:visible}
+.compact-desktop .storage-inline {display:grid;grid-template-columns:200px minmax(0,1fr);gap:20px;padding:0 12px 8px}
+.compact-desktop .stock-field {display:flex;flex-direction:column;gap:6px}
+.compact-desktop .stock-field input {width:140px;height:32px;padding:4px 9px;border:1px solid var(--border);border-radius:4px;background:var(--input);color:var(--text)}
+.compact-desktop .storage-zbo>div {display:flex;align-items:center;justify-content:space-between;gap:8px}
+.compact-desktop .storage-zbo>label {display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;color:var(--muted)}
+.compact-desktop .storage-zbo select,.compact-desktop .source-investment select {height:30px;padding:2px 4px;width:75px}
+.compact-desktop .storage-help,.compact-desktop .matrix-help {padding:6px 12px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;line-height:1.5}
+.compact-desktop details>summary {cursor:pointer}
+.compact-desktop details p {font-size:13px;line-height:1.5;margin:8px 0}
+.compact-desktop .direct-matrix {min-height:0;display:flex;flex-direction:column}
+.compact-desktop .matrix-instruction {font-size:13px;color:var(--muted);margin:0;padding:0 12px 8px}
+.compact-desktop .direct-matrix .matrix-viewport {overflow:auto;max-height:480px}
+.compact-desktop .direct-matrix .supply-matrix {min-width:760px;table-layout:fixed}
+.compact-desktop .direct-matrix .supply-matrix th:first-child {width:170px}
+.compact-desktop .direct-matrix .supply-matrix tbody tr {height:66px}
+.compact-desktop .direct-matrix .supply-matrix tbody tr:has(.source-investment) {height:94px}
+.compact-desktop .direct-matrix .supply-matrix thead th {height:32px;font-size:13px}
+.compact-desktop .direct-matrix .supply-matrix td {padding:4px 5px}
+.compact-desktop .matrix-direct-field {display:flex;align-items:center;gap:4px;font-size:13px;line-height:1.3;margin:2px 0;min-width:0}
+.compact-desktop .matrix-direct-field>span {width:44px;flex-shrink:0;color:var(--muted)}
+.compact-desktop .matrix-direct-field>input {min-width:0;width:100%;height:26px;padding:3px 4px;text-align:right;border:1px solid transparent;border-radius:3px;background:#111516;color:var(--text);font-variant-numeric:tabular-nums;appearance:textfield;-moz-appearance:textfield}
+.compact-desktop .matrix-direct-field>input::-webkit-inner-spin-button {appearance:none;margin:0}
+.compact-desktop .matrix-direct-field>input:hover,.compact-desktop .matrix-direct-field>input:focus {border-color:#667873}
+.compact-desktop .matrix-direct-field>input:disabled {background:transparent;opacity:.5}
+.compact-desktop .matrix-direct-field>input[aria-invalid=true] {border-color:#dd8379}
+.compact-desktop .source-name {padding:0;border:0;background:none;color:var(--text);font-size:13px;white-space:nowrap;text-align:left}
+.compact-desktop .source-name span {color:var(--muted)}
+.compact-desktop .source-investment {margin-top:5px}
+.compact-desktop .source-investment-controls {display:flex;gap:7px;align-items:center}
+.compact-desktop .source-investment small {display:block;font-size:13px;line-height:1.2;margin-top:4px;color:var(--muted);font-weight:400}
+.compact-desktop .result-chart-area {min-height:260px;padding:0 12px 8px;flex:0 0 auto;height:280px}
+.compact-desktop .daily-chart {min-height:0;gap:5px}
+.compact-desktop .daily-chart-frame,.compact-desktop .daily-chart-svg {min-height:220px}
+.compact-desktop .daily-legend {font-size:13px;line-height:1.4;flex-wrap:wrap;gap:6px 12px}
+.compact-desktop .daily-axis-label,.compact-desktop .chart-axis-label {font-size:13px}
+.compact-desktop .result-metrics {padding:6px 12px;min-height:0}
+.compact-desktop .service-values span,.compact-desktop .service-values small {font-size:13px}
+.compact-desktop .chart-mode button,.compact-desktop .timeline-view-toggle button {font-size:13px;padding:6px}
+.compact-desktop .timeline-control {padding:7px 12px}
+.compact-desktop .timeline-control-heading,.compact-desktop .timeline-control-action,.compact-desktop .timeline-year-scale,.compact-desktop .timeline-annual-label {font-size:13px}
+.compact-desktop .result-numbers {padding:8px 12px}
+.compact-desktop .result-numbers span,.compact-desktop .result-numbers small {font-size:13px}
+.compact-desktop .result-footer,.compact-desktop .result-footer span {font-size:13px}
+@media(max-width:1550px){.compact-desktop .operator-grid{grid-template-columns:minmax(0,1fr);max-width:1200px}.compact-desktop .operator-grid>.result-panel{grid-column:1;grid-row:3}.compact-desktop .strategy-summary{grid-template-columns:minmax(0,1fr)}.compact-desktop .strategy-scenarios{grid-column:1;grid-row:4}.compact-desktop .storage-inline{grid-template-columns:200px minmax(0,1fr)}}
+.compact-desktop .operator-grid {height:auto;align-content:start}
+.compact-desktop .strategy-footnote {grid-column:1/-1;grid-row:3}
+.compact-desktop .strategy-scenarios {grid-row:1/3}
+.compact-desktop .simple-storage>.panel-heading {width:auto;display:flex;align-items:center;justify-content:space-between;border-right:0}
+.compact-desktop .direct-matrix .source-investment {display:block}
+.compact-desktop .direct-matrix .source-investment-controls {display:flex}
+.compact-desktop .plot-legend,.compact-desktop .plot-legend strong,.compact-desktop .axis-label {font-size:13px}
+.compact-desktop .risk-entry>summary::after {content:' ▾';float:right}
+.compact-desktop .risk-entry[open]>summary::after {content:' ▴'}
+.compact-desktop .retained-unavailable {display:block;font-size:13px;line-height:1.2;margin-top:3px}

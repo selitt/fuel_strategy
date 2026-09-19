@@ -5,11 +5,11 @@ from src.app.main import create_app
 
 ROOT = Path(__file__).resolve().parents[2]
 
-def test_413_responses_are_documented_with_the_standard_fastapi_description():
+def test_413_responses_use_the_python_313_standard_description():
     schema = create_app().openapi()
     for route in ('validate', 'import', 'export'):
         response = schema['paths'][f'/api/plans/{route}']['post']['responses']['413']
-        assert response['description'] == 'Request Entity Too Large'
+        assert response['description'] == 'Content Too Large'
         assert response['content']['application/json']['schema']['$ref'].endswith('/ErrorDTO')
 
 def test_frontend_delivery_entrypoint_exists():
@@ -67,5 +67,6 @@ def test_missing_static_build_is_explicit(tmp_path, monkeypatch):
     from src.app.web import create_web_app
     monkeypatch.delenv('FUEL_HTTP_USER', raising=False)
     monkeypatch.delenv('FUEL_HTTP_PASSWORD', raising=False)
-    with pytest.raises(RuntimeError, match='Frontend build'):
+    with pytest.raises(RuntimeError, match='npm --prefix frontend run build') as error:
         create_web_app(static_dir=tmp_path/'absent')
+    assert 'prebuilt' not in str(error.value)

@@ -56,3 +56,47 @@ test('day lookup is exact and never falls back to another year or day', () => {
   assert.equal(daily.dailyRecordAt(result, 2036, 3), undefined);
   assert.equal(daily.dailyRecordAt(result, 2035, 2), undefined);
 });
+
+test('timeline coordinates cross model-year boundaries without civil-date math', () => {
+  assert.equal(daily.modelDayFromYearDay(2035, 1), 1);
+  assert.equal(daily.modelDayFromYearDay(2035, 365), 365);
+  assert.equal(daily.modelDayFromYearDay(2036, 1), 366);
+  assert.equal(daily.modelDayFromYearDay(2040, 365), 2190);
+  assert.deepEqual(daily.yearDayFromModelDay(366), { year: 2036, day: 1 });
+  assert.deepEqual(daily.yearDayFromModelDay(2190), { year: 2040, day: 365 });
+  assert.equal(daily.modelDayFromYearDay(2041, 1), undefined);
+  assert.equal(daily.yearDayFromModelDay(0), undefined);
+});
+
+test('a 90-day detail window follows the selected day across years and clamps at horizon edges', () => {
+  assert.deepEqual(daily.detailTimelineRange(1), [1, 90]);
+  assert.deepEqual(daily.detailTimelineRange(366), [321, 410]);
+  assert.deepEqual(daily.detailTimelineRange(2190), [2101, 2190]);
+  assert.deepEqual(daily.modelTimelineRange([-10, 9999]), [1, 2190]);
+});
+
+test('timeline projection sorts the whole horizon and keeps missing measurements absent', () => {
+  const projected = daily.projectTimelineTrace({
+    ...result,
+    inventory_trace: [
+      { year: 2036, day_of_year: 2, closing_inventory_t: 20 },
+      { year: 2035, day_of_year: 365, closing_inventory_t: 10 },
+      { year: 2036, day_of_year: 1, closing_inventory_t: null, shortage_t: 4 },
+      { year: 2041, day_of_year: 1, closing_inventory_t: 999 },
+    ],
+  });
+  assert.deepEqual(projected.map(row => [row.model_day, row.year, row.day]), [
+    [365, 2035, 365],
+    [366, 2036, 1],
+    [367, 2036, 2],
+  ]);
+  assert.equal(projected[1].closing_inventory_t, undefined);
+  assert.equal(projected[1].shortage_t, 4);
+  assert.deepEqual(daily.projectTimelineTrace(result, [366, 366]).map(row => row.model_day), [366]);
+});
+
+test('timeline ticks are sparse for the full horizon and readable inside a detail window', () => {
+  assert.deepEqual(daily.modelTimelineTicks([1, 2190], 7), [1, 366, 731, 1096, 1461, 1826, 2190]);
+  assert.deepEqual(daily.modelTimelineTicks([340, 429], 4), [340, 370, 399, 429]);
+  assert.equal(daily.modelDayLabel(366), '2036 · день 1');
+});

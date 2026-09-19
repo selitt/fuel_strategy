@@ -1,9 +1,0 @@
-{
-  "template_only": true,
-  "ready_for_calculation": false,
-  "scenario_id": "TEAM_UNCONFIGURED",
-  "status": "TEAM_ASSUMPTION",
-  "changes": [],
-  "combination_rule": null,
-  "basis": null
-}

@@ -58,7 +58,7 @@ if [[ "$(uname -s)" != Linux ]]; then
     exit 2
 fi
 
-if [[ ! -f "$ROOT_DIR/README.md" || ! -d "$ROOT_DIR/tasks" || ! -d "$ROOT_DIR/src" ]]; then
+if [[ ! -f "$ROOT_DIR/README.md" || ! -d "$ROOT_DIR/src" || ! -d "$ROOT_DIR/frontend" ]]; then
     printf 'BLOCKED: run this script from the command repository root.\n' >&2
     exit 2
 fi
@@ -132,7 +132,7 @@ python_usable() {
     if [[ "${PYTHON_PINNED:-0}" == 1 ]]; then
         version_matches "$1" "$PYTHON_TARGET"
     else
-        [[ "$1" =~ ^3\.(12|13)(\.|$) ]]
+        [[ "$1" =~ ^3\.13(\.|$) ]]
     fi
 }
 
@@ -503,18 +503,6 @@ ensure_docker() {
     fi
 }
 
-run_workspace_check() {
-    if [[ -x "$(command -v python3 2>/dev/null || true)" ]]; then
-        if python3 "$ROOT_DIR/tools/workspace.py" check; then
-            pass "workspace check"
-        else
-            blocked "workspace check failed"
-        fi
-    else
-        blocked "python3 is required for workspace check"
-    fi
-}
-
 sync_project_if_ready() {
     # Backend-only mode remains available independently of the web delivery.
     if [[ ! -f "$ROOT_DIR/pyproject.toml" ]]; then
@@ -591,7 +579,7 @@ run_full_checks() {
     fi
     if [[ "$BACKEND_READY" == 1 ]]; then
         if ! (cd "$ROOT_DIR" && "$ROOT_DIR/.venv/bin/python" -m pytest -q); then
-            blocked "backend and workspace tests failed"
+            blocked "backend tests failed"
         fi
         if ! (cd "$ROOT_DIR" && "$ROOT_DIR/.venv/bin/python" tools/export_openapi.py --check); then
             blocked "published OpenAPI is out of date"
@@ -621,7 +609,6 @@ if [[ "$BACKEND_ONLY" == 0 ]]; then
     ensure_node || true
     ensure_docker || true
 fi
-run_workspace_check
 sync_project_if_ready
 if [[ "$FULL_CHECK" == 1 ]]; then
     run_full_checks

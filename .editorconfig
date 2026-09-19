@@ -8,7 +8,3 @@ insert_final_newline = true
 
 [*.{json,yaml,yml}]
 indent_size = 2
-
-[fuel-hackathon/**]
-insert_final_newline = unset
-trim_trailing_whitespace = false

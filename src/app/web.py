@@ -77,7 +77,10 @@ def create_web_app(*, static_dir: Path | None = None) -> FastAPI:
         raise RuntimeError('Set both FUEL_HTTP_USER and FUEL_HTTP_PASSWORD, or leave both empty')
     directory = static_dir or Path(os.getenv('FUEL_FRONTEND_DIR', str(ROOT / 'frontend' / 'dist')))
     if not (directory / 'index.html').is_file():
-        raise RuntimeError(f'Frontend build is missing: {directory}. Run npm run build in frontend/ or set FUEL_FRONTEND_DIR to frontend/prebuilt.')
+        raise RuntimeError(
+            f'Frontend build is missing: {directory}. '
+            'Run npm --prefix frontend run build.'
+        )
     app = create_app()
     app.mount('/', WebFiles(directory=directory, html=True), name='frontend')
     if username:

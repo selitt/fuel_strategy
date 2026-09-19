@@ -15,7 +15,7 @@ ROOT=Path(__file__).resolve().parents[2]
 def main():
  parser=argparse.ArgumentParser(description=__doc__)
  parser.add_argument('--inline',action='store_true')
- parser.add_argument('--site',type=Path,default=ROOT/'frontend/prebuilt')
+ parser.add_argument('--site',type=Path,default=ROOT/'frontend/dist')
  parser.add_argument('--chromium',default=shutil.which('chromium'))
  parser.add_argument('--artifacts',type=Path,default=ROOT/'results/compact-ui')
  args=parser.parse_args();out=args.artifacts.resolve();out.mkdir(parents=True,exist_ok=True);site=args.site.resolve()

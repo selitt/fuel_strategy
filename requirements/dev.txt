@@ -1,5 +1,5 @@
 # Exact versions observed and dependency-checked in the test environment.
-# Not a network-resolved uv.lock; see docs/api/README.md (installation limitations).
+# Exact development dependency snapshot; this is not a network-resolved lockfile.
 -r base.txt
 attrs==26.1.0
 certifi==2026.5.20
