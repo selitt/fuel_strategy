@@ -2,11 +2,11 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, File, UploadFile, Request
 
-from src.app.api.dependencies import get_settings
+from app.api.deps import get_settings
+from app.service.project_service import parse_json_file, validate_plan
 from src.app.config import Settings
 from src.app.dto.calc_dto import ParticipantPlanDTO
 from src.app.dto.web_dto import ErrorDTO, PlanValidationDTO
-from src.app.service.plan_io import parse_json_file, validate_plan
 
 router = APIRouter(prefix="/api/plans", tags=["Планы · web extension"], responses={
     413: {"model": ErrorDTO}, 415: {"model": ErrorDTO},
@@ -23,7 +23,7 @@ def read_json_upload(file: UploadFile, settings: Settings):
 
 
 @router.post("/validate", response_model=PlanValidationDTO, summary="Проверить структуру плана без расчёта")
-async def validate(request: ParticipantPlanDTO, http_request: Request):
+async def validate(_: ParticipantPlanDTO, http_request: Request):
     # Read the original JSON as well as using the DTO for OpenAPI/body validation.
     # Otherwise Pydantic defaults would have erased evidence of normalization.
     return validate_plan(await http_request.json())
