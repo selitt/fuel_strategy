@@ -1,0 +1,29 @@
+{
+  "name": "fuel-operator-ui",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0 <25"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node scripts/test.mjs",
+    "typecheck": "tsc --noEmit",
+    "api:generate": "python ../tools/generate_frontend_types.py",
+    "api:check": "python ../tools/generate_frontend_types.py --check"
+  },
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.20",
+    "@types/react-dom": "18.3.6",
+    "typescript": "5.8.3",
+    "vite": "7.3.1",
+    "@types/node": "22.15.30"
+  }
+}

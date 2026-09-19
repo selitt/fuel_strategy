@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+const p = await import('../.test-build/lib/plan.js');
+const f = await import('../.test-build/lib/format.js');
+const sample = () => ({plan_id:'p',scenario_id:'BASE',extra:{untouched:1},decisions:{extra:3,supply_orders:[{year:2035,source_id:'Earth-Core',order_t:100,note:'keep'}],capacity_reservations:[],investments:[],inventory_policy:{initial_inventory_t:12.33,source:'A'}}});
+test('editor helpers are implemented',()=>assert.ok(p, 'missing plan helpers'));
+test('format helpers are implemented',()=>assert.ok(f, 'missing format helpers'));
+test('changing one order preserves extension properties and input',()=>{const a=sample();const b=p.updateDecision(a,'supply_orders',0,{order_t:99});assert.equal(a.decisions.supply_orders[0].order_t,100);assert.equal(b.decisions.supply_orders[0].note,'keep');assert.deepEqual(b.extra,a.extra);assert.equal(b.decisions.extra,3);assert.equal(b.decisions.supply_orders[0].order_t,99);});
+test('deleting an order does not delete reservations',()=>{const a=sample();a.decisions.capacity_reservations=[{year:2035,source_id:'A',reserved_capacity_t:120}];const b=p.removeDecision(a,'supply_orders',0);assert.equal(b.decisions.supply_orders.length,0);assert.equal(b.decisions.capacity_reservations.length,1);});
+test('duplicate orders remain separate rows',()=>{const a=sample();a.decisions.supply_orders.push({...a.decisions.supply_orders[0],order_t:40});const b=p.updateDecision(a,'supply_orders',0,{order_t:60});assert.equal(b.decisions.supply_orders.length,2);assert.equal(b.decisions.supply_orders[1].order_t,40);});
+test('NaN, Infinity, empty names and negative quantities are rejected',()=>{for(const n of [NaN,Infinity,-1]) {const a=sample();a.decisions.supply_orders[0].order_t=n;assert.ok(p.validateDraft('Plan',a).length);}assert.ok(p.validateDraft('   ',sample()).length);});
+test('valid zero is distinct from missing number',()=>{const a=sample();a.decisions.supply_orders[0].order_t=0;assert.deepEqual(p.validateDraft('Plan',a),[]);});
+test('year choices include extended plans and original demand',()=>{const a=sample();a.decisions.investments=[{investment_id:'X',year:2045}];assert.deepEqual(p.planYears(a,{tables:[{table_id:'demand',rows:[{year:'2037'}]}]}),[2035,2037,2045]);});
+test('stable equality ignores key ordering but detects invalid numbers',()=>{assert.equal(p.samePlan({a:1,b:2},{b:2,a:1}),true);assert.equal(p.samePlan({a:null},{a:NaN}),false);});
+test('unknown missing measurements are not formatted as zero',()=>{assert.equal(f.number(null),'—');assert.equal(f.number(NaN),'—');assert.equal(f.number(0),'0');assert.equal(f.percent(undefined),'—');});
+test('comparison CSV escapes formula prefixes and quotes',()=>{assert.equal(f.csvCell('=1+1'),"' =1+1".replace("' ","'"));assert.equal(f.csvCell('a,b'),'"a,b"');assert.equal(f.csvCell('a"b'),'"a""b"');});
+test('unsafe download filename cannot become path',()=>{assert.equal(f.safeFilename('../../test.json'),'test.json');assert.equal(f.safeFilename(''),'download.json');});
+
+test('new plan IDs work without the secure-context randomUUID API',()=>{assert.equal(typeof p.newPlanId,'function');const a=p.newPlanId();const b=p.newPlanId();assert.match(a,/^plan-[a-f0-9]{24}$/);assert.notEqual(a,b);});
+test('presentation accepts only the units it can label accurately',()=>{assert.equal(typeof f.supportedUnits,'function');assert.equal(f.supportedUnits({fuel:'t',currency:'mln_units'}),true);assert.equal(f.supportedUnits({fuel:'kg',currency:'USD'}),false);assert.equal(f.supportedUnits(undefined),false);});

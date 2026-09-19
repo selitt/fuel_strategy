@@ -1,3 +1,5 @@
+> Исторический отчёт передачи backend до UI. Новая веб-часть: [frontend/HANDOFF](../frontend/HANDOFF.md), проверки: [frontend/TEST_REPORT](../frontend/TEST_REPORT.md).
+
 # Передача: рабочий API и очищенная структура
 
 ## Область
