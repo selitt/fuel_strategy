@@ -8,6 +8,7 @@ export class ApiError extends Error {
   constructor(public status: number, public code: string, message: string, public requestId = '', public conflictContext?: ConflictContext, public retryAfter?: number) { super(message); this.name='ApiError'; }
 }
 export function errorText(error: unknown): string {
+  if(typeof error === 'string' && error.trim()) return error;
   if(error instanceof ApiError) {
     if(error.status===409 && error.conflictContext==='revision') return 'План изменён в другом окне. Откройте свежую версию или сохраните свои правки отдельной копией.';
     if(error.status===409 && error.conflictContext==='result') return 'Результат отсутствует или устарел. Выполните пересчёт для текущей версии плана и повторите выгрузку.';

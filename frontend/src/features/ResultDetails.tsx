@@ -6,7 +6,7 @@ export function ResultDetails({ w }: {
     w: Workspace;
 }) {
     const [tab, setTab] = useState<'balance' | 'finance' | 'checks' | 'source' | 'deliveries'>('checks');
-    const run = w.current && !w.preview ? w.project?.last_run : null, r = w.displayResult;
+    const run = w.displayRun, r = w.displayResult;
     if (!r)
         return <Notice>Сначала пересчитайте план. Устаревший результат не отображается.</Notice>;
     if (!supportedUnits(r.units))

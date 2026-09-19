@@ -10,6 +10,7 @@
 .strategy-scenario h3 {font-size:13px;margin:0}
 .strategy-cost {font-size:21px;font-variant-numeric:tabular-nums}
 .strategy-cost small {font-size:11px;color:var(--muted)}
+.strategy-scenario-meta {display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .strategy-verdict {font-size:13px;margin:10px 0;color:var(--muted)}
 .strategy-violations .strategy-verdict,.strategy-attention {color:#edbd79}
 .strategy-feasible .strategy-verdict {color:#8dcab1}

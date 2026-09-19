@@ -198,6 +198,25 @@ code {
   gap: 5px;
   flex: 1;
 }
+.plan-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+.plan-toolbar .plans-button {
+  flex: 0 0 auto;
+}
+.plan-toolbar .plan-title {
+  flex: 1 1 190px;
+}
+.plan-toolbar .calculate-button,
+.plan-toolbar .export-button {
+  min-width: 0;
+  height: 36px;
+  padding: 0 13px;
+}
 .plan-title input {
   background: transparent;
   border-color: transparent;
@@ -1724,6 +1743,50 @@ code {
   grid-template-columns: 1fr 1fr;
   gap: 9px;
 }
+.import-dropzone {
+  min-height: 150px;
+  margin: 14px 0 12px;
+  padding: 22px;
+  border: 1px dashed #566166;
+  background: #0f1314;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  cursor: pointer;
+}
+.import-dropzone:hover,.import-dropzone:focus-visible,.import-dropzone.dragging {
+  border-color: var(--text);
+  background: #181c1d;
+  color: var(--text);
+  outline: none;
+}
+.import-dropzone strong {color:var(--text);font-size:13px;}
+.import-dropzone span,.import-dropzone small {font-size:11px;}
+.import-selection {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:11px 12px;
+  border:1px solid var(--border);
+  background:#171a1b;
+}
+.import-selection>svg {flex:0 0 auto;margin-top:2px;}
+.import-selection>div {display:grid;gap:3px;min-width:0;}
+.import-selection strong {overflow-wrap:anywhere;}
+.import-selection span,.import-selection small {color:var(--muted);font-size:11px;line-height:1.4;}
+.transfer-templates {display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:11px;}
+.transfer-group+.transfer-group {margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
+.transfer-group h3 {font-size:12px;margin:0 0 9px;font-weight:600;}
+.export-options-single {grid-template-columns:1fr;}
+.export-options>button.export-primary {border-color:#7e8a87;background:#252a2b;}
+.export-options>button.export-primary:hover {background:#303637;border-color:#aab4b1;}
+.export-options>button:disabled {opacity:.45;cursor:not-allowed;}
+.transfer-disabled-reason {color:var(--muted);font-size:11px!important;margin:7px 0 0!important;}
+.transfer-pair-actions {justify-content:flex-start;margin-top:0;}
 .reference-values {
   font-size: 11px;
 }
