@@ -39,7 +39,7 @@ class SimulationEngine:
         # 2. Финансово-экономический расчёт
         investments = decisions.get("investments", [])
         inv_policy = decisions.get("inventory_policy", {})
-        initial_inv = float(inv_policy.get("initial_inventory_t", 12.33))
+        initial_inv = float(inv_policy.get("initial_inventory_t", 0.0))
 
         financial_breakdown, total_cost, cum_capex = calculate_finances(
             catalog=self.catalog,
@@ -78,6 +78,7 @@ class SimulationEngine:
                 "opening_inventory_t": b.opening_inventory_t,
                 "delivered_t": b.delivered_t,
                 "losses_t": b.losses_t,
+                "spill_t": b.spill_t,
                 "served_t": b.served_t,
                 "closing_inventory_t": b.closing_inventory_t,
                 "shortage_t": b.shortage_t,
@@ -105,6 +106,24 @@ class SimulationEngine:
             }
             for s in source_sched
         ]
+
+        delivery_schedule_dicts = [
+            {
+                "batch_id": batch.batch_id,
+                "source_id": batch.source_name,
+                "year": batch.year,
+                "order_date": batch.order_date,
+                "delivery_date": batch.delivery_date,
+                "ordered_t": batch.ordered_t,
+                "delivered_t": batch.delivered_t,
+                "status": batch.status,
+            }
+            for source in source_sched
+            for batch in source.batches
+        ]
+        delivery_schedule_dicts.sort(
+            key=lambda row: (row["delivery_date"], row["source_id"], row["batch_id"])
+        )
 
         financial_breakdown_dicts = [
             {
@@ -138,6 +157,7 @@ class SimulationEngine:
                 "opening_inventory_t": t.opening_inventory_t,
                 "delivered_t": t.delivered_t,
                 "losses_t": t.losses_t,
+                "spill_t": t.spill_t,
                 "net_inflow_t": t.net_inflow_t,
                 "demand_total_t": t.demand_total_t,
                 "demand_critical_t": t.demand_critical_t,
@@ -157,6 +177,7 @@ class SimulationEngine:
             "assumptions_reference": "docs/MODEL.md",
             "yearly_balance": yearly_balance_dicts,
             "source_schedule": source_schedule_dicts,
+            "delivery_schedule": delivery_schedule_dicts,
             "inventory_trace": inventory_trace_dicts,
             "financial_breakdown": financial_breakdown_dicts,
             "constraint_checks": constraint_check_dicts,

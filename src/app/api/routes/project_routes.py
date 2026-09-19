@@ -41,7 +41,7 @@ from src.app.service.project_service import ProjectService, validate_plan
 plan_router = APIRouter(
     prefix="/api/plans",
     tags=["Планы · web extension"],
-    responses={413: {"model": ErrorDTO}, 415: {"model": ErrorDTO}},
+    responses={413: {"model": ErrorDTO, "description": "Content Too Large"}, 415: {"model": ErrorDTO}},
 )
 
 project_router = APIRouter(

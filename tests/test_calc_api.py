@@ -28,8 +28,8 @@ class TestCalcApi(unittest.TestCase):
             "scenario_id": "BASE",
             "decisions": {
                 "supply_orders": [
-                    {"year": 2035, "source_id": "Earth-Core", "order_t": 100.0},
-                    {"year": 2036, "source_id": "Earth-Core", "order_t": 140.0},
+                    {"year": 2035, "source_id": "Earth-Core", "order_t": 100.0, "delivery_date": "2035-06-15", "batch_id": "api-1"},
+                    {"year": 2036, "source_id": "Earth-Core", "order_t": 140.0, "delivery_date": "2036-06-15", "batch_id": "api-2"},
                 ],
                 "capacity_reservations": [
                     {"year": 2035, "source_id": "Earth-Core", "reserved_capacity_t": 120.0},

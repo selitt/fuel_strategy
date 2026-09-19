@@ -45,6 +45,6 @@ export function StrategySummary({w,onDetails}:{w:Workspace;onDetails:()=>void}) 
    <ScenarioSummary result={w.displayResult} label={name(w.displayResult) || 'BASE'} fresh={fresh}/>
    {w.both && <ScenarioSummary result={w.displayOther} label={w.displayResult?.scenario_id==='MANDATORY_STRESS'?'BASE · Базовые условия':'STRESS · Обязательный стресс'} fresh={fresh}/>}
   </div>
-  <p className="strategy-footnote">Прототип модели · расходы — не прибыль.</p>
+  <p className="strategy-footnote">{w.draft?.template_kind === "TEAM_DECISION_EXAMPLE" ? "Стартовый пример · изменяйте поставки под свою стратегию." : "Прототип модели · расходы — не прибыль."}</p>
  </section>;
 }

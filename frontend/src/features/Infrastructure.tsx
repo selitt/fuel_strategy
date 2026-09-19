@@ -18,7 +18,8 @@ export function Infrastructure({ w, onAdvanced, onData }: {
     const plan = w.draft, inventory = plan.decisions.inventory_policy.initial_inventory_t;
     const investments = w.catalog?.tables.find(table => table.table_id === 'investment_options')?.rows || [];
     const storage = w.catalog?.tables.find(table => table.table_id === 'storage_options')?.rows || [];
-    const cap = Number(storage[0]?.capacity_t) || 70;
+    const baseStorage = storage.find(item => item.storage_id === "BASE");
+    const cap = baseStorage ? Number(baseStorage.capacity_t) : NaN;
     const records = plan.decisions.investments.filter(row => row.investment_id === storageInvestment.id);
     const row = records[0];
     const reference = investments.find(item => item.investment_id === storageInvestment.id);
@@ -36,6 +37,6 @@ export function Infrastructure({ w, onAdvanced, onData }: {
       </fieldset>
       {(!Number.isFinite(inventory)||inventory<0)&&<p className="field-error">Начальный запас: введите число не меньше нуля.</p>}
       {inventory>cap&&<p className="field-error">Запас выше базовой ёмкости {number(cap)} т. Проверьте ограничения хранилища.</p>}
-      {help && <Modal title="Запас и хранение" onClose={()=>setHelp(false)}><p>Начальный запас — топливо к началу первого года модели. Его источник и оплату нужно обосновать. ZBO — инвестиция в снижение потерь при хранении; текущая модель не обнуляет потери. Год решения не задаёт отдельные даты оплаты и ввода.</p></Modal>}
+      {help && <Modal title="Запас и хранение" onClose={()=>setHelp(false)}><p>Начальный запас — топливо к началу первого года модели. Пока его стоимость оценивается по цене Earth-Core из справочника; отдельные источник, дата и финансирование предстартовой поставки ещё не задаются. Это ограничение прототипа, а не полное обоснование запаса. ZBO — инвестиция в снижение потерь при хранении; текущая модель не обнуляет потери. Год решения не задаёт отдельные даты оплаты и ввода.</p></Modal>}
     </aside>;
 }

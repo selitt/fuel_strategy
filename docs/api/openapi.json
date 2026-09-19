@@ -96,7 +96,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -254,7 +254,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -412,7 +412,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -559,7 +559,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -706,7 +706,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -848,14 +848,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -875,7 +875,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -1015,7 +1015,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -1172,7 +1172,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -1329,7 +1329,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -1470,14 +1470,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -1497,7 +1497,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -1647,7 +1647,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -1784,14 +1784,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -1811,7 +1811,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -1954,14 +1954,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -1981,7 +1981,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -2113,14 +2113,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -2140,7 +2140,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -2280,14 +2280,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -2307,7 +2307,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -2440,14 +2440,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -2467,7 +2467,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -2609,14 +2609,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -2636,7 +2636,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -2768,14 +2768,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -2795,7 +2795,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -2945,7 +2945,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -3102,7 +3102,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Content",
+            "description": "Unprocessable Entity",
             "content": {
               "application/json": {
                 "schema": {
@@ -3241,14 +3241,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -3268,7 +3268,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -3420,14 +3420,14 @@
             "description": "Conflict"
           },
           "413": {
+            "description": "Content Too Large",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Content Too Large"
+            }
           },
           "415": {
             "content": {
@@ -3447,7 +3447,7 @@
                 }
               }
             },
-            "description": "Unprocessable Content"
+            "description": "Unprocessable Entity"
           },
           "429": {
             "headers": {
@@ -3730,6 +3730,56 @@
         "title": "ConstraintCheckDTO",
         "description": "Результат проверки ограничения."
       },
+      "DeliveryScheduleDTO": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "source_id": {
+            "type": "string",
+            "title": "Source Id"
+          },
+          "year": {
+            "type": "integer",
+            "title": "Year"
+          },
+          "order_date": {
+            "type": "string",
+            "title": "Order Date"
+          },
+          "delivery_date": {
+            "type": "string",
+            "title": "Delivery Date"
+          },
+          "ordered_t": {
+            "type": "number",
+            "title": "Ordered T"
+          },
+          "delivered_t": {
+            "type": "number",
+            "title": "Delivered T"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "batch_id",
+          "source_id",
+          "year",
+          "order_date",
+          "delivery_date",
+          "ordered_t",
+          "delivered_t",
+          "status"
+        ],
+        "title": "DeliveryScheduleDTO",
+        "description": "Calculated dates and actual delivery of one batch."
+      },
       "EngineInfoDTO": {
         "properties": {
           "engine_id": {
@@ -3982,7 +4032,7 @@
             "minimum": 0.0,
             "title": "Initial Inventory T",
             "description": "Начальный физический запас на 1 января 2035, тонн",
-            "default": 12.33
+            "default": 0
           }
         },
         "additionalProperties": true,
@@ -4488,6 +4538,14 @@
             "type": "array",
             "title": "Inventory Trace"
           },
+          "delivery_schedule": {
+            "items": {
+              "$ref": "#/components/schemas/DeliveryScheduleDTO"
+            },
+            "type": "array",
+            "title": "Delivery Schedule",
+            "description": "Партии: дата заказа и получения, объём и фактический статус из engine"
+          },
           "financial_breakdown": {
             "items": {
               "$ref": "#/components/schemas/FinancialBreakdownDTO"
@@ -4585,6 +4643,14 @@
             },
             "type": "array",
             "title": "Inventory Trace"
+          },
+          "delivery_schedule": {
+            "items": {
+              "$ref": "#/components/schemas/DeliveryScheduleDTO"
+            },
+            "type": "array",
+            "title": "Delivery Schedule",
+            "description": "Партии: дата заказа и получения, объём и фактический статус из engine"
           },
           "financial_breakdown": {
             "items": {
@@ -4740,6 +4806,30 @@
             "minimum": 0.0,
             "title": "Order T",
             "description": "Заказанный объём, тонн"
+          },
+          "delivery_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delivery Date",
+            "description": "Дата получения партии YYYY-MM-DD; модельный год содержит 365 дней, без 29 февраля. Старому плану дату назначает оператор."
+          },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id",
+            "description": "Уникальный идентификатор партии в плане"
           }
         },
         "additionalProperties": true,

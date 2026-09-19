@@ -118,6 +118,48 @@ button,input,select,textarea{font-family:inherit}
 .compact-desktop .strategy-violation-preview li{height:18px;min-width:0}
 .compact-desktop .strategy-violation-preview button{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left;color:#d8b983;line-height:18px;padding:0}
 
+/* One planning surface: monthly totals open the exact dated batches in place. */
+.compact-desktop .monthly-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.compact-desktop .monthly-heading>div:first-child{display:grid;gap:2px}
+.compact-desktop .monthly-actions,.compact-desktop .monthly-actions label{display:flex;align-items:center;gap:8px}
+.compact-desktop .monthly-actions label{color:var(--muted)}
+.compact-desktop .monthly-actions select{height:26px;width:76px;padding:2px 5px}
+.compact-desktop .monthly-matrix .matrix-viewport{align-items:flex-start}
+.compact-desktop .monthly-matrix .monthly-supply-table{min-width:860px;height:auto;align-self:flex-start;table-layout:fixed}
+.compact-desktop .monthly-matrix .monthly-supply-table th:first-child{width:190px}
+.compact-desktop .monthly-matrix .monthly-supply-table thead th:not(:first-child){width:auto;padding-inline:2px}
+.compact-desktop .monthly-matrix .monthly-supply-table tbody tr{height:64px}
+.compact-desktop .monthly-matrix .monthly-supply-table tbody tr:has(.source-investment){height:96px}
+.compact-desktop .monthly-matrix .monthly-supply-table td{padding:0}
+.compact-desktop .monthly-source{vertical-align:top;padding:7px 8px!important}
+.compact-desktop .annual-reserve{display:flex;align-items:center;justify-content:space-between;gap:5px;margin-top:4px;color:var(--muted);font-size:11px;font-weight:400}
+.compact-desktop .annual-reserve input{width:66px;height:23px;padding:2px 4px;text-align:right;border-radius:3px}
+.compact-desktop .undated-badge{margin-top:5px;padding:2px 5px;border:1px solid #74533d;border-radius:3px;background:#2a211c;color:#edbe77;font-size:11px}
+.compact-desktop .month-cell{display:grid;place-content:center;gap:2px;width:100%;height:100%;min-height:63px;padding:4px 2px;border:0;background:transparent;text-align:center}
+.compact-desktop .month-cell strong{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+.compact-desktop .month-cell span{color:var(--muted);font-size:10px;white-space:nowrap}
+.compact-desktop .month-cell:hover:not(:disabled){background:#182021}
+.compact-desktop .monthly-supply-table .batch-editor-row{height:auto!important}
+.compact-desktop .monthly-supply-table .batch-editor-row>td{padding:0!important;border-bottom:1px solid var(--border);background:#111718}
+.compact-desktop .batch-editor{padding:10px 12px;box-shadow:inset 3px 0 0 #72cfff}
+.compact-desktop .batch-editor-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.compact-desktop .batch-editor-heading>div{display:flex;align-items:baseline;gap:8px}
+.compact-desktop .batch-editor-heading span,.compact-desktop .batch-editor-note{color:var(--muted)}
+.compact-desktop .batch-editor-note{margin:5px 0 8px;font-size:12px}
+.compact-desktop .batch-list{display:grid;gap:6px;margin-top:8px}
+.compact-desktop .batch-line{display:grid;grid-template-columns:minmax(160px,1fr) minmax(110px,.6fr) minmax(120px,.8fr) auto;align-items:end;gap:6px 10px;padding-top:6px;border-top:1px solid #273133}
+.compact-desktop .batch-line label{display:grid;gap:2px;color:var(--muted);font-size:11px}
+.compact-desktop .batch-line input{height:28px;padding:3px 6px;border-radius:3px}
+.compact-desktop .batch-id{align-self:center;overflow:hidden;color:var(--muted);font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+.compact-desktop .batch-issue{grid-column:1/-1;color:var(--amber);font-size:11px}
+.compact-desktop .empty-batches{margin-top:8px;padding:10px;border:1px dashed var(--border);color:var(--muted);text-align:center}
+@media(max-width:900px){
+ .compact-desktop .monthly-heading{align-items:stretch;flex-direction:column}
+ .compact-desktop .monthly-actions{justify-content:space-between}
+ .compact-desktop .batch-line{grid-template-columns:minmax(150px,1fr) minmax(100px,.7fr)}
+ .compact-desktop .batch-id{grid-column:1}
+}
+
 /* Switching chart content must not resize the shared row or supply table. */
 .compact-desktop .result-widget{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:40px 30px minmax(0,1fr) 92px;height:clamp(400px,calc(100dvh - 465px),570px);flex:0 0 auto;min-width:0}
 .compact-desktop .result-widget>.result-toolbar{grid-row:1;display:grid;grid-template-columns:minmax(0,1fr) 320px;min-height:0}

@@ -18,6 +18,8 @@ class SupplyOrderDTO(BaseModel):
     year: int = Field(..., description="Год поставки (2035-2040)")
     source_id: str = Field(..., description="Идентификатор канала (A, B, C, D, E или Earth-Core и т.д.)")
     order_t: float = Field(..., ge=0, description="Заказанный объём, тонн")
+    delivery_date: Optional[str] = Field(default=None, description="Дата получения партии YYYY-MM-DD; модельный год содержит 365 дней, без 29 февраля. Старому плану дату назначает оператор.")
+    batch_id: Optional[str] = Field(default=None, description="Уникальный идентификатор партии в плане")
 
 
 class CapacityReservationDTO(BaseModel):
@@ -42,7 +44,7 @@ class InventoryPolicyDTO(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     initial_inventory_t: float = Field(
-        default=12.33,
+        default=0,
         ge=0,
         description="Начальный физический запас на 1 января 2035, тонн",
     )
@@ -112,6 +114,19 @@ class SourceScheduleDTO(BaseModel):
     delivered_t: float
 
 
+class DeliveryScheduleDTO(BaseModel):
+    """Calculated dates and actual delivery of one batch."""
+    model_config = ConfigDict(extra="allow")
+    batch_id: str
+    source_id: str
+    year: int
+    order_date: str
+    delivery_date: str
+    ordered_t: float
+    delivered_t: float
+    status: str
+
+
 class FinancialBreakdownDTO(BaseModel):
     """Финансовая разбивка затрат за год (в млн у.е.)."""
     model_config = ConfigDict(extra="allow")
@@ -149,6 +164,7 @@ class ResultExportEnvelopeDTO(BaseModel):
     yearly_balance: List[YearlyBalanceDTO] = Field(default_factory=list)
     source_schedule: List[SourceScheduleDTO] = Field(default_factory=list)
     inventory_trace: List[Dict[str, Any]] = Field(default_factory=list)
+    delivery_schedule: List[DeliveryScheduleDTO] = Field(default_factory=list, description="Партии: дата заказа и получения, объём и фактический статус из engine")
     financial_breakdown: List[FinancialBreakdownDTO] = Field(default_factory=list)
     constraint_checks: List[ConstraintCheckDTO] = Field(default_factory=list)
     risk_register: List[Dict[str, Any]] = Field(default_factory=list)

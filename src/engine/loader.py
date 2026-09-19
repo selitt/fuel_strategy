@@ -4,6 +4,8 @@
 """
 
 import csv
+import math
+import yaml
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -155,3 +157,26 @@ class CaseCatalog:
         self.investments = load_investment_options(self.data_root)
         self.constraints = load_constraints(self.data_root)
         self.years = sorted(self.demands.keys())
+        self.scenarios = {}
+        for path in sorted((self.data_root / "scenarios").glob("*.yaml")):
+            value = yaml.safe_load(path.read_text(encoding="utf-8"))
+            if isinstance(value, dict) and value.get("scenario_id"):
+                self.scenarios[value["scenario_id"]] = value
+
+    def multiplier(self, scenario_id: str, field: str, year: int, source: str | None = None) -> float:
+        scenario = self.scenarios[scenario_id]
+        values = scenario.get(field, {})
+        if source is not None:
+            values = values.get(source, values.get("default", 1.0))
+        if isinstance(values, dict):
+            values = values.get(year, values.get(str(year), values.get("default", 1.0)))
+        number = float(values)
+        if not math.isfinite(number) or number < 0:
+            raise ValueError(f"Invalid {field} in scenario {scenario_id}, year {year}")
+        return number
+
+    def constraint_value(self, constraint_id: str) -> float:
+        matches = [rule.value for rule in self.constraints if rule.constraint_id == constraint_id]
+        if len(matches) != 1:
+            raise ValueError(f"Expected one catalog rule {constraint_id}")
+        return matches[0]

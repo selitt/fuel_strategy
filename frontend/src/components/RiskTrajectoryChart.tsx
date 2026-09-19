@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { RiskMetric, RiskTrajectories } from '../lib/risk';
 import { number } from '../lib/format';
+import { modelCalendarDate } from '../lib/daily';
 
 type Props = {data:RiskTrajectories;label:string};
 export function RiskTrajectoryChart({data,label}:Props) {
@@ -81,7 +82,7 @@ export function RiskTrajectoryChart({data,label}:Props) {
    }}>
    <title>Диапазон значений на каждый день. Колесо — масштаб; перетаскивание — время; стрелки — выбранный день.</title>
    {[0,.25,.5,.75,1].map(v=><g key={v}><line x1={L} x2={R} y1={y(v*maximum)} y2={y(v*maximum)} className="trajectory-grid"/><text x={R+12} y={y(v*maximum)+5} className="trajectory-label">{number(v*maximum)}</text></g>)}
-   {ticks.map((i,j)=><g key={j}><line x1={x(i)} x2={x(i)} y1={T} y2={B} className="trajectory-grid"/><text x={x(i)} y={B+28} textAnchor={j===0?'start':j===ticks.length-1?'end':'middle'} className="trajectory-label">{W<600?<><tspan x={x(i)}>{data.days[i].year}</tspan><tspan x={x(i)} dy={13}>{data.days[i].day_of_year} д.</tspan></>:`${data.days[i].year} · ${data.days[i].day_of_year} д.`}</text></g>)}
+   {ticks.map((i,j)=><g key={j}><line x1={x(i)} x2={x(i)} y1={T} y2={B} className="trajectory-grid"/><text x={x(i)} y={B+28} textAnchor={j===0?'start':j===ticks.length-1?'end':'middle'} className="trajectory-label">{W<600?<><tspan x={x(i)}>{data.days[i].year}</tspan><tspan x={x(i)} dy={13}>{data.days[i].day_of_year} д.</tspan></>:modelCalendarDate(data.days[i].year, data.days[i].day_of_year)}</text></g>)}
    <polygon points={`${points(band.p95)} ${points(band.p05,true)}`} className="trajectory-fan"/>
    <polyline points={points(band.p95)} className="trajectory-bound"/><polyline points={points(band.p05)} className="trajectory-bound"/>
    <polyline points={points(band.median)} className="trajectory-median"/>
@@ -90,7 +91,7 @@ export function RiskTrajectoryChart({data,label}:Props) {
    <line x1={L} x2={R} y1={y(run?run[metric][index]:band.median[index])} y2={y(run?run[metric][index]:band.median[index])} className="trajectory-crosshair"/>
    <circle cx={x(index)} cy={y(run?run[metric][index]:band.median[index])} r={4} className={run?'trajectory-run-dot':'trajectory-median-dot'}/>
   </svg>
-  <div className="risk-day-readout" data-testid="risk-day-readout"><strong>{day.year} · день {day.day_of_year}</strong><span>5–95%: <b>{number(band.p05[index])}–{number(band.p95[index])} т</b></span><span>Медиана: <b>{number(band.median[index])} т</b></span>{run&&<><span>№ {run.run} · запас: <b>{number(run.inventory_t[index])} т</b></span><span>Поступило: <b>{number(run.delivered_t[index])} т</b></span><span>Дефицит: <b>{number(run.shortage_t[index])} т</b></span></>}</div>
+  <div className="risk-day-readout" data-testid="risk-day-readout"><strong>{modelCalendarDate(day.year, day.day_of_year)} · день {day.day_of_year}</strong><span>5–95%: <b>{number(band.p05[index])}–{number(band.p95[index])} т</b></span><span>Медиана: <b>{number(band.median[index])} т</b></span>{run&&<><span>№ {run.run} · запас: <b>{number(run.inventory_t[index])} т</b></span><span>Поступило: <b>{number(run.delivered_t[index])} т</b></span><span>Дефицит: <b>{number(run.shortage_t[index])} т</b></span></>}</div>
   <div className="risk-chart-help"><span>Колесо — масштаб · перетаскивание — время · ← → — день</span><span>Показаны дни {lo+1}–{hi+1} из {n}</span></div>
   <p className="risk-band-explanation">Заливка — от 5-го до 95-го процентиля на каждый день. Это диапазон выборки, а не гарантия и не отдельный прогон. Выберите прогон, чтобы увидеть его реальный путь.</p>
  </section>;

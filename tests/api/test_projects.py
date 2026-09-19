@@ -53,7 +53,7 @@ def test_missing_default_fields_are_disclosed_not_called_organizer_decisions(cli
     assert response.status_code == 200
     assert response.json()["normalized"] is True
     assert response.json()["warnings"]
-    assert response.json()["plan"]["decisions"]["inventory_policy"]["initial_inventory_t"] == 12.33
+    assert response.json()["plan"]["decisions"]["inventory_policy"]["initial_inventory_t"] == 0
 
 
 def test_project_roundtrip_and_listing(client, plan):

@@ -26,6 +26,17 @@ def resolve(value, document):
 def test_legacy_operations_and_payload_schemas_are_preserved(client):
     baseline = yaml.safe_load((ROOT / "src/app/api/KosmoAPI.yaml").read_text())
     live = client.get("/openapi.json").json()
+    # Calendar v2 adds optional fields and intentionally starts new plans at zero.
+    # Compare the entire legacy shape after removing ONLY those declared additions.
+    components = live['components']['schemas']
+    for field in ('delivery_date', 'batch_id'):
+        prop = components['SupplyOrderDTO']['properties'].pop(field)
+        assert prop.get('default') is None
+        assert field not in components['SupplyOrderDTO'].get('required', [])
+    components['ResultExportEnvelopeDTO']['properties'].pop('delivery_schedule')
+    stock = components['InventoryPolicyDTO']['properties']['initial_inventory_t']
+    assert stock['default'] == 0
+    stock['default'] = 12.33
     for path, methods in baseline["paths"].items():
         for method, expected in methods.items():
             actual = live["paths"][path][method]

@@ -29,6 +29,12 @@ def audit_constraints(
     2. is_feasible (True, если все жесткие правила выполнены)
     """
     is_stress = scenario_id.upper() == "MANDATORY_STRESS"
+    total_target = catalog.constraint_value("BASE_TOTAL_SERVICE")
+    critical_target = catalog.constraint_value("BASE_CRITICAL_SERVICE")
+    loss_limit = catalog.constraint_value("STRESS_LOSS_LIMIT")
+    early_budget = catalog.constraint_value("CAPEX_2037")
+    full_budget = catalog.constraint_value("CAPEX_2040")
+    emergency_limit = catalog.constraint_value("EMERGENCY_BASE_STREAK")
     checks: List[ConstraintCheckRecord] = []
     is_feasible = True
 
@@ -84,41 +90,41 @@ def audit_constraints(
         # Уровни обслуживания в BASE
         if not is_stress:
             # Общий SL >= 97%
-            sl_total_met = bal.service_level_total >= (0.97 - 1e-5)
+            sl_total_met = bal.service_level_total >= (total_target - 1e-5)
             if not sl_total_met:
                 is_feasible = False
             checks.append(ConstraintCheckRecord(
                 constraint_id="BASE_TOTAL_SERVICE",
                 year=bal.year,
                 passed=sl_total_met,
-                detail=f"Общий SL = {bal.service_level_total * 100:.2f}% (норма >= 97.0%)",
-                excess=round(0.97 - bal.service_level_total, 4) if not sl_total_met else None,
+                detail=f"Общий SL = {bal.service_level_total * 100:.2f}% (норма >= {total_target * 100:.2f}%)",
+                excess=round(total_target - bal.service_level_total, 4) if not sl_total_met else None,
             ))
 
             # Критический SL >= 99%
-            sl_crit_met = bal.service_level_critical >= (0.99 - 1e-5)
+            sl_crit_met = bal.service_level_critical >= (critical_target - 1e-5)
             if not sl_crit_met:
                 is_feasible = False
             checks.append(ConstraintCheckRecord(
                 constraint_id="BASE_CRITICAL_SERVICE",
                 year=bal.year,
                 passed=sl_crit_met,
-                detail=f"Критический SL = {bal.service_level_critical * 100:.2f}% (норма >= 99.0%)",
-                excess=round(0.99 - bal.service_level_critical, 4) if not sl_crit_met else None,
+                detail=f"Критический SL = {bal.service_level_critical * 100:.2f}% (норма >= {critical_target * 100:.2f}%)",
+                excess=round(critical_target - bal.service_level_critical, 4) if not sl_crit_met else None,
             ))
 
         # 4. В стресс-сценарии: ограничение на потери (STRESS_LOSS_LIMIT <= 2%) с 2038 года
         if is_stress and bal.year >= 2038:
             loss_ratio = (bal.losses_t / bal.delivered_t) if bal.delivered_t > 0 else 0.0
-            loss_limit_met = loss_ratio <= (0.02 + 1e-5)
+            loss_limit_met = loss_ratio <= (loss_limit + 1e-5)
             if not loss_limit_met:
                 is_feasible = False
             checks.append(ConstraintCheckRecord(
                 constraint_id="STRESS_LOSS_LIMIT",
                 year=bal.year,
                 passed=loss_limit_met,
-                detail=f"Доля потерь = {loss_ratio * 100:.2f}% (норма <= 2.0%)",
-                excess=round(loss_ratio - 0.02, 4) if not loss_limit_met else None,
+                detail=f"Доля потерь = {loss_ratio * 100:.2f}% (норма <= {loss_limit * 100:.2f}%)",
+                excess=round(loss_ratio - loss_limit, 4) if not loss_limit_met else None,
             ))
 
     # 5. Аудит бюджетных лимитов CAPEX (CAPEX_2037 <= 1800, CAPEX_2040 <= 2800)
@@ -130,26 +136,26 @@ def audit_constraints(
         if fin.year <= 2040:
             cum_capex_2040 = fin.cumulative_capex
 
-    capex_2037_met = cum_capex_2037 <= 1800.0
+    capex_2037_met = cum_capex_2037 <= early_budget
     if not capex_2037_met:
         is_feasible = False
     checks.append(ConstraintCheckRecord(
         constraint_id="CAPEX_2037",
         year=2037,
         passed=capex_2037_met,
-        detail=f"Накопленный CAPEX к концу 2037 года = {cum_capex_2037:.2f} млн (лимит 1800 млн)",
-        excess=round(cum_capex_2037 - 1800.0, 2) if not capex_2037_met else None,
+        detail=f"Накопленный CAPEX к концу 2037 года = {cum_capex_2037:.2f} млн (лимит {early_budget:g} млн)",
+        excess=round(cum_capex_2037 - early_budget, 2) if not capex_2037_met else None,
     ))
 
-    capex_2040_met = cum_capex_2040 <= 2800.0
+    capex_2040_met = cum_capex_2040 <= full_budget
     if not capex_2040_met:
         is_feasible = False
     checks.append(ConstraintCheckRecord(
         constraint_id="CAPEX_2040",
         year=2040,
         passed=capex_2040_met,
-        detail=f"Суммарный CAPEX за 2035–2040 гг. = {cum_capex_2040:.2f} млн (лимит 2800 млн)",
-        excess=round(cum_capex_2040 - 2800.0, 2) if not capex_2040_met else None,
+        detail=f"Суммарный CAPEX за 2035–2040 гг. = {cum_capex_2040:.2f} млн (лимит {full_budget:g} млн)",
+        excess=round(cum_capex_2040 - full_budget, 2) if not capex_2040_met else None,
     ))
 
     # 6. Ограничение на Emergency как базовый канал (EMERGENCY_BASE_STREAK <= 2)
@@ -176,15 +182,15 @@ def audit_constraints(
         else:
             consecutive_emergency_years = 0
 
-    emer_streak_met = max_consecutive_emergency <= 2
+    emer_streak_met = max_consecutive_emergency <= emergency_limit
     if not emer_streak_met:
         is_feasible = False
     checks.append(ConstraintCheckRecord(
         constraint_id="EMERGENCY_BASE_STREAK",
         year=years[-1] if years else 2040,
         passed=emer_streak_met,
-        detail=f"Emergency использовался как базовый канал {max_consecutive_emergency} лет подряд (норма <= 2)",
-        excess=float(max_consecutive_emergency - 2) if not emer_streak_met else None,
+        detail=f"Emergency использовался как базовый канал {max_consecutive_emergency} лет подряд (норма <= {emergency_limit:g})",
+        excess=float(max_consecutive_emergency - emergency_limit) if not emer_streak_met else None,
     ))
 
     return checks, is_feasible
