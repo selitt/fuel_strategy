@@ -4,29 +4,52 @@
 """
 
 import random
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Any, Tuple, Optional
 from .loader import CaseCatalog
 from .simulation import simulate_daily
 
 
-def extract_reliability(reliability_profile: str, year: int) -> float:
-    """Извлекает числовой коэффициент надежности для заданного года."""
-    s = reliability_profile.strip()
+def extract_reliability(
+    reliability_profile: str,
+    year: int,
+    first_operating_year: Optional[int] = None
+) -> float:
+    s = reliability_profile.strip().strip('"').strip("'")
+
+    # 1. Формат constant:0.96
     if s.startswith("constant:"):
-        return float(s.split(":")[1])
-    elif "2038:" in s:
-        # Например: 2038:0.78;2039:0.90;2040:0.93
-        parts = s.split(";")
-        for p in parts:
-            if f"{year}:" in p:
-                return float(p.split(":")[1])
-        return 0.90
-    elif "first_operating_year:" in s:
-        return 0.88 if year == 2035 else 0.94
-    try:
-        return float(s)
-    except ValueError:
-        return 0.95
+        return float(s.split(":")[1].strip())
+
+    # 2. Формат first_operating_year:0.88;later:0.94
+    if "first_operating_year:" in s:
+        pairs = dict(part.split(":") for part in s.split(";"))
+        first_val = float(pairs.get("first_operating_year", 0.88))
+        later_val = float(pairs.get("later", pairs.get("subsequent", 0.94)))
+
+        # Если передан реальный год ввода канала
+        if first_operating_year is not None:
+            return first_val if year == first_operating_year else later_val
+        return first_val if year == 2035 else later_val
+
+    # 3. Формат по годам 2038:0.78;2039:0.90;2040:0.93
+    if ":" in s:
+        year_map = {}
+        for part in s.split(";"):
+            if ":" in part:
+                k, v = part.split(":")
+                year_map[int(k.strip())] = float(v.strip())
+
+        if year in year_map:
+            return year_map[year]
+        # Если год раньше первого известного — берём значение первого года
+        min_y = min(year_map.keys())
+        if year < min_y:
+            return year_map[min_y]
+        # Если год позже — берём последнее значение
+        max_y = max(year_map.keys())
+        return year_map[max_y]
+
+    return float(s)
 
 
 def run_monte_carlo(
@@ -52,11 +75,25 @@ def run_monte_carlo(
     # Убираем дубли по именам
     unique_sources = {s.source_id: s for s in sources}.values()
 
+    # Извлекаем реальный год ввода каналов из инвестиций
+    first_op_years = {}
+    for inv in decisions.get("investments", []):
+        inv_id = str(inv.get("investment_id", "")).upper()
+        y = inv.get("commissioning_year", inv.get("year"))
+        if y:
+            if "LUNAR" in inv_id:
+                first_op_years["Lunar-ISRU"] = int(y)
+                first_op_years["D"] = int(y)
+            elif "EARTH_NEW" in inv_id or "NEW" in inv_id:
+                first_op_years["Earth-New"] = int(y)
+                first_op_years["C"] = int(y)
+
     for run_idx in range(iterations):
         failures = {}
         for y in years:
             for s in unique_sources:
-                p = extract_reliability(s.reliability_profile, y)
+                f_op = first_op_years.get(s.source_id, first_op_years.get(s.name))
+                p = extract_reliability(s.reliability_profile, y, first_operating_year=f_op)
                 for b_idx in range(num_batches):
                     # Испытание Бернулли: сбой с вероятностью 1 - p
                     if rng.random() > p:
