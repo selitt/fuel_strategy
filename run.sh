@@ -45,6 +45,7 @@ compose() {
 
 PUBLIC_BUILD_DIR=""
 PUBLIC_BUILD_CONTAINER=""
+CLOUDPUB_CONTAINER="fuel-contour-cloudpub"
 
 cleanup_public_build() {
   local exit_status=$?
@@ -89,6 +90,65 @@ build_public_image() {
     "$ROOT_DIR"
 }
 
+read_cloudpub_token() {
+  if [[ -n "${CLOUDPUB_TOKEN:-}" ]]; then
+    return 0
+  fi
+  if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
+    return 1
+  fi
+  printf 'CloudPub token (leave empty to run without a public link): ' >/dev/tty
+  if ! IFS= read -r -s CLOUDPUB_TOKEN </dev/tty; then
+    printf '\n' >/dev/tty
+    return 1
+  fi
+  printf '\n' >/dev/tty
+  [[ -n "$CLOUDPUB_TOKEN" ]]
+}
+
+start_cloudpub() {
+  local attempt logs public_url
+
+  if ! read_cloudpub_token; then
+    printf 'CloudPub was not started: no token was provided.\n'
+    return 0
+  fi
+
+  docker rm -f "$CLOUDPUB_CONTAINER" >/dev/null 2>&1 || true
+  if ! TOKEN="$CLOUDPUB_TOKEN" docker run --detach \
+      --name "$CLOUDPUB_CONTAINER" \
+      --network host \
+      --restart unless-stopped \
+      --env TOKEN \
+      cloudpub/cloudpub:latest publish http "$FUEL_WEB_PORT" >/dev/null; then
+    unset CLOUDPUB_TOKEN
+    printf 'ERROR: CloudPub tunnel could not be started.\n' >&2
+    return 1
+  fi
+  unset CLOUDPUB_TOKEN
+
+  for attempt in $(seq 1 30); do
+    logs=$(docker logs "$CLOUDPUB_CONTAINER" 2>&1 || true)
+    public_url=$(printf '%s\n' "$logs" \
+      | grep -Eo 'https://[A-Za-z0-9.-]+\.cloudpub\.ru[^[:space:]]*' \
+      | head -n 1 || true)
+    if [[ -n "$public_url" ]]; then
+      printf '\nPublic site: %s\n' "$public_url"
+      printf 'Share this URL together with the site login and password.\n'
+      return 0
+    fi
+    sleep 1
+  done
+
+  printf 'ERROR: CloudPub did not provide a public URL; recent logs follow.\n' >&2
+  docker logs --tail=100 "$CLOUDPUB_CONTAINER" >&2 || true
+  return 1
+}
+
+stop_cloudpub() {
+  docker rm -f "$CLOUDPUB_CONTAINER" >/dev/null 2>&1 || true
+}
+
 run_public() {
   select_compose_env
   select_python
@@ -109,7 +169,7 @@ run_public() {
     return 1
   fi
   printf 'Site is ready on port %s.\n' "$FUEL_WEB_PORT"
-  printf 'In GigaIDE, make port %s Public and choose Open in new tab.\n' "$FUEL_WEB_PORT"
+  start_cloudpub
 }
 
 run_local() {
@@ -164,6 +224,8 @@ case "$command_name" in
   status)
     select_compose_env
     compose ps
+    docker ps --filter "name=^/${CLOUDPUB_CONTAINER}$" \
+      --format 'CloudPub tunnel: {{.Status}}'
     ;;
   logs)
     select_compose_env
@@ -171,6 +233,7 @@ case "$command_name" in
     ;;
   stop)
     select_compose_env
+    stop_cloudpub
     compose stop web
     ;;
   local)

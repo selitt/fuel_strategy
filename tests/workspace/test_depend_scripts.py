@@ -212,6 +212,85 @@ class DependBootstrapContractTests(unittest.TestCase):
             )
             self.assertEqual(list(root.glob(".docker-frontend.*")), [])
 
+    def test_run_starts_cloudpub_and_prints_public_url_when_token_is_set(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            (root / "tools").mkdir()
+            shutil.copyfile(ROOT / "tools/configure_access.py", root / "tools/configure_access.py")
+            (root / "docker").mkdir()
+            (root / "docker/compose.yaml").touch()
+            (root / "docker/.env.example").touch()
+            (root / "bin").mkdir()
+            log = root / "docker.log"
+            docker = root / "bin/docker"
+            docker.write_text(
+                '#!/bin/sh\ncase "$*" in *"config --format json") '
+                'printf \'%s\\n\' '
+                '\'{"services":{"web":{"environment":{"FUEL_HTTP_USER":"team","FUEL_HTTP_PASSWORD":"secret"}}}}\'; exit 0;; esac\n'
+                'if [ "$1" = create ]; then printf "%s\\n" frontend-export; fi\n'
+                'if [ "$1" = cp ]; then mkdir -p "$3"; : > "$3/index.html"; fi\n'
+                'printf "%s\\n" "$*" >> "$TEST_LOG"\n'
+                'case "$*" in "logs fuel-contour-cloudpub") '
+                'printf "%s\\n" "Service published: https://demo.cloudpub.ru";; esac\n'
+            )
+            docker.chmod(0o755)
+            result = subprocess.run(
+                ["bash", str(root / "run.sh")],
+                cwd=root,
+                env={
+                    **os.environ,
+                    "PATH": str(root / "bin") + ":" + os.environ["PATH"],
+                    "TEST_LOG": str(log),
+                    "CLOUDPUB_TOKEN": "test-token",
+                },
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("https://demo.cloudpub.ru", result.stdout)
+            calls = log.read_text().splitlines()
+            self.assertIn("rm -f fuel-contour-cloudpub", calls)
+            self.assertIn(
+                "run --detach --name fuel-contour-cloudpub --network host "
+                "--restart unless-stopped --env TOKEN cloudpub/cloudpub:latest "
+                "publish http 8080",
+                calls,
+            )
+            self.assertNotIn("test-token", "\n".join(calls))
+
+    def test_run_stop_removes_cloudpub_tunnel_and_stops_web(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            (root / "docker").mkdir()
+            (root / "docker/compose.yaml").touch()
+            (root / "docker/.env.example").touch()
+            (root / "bin").mkdir()
+            log = root / "docker.log"
+            docker = root / "bin/docker"
+            docker.write_text('#!/bin/sh\nprintf "%s\\n" "$*" >> "$TEST_LOG"\n')
+            docker.chmod(0o755)
+            result = subprocess.run(
+                ["bash", str(root / "run.sh"), "stop"],
+                cwd=root,
+                env={
+                    **os.environ,
+                    "PATH": str(root / "bin") + ":" + os.environ["PATH"],
+                    "TEST_LOG": str(log),
+                },
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            calls = log.read_text().splitlines()
+            self.assertEqual(calls[0], "rm -f fuel-contour-cloudpub")
+            self.assertIn("stop web", calls[1])
+
     def test_run_reports_web_logs_when_public_service_is_not_ready(self):
         import shutil
         with tempfile.TemporaryDirectory() as directory:
