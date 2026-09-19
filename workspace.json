@@ -2,10 +2,10 @@
   "schema_version": "1.0",
   "project_name": "Топливный космоконтур 2035",
   "team_size": 5,
-  "stage": "web_api_ready_frontend_pending",
+  "stage": "web_interface_implemented_model_pending",
   "application_implemented": false,
-  "application_stack": "Python/FastAPI/Pydantic + React/TypeScript/Vite/Plotly + Docker Compose; JSON persistence and CSV/XLSX export; no Streamlit, automatic optimizer, or SQL at start",
-  "next_task": "T04",
+  "application_stack": "Python/FastAPI/Pydantic + React/TypeScript/Vite + SVG charts; Docker Compose; JSON persistence and JSON/CSV exports",
+  "next_task": "T06",
   "check_scope": "workspace_only_not_product",
   "reference_paths": [
     "fuel-hackathon/test_oil",
@@ -53,15 +53,17 @@
     "docker/compose.yaml",
     "docker/Dockerfile.dockerignore"
   ],
-  "note": "application_implemented относится к полному конкурсному приложению и остаётся false: HTTP API реализован, UI и полная модель не приняты. workspace check проверяет материалы, root data и навигацию. Тесты API: python3 -m pytest; актуальные границы: docs/api/TEAM_AND_NEXT.md.",
+  "note": "application_implemented относится к полной конкурсной модели и остаётся false. UI реализован; native production-сборка, Docker и полная математическая приёмка не подтверждены. Актуальная передача: docs/frontend/HANDOFF.md; проверки: docs/frontend/TEST_REPORT.md.",
   "implemented_components": [
     "http_api",
     "project_storage",
     "json_plan_project_import",
-    "json_csv_result_export"
+    "json_csv_result_export",
+    "frontend",
+    "same_origin_web_delivery"
   ],
   "pending_components": [
-    "frontend",
+    "network_production_build_verification",
     "complete_case_model",
     "product_acceptance"
   ]

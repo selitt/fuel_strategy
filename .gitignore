@@ -22,3 +22,10 @@ docker/.env
 Thumbs.db
 .codex/
 .local/
+
+# Operator UI
+frontend/node_modules/
+frontend/dist/
+frontend/.test-build/
+frontend/test-results/
+.env

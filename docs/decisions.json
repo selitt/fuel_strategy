@@ -89,5 +89,16 @@
       "approved_by": null,
       "evidence": []
     }
-  ]
+  ],
+  "frontend_delivery": {
+    "date": "2026-09-19",
+    "base_archive": "11.zip",
+    "status": "implemented_web_slice_model_unverified",
+    "actual_stack": "React 18 + TypeScript + Vite config; SVG charts; Python/FastAPI; Docker Compose configuration",
+    "note": "Historical D01/D02 retain the team plan including Plotly. This delivered slice uses a small SVG renderer and does not claim to update model decisions.",
+    "evidence": [
+      "docs/frontend/HANDOFF.md",
+      "docs/frontend/TEST_REPORT.md"
+    ]
+  }
 }

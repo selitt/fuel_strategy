@@ -1,0 +1,13 @@
+**/.git
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.test-build
+**/.env
+.env
+.local
+.venv
+frontend/dist
+*.zip
+fuel-hackathon
+results

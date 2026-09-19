@@ -1,0 +1,20 @@
+# Portable bundle supplied with this archive. No npm needed for this image.
+# Rebuild with Dockerfile.web or scripts/build-portable.mjs after UI changes.
+FROM python:3.13-slim
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_DISABLE_PIP_VERSION_CHECK=1     FUEL_DATA_DIR=/data/projects FUEL_FRONTEND_DIR=/app/frontend/prebuilt
+WORKDIR /app
+COPY requirements.txt ./
+RUN python -m pip install --no-cache-dir -r requirements.txt     && groupadd --gid 10001 fuel     && useradd --uid 10001 --gid 10001 --no-create-home fuel     && mkdir -p /data/projects     && chown -R 10001:10001 /data
+COPY src ./src
+COPY data ./data
+COPY frontend/prebuilt ./frontend/prebuilt
+COPY frontend/src ./frontend/src
+COPY frontend/index.html ./frontend/index.html
+COPY frontend/public ./frontend/public
+COPY frontend/vendor ./frontend/vendor
+COPY frontend/scripts/build-portable.mjs ./frontend/scripts/build-portable.mjs
+COPY tools/verify_prebuilt.py ./tools/verify_prebuilt.py
+RUN python tools/verify_prebuilt.py
+USER 10001:10001
+EXPOSE 8080
+CMD ["python", "-m", "uvicorn", "src.app.web:create_web_app", "--factory", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]

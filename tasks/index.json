@@ -1,5 +1,5 @@
 {
-  "stage": "web_api_integration",
+  "stage": "operator_ui_delivered_model_pending",
   "dependency_note": "T06 early checkpoint starts on first compatible slices of T02/T03/T04; final T06 requires their completion.",
   "tasks": [
     {
@@ -100,7 +100,7 @@
       "depends_on": [
         "T01"
       ],
-      "status": "not_started",
+      "status": "implemented_web_slice",
       "optional": false,
       "criteria": [
         "K19",
@@ -110,7 +110,11 @@
         "frontend/",
         "tests/"
       ],
-      "evidence": []
+      "evidence": [
+        "docs/frontend/HANDOFF.md",
+        "docs/frontend/TEST_REPORT.md"
+      ],
+      "remaining": "Dataset input contract, native production toolchain checks and full T06 model acceptance are not claimed."
     },
     {
       "id": "T05",

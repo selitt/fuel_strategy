@@ -9,7 +9,7 @@ from src.app.dto.web_dto import ErrorDTO, PlanValidationDTO
 from src.app.service.plan_io import parse_json_file, validate_plan
 
 router = APIRouter(prefix="/api/plans", tags=["Планы · web extension"], responses={
-    413: {"model": ErrorDTO}, 415: {"model": ErrorDTO},
+    413: {"model": ErrorDTO, "description": "Превышен размер запроса или файла"}, 415: {"model": ErrorDTO},
 })
 SettingsDep = Annotated[Settings, Depends(get_settings)]
 
