@@ -64,6 +64,17 @@ def simulate_daily(
             (batch.year, batch.source.source_id), []
         ).append(batch)
 
+    # Доступная бронь Emergency для оперативного парирования аварий в Монте-Карло
+    remaining_emer_res: Dict[int, float] = {}
+    for y in years:
+        res_emer = reservations_map.get((y, "Emergency"), reservations_map.get((y, "E"), 0.0))
+        ord_emer = sum(
+            b.ordered_t for b in batches
+            if b.year == y and b.source.source_id in ("E", "Emergency")
+        )
+        remaining_emer_res[y] = max(0.0, res_emer - ord_emer)
+
+    total_days = len(years) * 365
     source_schedule_records: List[SourceScheduleRecord] = []
 
     for y_idx, year in enumerate(years):
@@ -108,6 +119,21 @@ def simulate_daily(
                             "volume": delivered_t,
                         }
                     )
+                elif is_failed and s_id not in ("E", "Emergency"):
+                    # Резервный вызов Emergency при сбое пуска (lead time 6 недель = 42 дня)
+                    avail_emer = remaining_emer_res.get(year, 0.0)
+                    if avail_emer > 0:
+                        dispatch_vol = min(batch.ordered_t, avail_emer)
+                        remaining_emer_res[year] -= dispatch_vol
+                        arr_day = batch.model_day + 42
+                        if arr_day < total_days:
+                            deliveries_calendar.setdefault(arr_day, []).append(
+                                {
+                                    "source_id": "E",
+                                    "source_name": "Emergency",
+                                    "volume": dispatch_vol,
+                                }
+                            )
 
             # Take-or-pay объем
             top_threshold = round(s_info.take_or_pay_share * res_t, 2)
