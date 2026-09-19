@@ -6,7 +6,8 @@ WORKDIR /build
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY frontend/ ./
-RUN npm run build
+RUN npm run build \
+    && tar -C dist -cf /tmp/frontend-dist.tar .
 
 FROM ${PYTHON_IMAGE} AS runtime
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_DISABLE_PIP_VERSION_CHECK=1     FUEL_DATA_DIR=/data/projects FUEL_FRONTEND_DIR=/app/frontend/dist FUEL_PUBLIC_MODE=1
@@ -16,7 +17,10 @@ RUN python -m pip install --no-cache-dir -r requirements.txt     && groupadd --g
 COPY src ./src
 COPY data ./data
 COPY tools/project_archive.py ./tools/project_archive.py
-COPY --from=ui /build/dist ./frontend/dist
+COPY --from=ui /tmp/frontend-dist.tar /tmp/frontend-dist.tar
+RUN mkdir -p ./frontend/dist \
+    && python -c "import tarfile; tarfile.open('/tmp/frontend-dist.tar').extractall('./frontend/dist', filter='data')" \
+    && rm /tmp/frontend-dist.tar
 USER 10001:10001
 EXPOSE 8080
 # The JSON store uses an in-process lock: keep exactly one worker.
