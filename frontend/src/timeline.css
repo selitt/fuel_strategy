@@ -1,0 +1,177 @@
+.result-panel .timeline-selected-day {
+  color: #d7dcda;
+  font-size: 12px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-view-toggle {
+  display: flex;
+  align-self: flex-end;
+  gap: 2px;
+  margin: 0 14px 6px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  background: #0d0f10;
+}
+
+.timeline-view-toggle button {
+  padding: 4px 9px;
+  border: 0;
+  border-radius: 1px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.timeline-view-toggle button[aria-pressed="true"] {
+  background: #303536;
+  color: var(--text);
+}
+
+.timeline-control {
+  flex: 0 0 auto;
+  padding: 4px 18px 10px;
+  border-top: 1px solid #26302f;
+}
+
+.timeline-control-heading,
+.timeline-control-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-control-heading span:last-child {
+  color: #c7cfcc;
+}
+
+.timeline-control .range {
+  margin: 11px 0 9px;
+}
+
+.timeline-year-scale {
+  position: relative;
+  height: 23px;
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-year-scale span {
+  position: absolute;
+  top: 0;
+  padding-top: 6px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.timeline-year-scale span:first-child {
+  transform: none;
+}
+
+.timeline-year-scale span::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 4px;
+  background: #65706d;
+  content: '';
+}
+
+.timeline-control-action {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  margin-top: 4px;
+}
+
+.timeline-control-action > :last-child {
+  text-align: right;
+}
+
+.timeline-control-action .text-button {
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.timeline-annual-label {
+  padding: 7px 17px 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-annual-label strong {
+  color: #c7cfcc;
+  font-weight: 600;
+}
+
+.daily-chart-selector {
+  cursor: crosshair;
+  outline: none;
+  touch-action: none;
+}
+
+.daily-chart-selector:focus-visible {
+  stroke: #d7dcda;
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.daily-chart-timeline .daily-selected {
+  stroke: #f1f4f2;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.daily-chart-timeline .daily-axis-label {
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .timeline-view-toggle {
+    align-self: stretch;
+  }
+
+  .timeline-view-toggle button {
+    flex: 1;
+  }
+
+  .timeline-control {
+    padding-inline: 14px;
+  }
+
+  .timeline-control-action {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .timeline-control-action .text-button {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 430px) {
+  .timeline-control-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .timeline-year-scale {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-view-toggle button,
+  .timeline-control .range {
+    transition: none;
+  }
+}

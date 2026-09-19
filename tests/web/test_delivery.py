@@ -67,5 +67,6 @@ def test_missing_static_build_is_explicit(tmp_path, monkeypatch):
     from src.app.web import create_web_app
     monkeypatch.delenv('FUEL_HTTP_USER', raising=False)
     monkeypatch.delenv('FUEL_HTTP_PASSWORD', raising=False)
-    with pytest.raises(RuntimeError, match='Frontend build'):
+    with pytest.raises(RuntimeError, match='npm --prefix frontend run build') as error:
         create_web_app(static_dir=tmp_path/'absent')
+    assert 'prebuilt' not in str(error.value)

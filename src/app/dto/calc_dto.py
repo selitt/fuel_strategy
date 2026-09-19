@@ -1,8 +1,8 @@
 """
 DTO контракты для взаимодействия с API планирования и моделирования.
 Основаны на схемах организатора:
-- ParticipantPlan (fuel-hackathon/test_oil/schemas/plan.schema.json)
-- ResultExportEnvelope (fuel-hackathon/test_oil/schemas/export.schema.json)
+- ParticipantPlan (data/schemas/plan.schema.json)
+- ResultExportEnvelope (data/schemas/export.schema.json)
 """
 
 from typing import List, Dict, Any, Optional, Union
@@ -145,7 +145,7 @@ class ResultExportEnvelopeDTO(BaseModel):
     units: Dict[str, str] = Field(
         default_factory=lambda: {"fuel": "t", "currency": "mln_units"}
     )
-    assumptions_reference: Union[str, Dict[str, Any]] = "docs/CASE_RULES.md"
+    assumptions_reference: Union[str, Dict[str, Any]] = "docs/MODEL.md"
     yearly_balance: List[YearlyBalanceDTO] = Field(default_factory=list)
     source_schedule: List[SourceScheduleDTO] = Field(default_factory=list)
     inventory_trace: List[Dict[str, Any]] = Field(default_factory=list)
@@ -156,4 +156,3 @@ class ResultExportEnvelopeDTO(BaseModel):
     # Сводные показатели
     is_feasible: bool = True
     total_cost_mln: float = 0.0
-

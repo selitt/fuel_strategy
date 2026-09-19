@@ -1,32 +1,59 @@
-# Контур · Топливное планирование
+# Контур · топливное планирование
 
-Одностраничное приложение для кейса **«Топливный космоконтур 2035»**: React-интерфейс, HTTP API на FastAPI и исходный прототип расчётного движка. Интерфейс и API работают, но математическая приёмка модели ещё не завершена. API подключён к существующему `SimulationEngine`; `pseudo_engine` удалён. Дневной график и отдельный анализ рисков описаны в [актуальной передаче](docs/frontend/DAILY_ENGINE_REPORT.md).
+Состояние на **19 сентября 2026 года**. Это одностраничное приложение для кейса «Топливный космоконтур 2035»: React/Vite frontend, FastAPI API, JSON-хранилище проектов и исходный расчётный движок.
 
-Объединение с новым FastAPI: [передача интеграции](docs/maintenance/INTEGRATION_D79C681.md).
+Оператор может редактировать план поставок и инвестиций на 2035–2040 годы, рассчитывать BASE и MANDATORY_STRESS, сравнивать одинаковые решения, сохранять проекты и выгружать JSON/CSV. Интерфейс и HTTP API работают. Математическая приёмка модели не завершена: API честно возвращает `engine.status=prototype` и `model_verified=false`.
 
-## С чего начать
+Критические правила и ограничения расчёта собраны в [docs/MODEL.md](docs/MODEL.md). Рабочие входы, схемы и контрольные примеры находятся только в `data/`.
 
-1. Прочитать [описание продукта](docs/PRODUCT.md) и выбрать одну карточку из [списка задач](tasks/README.md).
-2. Для смысловой работы открыть только связанные первоисточники и [правила регламента](docs/regulation/RULES.md).
-3. Для интерфейса использовать [актуальную передачу frontend](docs/frontend/HANDOFF.md), для сервера — [инструкцию деплоя](docs/DEPLOYMENT.md).
-4. Фактические проверки обвязки записаны в [maintenance handoff](docs/maintenance/HANDOFF.md); прежние результаты UI сохранены как [исторический отчёт](docs/frontend/TEST_REPORT.md).
+## Структура
 
-Основные источники находятся в `docs/Task/`, `data/` и `fuel-hackathon/test_oil/`. Каталог `fuel-hackathon/test/` относится к другому кейсу. Неизвестные параметры нельзя заменять правдоподобными числами, а проверки каркаса не доказывают корректность модели.
+- `src/engine/` — расчётный прототип;
+- `src/app/` — FastAPI, DTO, проекты, импорт и экспорт;
+- `frontend/` — React/TypeScript/Vite интерфейс и тесты;
+- `data/` — CSV/YAML входы, JSON Schema и контрольные примеры;
+- `docker/` — единственная production-сборка и Compose;
+- `tests/` — Python, API, frontend delivery и tooling tests;
+- `tools/` — генерация и проверка OpenAPI/TypeScript-контракта.
 
-## Запуск на Linux-сервере
+## Локальный запуск
 
-Из корня проекта выполните:
+Нужны Linux, Python 3.13, Node.js 22.12–24 и npm. Автоматическая подготовка устанавливает проектные зависимости и собирает frontend:
 
 ```bash
 ./scripts/prepare.sh
+./run.sh local
+```
+
+Сайт откроется на <http://127.0.0.1:8080>. `run.sh local` использует только штатную Vite-сборку `frontend/dist`; если её нет, выполните:
+
+```bash
+npm --prefix frontend ci
+npm --prefix frontend run build
+./run.sh local
+```
+
+Для разработки с Vite proxy:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements/dev.txt
+npm --prefix frontend ci
+./run.sh dev
+```
+
+Frontend будет доступен на `http://localhost:5173`, API — на `http://127.0.0.1:8000`.
+
+## Docker и GitVerse Cloud
+
+Локальный сервер и облачная площадка используют один путь: `docker/Dockerfile` собирает Vite frontend, затем FastAPI обслуживает UI и API из одного контейнера.
+
+```bash
+test -f docker/.env || cp docker/.env.example docker/.env
 ./run.sh
 ```
 
-Подготовка устанавливает поддерживаемые инструменты, синхронизирует Python- и npm-зависимости и собирает production frontend. `run.sh` собирает Docker-образ, запускает сайт и API в фоне и ждёт успешный healthcheck. В GigaIDE откройте порт `8080`, задайте видимость **Public** и выберите **Open in new tab**. Встроенный Preview не подходит: политика сайта запрещает встраивание в iframe.
-
-Пока `FUEL_HTTP_USER` и `FUEL_HTTP_PASSWORD` пустые, любой обладатель публичной ссылки может смотреть, рассчитывать, сохранять и изменять общие проекты. Для постоянного публичного сервера настройте пароль и HTTPS по [инструкции деплоя](docs/DEPLOYMENT.md).
-
-Управление запущенным контейнером:
+По умолчанию контейнер публикует порт `8080`. В GitVerse Cloud/GigaIDE откройте этот порт как Public и используйте отдельную вкладку. Если `FUEL_HTTP_USER` и `FUEL_HTTP_PASSWORD` пустые, любой обладатель ссылки может просматривать, рассчитывать и изменять общие проекты. Для постоянного публичного доступа задайте обе переменные в `docker/.env` и завершайте HTTPS на стороне площадки или reverse proxy. Не заменяйте существующий `docker/.env` примером: так можно стереть действующие credentials.
 
 ```bash
 ./run.sh status
@@ -34,73 +61,32 @@
 ./run.sh stop
 ```
 
-Контейнер работает не от root, использует один worker и хранит проекты в named volume.
+Проекты хранятся в named volume `fuel-contour_project_data`. Не выполняйте `docker compose down -v`, если данные нужно сохранить. Один JSON-store рассчитан на один контейнер и один worker.
 
-Обычный образ собирает frontend через npm, TypeScript и Vite. Если на сервере нужен поставленный portable-пакет, задайте в `docker/.env`:
-
-```dotenv
-FUEL_DOCKERFILE=docker/Dockerfile.web-prebuilt
-```
-
-Portable-вариант не заменяет полноценную frontend-сборку после изменения исходников.
-
-## Подготовка Linux и локальная разработка
-
-Проверить инструменты без установки и изменения системы:
+## Проверки
 
 ```bash
-./scripts/prepare.sh --check
-```
-
-Запуск `./scripts/prepare.sh` без `--check` может установить недостающие host-инструменты и зависимости, выполнить `npm ci` и собрать frontend; используйте его только явно на подготовляемом Linux-хосте. Скрипт не запускает приложение.
-
-Для ручной установки Python-части рекомендуются Python 3.13 и отдельная `.venv`:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements/base.txt
-./run.sh local
-```
-
-Готовый сайт откроется на `http://127.0.0.1:8080`. `run.sh local` использует `frontend/dist`, а при его отсутствии проверяет и запускает `frontend/prebuilt`.
-
-Для разработки frontend нужен Node.js >=22.12,<25 (рекомендуется ветка 22):
-
-```bash
-python -m pip install -r requirements/dev.txt
-npm --prefix frontend ci
+.venv/bin/python -m pytest -q
+.venv/bin/python tools/export_openapi.py --check
+.venv/bin/python tools/generate_frontend_types.py --check
 npm --prefix frontend test
 npm --prefix frontend run build
-./run.sh dev
+docker compose --env-file docker/.env.example -f docker/compose.yaml config --quiet
 ```
 
-Dev-режим запускает API на `127.0.0.1:8000` и Vite на `localhost:5173`; запросы `/api` проксируются в FastAPI. Скрипт читает переменные текущего процесса, а не `docker/.env`.
-
-После согласованного изменения веб-контракта:
+OpenAPI хранится в `docs/api/openapi.json`, TypeScript-типы — в `frontend/src/api/schema.d.ts`. После изменения HTTP-контракта обновляйте их только штатными генераторами:
 
 ```bash
-python tools/export_openapi.py
-python tools/generate_frontend_types.py
+.venv/bin/python tools/export_openapi.py
+.venv/bin/python tools/generate_frontend_types.py
 ```
 
-`frontend/src/api/schema.d.ts` вручную не редактируется. Бизнес-формулы остаются в общем ядре, браузер получает готовый результат API.
+Эти проверки подтверждают транспорт, хранение, сборку и согласованность контрактов. Они не доказывают математическую корректность модели или конкурсные показатели.
 
-## Что уже работает
+## Известные границы
 
-Оператор может создать и сохранить проект, редактировать матрицу заказов и брони, запустить BASE или MANDATORY_STRESS, сравнить одинаковые решения в двух сценариях, открыть результаты и выгрузить данные. Неизвестные поля плана, нестандартные источники и будущие периоды сохраняются; конфликт ревизий и устаревший результат показываются явно.
-
-Прохождение UI/API-тестов не подтверждает V01–V10, K01–K20, прогнозирование, оптимизацию или математическую корректность. Пользовательские CSV/XLSX пока не подключены к отдельному dataset contract. Один общий HTTP Basic-доступ не создаёт пользовательских аккаунтов; несколько контейнеров нельзя запускать поверх одного JSON-хранилища.
-
-## Карта проекта
-
-- `src/` — API, хранение и расчётный прототип;
-- `frontend/` — интерфейс, тесты и portable-поставка;
-- `docker/` — единый серверный Compose, Dockerfiles и пример окружения;
-- `requirements/` — Python-зависимости для runtime, разработки и browser-проверок;
-- `scripts/` — подготовка Linux-хоста;
-- `tools/` — проверки workspace, OpenAPI, frontend-типов и prebuilt;
-- `docs/`, `tasks/`, `plans/`, `prompts/` — документация, задачи и история планирования;
-- `data/`, `contracts/`, `fuel-hackathon/` — данные, контракты и исходные материалы.
-
-Описание HTTP API: [docs/api/README.md](docs/api/README.md). Архивные контрольные суммы исходной поставки: [docs/archive/DELIVERY_SHA256.txt](docs/archive/DELIVERY_SHA256.txt); их не перегенерируют после рабочих изменений.
+- модель использует 365 дней в каждом году;
+- Monte Carlo возвращает сводку без истории отдельных случайных событий;
+- пользовательские CSV/XLSX не подключены как отдельный набор расчётных данных;
+- общий HTTP Basic-доступ не создаёт пользователей и ролей;
+- автоматический оптимизатор и подтверждённая «лучшая стратегия» отсутствуют.

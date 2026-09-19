@@ -32,7 +32,7 @@ def test_gitverse_ci_runs_each_required_verification_and_cleanup() -> None:
     jobs = load_workflow()["jobs"]
 
     integrity = commands(jobs["integrity-contracts"])
-    assert "tools/workspace.py check" in integrity
+    assert "tools/workspace.py" not in integrity
     assert "tools/export_openapi.py --check" in integrity
     assert "tools/generate_frontend_types.py --check" in integrity
 
@@ -42,9 +42,11 @@ def test_gitverse_ci_runs_each_required_verification_and_cleanup() -> None:
     assert "npm --prefix frontend ci" in frontend
     assert "npm --prefix frontend test" in frontend
     assert "npm --prefix frontend run build" in frontend
-    assert "tools/verify_prebuilt.py" in frontend
+    assert "tools/verify_prebuilt.py" not in frontend
 
     serialized = WORKFLOW.read_text(encoding="utf-8")
+    assert "submodules:" not in serialized
+    assert "prebuilt" not in serialized
     assert "docker compose" not in serialized
     assert "playwright" not in serialized.lower()
     assert "deployment_smoke.py" not in serialized

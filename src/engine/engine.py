@@ -154,7 +154,7 @@ class SimulationEngine:
             "scenario_id": scenario_id,
             "plan_id": plan_id,
             "units": {"fuel": "t", "currency": "mln_units"},
-            "assumptions_reference": "docs/CASE_RULES.md",
+            "assumptions_reference": "docs/MODEL.md",
             "yearly_balance": yearly_balance_dicts,
             "source_schedule": source_schedule_dicts,
             "inventory_trace": inventory_trace_dicts,

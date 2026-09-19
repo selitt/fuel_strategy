@@ -1,0 +1,31 @@
+.strategy-summary {padding:20px; min-width:0}
+.strategy-summary .panel-heading {height:auto;min-height:0;padding:0; margin-bottom:10px;align-items:start;gap:12px}
+.strategy-summary h2 {font-size:18px;margin:0 0 6px}
+.strategy-summary .panel-heading p,.strategy-footnote {color:var(--muted);font-size:12px;line-height:1.6;margin:0}
+.strategy-freshness {font-size:12px;margin:8px 0 14px;color:var(--muted)}
+.strategy-scenarios {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.strategy-pair {grid-template-columns:repeat(2,minmax(0,1fr))}
+.strategy-scenario {min-width:0;border:1px solid var(--border);border-radius:6px;padding:14px;background:var(--surface)}
+.strategy-scenario-heading {display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.strategy-scenario h3 {font-size:13px;margin:0}
+.strategy-cost {font-size:21px;font-variant-numeric:tabular-nums}
+.strategy-cost small {font-size:11px;color:var(--muted)}
+.strategy-verdict {font-size:13px;margin:10px 0;color:var(--muted)}
+.strategy-violations .strategy-verdict,.strategy-attention {color:#edbd79}
+.strategy-feasible .strategy-verdict {color:#8dcab1}
+.strategy-table-wrap {overflow-x:auto;margin-top:12px}
+.strategy-years {width:100%;border-collapse:collapse;min-width:510px;font-size:12px;font-variant-numeric:tabular-nums}
+.strategy-years th,.strategy-years td {padding:9px 7px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap}
+.strategy-years th:first-child {text-align:left;font-weight:400;white-space:normal;min-width:125px}
+.strategy-years thead th {color:var(--muted);font-weight:400}
+.strategy-years tr:last-child th,.strategy-years tr:last-child td {border-bottom:0}
+.strategy-footnote {margin-top:12px}
+.operator-guide {font-size:13px;line-height:1.6;color:var(--muted);margin:0;padding:4px 0}
+@media(max-width:1050px){.strategy-pair{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.strategy-summary{padding:14px}.strategy-summary .panel-heading{display:block}.strategy-summary .panel-heading>.text-button{margin-top:8px}.strategy-scenario{padding:10px}.strategy-cost{font-size:19px}.strategy-summary h2{font-size:17px}.strategy-footnote{font-size:11px}}
+.strategy-checks {font-size:12px;line-height:1.6;color:var(--muted);margin:8px 0}
+.strategy-checks summary {cursor:pointer;color:#edbd79}
+.strategy-checks ul {padding-left:20px}
+.strategy-checks li {margin:7px 0}
+.strategy-scroll-hint {display:none;margin:8px 0 0;color:var(--muted);font-size:11px}
+@media(max-width:600px){.strategy-scroll-hint{display:block}}

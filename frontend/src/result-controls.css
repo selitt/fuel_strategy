@@ -1,0 +1,213 @@
+.result-panel .service-values > div {
+  align-items: baseline;
+  margin: 4px 0;
+}
+
+.result-panel .service-values > div > span,
+.result-panel .service-values > small,
+.result-panel .chart-mode > button,
+.result-panel .daily-detail-switch,
+.result-panel .daily-legend,
+.result-panel .plot-legend,
+.result-panel .timeline-control-heading,
+.result-panel .timeline-control-action,
+.result-panel .timeline-year-scale,
+.result-panel .timeline-annual-label,
+.result-panel .result-numbers > div > span,
+.result-panel .result-numbers strong > small,
+.result-panel .comparison-caption,
+.result-panel .check-preview > p,
+.result-panel .check-preview b,
+.result-panel .check-preview p > small {
+  font-size: 13px;
+}
+
+.result-panel .result-metrics {
+  height: auto;
+  min-height: 82px;
+}
+
+.result-panel .daily-axis-label,
+.result-panel .axis-label {
+  font-size: 13px;
+}
+
+.result-panel .result-chart-area {
+  min-height: 285px;
+  padding-bottom: 7px;
+}
+
+.result-panel .daily-chart,
+.result-panel .daily-chart-frame,
+.result-panel .daily-chart-svg {
+  min-height: 245px;
+}
+
+.cost-year-selector {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 2px;
+  margin: 0 17px 7px;
+}
+
+.cost-year-selector button {
+  min-height: 30px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: #111516;
+  color: var(--muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-year-selector button[aria-pressed="true"] {
+  border-color: #8e9995;
+  background: #303536;
+  color: var(--text);
+}
+
+.result-disclosure {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--border);
+}
+
+.result-disclosure > summary {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 17px;
+  color: #cbd2cf;
+  cursor: pointer;
+  font-size: 13px;
+  list-style: none;
+}
+
+.result-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.result-disclosure > summary > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.result-disclosure[open] > summary > svg:last-child {
+  transform: rotate(90deg);
+}
+
+.result-disclosure .compact-checks {
+  padding: 0 17px 10px;
+}
+
+.result-disclosure .compact-checks > .text-button {
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+.risk-entry > div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 17px 12px;
+}
+
+.risk-entry p {
+  flex: 1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.risk-entry .button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.risk-panel {
+  font-size: 13px;
+}
+
+.risk-toolbar > div {
+  display: grid;
+  gap: 4px;
+}
+
+.risk-toolbar strong {
+  font-size: 16px;
+}
+
+.risk-toolbar span,
+.risk-explanation,
+.risk-panel .help,
+.risk-method summary,
+.risk-method-body p {
+  font-size: 13px;
+}
+
+.risk-explanation,
+.risk-method-body p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.risk-summary th,
+.risk-summary td,
+.risk-raw th,
+.risk-raw td {
+  font-size: 13px;
+}
+
+.risk-summary th:first-child,
+.risk-raw th:first-child {
+  max-width: 480px;
+}
+
+.risk-raw {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.risk-raw th,
+.risk-raw td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+
+.risk-raw th:first-child {
+  text-align: left;
+}
+
+.risk-method {
+  margin-top: 16px;
+  border: 1px solid var(--border);
+}
+
+.risk-method > summary {
+  padding: 10px 12px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.risk-method-body {
+  padding: 0 12px 12px;
+}
+
+@media (max-width: 760px) {
+  .cost-year-selector {
+    margin-inline: 14px;
+  }
+
+  .risk-entry > div {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .risk-entry .button {
+    align-self: flex-start;
+  }
+}

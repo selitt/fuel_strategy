@@ -1,4 +1,4 @@
-# Local/generated files only. Keep source plans and evidence under version control.
+# Local and generated files.
 .venv/
 venv/
 node_modules/

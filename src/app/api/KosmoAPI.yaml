@@ -265,7 +265,7 @@ components:
           - additionalProperties: true
             type: object
           title: Assumptions Reference
-          default: docs/CASE_RULES.md
+          default: docs/MODEL.md
         yearly_balance:
           items:
             $ref: '#/components/schemas/YearlyBalanceDTO'

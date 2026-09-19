@@ -130,6 +130,31 @@ class DependBootstrapContractTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("src.app.web:create_web_app", result.stdout)
 
+    def test_local_run_requires_the_vite_dist_without_portable_fallback(self):
+        script = self._read_required("run.sh")
+        self.assertNotIn("prebuilt", script)
+        self.assertNotIn("verify_prebuilt", script)
+
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            selected = root / "selected-python"
+            selected.write_text("#!/bin/sh\nexit 99\n")
+            selected.chmod(0o755)
+            env = {**os.environ, "PYTHON": str(selected)}
+            env.pop("FUEL_FRONTEND_DIR", None)
+            result = subprocess.run(
+                ["bash", str(root / "run.sh"), "local"],
+                cwd=root,
+                env=env,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("npm --prefix frontend run build", result.stderr)
+
     def test_run_starts_public_compose_and_waits_for_health(self):
         import shutil
         with tempfile.TemporaryDirectory() as directory:

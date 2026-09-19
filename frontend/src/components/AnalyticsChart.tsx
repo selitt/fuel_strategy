@@ -103,7 +103,7 @@ export function AnalyticsChart({ years, series, unit, selected, onSelect }: {
  </div>;
 }
 export const costKeys = ['procurement', 'reservation', 'holding', 'capex', 'opex'] as const;
-export const costNames = ['Закупка', 'Бронь', 'Хранение', 'CAPEX', 'OPEX'];
+export const costNames = ['Закупка топлива', 'Резерв мощности', 'Хранение', 'Инвестиции', 'Эксплуатация'];
 export const costColors = [palette.blue, palette.purple, palette.green, palette.amber, palette.muted];
 export function FinanceChart({ rows, selected, onSelect }: {
     rows: Finance[];
