@@ -53,7 +53,7 @@ def test_health_and_metadata_do_not_claim_verified_model(client):
     assert health.json()["engine"]["status"] == "prototype"
     assert health.json()["engine"]["model_verified"] is False
     meta = client.get("/api/meta").json()
-    assert meta["plan_import_formats"] == ["json"]
+    assert meta["plan_import_formats"] == ["json", "csv", "xlsx", "xls"]
     assert meta["background_jobs"] is False
     assert meta["engine"]["limitations"]
 

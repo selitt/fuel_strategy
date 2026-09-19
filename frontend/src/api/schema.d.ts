@@ -17,7 +17,7 @@ export interface schemas {
   "HealthDTO": { "status"?: "ok"; "api_version": string; "engine": schemas["EngineInfoDTO"]; };
   "InventoryPolicyDTO": { "initial_inventory_t"?: number; [key: string]: unknown; };
   "InvestmentDecisionDTO": { "investment_id": string; "year": number; [key: string]: unknown; };
-  "MetaDTO": { "api_version": string; "engine": schemas["EngineInfoDTO"]; "plan_import_formats": Array<"json">; "result_export_formats": Array<"json" | "csv">; "max_upload_bytes": number; "max_request_bytes": number; "background_jobs"?: boolean; "workspace_mode"?: "single_shared_local_workspace"; "warnings": Array<string>; };
+  "MetaDTO": { "api_version": string; "engine": schemas["EngineInfoDTO"]; "plan_import_formats": Array<"json" | "csv" | "xlsx" | "xls">; "result_export_formats": Array<"json" | "csv">; "max_upload_bytes": number; "max_request_bytes": number; "background_jobs"?: boolean; "workspace_mode"?: "single_shared_local_workspace"; "warnings": Array<string>; };
   "ParticipantPlanDTO": { "plan_id"?: string; "scenario_id"?: string; "decisions": schemas["PlanDecisionsDTO"]; [key: string]: unknown; };
   "PlanDecisionsDTO": { "supply_orders"?: Array<schemas["SupplyOrderDTO"]>; "capacity_reservations"?: Array<schemas["CapacityReservationDTO"]>; "investments"?: Array<schemas["InvestmentDecisionDTO"]>; "inventory_policy"?: schemas["InventoryPolicyDTO"]; [key: string]: unknown; };
   "PlanValidationDTO": { "validation_scope"?: "structure_only"; "model_checked"?: false; "plan": schemas["ParticipantPlanDTO"]; "normalized": boolean; "warnings": Array<string>; };

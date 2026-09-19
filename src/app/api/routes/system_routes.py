@@ -38,14 +38,14 @@ def meta(request: Request, settings: Settings = Depends(get_settings)):
     return MetaDTO(
         api_version=request.app.version,
         engine=request.app.state.engine_info,
-        plan_import_formats=["json"],
+        plan_import_formats=["json", "csv", "xlsx", "xls"],
         result_export_formats=["json", "csv"],
         max_upload_bytes=settings.max_upload_bytes,
         max_request_bytes=settings.max_request_bytes,
         warnings=[
             "Общий локальный workspace без регистрации и разграничения доступа; не публикуйте API без защиты.",
             "Шаблон и defaults DTO унаследованы из 6.zip; это не оптимальный или подтверждённый план.",
-            "Импорт произвольного CSV/XLSX в математическую модель ещё не подключён.",
+            "Табличный импорт создаёт план решений; справочники CASE_INPUT из data/ остаются неизменными.",
         ],
     )
 

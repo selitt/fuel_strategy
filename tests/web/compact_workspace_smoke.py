@@ -13,7 +13,7 @@ async def main():
     parser.add_argument('--site', type=Path, default=ROOT/'frontend/dist')
     parser.add_argument('--artifacts', type=Path, default=ROOT/'evidence/browser')
     args = parser.parse_args(); out = args.artifacts.resolve(); out.mkdir(parents=True, exist_ok=True)
-    report = {'checks': [], 'errors': []}; ordinary = []; risk_requests = []
+    report = {'checks': [], 'errors': []}; ordinary = []; risk_requests = []; risk_responses = []
     def check(name, condition=True):
         assert condition, name
         report['checks'].append(name); print('PASS', name, flush=True)
@@ -21,8 +21,8 @@ async def main():
         sock.bind(('127.0.0.1', 0)); port = sock.getsockname()[1]
     url = f'http://127.0.0.1:{port}'
     with tempfile.TemporaryDirectory(dir=out) as storage, (out/'server.log').open('w') as log:
-        proc = subprocess.Popen([sys.executable, '-m', 'uvicorn', 'src.app.web:create_web_app', '--factory', '--host', '127.0.0.1', '--port', str(port)], cwd=ROOT,
-            env={**os.environ, 'FUEL_DATA_DIR':storage, 'FUEL_FRONTEND_DIR':str(args.site.resolve()), 'FUEL_HTTP_USER':'', 'FUEL_HTTP_PASSWORD':''}, stdout=log, stderr=log)
+        proc = subprocess.Popen([sys.executable, '-m', 'uvicorn', 'src.app.web:create_web_app', '--factory', '--host', '127.0.0.1', '--port', str(port), '--no-proxy-headers'], cwd=ROOT,
+            env={**os.environ, 'FUEL_DATA_DIR':storage, 'FUEL_FRONTEND_DIR':str(args.site.resolve()), 'FUEL_HTTP_USER':'', 'FUEL_HTTP_PASSWORD':'', 'FUEL_PUBLIC_MODE':'0', 'FUEL_ALLOW_UNAUTHENTICATED_LOCAL':'1', 'FUEL_BIND_HOST':'127.0.0.1', 'FUEL_PUBLIC_ORIGIN':url}, stdout=log, stderr=log)
         try:
             async with httpx.AsyncClient(base_url=url, timeout=120) as client:
                 for _ in range(100):
@@ -33,7 +33,7 @@ async def main():
                 else: raise AssertionError('Local API did not start')
                 async with async_playwright() as pw:
                     browser = await pw.chromium.launch()
-                    page = await browser.new_page(viewport={'width':1920,'height':1080}, accept_downloads=True)
+                    page = await browser.new_page(viewport={'width':1920,'height':900}, accept_downloads=True)
                     page.set_default_timeout(15000)
                     page.on('pageerror', lambda e: report['errors'].append(str(e)))
                     async def calc_route(route):
@@ -42,7 +42,7 @@ async def main():
                         await route.fulfill(response=response)
                     async def risk_route(route):
                         risk_requests.append(route.request.post_data_json)
-                        response = await route.fetch(timeout=120000); await route.fulfill(response=response)
+                        response = await route.fetch(timeout=120000); risk_responses.append(await response.json()); await route.fulfill(response=response)
                     async def preparatory_template(route):
                         response = await route.fetch(); data = await response.json()
                         # Test input: a preserved preparation-year decision must not relabel model start.
@@ -60,7 +60,17 @@ async def main():
                     result = ordinary[-1]['result']
                     check('Real API supplies complete daily horizon', len(result['inventory_trace']) == 2190)
                     check('No automatic risk or project writes', not risk_requests and (await client.get('/api/projects')).json()['total'] == 0)
-                    check('Collapsed summary keeps all six annual columns', await page.locator('.strategy-years thead th').count() == 7)
+                    await page.evaluate('document.fonts.ready')
+                    check('Local Golos Text loaded for Cyrillic',await page.evaluate('document.fonts.check(\'400 14px "Golos Text"\',"Поставки") && document.fonts.check(\'600 14px "Golos Text"\',"Поставки")'))
+                    await page.get_by_role('button',name='Показатели по годам →',exact=True).first.click()
+                    check('Annual details keep all six columns in dialog',await page.get_by_role('dialog').locator('.strategy-years thead th').count()==7)
+                    await page.get_by_role('dialog').get_by_label('Закрыть окно',exact=True).click()
+                    await page.get_by_role('button',name='Проверить сроки ⚠',exact=True).click()
+                    await expect(page.get_by_role('dialog')).to_contain_text('до 2038')
+                    await page.keyboard.press('Escape')
+                    check('Long investment warning opens with keyboard accessible dialog',await page.get_by_role('dialog').count()==0)
+                    await page.screenshot(path=str(out/'initial-900.png'),full_page=True)
+                    check('Default investments and warning fit 1920x900',await page.evaluate('document.documentElement.scrollHeight<=innerHeight+1'))
                     formatted_cost = await page.evaluate('(x)=>new Intl.NumberFormat("ru-RU",{maximumFractionDigits:2}).format(x)', result['total_cost_mln'])
                     await expect(page.locator('.strategy-cost')).to_contain_text(formatted_cost)
                     check('Total cost comes from model result')
@@ -71,13 +81,29 @@ async def main():
                     await expect(page.locator('.strategy-freshness')).to_contain_text('Результат текущих настроек')
                     await expect(page.locator('.strategy-scenario').nth(1)).to_contain_text('STRESS')
                     check('Both scenarios have independent whole-strategy summaries')
+                    await page.screenshot(path=str(out/'both.png'),full_page=True)
                     check('Both scenarios fit the desktop workspace',await page.evaluate('document.documentElement.scrollHeight<=innerHeight+1'))
                     await page.screenshot(path=str(out/'both.png'),full_page=True)
-                    await page.locator('.risk-entry > summary').click()
+                    await page.get_by_test_id('risk-disclosure').click()
                     check('Opening risk explanation does not run the model', not risk_requests)
                     await page.get_by_test_id('run-risk-button').click()
                     await expect(page.locator('.risk-summary').first.locator('thead th')).to_have_count(3, timeout=120000)
                     check('Explicit risks calculate both scenarios', len(risk_requests) == 2 and {r['scenario_id'] for r in risk_requests} == {'BASE','MANDATORY_STRESS'})
+                    await expect(page.get_by_test_id('risk-histogram')).to_have_count(2)
+                    for i,response in enumerate(risk_responses):
+                        risk=response['risk_register'][0]
+                        assert len(risk['shortage_samples_t'])==100
+                        bars=page.get_by_test_id('risk-histogram').nth(i).locator('.risk-bin')
+                        await expect(bars).to_have_count(len(risk['shortage_histogram']))
+                        for j,bin_ in enumerate(risk['shortage_histogram']):
+                            await expect(bars.nth(j)).to_have_attribute('aria-label',__import__('re').compile(f": {bin_['count']} из 100 прогонов"))
+                    check('Risk histograms show every real API bin for both 100-run samples')
+                    await page.locator('.risk-distribution-details > summary').click()
+                    await page.get_by_test_id('risk-histogram').first.locator('.risk-bin').first.focus()
+                    await expect(page.get_by_test_id('risk-histogram').first.locator('.risk-bin-detail')).to_contain_text('из 100 прогонов')
+                    check('Histogram frequencies are available through keyboard focus')
+                    await page.screenshot(path=str(out/'monte-carlo.png'),full_page=True)
+
                     await page.get_by_role('dialog').get_by_label('Закрыть окно', exact=True).click()
                     await page.get_by_label('Название плана', exact=True).fill('Strategy UX browser check')
                     await page.locator('.calculate-button').click()
@@ -118,12 +144,13 @@ async def main():
                     check('Copied strategy can be calculated and compared')
                     await page.screenshot(path=str(out/'comparison.png'), full_page=True)
                     await page.get_by_label('Закрыть окно', exact=True).click()
-                    for width,height in [(1920,1080)]:
+                    for width,height in [(1920,900),(1920,1080)]:
                         await page.set_viewport_size({'width':width,'height':height})
                         await page.wait_for_timeout(200)
+                        check(f'No vertical page overflow at {width}x{height}',await page.evaluate('document.documentElement.scrollHeight<=innerHeight+1'))
                         check(f'No page overflow at {width}', await page.evaluate('document.documentElement.scrollWidth<=innerWidth'))
-                        check(f'Summary heading does not overlap status at {width}', await page.locator('.strategy-summary').evaluate("el=>{const a=el.querySelector('.panel-heading'),b=el.querySelector('.strategy-freshness');return Math.max(a.getBoundingClientRect().bottom,...[...a.querySelectorAll('*')].map(n=>n.getBoundingClientRect().bottom))<=b.getBoundingClientRect().top}"))
-                        await page.screenshot(path=str(out/f'view-{width}.png'), full_page=True)
+                        check(f'Summary heading does not overlap status at {width}', await page.locator('.strategy-summary').evaluate("el=>el.querySelector('.panel-heading').getBoundingClientRect().bottom<=el.querySelector('.strategy-freshness').getBoundingClientRect().top"))
+                        await page.screenshot(path=str(out/f'view-{width}-{height}.png'), full_page=True)
                     await page.emulate_media(reduced_motion='reduce')
                     await page.keyboard.press('Tab')
                     check('Keyboard focus is visible', await page.evaluate('document.activeElement!==document.body'))
@@ -153,10 +180,14 @@ async def exercise(page, client, ordinary, check, out):
     await page.get_by_role('button',name='Другие записи →',exact=True).click()
     check('Advanced dialog does not repeat ordinary quantities',await page.get_by_role('dialog').locator('input[type=number]').count()==0)
     await page.get_by_role('dialog').get_by_label('Закрыть окно',exact=True).click()
+    stable_top=await page.locator('.settings-column').evaluate('e=>e.getBoundingClientRect().top')
     before_invalid=len(ordinary);await order.fill('')
     await expect(page.locator('.strategy-freshness')).to_contain_text('Исправьте ошибки ввода')
     await asyncio.sleep(.25);check('Invalid input blocks computation instead of claiming success', len(ordinary)==before_invalid)
+    check('Invalid status does not move workspace',await page.locator('.settings-column').evaluate('e=>e.getBoundingClientRect().top')==stable_top)
     await order.fill('123');await expect(page.locator('.strategy-freshness')).to_contain_text('Результат текущих настроек')
+    check('Restored result does not move workspace',await page.locator('.settings-column').evaluate('e=>e.getBoundingClientRect().top')==stable_top)
+    check('Violation details are visible in summary',await page.locator('.strategy-violation-preview li').count()>0)
     before=len(ordinary);summary=await page.locator('.strategy-scenarios').inner_text()
     slider=page.get_by_role('slider',name='День горизонта',exact=True)
     await slider.focus();await slider.press('End');await expect(slider).to_have_value('2190')
@@ -164,7 +195,9 @@ async def exercise(page, client, ordinary, check, out):
     await slider.evaluate("""el=>{Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(el,'365');el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));}""")
     await slider.focus();await slider.press('ArrowRight');await expect(slider).to_have_attribute('aria-valuetext','2036, день 1')
     check('Day navigation crosses year boundary correctly')
+    geometry=await page.evaluate("JSON.stringify(['.settings-column','.supply-matrix','.result-numbers','.result-widget'].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [r.x,r.y,r.width,r.height]}))")
     await page.get_by_role('button',name='Затраты по годам',exact=True).click()
+    check('Changing chart preserves table and result geometry',geometry==await page.evaluate("JSON.stringify(['.settings-column','.supply-matrix','.result-numbers','.result-widget'].map(s=>{const r=document.querySelector(s).getBoundingClientRect();return [r.x,r.y,r.width,r.height]}))"))
     check('Annual costs have no day slider or day-details action', await slider.count()==0 and await page.get_by_test_id('timeline-details-button').count()==0)
     await page.get_by_role('group',name='Год расходов').get_by_role('button',name='2039',exact=True).click()
     await expect(page.get_by_test_id('timeline-selected-day')).to_contain_text('2039')

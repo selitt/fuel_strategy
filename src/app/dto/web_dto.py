@@ -27,7 +27,7 @@ class HealthDTO(WebDTO):
 class MetaDTO(WebDTO):
     api_version: str
     engine: EngineInfoDTO
-    plan_import_formats: list[Literal["json"]]
+    plan_import_formats: list[Literal["json", "csv", "xlsx", "xls"]]
     result_export_formats: list[Literal["json", "csv"]]
     max_upload_bytes: int
     max_request_bytes: int

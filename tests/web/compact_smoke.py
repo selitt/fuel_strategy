@@ -25,8 +25,8 @@ def main():
   if not condition:raise AssertionError(name)
   print('PASS:',name,flush=True);report['checks'].append(name)
  with tempfile.TemporaryDirectory(prefix='fuel-compact-') as temp,(out/'server.log').open('w') as log:
-  env={**os.environ,'FUEL_DATA_DIR':temp,'FUEL_FRONTEND_DIR':str(site),'FUEL_HTTP_USER':'','FUEL_HTTP_PASSWORD':''}
-  cmd=[sys.executable,'-m','uvicorn','src.app.web:create_web_app','--factory','--host','127.0.0.1','--port',str(port),'--workers','1']
+  env={**os.environ,'FUEL_DATA_DIR':temp,'FUEL_FRONTEND_DIR':str(site),'FUEL_HTTP_USER':'','FUEL_HTTP_PASSWORD':'','FUEL_PUBLIC_MODE':'0','FUEL_ALLOW_UNAUTHENTICATED_LOCAL':'1','FUEL_BIND_HOST':'127.0.0.1'}
+  cmd=[sys.executable,'-m','uvicorn','src.app.web:create_web_app','--factory','--host','127.0.0.1','--port',str(port),'--workers','1','--no-proxy-headers']
   proc=subprocess.Popen(cmd,cwd=ROOT,env=env,stdout=log,stderr=log)
   def req(method,path,**kw):return httpx.request(method,url+path,timeout=30,**kw)
   def projects():return req('GET','/api/projects').json()['items']

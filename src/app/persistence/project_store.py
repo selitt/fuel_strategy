@@ -14,8 +14,12 @@ from fastapi import HTTPException
 from pydantic import ValidationError
 
 from src.app.dto.web_dto import ProjectDTO, RunRecordDTO
-from src.app.service.json_io import InvalidJSON, dumps, loads, plan_hash
-from src.app.service.calc_service import validate_result
+from src.app.persistence.project_backup import (
+    BackupError,
+    BackupManager,
+    validate_project_document,
+)
+from src.app.service.json_io import InvalidJSON, dumps, plan_hash
 
 logger = logging.getLogger("fuel.api")
 
@@ -28,6 +32,7 @@ class ProjectStore:
     def __init__(self, directory: Path):
         self.directory = directory.resolve()
         self.lock = RLock()
+        self.backups = BackupManager(self.directory)
 
     def _path(self, project_id: UUID) -> Path:
         return self.directory / f"{UUID(str(project_id))}.json"
@@ -38,15 +43,7 @@ class ProjectStore:
             raise HTTPException(status_code=500, detail="Файл проекта не может быть символической ссылкой")
         try:
             raw = path.read_bytes()
-            project = ProjectDTO.model_validate(loads(raw))
-            if project.project_id != project_id:
-                raise ValueError("Project ID mismatch")
-            plan_hash(project.plan)
-            if project.last_run is not None:
-                validate_result(project.last_run.result)
-                if project.last_run.input_hash != plan_hash(project.last_run.plan_snapshot):
-                    raise ValueError("Saved input hash mismatch")
-            return project
+            return validate_project_document(raw, project_id)
         except FileNotFoundError as exc:
             raise HTTPException(status_code=404, detail="Проект не найден") from exc
         except (InvalidJSON, ValidationError, ValueError) as exc:
@@ -79,6 +76,16 @@ class ProjectStore:
         if project.revision != expected:
             raise HTTPException(status_code=409, detail="Проект изменился. Загрузите актуальную ревизию перед повтором операции")
 
+    def _backup(self, project_id: UUID) -> None:
+        try:
+            self.backups.create(project_id, self._path(project_id))
+        except BackupError as exc:
+            logger.exception("Cannot back up project %s", project_id)
+            raise HTTPException(
+                status_code=500,
+                detail="Не удалось создать резервную версию; проект не изменён",
+            ) from exc
+
     def create(self, name: str, plan, *, last_run: RunRecordDTO | None = None) -> ProjectDTO:
         with self.lock:
             timestamp = now()
@@ -106,6 +113,7 @@ class ProjectStore:
         with self.lock:
             project = self._read(project_id)
             self.require_revision(project, expected_revision)
+            self._backup(project_id)
             project.name = name
             project.plan = plan.model_copy(deep=True)
             project.revision += 1
@@ -119,6 +127,7 @@ class ProjectStore:
             self.require_revision(project, expected_revision)
             if plan_hash(project.plan) != run.input_hash:
                 raise HTTPException(status_code=409, detail="Результат относится к другим входным данным")
+            self._backup(project_id)
             project.last_run = run
             project.revision += 1
             project.updated_at = now()
@@ -129,6 +138,7 @@ class ProjectStore:
         with self.lock:
             project = self._read(project_id)
             self.require_revision(project, expected_revision)
+            self._backup(project_id)
             try:
                 self._path(project_id).unlink()
             except OSError as exc:

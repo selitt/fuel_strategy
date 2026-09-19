@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 // API stays same-origin in all environments. Never bake a machine address into JS.
 export default defineConfig({
+  base: './',
   server: {
     port: 5173,
     strictPort: true,

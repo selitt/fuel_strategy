@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from urllib.parse import urljoin
 
 import httpx
 
@@ -64,8 +65,11 @@ def main() -> None:
                         html = client.get('/')
                         verify(f'Process {iteration}: HTML served by bash run.sh local', html.status_code == 200 and '<div id="root"' in html.text)
                         if iteration == 0:
-                            assets = re.findall(r'(?:src|href)="(/assets/[^\"]+)"', html.text)
-                            verify('Production assets served through native HTTP', bool(assets) and all(client.get(a).status_code == 200 for a in assets))
+                            assets = re.findall(r'(?:src|href)="([^\"]*assets/[^\"]+)"', html.text)
+                            verify(
+                                'Production assets served through native HTTP',
+                                bool(assets) and all(client.get(urljoin('/', asset)).status_code == 200 for asset in assets),
+                            )
                             template = client.get('/api/calc/template').json()
                             created = client.post('/api/projects', json={'name': 'Restart smoke', 'plan': template})
                             verify('Project created through native HTTP', created.status_code in (200, 201))

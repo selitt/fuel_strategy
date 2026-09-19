@@ -45,6 +45,16 @@ compose() {
 
 run_public() {
   select_compose_env
+  select_python
+  if ! "$PYTHON" "$ROOT_DIR/tools/configure_access.py" \
+      --compose-file "$COMPOSE_FILE" --source-env "$COMPOSE_ENV" \
+      --target-env "$ROOT_DIR/docker/.env"; then
+    printf 'ERROR: public access is not configured; Docker was not started.\n' >&2
+    return 2
+  fi
+  if [[ -f "$ROOT_DIR/docker/.env" ]]; then
+    COMPOSE_ENV="$ROOT_DIR/docker/.env"
+  fi
   export FUEL_BIND_HOST="${FUEL_BIND_HOST:-0.0.0.0}"
   export FUEL_WEB_PORT="${FUEL_WEB_PORT:-8080}"
   if ! compose up --build -d --wait; then
@@ -58,6 +68,9 @@ run_public() {
 
 run_local() {
   select_python
+  export FUEL_PUBLIC_MODE=0
+  export FUEL_ALLOW_UNAUTHENTICATED_LOCAL="${FUEL_ALLOW_UNAUTHENTICATED_LOCAL:-1}"
+  export FUEL_BIND_HOST="${FUEL_BIND_HOST:-127.0.0.1}"
   if [[ -z "${FUEL_FRONTEND_DIR:-}" ]]; then
     if [[ ! -f frontend/dist/index.html ]]; then
       printf 'ERROR: frontend/dist is missing. Run npm --prefix frontend run build.\n' >&2
@@ -66,7 +79,8 @@ run_local() {
     export FUEL_FRONTEND_DIR="$PWD/frontend/dist"
   fi
   exec "$PYTHON" -m uvicorn src.app.web:create_web_app --factory \
-    --host "${FUEL_BIND_HOST:-127.0.0.1}" --port "${FUEL_WEB_PORT:-8080}" --workers 1
+    --host "$FUEL_BIND_HOST" --port "${FUEL_WEB_PORT:-8080}" --workers 1 \
+    --no-proxy-headers
 }
 
 run_dev() {

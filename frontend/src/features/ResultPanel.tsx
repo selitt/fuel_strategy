@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Workspace } from '../state/useWorkspace';
 import type { Result } from '../api/types';
-import { AnalyticsChart, FinanceChart, ServiceRing, palette } from '../components/AnalyticsChart';
+import { AnalyticsChart, FinanceChart, palette } from '../components/AnalyticsChart';
 import type { Trace } from '../components/AnalyticsChart';
 import { DailyChart } from '../components/DailyChart';
 import { Icon } from '../components/Icon';
@@ -37,6 +37,7 @@ export function ResultPanel({ w, onDetails, onRisk }: {
   const [selectedModelDay, setSelectedModelDay] = useState(1);
   const [timelineView, setTimelineView] = useState<'overview' | 'detail'>('overview');
   const [dayDetailsOpen, setDayDetailsOpen] = useState(false);
+  const [infoModal, setInfoModal] = useState<'checks' | 'risk' | null>(null);
   const [detailSide, setDetailSide] = useState<'primary' | 'other'>('primary');
   const result = w.displayResult;
   if (!result)
@@ -73,13 +74,28 @@ export function ResultPanel({ w, onDetails, onRisk }: {
 
   return <section className="result-panel panel" aria-labelledby="result-title">
     <div className="panel-heading"><h2 id="result-title">{other ? 'Сравнение сценариев' : 'Результат'}</h2><strong className="timeline-selected-day" data-testid="timeline-selected-day">{chart === 'inventory' ? modelDayLabel(selectedModelDay) : `Расходы за ${year}`}</strong></div>
-    <div className="result-metrics"><ServiceRing total={row?.service_level_total} critical={row?.service_level_critical}/><div className="service-values"><div><span><i className="dot blue"/>Обеспечение общего спроса</span><strong data-testid="service-total">{percent(row?.service_level_total)}</strong></div><div><span><i className="dot green"/>Обеспечение критического спроса</span><strong>{percent(row?.service_level_critical)}</strong></div>{otherRow && <small>Второй сценарий: {percent(otherRow.service_level_total)} / {percent(otherRow.service_level_critical)}</small>}</div></div>
-    <div className="chart-mode" aria-label="Показатель графика"><button type="button" aria-pressed={chart === 'inventory'} onClick={() => setChart('inventory')}>Запас по дням</button><button type="button" aria-pressed={chart === 'cost'} onClick={() => setChart('cost')}>Затраты по годам</button></div>
-    {chart === 'cost' && <div className="cost-year-selector" data-testid="cost-year-selector" role="group" aria-label="Год расходов">{years.map(value => <button type="button" key={value} aria-pressed={value === year} onClick={() => selectYear(value)}>{value}</button>)}</div>}
-    {chart === 'inventory' && <div className="timeline-view-toggle" data-testid="timeline-view-toggle" aria-label="Масштаб дневного графика">
-      <button type="button" aria-pressed={timelineView === 'overview'} onClick={() => setTimelineView('overview')}>Весь период</button>
-      <button type="button" aria-pressed={timelineView === 'detail'} onClick={() => setTimelineView('detail')}>Подробнее · 90 дней</button>
-    </div>}
+    <div className="result-metrics result-metrics-compact">
+      <strong className="service-year">Обеспечение спроса за {year}</strong>
+      <div className="service-scenario">
+        <b>{scenarioCode(result)}</b>
+        <span>Общий спрос <strong data-testid="service-total">{percent(row?.service_level_total)}</strong></span>
+        <span>Критический спрос <strong>{percent(row?.service_level_critical)}</strong></span>
+      </div>
+      {otherRow && <div className="service-scenario">
+        <b>{scenarioCode(other!)}</b>
+        <span>Общий спрос <strong>{percent(otherRow.service_level_total)}</strong></span>
+        <span>Критический спрос <strong>{percent(otherRow.service_level_critical)}</strong></span>
+      </div>}
+    </div>
+    <div className={`result-widget result-widget-${chart}`} data-testid="result-widget">
+    <div className="result-toolbar">
+      <div className="chart-mode" aria-label="Показатель графика"><button type="button" aria-pressed={chart === 'inventory'} onClick={() => setChart('inventory')}>Запас по дням</button><button type="button" aria-pressed={chart === 'cost'} onClick={() => setChart('cost')}>Затраты по годам</button></div>
+      {chart === 'cost' && <div className="cost-year-selector" data-testid="cost-year-selector" role="group" aria-label="Год расходов">{years.map(value => <button type="button" key={value} aria-pressed={value === year} onClick={() => selectYear(value)}>{value}</button>)}</div>}
+      {chart === 'inventory' && <div className="timeline-view-toggle" data-testid="timeline-view-toggle" aria-label="Масштаб дневного графика">
+        <button type="button" aria-pressed={timelineView === 'overview'} onClick={() => setTimelineView('overview')}>Весь период</button>
+        <button type="button" aria-pressed={timelineView === 'detail'} onClick={() => setTimelineView('detail')}>Подробнее · 90 дней</button>
+      </div>}
+    </div>
     {w.displayOther && !other && <p className="comparison-caption">Второй сценарий использует другие единицы. Сопоставление скрыто.</p>}
     {other && chart === 'inventory' && <div className="daily-detail-switch" aria-label="Сценарий дневных событий">
       <span>Поступления и дефицит:</span>
@@ -114,13 +130,26 @@ export function ResultPanel({ w, onDetails, onRisk }: {
       })}</div>
       <div className="timeline-control-action"><span>День 1</span><button type="button" className="text-button" data-testid="timeline-details-button" onClick={() => setDayDetailsOpen(true)}>Подробнее о выбранном дне</button><span>День {MODEL_HORIZON_DAYS}</span></div>
     </div>}
+    </div>
     {!row && <p className="inline-warning">Нет данных за {year}</p>}
     <div className="timeline-annual-label">За год <strong>{year}</strong></div>
     <div className="result-numbers"><div><span>Дефицит</span><strong className={(row?.shortage_t || 0) > 0 ? 'warning-text' : ''}>{number(row?.shortage_t)}<small> т</small></strong></div><div><span>Запас на конец</span><strong>{number(row?.closing_inventory_t)}<small> т</small></strong></div><div><span>Расходы за год</span><strong>{number(financial?.total)}<small> млн у.е.</small></strong></div></div>
-    <details className="result-disclosure" data-testid="result-checks"><summary><span><Icon name={failed.length ? 'alert' : 'check'} size={15}/>{checks.length ? (failed.length ? `${failed.length} нарушений за горизонт` : 'Все проверки модели пройдены') : 'Проверки не переданы'}</span><Icon name="right" size={15}/></summary>
-      <div className="compact-checks"><div className="check-preview">{yearFails.slice(0, 2).map((check, checkIndex) => <p key={checkIndex} title={check.detail}><b>{check.year}</b><span>{checkLabels[check.constraint_id] || check.constraint_id}</span><small>{check.excess == null ? '' : number(check.excess)}</small></p>)}</div><button className="text-button" type="button" onClick={onDetails}>Все проверки и значения<Icon name="right" size={12}/></button></div>
-    </details>
-    <details className="result-disclosure risk-entry" data-testid="risk-disclosure"><summary>Проверка сбоев поставок</summary><div><p>Модель выполнит 100 случайных прогонов отказов поставок и покажет, как часто нет дефицита, нарушений начального резерва и переполнения.</p><Button data-testid="run-risk-button" disabled={w.riskBusy || !!w.busy} onClick={onRisk}>Запустить проверку сбоев</Button></div></details>
+    <div className="result-actions">
+      <button className="result-action" type="button" data-testid="result-checks" onClick={() => setInfoModal('checks')}><Icon name={failed.length ? 'alert' : 'check'} size={15}/><span>{scenarioCode(result)} · {checks.length ? (failed.length ? `${failed.length} нарушений за горизонт` : 'Все проверки модели пройдены') : 'Проверки не переданы'}</span><Icon name="right" size={15}/></button>
+      <button className="result-action risk-entry" type="button" data-testid="risk-disclosure" onClick={() => setInfoModal('risk')}><span>Проверка сбоев поставок</span><Icon name="right" size={15}/></button>
+    </div>
+    {infoModal === 'checks' && <Modal title={`Проверки модели · ${scenarioCode(result)}`} wide onClose={() => setInfoModal(null)}>
+      <div className="compact-checks">
+        {failed.length ? <div className="check-preview">{failed.map((check, checkIndex) => <p key={checkIndex} title={check.detail}><b>{check.year}</b><span>{checkLabels[check.constraint_id] || check.constraint_id}</span><small>{check.excess == null ? '' : number(check.excess)}</small></p>)}</div> : <p>{checks.length ? 'Нарушений в переданных проверках нет.' : 'Модель не передала проверки для этого результата.'}</p>}
+        {yearFails.length > 0 && <p className="help">За выбранный {year} год: {yearFails.length}.</p>}
+        <div className="modal-actions"><Button onClick={() => { setInfoModal(null); onDetails(); }}>Все показатели и значения</Button></div>
+      </div>
+    </Modal>}
+    {infoModal === 'risk' && <Modal title="Проверка сбоев поставок" onClose={() => setInfoModal(null)}>
+      <p>Модель выполнит 100 случайных прогонов отказов поставок и покажет, как часто нет дефицита, нарушений начального резерва и переполнения.</p>
+      <p className="help">Это дополнительная оценка устойчивости текущего плана. Она запускается отдельно и не меняет введённые решения.</p>
+      <div className="modal-actions"><Button data-testid="run-risk-button" disabled={w.riskBusy || !!w.busy} onClick={() => { setInfoModal(null); onRisk(); }}>Запустить проверку сбоев</Button></div>
+    </Modal>}
     {dayDetailsOpen && <Modal title={modelDayLabel(selectedModelDay)} wide onClose={() => setDayDetailsOpen(false)}>
       <div className="daily-detail" data-testid="daily-detail">
         {other && <div className="daily-detail-switch" aria-label="Сценарий подробностей"><span>Сценарий:</span><button type="button" aria-pressed={detailSide === 'primary'} onClick={() => setDetailSide('primary')}>{scenarioCode(result)}</button><button type="button" aria-pressed={detailSide === 'other'} onClick={() => setDetailSide('other')}>{scenarioCode(other)}</button></div>}

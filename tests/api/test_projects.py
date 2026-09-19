@@ -29,7 +29,7 @@ def test_json_import_preserves_plan_and_is_not_a_calculation(client, plan):
 
 
 @pytest.mark.parametrize("filename,contents,status,cause", [
-    ("script.py", b"{}", 415, "Поддерживается JSON-файл"),
+    ("script.py", b"{}", 415, "Поддерживаются файлы JSON, CSV, XLSX и XLS"),
     ("plan.json", b"not json", 422, "Ожидается корректный JSON"),
     ("plan.json", b'{"decisions": []}', 422, "decisions"),
     ("plan.json", b'{"decisions": {}, "decisions": {}}', 422, "повторяющееся имя поля"),

@@ -48,6 +48,35 @@ def test_risk_calc_matches_real_100_run_seed_42_analysis(client, plan):
     assert actual["risk_register"] == expected["risk_register"]
     assert actual["risk_register"][0]["iterations"] == 100
     assert actual["risk_register"][0]["seed"] == 42
+    risk = actual["risk_register"][0]
+    samples = sorted(risk["shortage_samples_t"])
+    assert len(samples) == 100
+    assert risk["median_shortage_t"] == round((samples[49] + samples[50]) / 2, 2)
+    assert risk["p95_shortage_t"] == samples[94]
+    assert risk["max_shortage_t"] == samples[-1]
+    bins = risk["shortage_histogram"]
+    assert sum(row["count"] for row in bins) == 100
+    for index, row in enumerate(bins):
+        observed = sum(row["lower_t"] <= value and
+                       (value <= row["upper_t"] if index == len(bins)-1 else value < row["upper_t"])
+                       for value in samples)
+        assert row["count"] == observed
+    assert risk["probability_of_no_shortage"] == risk["zero_shortage_runs"] / 100
+    assert risk["probability_of_zero_shortage"] == risk["successful_runs"] / 100
+    assert risk["successful_runs"] <= risk["zero_shortage_runs"]
+    trajectories = risk["daily_trajectories"]
+    assert len(trajectories["runs"]) == 100
+    assert len(trajectories["days"]) == 2190
+    assert trajectories["days"][0] == {"day": 0, "year": 2035, "day_of_year": 1}
+    assert trajectories["days"][-1] == {"day": 2189, "year": 2040, "day_of_year": 365}
+    for metric in ("inventory_t", "shortage_t"):
+        band = trajectories["bands"][metric]
+        for day_index in range(2190):
+            values = sorted(run[metric][day_index] for run in trajectories["runs"])
+            assert band["p05"][day_index] == values[4]
+            assert band["median"][day_index] == round((values[49] + values[50]) / 2, 2)
+            assert band["p95"][day_index] == values[94]
+
 
 
 def test_risk_route_is_503_when_injected_adapter_has_no_risk_method(client_factory, plan):

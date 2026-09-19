@@ -4,9 +4,13 @@
 **/.pytest_cache
 **/.test-build
 **/.env
+**/.env.*
+!docker/.env.example
 .env
 .local
-.venv
+.venv*
+coverage
+.coverage
 frontend/dist
 *.zip
 results

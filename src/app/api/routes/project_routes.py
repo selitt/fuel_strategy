@@ -16,6 +16,7 @@ from src.app.api.deps import (
     get_settings,
     project_response,
     read_json_upload,
+    read_plan_upload,
     set_etag,
 )
 from src.app.config.config import Settings
@@ -34,6 +35,7 @@ from src.app.dto.web_dto import (
 )
 from src.app.service.export_service import csv_archive, result_document
 from src.app.service.json_io import dumps
+from src.app.service.plan_tabular_io import plan_template
 from src.app.service.project_service import ProjectService, validate_plan
 
 plan_router = APIRouter(
@@ -49,7 +51,10 @@ project_router = APIRouter(
         404: {"model": ErrorDTO},
         409: {"model": ErrorDTO},
         500: {"model": ErrorDTO},
-        503: {"model": ErrorDTO},
+        503: {"model": ErrorDTO, "headers": {"Retry-After": {
+            "description": "Секунды до повторной попытки при занятом расчётном сервисе",
+            "schema": {"type": "integer"},
+        }}},
     },
 )
 
@@ -59,12 +64,22 @@ async def validate(_: ParticipantPlanDTO, http_request: Request):
     return validate_plan(await http_request.json())
 
 
-@plan_router.post("/import", response_model=PlanValidationDTO, summary="Прочитать ParticipantPlan из JSON-файла")
+@plan_router.post("/import", response_model=PlanValidationDTO, summary="Прочитать ParticipantPlan из JSON, CSV, XLSX или XLS")
 def import_plan(
     settings: Settings = Depends(get_settings),
-    file: UploadFile = File(description="JSON-план; не исполняемый Python"),
+    file: UploadFile = File(description="План в JSON или едином табличном формате CSV/XLSX/XLS"),
 ):
-    return validate_plan(read_json_upload(file, settings))
+    return validate_plan(read_plan_upload(file, settings))
+
+
+@plan_router.get("/import/template", summary="Скачать пустой шаблон табличного плана")
+def import_plan_template(format: Literal["csv", "xlsx"] = Query(default="csv")):
+    content, media_type, filename = plan_template(format)
+    return Response(
+        content=content,
+        media_type=media_type,
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @plan_router.post("/export", response_model=ParticipantPlanDTO, summary="Скачать план в переносимом JSON без запуска расчёта")

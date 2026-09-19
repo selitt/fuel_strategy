@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 const root = process.cwd();
+const coverage = process.argv.includes('--coverage');
 fs.rmSync('.test-build', {recursive:true,force:true});
 for (const folder of ['lib','api']) {
  const dir=path.join(root,'src',folder); if (!fs.existsSync(dir)) continue;
@@ -14,5 +15,10 @@ for (const folder of ['lib','api']) {
   fs.mkdirSync(path.join('.test-build',folder),{recursive:true}); fs.writeFileSync(path.join('.test-build',folder,name.replace(/\.ts$/,'.js')),out.outputText);
  }
 }
-const run=spawnSync(process.execPath,['--test',...fs.readdirSync('tests').filter(n=>n.endsWith('.test.mjs')).map(n=>'tests/'+n)],{stdio:'inherit'});
+const coverageArgs=coverage ? [
+ '--experimental-test-coverage',
+ '--test-coverage-include=.test-build/lib/**/*.js',
+ '--test-coverage-include=.test-build/api/**/*.js',
+] : [];
+const run=spawnSync(process.execPath,['--test',...coverageArgs,...fs.readdirSync('tests').filter(n=>n.endsWith('.test.mjs')).map(n=>'tests/'+n)],{stdio:'inherit'});
 process.exit(run.status??1);

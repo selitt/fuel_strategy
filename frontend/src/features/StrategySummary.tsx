@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { Modal } from '../components/Ui';
 import type { Result } from '../api/types';
 import type { Workspace } from '../state/useWorkspace';
 import { number, percent, supportedUnits } from '../lib/format';
@@ -8,19 +10,23 @@ const statusLabels = {
  violations:'Есть нарушения', feasible:'Выполнима по переданным проверкам модели',
 };
 function ScenarioSummary({result, label, fresh}: {result:Result|null;label:string;fresh:boolean}) {
+ const [details,setDetails]=useState<'years'|'checks'|null>(null);
  const status = strategyStatus(result);
  const unitsOk = !!result && supportedUnits(result.units);
+ const failures = result?.constraint_checks?.filter(c=>c.passed===false) || [];
  return <article className={`strategy-scenario strategy-${fresh ? status.kind : 'stale'}`}>
   <div className="strategy-scenario-heading"><h3>{label}</h3><span className="strategy-cost">{unitsOk ? number(result?.total_cost_mln) : '—'} <small>млн у.е. за весь период</small></span></div>
   <p className="strategy-verdict">{!fresh && result ? 'Предыдущий результат · ' : ''}{statusLabels[status.kind]}</p>
-  {status.failed > 0 && <details className="strategy-checks"><summary>Нарушений в ответе: {status.failed} · Посмотреть причины</summary><ul>{result?.constraint_checks?.filter(c=>c.passed===false).map((c,i)=><li key={i}><strong>{c.year ? `${c.year}: ` : ''}</strong>{c.detail || c.constraint_id}</li>)}</ul></details>}
-  <details className="strategy-year-details"><summary>Показатели по годам</summary><div className="strategy-table-wrap"><table className="strategy-years"><caption className="sr-only">{label}: обеспечение спроса и дефицит по годам</caption><thead><tr><th scope="col">Показатель</th>{strategyYears.map(year=><th scope="col" key={year}>{year}</th>)}</tr></thead><tbody>
+  <div className="strategy-actions">{status.failed > 0 && <button type="button" className="text-button strategy-attention" onClick={()=>setDetails('checks')}>Нарушений: {status.failed}</button>}<button type="button" className="text-button" onClick={()=>setDetails('years')}>Показатели по годам →</button></div>
+  <ul className="strategy-violation-preview" aria-label={`${label}: нарушения${fresh?'':' предыдущего результата'}`}>{failures.slice(0,2).map((c,i)=><li key={i}><button type="button" className="text-button" title={`${c.year ? `${c.year}: ` : ''}${c.detail || c.constraint_id}`} onClick={()=>setDetails('checks')}>{c.year ? `${c.year}: ` : ''}{c.detail || c.constraint_id}</button></li>)}</ul>
+  {details==='checks' && <Modal title={`${label}: нарушения`} wide onClose={()=>setDetails(null)}><ul>{result?.constraint_checks?.filter(c=>c.passed===false).map((c,i)=><li key={i}><strong>{c.year ? `${c.year}: ` : ''}</strong>{c.detail || c.constraint_id}</li>)}</ul></Modal>}
+  {details==='years' && <Modal title={`${label}: показатели по годам`} wide onClose={()=>setDetails(null)}><div className="strategy-table-wrap"><table className="strategy-years"><caption className="sr-only">{label}: обеспечение спроса и дефицит по годам</caption><thead><tr><th scope="col">Показатель</th>{strategyYears.map(year=><th scope="col" key={year}>{year}</th>)}</tr></thead><tbody>
    {([['service_level_total','Общий спрос обеспечен',true],['service_level_critical','Критический спрос обеспечен',true],['shortage_t','Дефицит, т',false]] as const).map(([key,title,pct])=><tr key={key}><th scope="row">{title}</th>{strategyYears.map(year=>{
     const matches=result?.yearly_balance?.filter(row=>row.year===year)||[];
     const value=unitsOk && matches.length===1 ? matches[0][key] : undefined;
     return <td key={year} className={typeof value==='number' && (pct ? value<1 : value>0) ? 'strategy-attention' : ''}>{pct ? percent(value) : number(value)}</td>;
    })}</tr>)}
-  </tbody></table></div><p className="strategy-scroll-hint">Прокрутите таблицу вправо, чтобы увидеть все годы.</p></details>
+  </tbody></table></div><p className="strategy-scroll-hint">Прокрутите таблицу вправо, чтобы увидеть все годы.</p></Modal>}
  </article>;
 }
 export function StrategySummary({w,onDetails}:{w:Workspace;onDetails:()=>void}) {
@@ -39,6 +45,6 @@ export function StrategySummary({w,onDetails}:{w:Workspace;onDetails:()=>void}) 
    <ScenarioSummary result={w.displayResult} label={name(w.displayResult) || 'BASE'} fresh={fresh}/>
    {w.both && <ScenarioSummary result={w.displayOther} label={w.displayResult?.scenario_id==='MANDATORY_STRESS'?'BASE · Базовые условия':'STRESS · Обязательный стресс'} fresh={fresh}/>}
   </div>
-  <p className="strategy-footnote">Оценка прототипа модели. Критический спрос входит в общий; расходы — не прибыль.</p>
+  <p className="strategy-footnote">Прототип модели · расходы — не прибыль.</p>
  </section>;
 }
