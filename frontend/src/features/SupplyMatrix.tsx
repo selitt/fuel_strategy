@@ -1,4 +1,5 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useLayoutEffect, useRef, useState } from 'react';
+import { useStrategyUiState } from '../state/useStrategyUiState';
 import { Modal } from '../components/Ui';
 import type { Workspace } from '../state/useWorkspace';
 import type { MatrixSource } from '../lib/matrix';
@@ -18,8 +19,10 @@ type Expanded = {source:string;month:number|null};
 
 export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=>void;onSource:(source:MatrixSource)=>void}) {
  const [help,setHelp]=useState<string|null>(null);
- const [chosenYear,setChosenYear]=useState<number|null>(null);
- const [expanded,setExpanded]=useState<Expanded|null>(null);
+ const [chosenYear,setChosenYear]=useStrategyUiState<number|null>(w,'supplyYear',null);
+ const [expanded,setExpanded]=useStrategyUiState<Expanded|null>(w,'supplyExpanded',null);
+ const viewport=useRef<HTMLDivElement>(null);
+ useLayoutEffect(()=>{if(viewport.current){viewport.current.scrollLeft=Number(w.ui.supplyScrollX)||0;viewport.current.scrollTop=Number(w.ui.supplyScrollY)||0;}},[w.activeId]);
  if (!w.draft) return null;
  const plan=w.draft, sources=matrixSources(plan,w.catalog), years=matrixYears(plan,w.catalog);
  const selectedYear=chosenYear!==null&&years.includes(chosenYear)?chosenYear:years[0]||2035;
@@ -63,7 +66,7 @@ export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=
  return <section className="panel supply-panel direct-matrix monthly-matrix" aria-labelledby="matrix-title">
   <div className="panel-heading monthly-heading"><div><h2 id="matrix-title">Поставки по месяцам</h2><span className="muted">Партии с точными датами · engine считает каждый день</span></div><div className="monthly-actions"><label>Год<select aria-label="Год плана поставок" value={selectedYear} onChange={e=>{setChosenYear(Number(e.target.value));setExpanded(null);}}>{years.map(year=><option key={year}>{year}</option>)}</select></label><button type="button" className="text-button" onClick={onAdvanced}>Другие записи →</button></div></div>
   <p className="matrix-instruction">Нажмите месяц → укажите дату и тонны. Резерв — один раз на год.</p>
-  <fieldset disabled={!!w.busy} className="matrix-fieldset"><div className="matrix-viewport" tabIndex={0} aria-label={`Поставки за ${selectedYear} год`}>
+  <fieldset disabled={!!w.busy} className="matrix-fieldset"><div ref={viewport} onScroll={event=>{w.setUi('supplyScrollX',event.currentTarget.scrollLeft,0);w.setUi('supplyScrollY',event.currentTarget.scrollTop,0);}} className="matrix-viewport" tabIndex={0} aria-label={`Поставки за ${selectedYear} год`}>
    <table className="supply-matrix monthly-supply-table"><caption className="sr-only">Партии поставок по месяцам за {selectedYear} год</caption>
     <thead><tr><th scope="col">Источник и резерв</th>{MONTHS.map(month=><th scope="col" key={month}>{month}</th>)}</tr></thead>
     <tbody>{sources.map(source=>{

@@ -133,7 +133,16 @@ def _start_reverse_proxy(
 
 def _wait_for_saved(page: Page) -> None:
     expect(page.locator(".calculate-button")).to_be_enabled(timeout=120_000)
-    expect(page.get_by_text("План и результат сохранены", exact=True)).to_be_visible(timeout=120_000)
+    expect(page.get_by_text("Стратегия и результат сохранены", exact=True)).to_be_visible(timeout=120_000)
+
+
+def _earth_core_january_order(page: Page):
+    month = page.locator('button[aria-label^="Earth-Core, Янв 2035:"]')
+    if month.get_attribute("aria-expanded") != "true":
+        month.click()
+    editor = page.get_by_role("region", name="Партии Earth-Core: Янв 2035", exact=True)
+    expect(editor).to_be_visible(timeout=30_000)
+    return editor.get_by_label("Топливо, т", exact=True)
 
 
 def main() -> None:
@@ -225,7 +234,7 @@ def main() -> None:
                     with httpx.Client(base_url=backend_url, auth=(USERNAME, PASSWORD)) as client:
                         import_plan = client.get("/api/calc/template").json()
                     upload_all_plan_formats(page, public_url, import_plan)
-                    order = page.get_by_label("Заказ Earth-Core 2035, т", exact=True)
+                    order = _earth_core_january_order(page)
                     order.wait_for(state="visible")
                     page.locator("#plan-name").fill("Public browser smoke")
 
@@ -234,9 +243,9 @@ def main() -> None:
                         and candidate.request.method == "POST",
                         timeout=120_000,
                     ) as preview_info:
-                        order.fill("111")
+                        order.fill("9")
                     assert preview_info.value.ok
-                    assert order.input_value() == "111"
+                    assert order.input_value() == "9"
 
                     with page.expect_response(
                         lambda candidate: candidate.url.endswith("/calculate")
@@ -252,11 +261,11 @@ def main() -> None:
                     second = context.new_page()
                     second.on("pageerror", lambda error: browser_errors.append(f"secondary: {error}"))
                     second.goto(page.url, wait_until="networkidle", timeout=120_000)
-                    second_order = second.get_by_label("Заказ Earth-Core 2035, т", exact=True)
+                    second_order = _earth_core_january_order(second)
                     second_order.wait_for(state="visible")
-                    assert second_order.input_value() == "111"
+                    assert second_order.input_value() == "9"
 
-                    order.fill("112")
+                    order.fill("10")
                     with page.expect_response(
                         lambda candidate: candidate.url.endswith("/calculate")
                         and candidate.request.method == "POST",
@@ -267,7 +276,7 @@ def main() -> None:
                     _wait_for_saved(page)
                     page.screenshot(path=artifacts / "saved.png", full_page=True)
 
-                    second_order.fill("113")
+                    second_order.fill("11")
                     second.locator(".calculate-button").click()
                     second.locator(".error-banner").get_by_text(
                         "План изменён в другом окне", exact=False
@@ -275,14 +284,13 @@ def main() -> None:
                     second.screenshot(path=artifacts / "revision-conflict.png", full_page=True)
 
                     page.reload(wait_until="networkidle", timeout=120_000)
-                    order = page.get_by_label("Заказ Earth-Core 2035, т", exact=True)
+                    order = _earth_core_january_order(page)
                     order.wait_for(state="visible")
-                    assert order.input_value() == "112"
+                    assert order.input_value() == "10"
                     assert page.locator("#plan-name").input_value() == "Public browser smoke"
 
-                    page.locator('summary[aria-label="Действия с планом"]').click()
-                    page.get_by_role("button", name="Скачать…", exact=True).click()
-                    result_download = page.get_by_role("button", name="Результат JSON", exact=False)
+                    page.get_by_role("button", name="Выгрузить", exact=True).click()
+                    result_download = page.get_by_role("button", name="Результат JSON", exact=True)
                     assert result_download.is_enabled()
                     with page.expect_download(timeout=120_000) as download_info:
                         result_download.click()
