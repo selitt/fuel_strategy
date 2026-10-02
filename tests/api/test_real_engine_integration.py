@@ -49,6 +49,13 @@ def test_risk_calc_matches_real_100_run_seed_42_analysis(client, plan):
     assert actual["risk_register"][0]["iterations"] == 100
     assert actual["risk_register"][0]["seed"] == 42
     risk = actual["risk_register"][0]
+    assert len(risk['total_cost_samples_mln']) == 100
+    assert len(risk['emergency_procurement_samples_mln']) == 100
+    assert 0 <= risk['probability_of_all_constraints'] <= 1
+    assert all(total >= rescue >= 0 for total, rescue in zip(
+        risk['total_cost_samples_mln'], risk['emergency_procurement_samples_mln']))
+    assert risk['mean_total_cost_mln'] == round(sum(risk['total_cost_samples_mln']) / 100, 2)
+    assert risk['p95_total_cost_mln'] == sorted(risk['total_cost_samples_mln'])[94]
     samples = sorted(risk["shortage_samples_t"])
     assert len(samples) == 100
     assert risk["median_shortage_t"] == round((samples[49] + samples[50]) / 2, 2)

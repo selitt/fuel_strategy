@@ -6,13 +6,164 @@
     "version": "1.1.0"
   },
   "paths": {
+    "/api/calc/strategies": {
+      "get": {
+        "tags": [
+          "Моделирование снабжения"
+        ],
+        "summary": "Готовые стратегии команды",
+        "operationId": "get_strategies_api_calc_strategies_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BuiltinStrategyDTO"
+                  },
+                  "type": "array",
+                  "title": "Response Get Strategies Api Calc Strategies Get"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Content Too Large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported Media Type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "headers": {
+              "Retry-After": {
+                "description": "Секунды до повторной попытки при ограничении запросов или занятом расчётном сервисе",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "headers": {
+              "Retry-After": {
+                "description": "Секунды до повторной попытки при ограничении запросов или занятом расчётном сервисе",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/calc/template": {
       "get": {
         "tags": [
           "Моделирование снабжения"
         ],
         "summary": "Получить типовой шаблон плана (ParticipantPlan)",
-        "description": "Возвращает предзаполненный шаблон плана оператора для быстрого старта.",
+        "description": "Возвращает пустой план оператора для самостоятельного заполнения.",
         "operationId": "get_template_api_calc_template_get",
         "responses": {
           "200": {
@@ -96,7 +247,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -254,7 +405,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -412,7 +563,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -559,7 +710,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -706,7 +857,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -868,14 +1019,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -1015,7 +1166,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1172,7 +1323,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1329,7 +1480,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1490,14 +1641,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -1647,7 +1798,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -1804,14 +1955,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -1974,14 +2125,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2133,14 +2284,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2300,14 +2451,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2460,14 +2611,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2629,14 +2780,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2788,14 +2939,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -2945,7 +3096,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -3102,7 +3253,7 @@
             }
           },
           "422": {
-            "description": "Unprocessable Entity",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
@@ -3261,14 +3412,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -3440,14 +3591,14 @@
             "description": "Unsupported Media Type"
           },
           "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorDTO"
                 }
               }
-            },
-            "description": "Unprocessable Entity"
+            }
           },
           "429": {
             "headers": {
@@ -3530,6 +3681,34 @@
           "file"
         ],
         "title": "Body_import_project_api_projects_import_post"
+      },
+      "BuiltinStrategyDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/ParticipantPlanDTO"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "description",
+          "plan"
+        ],
+        "title": "BuiltinStrategyDTO",
+        "description": "Неизменяемое решение команды; пользователь редактирует отдельную копию."
       },
       "CalculationCommandDTO": {
         "properties": {
@@ -3839,6 +4018,20 @@
               }
             ],
             "title": "Detail"
+          },
+          "issues": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ValidationIssueDTO"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issues"
           }
         },
         "additionalProperties": false,
@@ -4154,6 +4347,14 @@
           "decisions": {
             "$ref": "#/components/schemas/PlanDecisionsDTO",
             "description": "Решения оператора"
+          },
+          "source_overrides": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SourceOverrideDTO"
+            },
+            "type": "object",
+            "title": "Source Overrides",
+            "description": "Исследовательские условия существующих поставщиков по коду из справочника. CASE_INPUT не изменяется."
           }
         },
         "additionalProperties": true,
@@ -4754,6 +4955,127 @@
         ],
         "title": "RunRecordDTO"
       },
+      "SourceOverrideDTO": {
+        "properties": {
+          "capacity_t_per_year": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capacity T Per Year"
+          },
+          "variable_cost_mln_per_t": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variable Cost Mln Per T"
+          },
+          "reservation_rate_mln_per_t_year_capacity": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reservation Rate Mln Per T Year Capacity"
+          },
+          "take_or_pay_share": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Take Or Pay Share"
+          },
+          "lead_time_min_value": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Time Min Value"
+          },
+          "lead_time_max_value": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Time Max Value"
+          },
+          "lead_time_unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "month",
+                  "week",
+                  "day"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lead Time Unit"
+          },
+          "reliability_profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reliability Profile"
+          },
+          "available_from_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 9999.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Available From Year"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SourceOverrideDTO",
+        "description": "Явные пользовательские допущения; отсутствующие поля берутся из CASE_INPUT."
+      },
       "SourceScheduleDTO": {
         "properties": {
           "year": {
@@ -4841,6 +5163,84 @@
         ],
         "title": "SupplyOrderDTO",
         "description": "Заказ топлива у канала снабжения."
+      },
+      "ValidationIssueDTO": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Loc"
+          },
+          "source_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Id"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          },
+          "actual": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual"
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limit"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "loc"
+        ],
+        "title": "ValidationIssueDTO"
       },
       "YearlyBalanceDTO": {
         "properties": {

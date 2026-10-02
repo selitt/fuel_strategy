@@ -1,309 +1,229 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { api, ApiError, errorText } from '../api/client';
-import type { Catalog, Meta, Plan, Project, Result, Summary } from '../api/types';
+import type { BuiltinStrategy, Catalog, Meta, Plan, Project, Result, Summary } from '../api/types';
 import { normalizedPlan, samePlan, validateDraft, newPlanId } from '../lib/plan';
+import { draftIssues } from '../lib/validation';
 import { otherScenario } from '../lib/matrix';
-import { useLivePreview } from './useLivePreview';
 import { calculateRisks } from '../lib/risk';
-import type { RiskRun } from '../lib/risk';
-import { planImportKind, planImportName } from '../lib/import';
-export type ScenarioPair = {
-    basis: Plan;
-    otherPlan: Plan;
-    other: Result;
-    createdAt: string;
-};
+import { inspectPlanImport, planImportName } from '../lib/import';
+import { makeStrategy, makeBuiltinStrategy, updateStrategy, updateStrategyPlan, renameStrategy, removeStrategyTab, toggleStrategySelection, nextStrategyCopyName, strategyDirty, strategyRunFresh, scenarioPlan, importStrategyFiles, acceptStrategyRun, acceptSavedStrategy, savedStrategyIsCalculated } from '../lib/strategies';
+import type { StrategyTab } from '../lib/strategies';
+import { StrategyCalculationQueue } from '../lib/strategyQueue';
+import type { StrategyJob } from '../lib/strategyQueue';
+import { comparisonEditorContext, updateEditorUi } from '../lib/comparisonView';
+
+export type ScenarioPair = {basis:Plan;otherPlan:Plan;other:Result;createdAt:string};
 export type View = 'overview' | 'plan' | 'compare' | 'data';
-function initialView(): View { const v = new URLSearchParams(location.search).get('view'); return ['overview', 'plan', 'compare', 'data'].includes(v || '') ? v as View : 'plan'; }
-function urlUpdate(view: View, id?: string) { const u = new URL(location.href); u.searchParams.set('view', view); if (id)
-    u.searchParams.set('project', id);
-else
-    u.searchParams.delete('project'); history.replaceState(null, '', u); }
+export type ComparisonSettings = {year:number;scenario:'BASE'|'MANDATORY_STRESS';metric:'inventory'|'shortage'|'cost';range:'all'|'year';referenceId:string|null};
+type AddTabOptions = {builtin?:BuiltinStrategy;activate?:boolean;view?:View;select?:boolean};
 export function useWorkspace() {
-    const [both, setBothState] = useState(false);
-    const [scope, setScope] = useState(0);
-    const [selection, setSelection] = useState<{source: string; year: number} | null>(null);
-    const [pair, setPair] = useState<ScenarioPair | null>(null);
-    const [view, setViewState] = useState<View>(initialView);
-    const [project, setProject] = useState<Project | null>(null);
-    const [draft, setDraftState] = useState<Plan | null>(null);
-    const [name, setNameState] = useState('Новый план');
-    const [edited, setEdited] = useState(false);
-    const [projects, setProjects] = useState<Summary[]>([]);
-    const [catalog, setCatalog] = useState<Catalog | null>(null);
-    const [meta, setMeta] = useState<Meta | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [busy, setBusy] = useState('');
-    const [error, setError] = useState<unknown>(null);
-    const [message, setMessage] = useState('');
-    const [risk, setRisk] = useState<{basis: Plan; both: boolean; runs: RiskRun[]; createdAt: string} | null>(null);
-    const [riskBusy, setRiskBusy] = useState(false), [riskStage, setRiskStage] = useState('');
-    const [riskError, setRiskError] = useState('');
-    const riskLock = useRef(false), mounted = useRef(true);
-    useEffect(() => { mounted.current = true; return () => {mounted.current = false;}; }, []);
-    const lock = useRef(false);
-    const live = useLivePreview(draft, both, !loading && !busy && !riskBusy, scope);
-    const setBoth = (value: boolean) => { if (value !== both) { live.invalidate(); setBothState(value); } };
-    const resetPreview = () => { live.invalidate(); setScope(v => v + 1); setSelection(null); };
-    const inputChanged = !!draft && (project ? !samePlan(draft, project.plan) : edited);
-    const dirty = !!draft && (project ? (inputChanged || name !== project.name) : edited);
-    const current = !!project && project.result_state === 'current' && !inputChanged;
-    const setView = useCallback((v: View) => { setViewState(v); urlUpdate(v, project?.project_id); }, [project?.project_id]);
-    const adopt = useCallback((p: Project) => { setPair(null); setProject(p); setDraftState(normalizedPlan(p.plan)); setNameState(p.name); setEdited(false); urlUpdate(view, p.project_id); }, [view]);
-    const refreshList = useCallback(async () => { setProjects(await api.list()); }, []);
-    useEffect(() => {
-        let active = true;
-        (async () => {
-            try {
-                const [m, c, list] = await Promise.all([api.meta(), api.catalog(), api.list()]);
-                if (!active)
-                    return;
-                setMeta(m);
-                setCatalog(c);
-                setProjects(list);
-                const requested = new URLSearchParams(location.search).get('project');
-                if (requested || list.length) {
-                    const p = await api.project(requested || list[0].project_id);
-                    if (active) {
-                        setProject(p);
-                        setDraftState(normalizedPlan(p.plan));
-                        setNameState(p.name);
-                        urlUpdate(initialView(), p.project_id);
-                    }
-                }
-                else {
-                    const p = await api.template();
-                    if (active)
-                        setDraftState(normalizedPlan(p));
-                }
-            }
-            catch (e) {
-                if (active)
-                    setError(e);
-            }
-            finally {
-                if (active)
-                    setLoading(false);
-            }
-        })();
-        return () => { active = false; };
-    }, []);
-    useEffect(() => { const f = (e: BeforeUnloadEvent) => { if (dirty) {
-        e.preventDefault();
-        e.returnValue = '';
-    } }; window.addEventListener('beforeunload', f); return () => window.removeEventListener('beforeunload', f); }, [dirty]);
-    useEffect(() => { if (!message)
-        return; const timer = setTimeout(() => setMessage(''), 4500); return () => clearTimeout(timer); }, [message]);
-    async function execute<T>(label: string, work: () => Promise<T>): Promise<T | undefined> {
-        if (lock.current || riskLock.current)
-            return;
-        lock.current = true;
-        setBusy(label);
-        setError(null);
-        setMessage('');
-        try {
-            await live.pause();
-            return await work();
-        }
-        catch (e) {
-            setError(e);
-            return undefined;
-        }
-        finally {
-            lock.current = false;
-            setBusy('');
-        }
-    }
-    function assertValid() { if (!draft)
-        throw new Error('Сначала создайте или откройте план.'); const errors = validateDraft(name, draft); if (errors.length)
-        throw new Error(errors.join('\n')); return draft; }
-    async function persist(): Promise<Project> {
-        const p = assertValid();
-        if (project && !dirty)
-            return project;
-        const saved = project ? await api.update(project.project_id, name.trim(), p, project.revision) : await api.create(name.trim(), p);
-        adopt(saved);
-        return saved;
-    }
-    async function listAfterSuccess() { try {
-        await refreshList();
-    }
-    catch {
-        setMessage('Изменение сохранено. Не удалось обновить список планов.');
-    } }
-    async function save() {
-        return execute('Сохраняем…', async () => {
-            const saved = await persist();
-            const calculated = saved.result_state === 'current' ? saved : await api.calculate(saved.project_id, saved.revision);
-            adopt(calculated);
-            const basis = normalizedPlan(calculated.plan);
-            const createdAt = calculated.last_run?.created_at || new Date().toISOString();
-            if (calculated.last_run) {
-                if (both) {
-                    const otherPlan = otherScenario(basis);
-                    let other: Result;
-                    try { other = await api.simulate(otherPlan); }
-                    catch (error) { live.accept({basis, primary: calculated.last_run.result, createdAt}); throw error; }
-                    setPair({ basis, otherPlan, other, createdAt });
-                    live.accept({basis, primary: calculated.last_run.result, otherPlan, other, createdAt});
-                } else live.accept({basis, primary: calculated.last_run.result, createdAt});
-            }
-            setMessage('План и результат сохранены'); await listAfterSuccess(); return calculated;
-        });
-    }
-    async function calculate() {
-        return execute('Рассчитываем…', async () => {
-            const saved = await persist();
-            const calculated = await api.calculate(saved.project_id, saved.revision);
-            adopt(calculated);
-            await listAfterSuccess();
-            if (both) {
-                const basis = normalizedPlan(calculated.plan);
-                const otherPlan = otherScenario(basis);
-                const other = await api.simulate(otherPlan);
-                setPair({ basis, otherPlan, other, createdAt: new Date().toISOString() });
-            }
-            setViewState('plan');
-            urlUpdate('plan', calculated.project_id);
-            setMessage(both ? 'Оба сценария рассчитаны' : 'Результат получен');
-        });
-    }
-    async function load(id: string) { return execute('Открываем…', async () => { const loaded = await api.project(id); resetPreview(); adopt(loaded); }); }
-    async function newPlan() {
-        return execute('Создаём…', async () => {
-            const p = normalizedPlan(await api.template());
-            resetPreview(); setPair(null);
-            setProject(null);
-            setNameState('Новый план');
-            setDraftState({ ...p, plan_id: newPlanId() });
-            setEdited(false);
-            setViewState('plan');
-            urlUpdate('plan');
-        });
-    }
-    async function copy(copyName: string, scenarioId: string) {
-        return execute('Создаём копию…', async () => {
-            const p = assertValid();
-            const saved = await api.create(copyName.trim(), { ...p, plan_id: newPlanId(), scenario_id: scenarioId });
-            resetPreview(); adopt(saved);
-            await listAfterSuccess();
-            setMessage('Копия создана');
-            return saved;
-        });
-    }
-    async function remove() {
-        return execute('Удаляем…', async () => {
-            if (!project)
-                return;
-            await api.remove(project.project_id, project.revision);
-            const list = await api.list();
-            resetPreview(); setProjects(list);
-            if (list.length)
-                adopt(await api.project(list[0].project_id));
-            else {
-                setProject(null);
-                setDraftState(normalizedPlan(await api.template()));
-                setNameState('Новый план');
-                setEdited(false);
-                setViewState('plan');
-                urlUpdate('plan');
-            }
-            setMessage('План удалён');
-        });
-    }
-    async function importFile(file: File) {
-        return execute('Импортируем…', async () => {
-            if (file.size > (meta?.max_upload_bytes || 2097152))
-                throw new Error('Файл превышает допустимый размер ' + (meta?.max_upload_bytes || 2097152) + ' байт.');
-            const kind = planImportKind(file.name);
-            if (!kind)
-                throw new Error('Выберите план JSON, CSV, XLSX или XLS.');
-            let projectSnapshot = false;
-            if (kind === 'json') {
-                let probe: unknown;
-                try {
-                    probe = JSON.parse((await file.text()).replace(/^\uFEFF/, ''));
-                }
-                catch {
-                    throw new Error('Не удалось прочитать JSON. Проверьте синтаксис файла.');
-                }
-                projectSnapshot = !!probe && typeof probe === 'object' && 'schema_version' in probe && 'project_id' in probe;
-            }
-            if (projectSnapshot) {
-                const imported = await api.importProject(file);
-                resetPreview(); adopt(imported);
-                urlUpdate('plan', imported.project_id);
-                await listAfterSuccess();
-                setMessage('Проект импортирован отдельной копией');
-            }
-            else {
-                const p = await api.importPlan(file);
-                resetPreview(); setProject(null);
-                setNameState(planImportName(file.name));
-                setDraftState(normalizedPlan(p.plan));
-                setEdited(true);
-                urlUpdate('plan');
-                setMessage(p.normalized ? 'План импортирован. API добавил поля по умолчанию — проверьте значения.' : 'План импортирован — сохраните или рассчитайте его.');
-            }
-            setViewState('plan');
-        });
-    }
-    async function downloadTemplate(format: 'csv' | 'xlsx') {
-        return execute('Готовим шаблон…', async () => { await api.downloadPlanTemplate(format); });
-    }
-    async function analyzeRisk() {
-        if (riskLock.current || lock.current) return;
-        let basis: Plan;
-        try { basis = structuredClone(assertValid()); }
-        catch (error) { setRiskError(errorText(error)); return; }
-        const pairMode = both;
-        riskLock.current = true; setRiskBusy(true); setRiskError('');
-        setRisk({basis, both: pairMode, runs: [], createdAt: new Date().toISOString()});
-        try {
-            await live.pause();
-            if (!mounted.current) return;
-            await calculateRisks(basis, pairMode, api.analyzeRisk,
-                run => {if (mounted.current) setRisk(previous => previous ? {...previous, runs: [...previous.runs, run]} : previous);},
-                scenario => {if (mounted.current) setRiskStage(scenario);});
-        } catch (error) { if (mounted.current) setRiskError(errorText(error)); }
-        finally { riskLock.current = false; if (mounted.current) {setRiskBusy(false);setRiskStage('');} }
-    }
-    async function saveOther() {
-        return execute('Сохраняем второй сценарий…', async () => {
-            if (!pair || !draft || !samePlan(pair.basis, draft))
-                throw new Error('Сначала рассчитайте оба сценария.');
-            const saved = await api.create(name + ' — ' + (pair.otherPlan.scenario_id === 'BASE' ? 'BASE' : 'STRESS'), { ...pair.otherPlan, plan_id: newPlanId() });
-            await api.calculate(saved.project_id, saved.revision);
-            await listAfterSuccess();
-            setMessage('Второй сценарий сохранён отдельным проектом');
-        });
-    }
-    async function exportFile(kind: 'plan' | 'project' | 'json' | 'csv') {
-        return execute('Готовим файл…', async () => {
-            if (kind === 'plan') {
-                await api.exportPlan(assertValid());
-                return;
-            }
-            if (kind === 'project') {
-                const p = await persist();
-                await listAfterSuccess();
-                await api.exportProject(p.project_id);
-                return;
-            }
-            if (!project || !current || dirty)
-                throw new Error('Сначала сохраните и пересчитайте текущий план.');
-            await api.exportResult(project.project_id, kind);
-        });
-    }
-    const displayed = live.displayed;
-    const displayResult = displayed?.primary ?? (current ? project?.last_run?.result : null) ?? null;
-    const displayOther = both ? displayed?.other ?? null : null;
-    const reportedError = error || live.error;
-    return { risk, riskBusy, riskStage, riskError, analyzeRisk, displayResult, displayOther, preview: displayed, previewFresh: live.fresh, selection, setSelection, both, setBoth, pair: pair && draft && samePlan(pair.basis, draft) ? pair : null, saveOther, view, setView, project, draft, name, projects, catalog, meta, loading, busy, error, message, dirty, inputChanged, current,
-        setDraft: (p: Plan) => { live.invalidate(); setDraftState(p); setEdited(true); setError(null); },
-        setName: (v: string) => { setNameState(v); setEdited(true); },
-        setError, clearError: () => { setError(null); live.clearError(); }, setMessage, execute, save, calculate, load, newPlan, copy, remove, importFile, downloadTemplate, exportFile, refreshList,
-        errorMessage: reportedError ? errorText(reportedError) : '', requestId: reportedError instanceof ApiError ? reportedError.requestId : '',
-    };
+ const [tabs,setTabsState]=useState<StrategyTab[]>([]), tabsRef=useRef<StrategyTab[]>([]);
+ const [activeId,setActiveId]=useState(''), nextId=useRef(0);
+ const [view,setViewState]=useState<View>('plan');
+ const [selectedIds,setSelectedIds]=useState<string[]>([]), initializedComparison=useRef(false);
+ const [comparison,setComparisonState]=useState<ComparisonSettings>({year:2035,scenario:'BASE',metric:'inventory',range:'all',referenceId:null});
+ const [projects,setProjects]=useState<Summary[]>([]),[catalog,setCatalog]=useState<Catalog|null>(null),[meta,setMeta]=useState<Meta|null>(null);
+ const [loading,setLoading]=useState(true),[busy,setBusy]=useState(''),[error,setError]=useState<unknown>(null),[message,setMessage]=useState('');
+ const [riskBusy,setRiskBusy]=useState(false),[riskStage,setRiskStage]=useState('');
+ const [imports,setImports]=useState<{filename:string;value?:{id:string;warning?:string};error?:string}[]>([]);
+ const lock=useRef(false),mounted=useRef(false),queue=useRef<StrategyCalculationQueue|null>(null);
+ const changeTabs=useCallback((change:(tabs:StrategyTab[])=>StrategyTab[])=>{
+  const next=change(tabsRef.current);tabsRef.current=next;setTabsState(next);
+ },[]);
+ const patch=useCallback((id:string,change:(tab:StrategyTab)=>StrategyTab)=>changeTabs(tabs=>updateStrategy(tabs,id,change)),[changeTabs]);
+ const addTab=useCallback((name:string,plan:Plan,project:Project|null=null,options:AddTabOptions={})=>{
+  const existing=project?tabsRef.current.find(tab=>tab.project?.project_id===project.project_id):options.builtin?tabsRef.current.find(tab=>tab.builtin?.id===options.builtin?.id):undefined;
+  if(existing){if(options.select!==false)setSelectedIds(ids=>ids.includes(existing.id)?ids:[...ids,existing.id]);if(options.activate!==false){setActiveId(existing.id);setViewState(options.view??'plan');}return existing.id;}
+  const id=options.builtin?`builtin-${options.builtin.id}`:'strategy-'+nextId.current++;
+  const next=options.builtin?makeBuiltinStrategy(id,{...options.builtin,plan:normalizedPlan(options.builtin.plan as Plan)}):makeStrategy(id,name,normalizedPlan(plan),project);
+  changeTabs(tabs=>[...tabs,next]);
+  if(options.select!==false)setSelectedIds(ids=>ids.includes(id)?ids:[...ids,id]);
+  if(options.activate!==false){setActiveId(id);setViewState(options.view??'plan');}
+  return id;
+ },[changeTabs]);
+ const refreshList=useCallback(async()=>{setProjects(await api.list());},[]);
+ useEffect(()=>{
+  mounted.current=true;let active=true;let engine:Meta['engine']|undefined;
+  const instance=new StrategyCalculationQueue(job=>api.simulate(job.plan),(job,result)=>{
+   patch(job.tabId,tab=>acceptStrategyRun(tab,{basis:job.plan,result,createdAt:new Date().toISOString(),engine}));
+  },(job,cause)=>patch(job.tabId,tab=>samePlan(scenarioPlan(tab,job.plan.scenario_id),job.plan)?{...tab,errors:{...tab.errors,[job.plan.scenario_id]:{basis:job.plan,message:errorText(cause),issues:cause instanceof ApiError?cause.issues:[]}}}:tab));
+  queue.current=instance;
+  (async()=>{
+   try{
+    const [m,c,list,builtins]=await Promise.all([api.meta(),api.catalog(),api.list(),api.strategies()]);if(!active)return;
+    engine=m.engine;setMeta(m);setCatalog(c);setProjects(list);
+    const builtinIds=builtins.map(item=>addTab(item.name,item.plan as Plan,null,{builtin:item,activate:false,select:true}));
+    if(builtinIds.length){setActiveId(builtinIds[0]);setViewState('compare');initializedComparison.current=true;}
+    const requested=new URLSearchParams(location.search).get('project');
+    if(requested){const p=await api.project(requested);if(active)addTab(p.name,p.plan as Plan,p);}
+    else if(!builtinIds.length){const p=await api.template();if(active)addTab('Новая стратегия',p);}
+   }catch(cause){if(active)setError(cause);}finally{if(active)setLoading(false);}
+  })();
+  return()=>{active=false;mounted.current=false;instance.dispose();queue.current=null;};
+ },[addTab,patch]);
+ const tab=tabs.find(t=>t.id===activeId)??tabs[0];
+ const displayedScenario=tab?.viewScenario??tab?.plan.scenario_id;
+ const project=tab?.project??null,draft=tab?(displayedScenario===tab.plan.scenario_id?tab.plan:{...tab.plan,scenario_id:displayedScenario}):null,name=tab?.name??'Новая стратегия',both=tab?.both??false;
+ const dirty=!!tab&&strategyDirty(tab),inputChanged=!!tab&&(!project||!samePlan(tab.plan,project.plan));
+ const current=!!project&&project.result_state==='current'&&!inputChanged;
+ useEffect(()=>{
+  if(loading)return;
+  const url=new URL(location.href);url.searchParams.set('view',view);
+  if(project)url.searchParams.set('project',project.project_id);else url.searchParams.delete('project');
+  history.replaceState(null,'',url);
+ },[view,project?.project_id,loading]);
+ useEffect(()=>{
+  const listener=(e:BeforeUnloadEvent)=>{if(tabsRef.current.some(strategyDirty)){e.preventDefault();e.returnValue='';}};
+  window.addEventListener('beforeunload',listener);return()=>window.removeEventListener('beforeunload',listener);
+ },[]);
+ useEffect(()=>{if(!message)return;const timer=setTimeout(()=>setMessage(''),4500);return()=>clearTimeout(timer);},[message]);
+ useEffect(()=>{
+  if(loading||busy||riskBusy||lock.current){queue.current?.reconcile([]);return;}
+  const jobs:StrategyJob[]=[];
+  for(const item of tabs){
+   const selected=selectedIds.includes(item.id);
+   if(item.id!==activeId&&!selected)continue;
+   if(validateDraft('preview',item.plan).length)continue;
+   const scenarios=new Set(selected?['BASE','MANDATORY_STRESS']:[]);
+   if(item.id===activeId){const activeScenario=item.viewScenario??item.plan.scenario_id;scenarios.add(activeScenario);if(item.both)scenarios.add(otherScenario(scenarioPlan(item,activeScenario)).scenario_id);}
+   for(const scenario of scenarios){
+    const plan=scenarioPlan(item,scenario),failure=item.errors[scenario];
+    if(strategyRunFresh(item,scenario)||(failure&&samePlan(failure.basis,plan)))continue;
+    jobs.push({tabId:item.id,plan,priority:item.id===activeId?0:1});
+   }
+  }
+  queue.current?.reconcile(jobs);
+ },[tabs,activeId,selectedIds,loading,busy,riskBusy]);
+ function activateTab(id:string){if(lock.current||!tabsRef.current.some(t=>t.id===id))return;setActiveId(id);setViewState('plan');setError(null);}
+ function editComparedTab(id:string,scenario=comparison.scenario){
+  if(lock.current)return;
+  patch(id,t=>({...t,both:true,ui:comparisonEditorContext({...comparison,scenario},t.ui,t.viewScenario??t.plan.scenario_id)}));
+  setComparisonState(old=>({...old,scenario}));
+  activateTab(id);
+ }
+ function setView(value:View){
+  if(value==='compare'&&!initializedComparison.current){setSelectedIds(tabsRef.current.map(t=>t.id));initializedComparison.current=true;}
+  setViewState(value);
+ }
+ function toggleComparison(id:string){setSelectedIds(ids=>toggleStrategySelection(ids,id));}
+ function retryTab(id:string){patch(id,t=>({...t,errors:{}}));queue.current?.retry(id);}
+ function closeTab(id:string){
+  if(lock.current)return;
+  const left=removeStrategyTab(tabsRef.current,id);if(left===tabsRef.current)return;changeTabs(()=>left);setSelectedIds(ids=>ids.filter(i=>i!==id));
+  if(id===activeId)setActiveId(left[0]?.id??'');
+ }
+ async function execute<T>(label:string,work:()=>Promise<T>):Promise<T|undefined>{
+  if(lock.current)return;lock.current=true;setBusy(label);setError(null);setMessage('');
+  try{await queue.current?.pause();return await work();}
+  catch(cause){setError(cause);return undefined;}
+  finally{lock.current=false;if(mounted.current)setBusy('');}
+ }
+ function requireTab(id=activeId){const t=tabsRef.current.find(t=>t.id===id);if(!t)throw new Error('Сначала создайте или откройте стратегию.');return t;}
+ function assertValid(t:StrategyTab){const errors=validateDraft(t.name,t.plan);if(errors.length)throw new Error(errors.join('\n'));return t.plan;}
+ async function persist(t:StrategyTab):Promise<Project>{
+  if(t.builtin)throw new Error('Готовую стратегию нельзя сохранить или изменить. Сначала создайте свою копию.');
+  const plan=assertValid(t);
+  if(t.project&&!strategyDirty(t))return t.project;
+  const saved=t.project?await api.update(t.project.project_id,t.name.trim(),plan,t.project.revision):await api.create(t.name.trim(),plan);
+  patch(t.id,now=>acceptSavedStrategy(now,t,saved));return saved;
+ }
+ async function listAfterSuccess(){try{await refreshList();}catch{setMessage('Изменение сохранено. Не удалось обновить список стратегий.');}}
+ async function save(id=activeId){return execute('Сохраняем…',async()=>{
+  const t=requireTab(id),saved=await persist(t);
+  const calculated=savedStrategyIsCalculated(saved)?saved:await api.calculate(saved.project_id,saved.revision);
+  patch(id,now=>{const updated={...now,project:calculated},run=calculated.last_run;return run?acceptStrategyRun(updated,{basis:normalizedPlan(run.plan_snapshot),result:run.result,createdAt:run.created_at,engine:run.engine}):updated;});
+  await listAfterSuccess();setMessage('Стратегия и результат сохранены');return calculated;
+ });}
+ async function calculate(){retryTab(activeId);}
+ async function load(id:string){
+  const existing=tabsRef.current.find(t=>t.project?.project_id===id);
+  if(existing){setSelectedIds(ids=>ids.includes(existing.id)?ids:[...ids,existing.id]);activateTab(existing.id);return existing.project;}
+  return execute('Открываем…',async()=>{const loaded=await api.project(id);addTab(loaded.name,loaded.plan as Plan,loaded);return loaded;});
+ }
+ async function reload(){return execute('Открываем версию с сервера…',async()=>{
+  const t=requireTab();if(!t.project)return;
+  const loaded=await api.project(t.project.project_id);
+  patch(t.id,()=>makeStrategy(t.id,loaded.name,normalizedPlan(loaded.plan),loaded));return loaded;
+ });}
+ async function newPlan(){return execute('Создаём…',async()=>{const p=normalizedPlan(await api.template());return addTab('Новая стратегия',{...p,plan_id:newPlanId()});});}
+ async function copy(copyName:string,scenarioId:string){return execute('Создаём копию…',async()=>{
+  const t=requireTab(),p=assertValid(t);return addTab(copyName.trim(),{...structuredClone(p),plan_id:newPlanId(),scenario_id:scenarioId});
+ });}
+ async function copyFrom(id:string){return execute('Создаём копию…',async()=>{
+  const t=requireTab(id),p=assertValid(t),scenario=t.viewScenario??p.scenario_id;
+  return addTab(nextStrategyCopyName(tabsRef.current,t.name).slice(0,140),{...structuredClone(p),plan_id:newPlanId(),scenario_id:scenario});
+ });}
+ async function remove(){return execute('Удаляем…',async()=>{
+  const t=requireTab();if(!t.project)return;
+  await api.remove(t.project.project_id,t.project.revision);
+  const left=tabsRef.current.filter(item=>item.id!==t.id);changeTabs(()=>left);setActiveId(left[0]?.id??'');setSelectedIds(ids=>ids.filter(id=>id!==t.id));
+  await listAfterSuccess();setMessage('Сохранённая стратегия удалена');
+ });}
+ async function importFiles(files:File[]){return execute('Загружаем стратегии…',async()=>{
+  setImports([]);
+  const outcomes=await importStrategyFiles(files,async file=>{
+   const inspected=await inspectPlanImport(file,meta?.max_upload_bytes||2097152);
+   if(inspected.kind==='project'){
+    const imported=await api.importProject(file);return {id:addTab(imported.name,normalizedPlan(imported.plan),imported)};
+   }
+   const validated=await api.importPlan(file),messages=[...(validated.normalized?['API дополнил отсутствующие значения.']:[]),...(validated.warnings||[])];
+   return {id:addTab(planImportName(file.name),normalizedPlan(validated.plan)),warning:messages.join(' ')||undefined};
+  });
+  setImports(outcomes);await listAfterSuccess();setMessage('Загружено стратегий: '+outcomes.filter(r=>!r.error).length+' из '+files.length);return outcomes;
+ });}
+ async function downloadTemplate(format:'csv'|'xlsx'){return execute('Готовим шаблон…',()=>api.downloadPlanTemplate(format));}
+ async function analyzeRisk(){return execute('Проверяем сбои…',async()=>{
+  const t=requireTab(),stored=assertValid(t),basis=structuredClone(scenarioPlan(t,t.viewScenario??stored.scenario_id)),pairMode=t.both;
+  setRiskBusy(true);patch(t.id,now=>({...now,risk:{basis,both:pairMode,runs:[],createdAt:new Date().toISOString(),error:''}}));
+  try{await calculateRisks(basis,pairMode,api.analyzeRisk,run=>patch(t.id,now=>({...now,risk:now.risk?{...now.risk,runs:[...now.risk.runs,run]}:null})),setRiskStage);}
+  catch(cause){patch(t.id,now=>({...now,risk:now.risk?{...now.risk,error:errorText(cause)}:null}));}
+  finally{setRiskBusy(false);setRiskStage('');}
+ });}
+ async function saveOther(){return execute('Создаём второй сценарий…',async()=>{
+  const t=requireTab(),other=otherScenario(assertValid(t));
+  const saved=await api.create(t.name+' — '+(other.scenario_id==='BASE'?'BASE':'STRESS'),{...other,plan_id:newPlanId()});
+  const id=addTab(saved.name,normalizedPlan(saved.plan),saved);
+  await listAfterSuccess();
+  const calculated=await api.calculate(saved.project_id,saved.revision);
+  patch(id,()=>makeStrategy(id,calculated.name,normalizedPlan(calculated.plan),calculated));
+  await listAfterSuccess();setMessage('Второй сценарий сохранён отдельной стратегией');return calculated;
+ });}
+ async function exportFile(kind:'plan'|'project'|'json'|'csv'){return execute('Готовим файл…',async()=>{
+  const t=requireTab();
+  if(kind==='plan'){await api.exportPlan(assertValid(t));return;}
+  if(kind==='project'){
+   const saved=await persist(t),calculated=savedStrategyIsCalculated(saved)?saved:await api.calculate(saved.project_id,saved.revision);
+   patch(t.id,now=>{const updated={...now,project:calculated},run=calculated.last_run;return run?acceptStrategyRun(updated,{basis:normalizedPlan(run.plan_snapshot),result:run.result,createdAt:run.created_at,engine:run.engine}):updated;});
+   await listAfterSuccess();await api.exportProject(calculated.project_id);return;
+  }
+  if(!t.project||t.project.result_state!=='current'||strategyDirty(t))throw new Error('Сначала сохраните и пересчитайте текущий план.');
+  await api.exportResult(t.project.project_id,kind);
+ });}
+ const primary=draft&&tab?.results[draft.scenario_id],other=draft&&tab?.results[otherScenario(draft).scenario_id];
+ const displayResult=primary?.result??null;
+ const displayOther=both?other?.result??null:null;
+ const preview=primary?{basis:primary.basis,primary:primary.result,createdAt:primary.createdAt,other:both?other?.result:undefined,otherPlan:both?other?.basis:undefined}:null;
+ const previewFresh=!!tab&&!!draft&&strategyRunFresh(tab,draft.scenario_id)&&(!both||strategyRunFresh(tab,otherScenario(draft).scenario_id));
+ // The legacy single-plan export uses project.last_run as its primary record.
+ // Do not pair that saved record with an unsaved preview of another revision.
+ const savedPrimary=current&&project?.last_run&&primary&&samePlan(project.last_run.plan_snapshot,draft)&&samePlan(project.last_run.result,primary.result);
+ const pair:ScenarioPair|null=savedPrimary&&previewFresh&&both&&other&&draft?{basis:draft,otherPlan:other.basis,other:other.result,createdAt:other.createdAt}:null;
+ const currentFailure=tab&&draft&&[draft.scenario_id,...(both?[otherScenario(draft).scenario_id]:[])].map(s=>tab.errors[s]).find(e=>e&&samePlan(e.basis,scenarioPlan(tab,e.basis.scenario_id)));
+ const invalid=draft?validateDraft('preview',draft):[];
+ const localIssues=draft?draftIssues(draft):[];
+ const fieldIssues=[...localIssues,...(currentFailure?.issues??[]).filter(issue=>!localIssues.some(local=>JSON.stringify(local.loc)===JSON.stringify(issue.loc)))];
+ const reportedError=error||currentFailure?.message||(invalid.length?invalid.join('\n'):null);
+ function setUi<T>(key:string,value:T|((old:T)=>T),fallback:T){patch(activeId,t=>({...t,ui:updateEditorUi(t.ui,key,typeof value==='function'?(value as (old:T)=>T)((t.ui[key] as T)??fallback):value)}));}
+ return {
+  tabs,activeId,selectedIds,comparison,setComparison:(change:Partial<ComparisonSettings>)=>setComparisonState(old=>({...old,...change})),
+  activateTab,editComparedTab,closeTab,toggleComparison,retryTab,imports,clearImports:()=>setImports([]),
+  ui:tab?.ui??{},setUi,fieldIssues,
+  risk:tab?.risk??null,riskBusy,riskStage,riskError:tab?.risk?.error??'',analyzeRisk,displayResult,displayOther,preview,previewFresh,displayRun:savedPrimary?project?.last_run:null,
+  selection:tab?.selection??null,setSelection:(selection:StrategyTab['selection'])=>patch(activeId,t=>({...t,selection})),
+  both,setBoth:(value:boolean)=>patch(activeId,t=>({...t,both:value})),setScenario:(value:string)=>patch(activeId,t=>t.builtin?{...t,viewScenario:value}:updateStrategyPlan(t,{...t.plan,scenario_id:value})),pair,saveOther,view,setView,project,draft,name,builtin:tab?.builtin??null,immutable:!!tab?.builtin,projects,catalog,meta,loading,busy,error,message,dirty,inputChanged,current,
+  setDraft:(plan:Plan)=>patch(activeId,t=>updateStrategyPlan(t,plan)),setName:(value:string)=>patch(activeId,t=>renameStrategy(t,value)),
+  setError,clearError:()=>{setError(null);},setMessage,execute,save,calculate,load,reload,newPlan,copy,copyFrom,remove,importFiles,downloadTemplate,exportFile,refreshList,
+  errorMessage:reportedError?errorText(reportedError):'',requestId:reportedError instanceof ApiError?reportedError.requestId:'',
+ };
 }
-export type Workspace = ReturnType<typeof useWorkspace>;
+export type Workspace=ReturnType<typeof useWorkspace>;

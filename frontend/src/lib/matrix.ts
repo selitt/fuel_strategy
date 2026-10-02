@@ -1,5 +1,6 @@
 import type { Catalog, Plan } from '../api/types';
 import { planYears } from './plan.js';
+import { effectiveSourceReference, sourceIsCustomized } from './sourceOverrides.js';
 export type MatrixKey = 'supply_orders' | 'capacity_reservations';
 export interface MatrixSource {
     key: string;
@@ -7,6 +8,8 @@ export interface MatrixSource {
     aliases: string[];
     writeId: string;
     reference?: Record<string, string>;
+    originalReference?: Record<string, string>;
+    customized?: boolean;
 }
 export interface SupplyMonthCell {
     indices: number[];
@@ -62,7 +65,7 @@ export function unscheduledSupplyIndices(plan: Plan, source: MatrixSource, year:
     return indices;
 }
 
-export function updateSupplyBatch(plan: Plan, index: number, patch: { delivery_date?: string; order_t?: number; batch_id?: string }): Plan {
+export function updateSupplyBatch(plan: Plan, index: number, patch: { delivery_date?: string; order_t?: number; batch_id?: string; source_id?: string }): Plan {
     const supply_orders = plan.decisions.supply_orders.map((row, rowIndex) => {
         if (rowIndex !== index)
             return row;
@@ -102,7 +105,9 @@ export function matrixSources(plan: Plan, catalog: Pick<Catalog, 'tables'> | nul
     const decisions = [...plan.decisions.supply_orders, ...plan.decisions.capacity_reservations];
     const rows: MatrixSource[] = refs.map(reference => {
         const aliases = [reference.name, reference.source_id].filter(Boolean);
-        return { key: reference.name, label: reference.name, aliases, reference,
+        return { key: reference.name, label: reference.name, aliases,
+            reference: effectiveSourceReference(plan, reference), originalReference: reference,
+            customized: sourceIsCustomized(plan, reference),
             writeId: decisions.find(d => aliases.includes(d.source_id))?.source_id || reference.name };
     });
     for (const decision of decisions) {

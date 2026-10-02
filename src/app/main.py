@@ -9,10 +9,12 @@ from src.app.config.config import Settings, ROOT
 from src.app.dto.web_dto import EngineInfoDTO
 from src.app.api.router import api_router
 from src.app.api.transport import RequestBoundaryMiddleware, validation_error_response
+from src.app.api.deps import plan_validation_error_response
 from src.app.dto.web_dto import ErrorDTO
 from src.app.persistence.project_store import ProjectStore
 from src.app.service.calc_service import CalculationService
 from src.app.service.calculation_admission import CalculationAdmission
+from src.engine.calendar import PlanValidationError
 
 
 def _default_engine_version(reference_dir: Path) -> str:
@@ -47,7 +49,7 @@ def create_app(
         title="Топливный космоконтур 2035 — REST API",
         description="REST API для управления проектами и расчётами материального баланса.",
         version="1.1.0",
-        responses={status: {"model": ErrorDTO, **({"description": "Content Too Large"} if status == 413 else {}), **({"headers": {"Retry-After": {
+        responses={status: {"model": ErrorDTO, **({"description": {413: "Content Too Large", 422: "Unprocessable Content"}[status]} if status in (413, 422) else {}), **({"headers": {"Retry-After": {
             "description": "Секунды до повторной попытки при ограничении запросов или занятом расчётном сервисе",
             "schema": {"type": "integer"},
         }}} if status in (429, 503) else {})} for status in (400, 401, 403, 404, 409, 413, 415, 422, 429, 500, 503)},
@@ -71,6 +73,7 @@ def create_app(
     )
     application.include_router(api_router)
     application.add_exception_handler(RequestValidationError, validation_error_response)
+    application.add_exception_handler(PlanValidationError, plan_validation_error_response)
     application.add_middleware(RequestBoundaryMiddleware, max_request_bytes=config.max_request_bytes)
     application.add_middleware(
         CORSMiddleware,

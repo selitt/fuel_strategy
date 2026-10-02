@@ -1,14 +1,19 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useLayoutEffect, useRef, useState } from 'react';
+import { useStrategyUiState } from '../state/useStrategyUiState';
 import { Modal } from '../components/Ui';
 import type { Workspace } from '../state/useWorkspace';
 import type { MatrixSource } from '../lib/matrix';
 import {
  addSupplyBatch, matrixSources, matrixYears, nextSupplyBatchId, readCell, readSupplyMonth,
- removeSupplyBatch, setInvestment, supplyDateIssue, unscheduledSupplyIndices,
+ removeSupplyBatch, setInvestment, unscheduledSupplyIndices,
  updateSupplyBatch, writeCell,
 } from '../lib/matrix';
 import { number } from '../lib/format';
+import { issueTarget } from '../lib/validation';
+import type { PlanIssue } from '../lib/validation';
+import './supply-validation.css';
 import { Toggle } from '../components/Controls';
+import { RiskLauncher } from './RiskLauncher';
 
 const MONTHS = ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'] as const;
 const options: Record<string, {id:string;year:number}> = {
@@ -16,13 +21,47 @@ const options: Record<string, {id:string;year:number}> = {
 };
 type Expanded = {source:string;month:number|null};
 
-export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=>void;onSource:(source:MatrixSource)=>void}) {
+export function SupplyMatrix({w,onAdvanced,onSource,onRisk}:{w:Workspace;onAdvanced:()=>void;onSource:(source:MatrixSource)=>void;onRisk:(run:boolean)=>void}) {
  const [help,setHelp]=useState<string|null>(null);
- const [chosenYear,setChosenYear]=useState<number|null>(null);
- const [expanded,setExpanded]=useState<Expanded|null>(null);
+ const [chosenYear,setChosenYear]=useStrategyUiState<number|null>(w,'supplyYear',null);
+ const [expanded,setExpanded]=useStrategyUiState<Expanded|null>(w,'supplyExpanded',null);
+ const viewport=useRef<HTMLDivElement>(null);
+ const pendingFocus=useRef<string|null>(null);
+ useLayoutEffect(()=>{
+  if(!pendingFocus.current) return;
+  const holder=document.getElementById(pendingFocus.current);
+  const element=holder?.querySelector<HTMLElement>('button,input,select')??holder;
+  if(element){element.scrollIntoView({block:'nearest',inline:'nearest'});element.focus({preventScroll:true});pendingFocus.current=null;}
+ });
+ useLayoutEffect(()=>{if(viewport.current){viewport.current.scrollLeft=Number(w.ui.supplyScrollX)||0;viewport.current.scrollTop=Number(w.ui.supplyScrollY)||0;}},[w.activeId]);
  if (!w.draft) return null;
  const plan=w.draft, sources=matrixSources(plan,w.catalog), years=matrixYears(plan,w.catalog);
+ const modelYears=(w.catalog?.tables.find(table=>table.table_id==='demand')?.rows??[]).map(row=>Number(row.year)).filter(Number.isInteger).sort((a,b)=>a-b);
  const selectedYear=chosenYear!==null&&years.includes(chosenYear)?chosenYear:years[0]||2035;
+ const issues=w.fieldIssues.filter(issue=>['supply_orders','capacity_reservations','investments'].includes(issueTarget(issue,plan).kind));
+ const sourceIssues=(source:MatrixSource)=>issues.filter(issue=>{const target=issueTarget(issue,plan);return target.year===selectedYear&&source.aliases.includes(target.source??'');});
+ function revealIssue(issue:PlanIssue) {
+  const target=issueTarget(issue,plan),source=sources.find(item=>item.aliases.includes(target.source??''));
+  if(!source||!target.year){onAdvanced();return;}
+  setChosenYear(target.year);
+  w.setSelection({source:source.key,year:target.year});
+  if(target.kind==='investments'){
+   if(!options[source.key]){onAdvanced();return;}
+   pendingFocus.current=`investment-${source.key}${target.field==='year'?'-year':''}`;setExpanded(null);return;
+  }
+  if(target.kind==='capacity_reservations'&&(readCell(plan,'capacity_reservations',source,target.year).indices.length>1||(target.field&&target.field!=='reserved_capacity_t'))){onAdvanced();return;}
+  if(target.kind==='capacity_reservations'){
+   pendingFocus.current=`reserve-${source.key}-${target.year}`;
+   setExpanded(null);
+  } else {
+   const index=target.index??plan.decisions.supply_orders.findIndex(row=>row.year===target.year&&source.aliases.includes(row.source_id)&&Number(row.order_t)>0);
+   if(index<0){onAdvanced();return;}
+   const rowTarget=issueTarget({...issue,loc:['decisions','supply_orders',index,target.field??'order_t']},plan);
+   setExpanded({source:source.key,month:rowTarget.month??null});
+   const field=target.field==='year'?'delivery_date':target.field??'order_t';
+   pendingFocus.current=`batch-${index}-${['order_t','delivery_date','batch_id','source_id'].includes(field)?field:'row'}`;
+  }
+ }
  const investmentCatalog=w.catalog?.tables.find(t=>t.table_id==='investment_options')?.rows||[];
  function unavailable(source:MatrixSource) {
   const option=options[source.key];
@@ -41,29 +80,35 @@ export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=
  function batchEditor(source:MatrixSource,month:number|null,indices:number[]) {
   const title=month===null?'Поставки без корректной даты':`${MONTHS[month-1]} ${selectedYear}`;
   return <tr className="batch-editor-row"><td colSpan={13}><div className="batch-editor" role="region" aria-label={`Партии ${source.label}: ${title}`}>
-   <div className="batch-editor-heading"><div><strong>{source.label}</strong><span>{title}</span></div>{month!==null&&<button type="button" className="text-button" onClick={()=>addBatch(source,month)}>+ Добавить партию</button>}</div>
+   <div className="batch-editor-heading"><div><strong>{source.label}</strong><span>{title}</span></div>{month!==null&&<button type="button" className="text-button" disabled={w.immutable} onClick={()=>addBatch(source,month)}>+ Добавить партию</button>}</div>
    {month===null&&<p className="batch-editor-note">Старые годовые записи сохранены без изменений. Назначьте каждой партии точную дату — до этого календарный расчёт заблокирован.</p>}
    <div className="batch-list">{indices.map(index=>{
     const row=plan.decisions.supply_orders[index];
     const date=typeof row.delivery_date==='string'?row.delivery_date:'';
-    const issue=supplyDateIssue(date,selectedYear);
+    const rowIssues=issues.filter(issue=>{const target=issueTarget(issue,plan);return target.kind==='supply_orders'&&target.index===index;});
+    const fieldIssue=(field:string)=>rowIssues.find(issue=>issueTarget(issue,plan).field===field);
+    const issue=fieldIssue('delivery_date')?.message||'';
+    const quantityIssue=fieldIssue('order_t');
+    const idIssue=fieldIssue('batch_id');
     const storedBatchId=typeof row.batch_id==='string'&&row.batch_id?row.batch_id:'';
     const batchId=storedBatchId||nextSupplyBatchId(plan,date||`${selectedYear}-01-01`);
-    return <div className="batch-line" key={`${index}-${batchId}`}>
-     <label><span>Дата получения</span><input type="date" min={`${selectedYear}-01-01`} max={`${selectedYear}-12-31`} value={date} aria-invalid={!!issue} aria-describedby={issue?`batch-${index}-issue`:undefined} onChange={e=>w.setDraft(updateSupplyBatch(plan,index,{delivery_date:e.target.value,batch_id:batchId}))}/></label>
-     <label><span>Топливо, т</span><input type="number" inputMode="decimal" min={0} step="any" value={Number.isFinite(Number(row.order_t))?Number(row.order_t):''} aria-invalid={!Number.isFinite(Number(row.order_t))||Number(row.order_t)<0} onChange={e=>w.setDraft(updateSupplyBatch(plan,index,{order_t:e.target.value===''?NaN:Number(e.target.value),batch_id:batchId}))}/></label>
-     {storedBatchId?<span className="batch-id" title={batchId}>{batchId}</span>:<button type="button" className="text-button warning-text" onClick={()=>w.setDraft(updateSupplyBatch(plan,index,{batch_id:batchId}))}>Назначить ID партии</button>}
-     <button type="button" className="text-button danger-text" onClick={()=>w.setDraft(removeSupplyBatch(plan,index))}>Удалить</button>
-     {(issue||!storedBatchId)&&<small className="batch-issue" id={`batch-${index}-issue`}>{issue||'Для расчёта назначьте стабильный ID партии.'}</small>}
+    return <div className="batch-line" id={`batch-${index}-row`} tabIndex={-1} key={index}>
+     {fieldIssue('source_id')&&<label><span>Источник</span><select id={`batch-${index}-source_id`} disabled={w.immutable} aria-invalid="true" aria-describedby={`batch-${index}-issues`} value={row.source_id} onChange={e=>w.setDraft(updateSupplyBatch(plan,index,{source_id:e.target.value}))}>{[...new Set([row.source_id,...sources.filter(item=>item.reference).map(item=>item.writeId)])].map(value=><option key={value}>{value}</option>)}</select></label>}
+     <label><span>Дата получения</span><input id={`batch-${index}-delivery_date`} disabled={w.immutable} type="date" min={`${modelYears[0]??selectedYear}-01-01`} max={`${modelYears.at(-1)??selectedYear}-12-31`} value={date} aria-invalid={!!issue} aria-describedby={issue?`batch-${index}-issues`:undefined} onChange={e=>w.setDraft(updateSupplyBatch(plan,index,{delivery_date:e.target.value,batch_id:batchId}))}/></label>
+     <label><span>Топливо, т</span><input id={`batch-${index}-order_t`} disabled={w.immutable} type="number" inputMode="decimal" min={0} step="any" value={Number.isFinite(Number(row.order_t))?Number(row.order_t):''} aria-invalid={!!quantityIssue} aria-describedby={quantityIssue?`batch-${index}-issues`:undefined} onChange={e=>w.setDraft(updateSupplyBatch(plan,index,{order_t:e.target.value===''?NaN:Number(e.target.value),batch_id:batchId}))}/></label>
+     {storedBatchId?<label className="batch-id-field"><span>ID партии</span><input disabled={w.immutable} id={`batch-${index}-batch_id`} aria-invalid={!!idIssue} aria-describedby={idIssue?`batch-${index}-issues`:undefined} value={storedBatchId} onChange={e=>w.setDraft(updateSupplyBatch(plan,index,{batch_id:e.target.value}))}/></label>:<button type="button" disabled={w.immutable} id={`batch-${index}-batch_id`} className="text-button warning-text" onClick={()=>w.setDraft(updateSupplyBatch(plan,index,{batch_id:batchId}))}>Назначить ID партии</button>}
+     <button type="button" disabled={w.immutable} className="text-button danger-text" onClick={()=>w.setDraft(removeSupplyBatch(plan,index))}>Удалить</button>
+     {rowIssues.length>0&&<div className="batch-issue" id={`batch-${index}-issues`}>{rowIssues.map((error,i)=><small key={i}>{error.message}</small>)}</div>}
     </div>;
    })}</div>
    {!indices.length&&<div className="empty-batches">Партий пока нет. Добавьте поставку и укажите точную дату получения.</div>}
   </div></td></tr>;
  }
  return <section className="panel supply-panel direct-matrix monthly-matrix" aria-labelledby="matrix-title">
-  <div className="panel-heading monthly-heading"><div><h2 id="matrix-title">Поставки по месяцам</h2><span className="muted">Партии с точными датами · engine считает каждый день</span></div><div className="monthly-actions"><label>Год<select aria-label="Год плана поставок" value={selectedYear} onChange={e=>{setChosenYear(Number(e.target.value));setExpanded(null);}}>{years.map(year=><option key={year}>{year}</option>)}</select></label><button type="button" className="text-button" onClick={onAdvanced}>Другие записи →</button></div></div>
-  <p className="matrix-instruction">Нажмите месяц → укажите дату и тонны. Резерв — один раз на год.</p>
-  <fieldset disabled={!!w.busy} className="matrix-fieldset"><div className="matrix-viewport" tabIndex={0} aria-label={`Поставки за ${selectedYear} год`}>
+  <div className="panel-heading monthly-heading"><div><h2 id="matrix-title">Поставки по месяцам</h2><span className="muted">Объём поставок по месяцам, т</span></div><div className="monthly-actions"><label>Год<select aria-label="Год плана поставок" value={selectedYear} onChange={e=>{setChosenYear(Number(e.target.value));setExpanded(null);}}>{years.map(year=><option key={year}>{year}</option>)}</select></label><button type="button" className="text-button" onClick={onAdvanced}>Другие записи →</button></div></div>
+  <p className="matrix-instruction">Откройте месяц, чтобы посмотреть партии. Резерв указывается на весь год.</p>
+  {issues.length>0&&<div className="supply-issue-summary" aria-label="Ошибки поставок" aria-live="polite"><strong>Проверьте поставки и резерв</strong>{issues.map((issue,index)=>{const target=issueTarget(issue,plan);return <button type="button" key={index} onClick={()=>revealIssue(issue)}><span>{target.source||'Запись'} · {target.year??'год не указан'}</span> {issue.message} <span aria-hidden="true">→</span></button>;})}</div>}
+  <fieldset disabled={!!w.busy} className="matrix-fieldset"><div ref={viewport} onScroll={event=>{w.setUi('supplyScrollX',event.currentTarget.scrollLeft,0);w.setUi('supplyScrollY',event.currentTarget.scrollTop,0);}} className="matrix-viewport" tabIndex={0} aria-label={`Поставки за ${selectedYear} год`}>
    <table className="supply-matrix monthly-supply-table"><caption className="sr-only">Партии поставок по месяцам за {selectedYear} год</caption>
     <thead><tr><th scope="col">Источник и резерв</th>{MONTHS.map(month=><th scope="col" key={month}>{month}</th>)}</tr></thead>
     <tbody>{sources.map(source=>{
@@ -73,20 +118,28 @@ export function SupplyMatrix({w,onAdvanced,onSource}:{w:Workspace;onAdvanced:()=
      const defaultInvestmentYear=source.key==='Lunar-ISRU'&&Number.isInteger(availableYear)?availableYear-1:option?.year;
      const investmentYears=[...new Set([...years,...investments.map(i=>i.year),...(defaultInvestmentYear?[defaultInvestmentYear]:[])])].sort((a,b)=>a-b);
      const leadMin=Number(source.reference?.lead_time_min_value), leadMax=Number(source.reference?.lead_time_max_value);
-     const readiness=source.key==='Lunar-ISRU'&&Number.isInteger(availableYear)?`Доступно с ${availableYear}; решение до ${availableYear}`:source.key==='Earth-New'&&Number.isFinite(leadMin)&&Number.isFinite(leadMax)?`Подготовка ${leadMin}–${leadMax} мес. после решения`:'';
+     const leadUnit=source.reference?.lead_time_unit==='week'?'нед.':source.reference?.lead_time_unit==='day'?'дн.':'мес.';
+     const readiness=source.key==='Lunar-ISRU'&&Number.isInteger(availableYear)?`Доступно с ${availableYear}; решение до ${availableYear}`:source.key==='Earth-New'&&Number.isFinite(leadMin)&&Number.isFinite(leadMax)?`Подготовка ${leadMin}–${leadMax} ${leadUnit} после решения`:'';
      const reason=unavailable(source), reserve=readCell(plan,'capacity_reservations',source,selectedYear), undated=unscheduledSupplyIndices(plan,source,selectedYear);
+     const related=sourceIssues(source);
+     const reserveIssues=related.filter(issue=>{const target=issueTarget(issue,plan);return target.kind==='capacity_reservations'||target.index===undefined;});
+     const reserveInvalid=reserveIssues.some(issue=>issueTarget(issue,plan).kind==='capacity_reservations');
+     const reserveId=`reserve-${source.key}-${selectedYear}`;
      const opened=expanded?.source===source.key;
      return <Fragment key={source.key}><tr className={w.selection?.source===source.key?'selected-source':''}>
-      <th scope="row" className="monthly-source"><button type="button" className="source-name" aria-label={`Параметры ${source.label}`} onClick={()=>onSource(source)}>{source.label} <span aria-hidden="true">ⓘ</span></button>
-       <label className="annual-reserve"><span>Резерв, т/год</span>{reserve.indices.length>1?<button type="button" className="text-button" onClick={onAdvanced}>{reserve.indices.length} записи</button>:<input type="number" inputMode="decimal" min={0} step="any" placeholder="—" value={reserve.value===null||!Number.isFinite(reserve.value)?'':reserve.value} aria-label={`Резерв ${source.label} ${selectedYear}, т/год`} onChange={e=>w.setDraft(writeCell(plan,'capacity_reservations',source,selectedYear,e.target.value===''?NaN:Number(e.target.value)))}/>}</label>
+      <th scope="row" className="monthly-source"><button type="button" className="source-name" aria-label={`Параметры ${source.label}`} onClick={()=>onSource(source)}>{source.label} <span aria-hidden="true">ⓘ</span>{source.customized&&<em className="source-custom-badge">Исслед. условия</em>}</button>
+       <label className="annual-reserve"><span>Резерв, т/год</span>{reserve.indices.length>1?<button type="button" className="text-button" onClick={onAdvanced}>{reserve.indices.length} записи</button>:<input id={reserveId} aria-invalid={reserveInvalid} aria-describedby={reserveIssues.length?`${reserveId}-issues`:undefined} disabled={w.immutable} type="number" inputMode="decimal" min={0} step="any" placeholder="—" value={reserve.value===null||!Number.isFinite(reserve.value)?'':reserve.value} aria-label={`Резерв ${source.label} ${selectedYear}, т/год`} onChange={e=>w.setDraft(writeCell(plan,'capacity_reservations',source,selectedYear,e.target.value===''?NaN:Number(e.target.value)))}/>}</label>
+       {reserveIssues.length>0&&<div className="reserve-issues" id={`${reserveId}-issues`}>{reserveIssues.map((issue,index)=><small key={index}>{issue.message}</small>)}</div>}
+       {related.some(issue=>issueTarget(issue,plan).index===undefined)&&<button type="button" className="text-button source-cost-help" onClick={()=>onSource(source)}>Тарифы и пределы источника →</button>}
        {undated.length>0&&<button type="button" className="undated-badge" aria-expanded={opened&&expanded.month===null} onClick={()=>select(source,null)}>{undated.length} без даты</button>}
-       {option&&<div className="source-investment">{investments.length>1?<button type="button" className="text-button" onClick={onAdvanced}>{investments.length} инвестиции →</button>:<><div className="source-investment-controls"><Toggle label={`Включить инвестицию ${source.label}`} checked={!!investment} onChange={yes=>w.setDraft(setInvestment(plan,option.id,yes?(defaultInvestmentYear||option.year):null))}/><select aria-label={`Год решения ${source.label}`} title="Год решения об инвестиции; не дата поставки" disabled={!investment} value={investment?.year??defaultInvestmentYear??option.year} onChange={e=>w.setDraft(setInvestment(plan,option.id,Number(e.target.value)))}>{investmentYears.map(year=><option key={year}>{year}</option>)}</select></div><small>{investment?'Вложения':'Включить инвестицию'}{reference&&<> · {number(Number(reference.total_capex_mln))} млн</>}{readiness&&<><br/>{readiness}</>}</small></>}</div>}
+       {option&&<div className="source-investment">{investments.length>1?<button type="button" className="text-button" onClick={onAdvanced}>{investments.length} инвестиции →</button>:<><div id={`investment-${source.key}`} className="source-investment-controls"><Toggle disabled={w.immutable} label={`Включить инвестицию ${source.label}`} checked={!!investment} onChange={yes=>w.setDraft(setInvestment(plan,option.id,yes?(defaultInvestmentYear||option.year):null))}/><select id={`investment-${source.key}-year`} aria-invalid={related.some(issue=>issueTarget(issue,plan).kind==='investments')} aria-label={`Год решения ${source.label}`} title="Год решения об инвестиции; не дата поставки" disabled={w.immutable||!investment} value={investment?.year??defaultInvestmentYear??option.year} onChange={e=>w.setDraft(setInvestment(plan,option.id,Number(e.target.value)))}>{investmentYears.map(year=><option key={year}>{year}</option>)}</select></div><small>{investment?'Вложения':'Включить инвестицию'}{reference&&<> · {number(Number(reference.total_capex_mln))} млн</>}{readiness&&<><br/>{readiness}</>}</small></>}</div>}
       </th>
-      {MONTHS.map((monthName,index)=>{const month=index+1,cell=readSupplyMonth(plan,source,selectedYear,month);const active=opened&&expanded.month===month;return <td key={monthName} className={`${active?'active-cell':''} ${reason&&cell.indices.length?'warning-cell':''} ${reason&&!cell.indices.length?'locked-cell':''}`}><button type="button" className="month-cell" disabled={!!reason&&!cell.indices.length} aria-expanded={active} aria-label={`${source.label}, ${monthName} ${selectedYear}: ${cell.indices.length?`${number(cell.total)} т, партий ${cell.indices.length}`:'нет партий'}`} title={reason||'Открыть партии месяца'} onClick={()=>select(source,month)}><strong>{cell.indices.length?number(cell.total):'—'}</strong><span>{cell.indices.length?`${cell.indices.length} парт.`:'добавить'}</span></button></td>;})}
+      {MONTHS.map((monthName,index)=>{const month=index+1,cell=readSupplyMonth(plan,source,selectedYear,month);const active=opened&&expanded.month===month;const cellIssues=related.filter(issue=>{const target=issueTarget(issue,plan);return ['reserved_capacity_exceeded','missing_required_investment'].includes(issue.code)?cell.indices.length>0:target.kind==='supply_orders'&&(target.index===undefined?cell.indices.length>0:cell.indices.includes(target.index));});return <td key={monthName} className={`${active?'active-cell':''} ${(reason&&cell.indices.length)||cellIssues.length?'warning-cell':''} ${reason&&!cell.indices.length?'locked-cell':''}`}><button type="button" className="month-cell" aria-invalid={cellIssues.length>0} disabled={!!reason&&!cell.indices.length} aria-expanded={active} aria-label={`${source.label}, ${monthName} ${selectedYear}: ${cell.indices.length?`${number(cell.total)} т, партий ${cell.indices.length}`:'нет партий'}`} title={cellIssues.map(issue=>issue.message).join('\n')||reason||'Открыть партии месяца'} onClick={()=>select(source,month)}><strong>{cell.indices.length?number(cell.total):'—'}</strong><span>{cell.indices.length?`${cell.indices.length} парт.`:'добавить'}</span></button></td>;})}
      </tr>{opened&&batchEditor(source,expanded.month,expanded.month===null?undated:readSupplyMonth(plan,source,selectedYear,expanded.month).indices)}</Fragment>;
     })}</tbody>
    </table>
   </div></fieldset>
+  <RiskLauncher w={w} onOpen={onRisk}/>
   <button type="button" className="text-button matrix-help" onClick={()=>setHelp('Каждая поставка — отдельная партия с точной датой получения и объёмом в тоннах. Ячейка месяца показывает сумму таких партий. Резерв — годовая пропускная способность канала, а не запас топлива. Записи старых планов без даты не распределяются автоматически: дату нужно назначить вручную.')}>Как заполнить таблицу ⓘ</button>
   {help&&<Modal title="Пояснение к поставкам" onClose={()=>setHelp(null)}><p>{help}</p></Modal>}
  </section>;

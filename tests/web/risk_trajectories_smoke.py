@@ -19,7 +19,6 @@ async def main():
   await page.goto(args.url)
   await expect(page.locator('.strategy-freshness')).to_contain_text('Результат текущих настроек')
   await page.get_by_role('button',name='Оба',exact=True).click()
-  await page.get_by_test_id('risk-disclosure').click()
   await page.get_by_test_id('run-risk-button').click()
   await expect(page.get_by_test_id('risk-trajectories')).to_be_visible(timeout=120000)
   await expect(page.get_by_role('button',name='Повторить проверку',exact=True)).to_be_enabled(timeout=120000)

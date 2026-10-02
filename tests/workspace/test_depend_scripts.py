@@ -172,6 +172,8 @@ class DependBootstrapContractTests(unittest.TestCase):
                 '#!/bin/sh\ncase "$*" in *"config --format json") '
                 'printf \'CONFIG\\n\' >> "$TEST_LOG"; printf \'%s\\n\' '
                 '\'{"services":{"web":{"environment":{"FUEL_HTTP_USER":"team","FUEL_HTTP_PASSWORD":"secret"}}}}\'; exit 0;; esac\n'
+                'if [ "$1" = create ]; then printf "%s\\n" frontend-export; fi\n'
+                'if [ "$1" = cp ]; then mkdir -p "$3"; : > "$3/index.html"; fi\n'
                 'printf "%s|%s\\n" "$FUEL_BIND_HOST" "$*" >> "$TEST_LOG"\n'
             )
             docker.chmod(0o755)
@@ -190,17 +192,104 @@ class DependBootstrapContractTests(unittest.TestCase):
                 check=False,
             )
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertEqual(
-                log.read_text().splitlines(),
-                [
-                    "CONFIG",
-                    "0.0.0.0|compose --env-file "
-                    + str(root / "docker/.env.example")
-                    + " -f "
-                    + str(root / "docker/compose.yaml")
-                    + " up --build -d --wait"
-                ],
+            lines = log.read_text().splitlines()
+            self.assertEqual(lines[0], "CONFIG")
+            self.assertIn(
+                "build --file " + str(root / "docker/Dockerfile.frontend"), lines[1]
             )
+            self.assertEqual(lines[2], "0.0.0.0|create fuel-contour-frontend-build:local")
+            self.assertRegex(lines[3], r"0\.0\.0\.0\|cp frontend-export:/build/dist/\. .+/.docker-frontend\.[^/]+$")
+            self.assertEqual(lines[4], "0.0.0.0|rm -f frontend-export")
+            self.assertIn("build --build-arg FUEL_FRONTEND_BUILD_DIR=.docker-frontend.", lines[5])
+            self.assertIn("--tag fuel-contour-web:latest", lines[5])
+            self.assertEqual(
+                lines[6],
+                "0.0.0.0|compose --env-file "
+                + str(root / "docker/.env.example")
+                + " -f "
+                + str(root / "docker/compose.yaml")
+                + " up --no-build -d --wait",
+            )
+            self.assertEqual(list(root.glob(".docker-frontend.*")), [])
+
+    def test_run_starts_cloudpub_and_prints_public_url_when_token_is_set(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            (root / "tools").mkdir()
+            shutil.copyfile(ROOT / "tools/configure_access.py", root / "tools/configure_access.py")
+            (root / "docker").mkdir()
+            (root / "docker/compose.yaml").touch()
+            (root / "docker/.env.example").touch()
+            (root / "bin").mkdir()
+            log = root / "docker.log"
+            docker = root / "bin/docker"
+            docker.write_text(
+                '#!/bin/sh\ncase "$*" in *"config --format json") '
+                'printf \'%s\\n\' '
+                '\'{"services":{"web":{"environment":{"FUEL_HTTP_USER":"team","FUEL_HTTP_PASSWORD":"secret"}}}}\'; exit 0;; esac\n'
+                'if [ "$1" = create ]; then printf "%s\\n" frontend-export; fi\n'
+                'if [ "$1" = cp ]; then mkdir -p "$3"; : > "$3/index.html"; fi\n'
+                'printf "%s\\n" "$*" >> "$TEST_LOG"\n'
+                'case "$*" in "logs fuel-contour-cloudpub") '
+                'printf "%s\\n" "Service published: https://demo.cloudpub.ru";; esac\n'
+            )
+            docker.chmod(0o755)
+            result = subprocess.run(
+                ["bash", str(root / "run.sh")],
+                cwd=root,
+                env={
+                    **os.environ,
+                    "PATH": str(root / "bin") + ":" + os.environ["PATH"],
+                    "TEST_LOG": str(log),
+                    "CLOUDPUB_TOKEN": "test-token",
+                },
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("https://demo.cloudpub.ru", result.stdout)
+            calls = log.read_text().splitlines()
+            self.assertIn("rm -f fuel-contour-cloudpub", calls)
+            self.assertIn(
+                "run --detach --name fuel-contour-cloudpub --network host "
+                "--restart unless-stopped --env TOKEN cloudpub/cloudpub:latest "
+                "publish http 8080",
+                calls,
+            )
+            self.assertNotIn("test-token", "\n".join(calls))
+
+    def test_run_stop_removes_cloudpub_tunnel_and_stops_web(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shutil.copyfile(ROOT / "run.sh", root / "run.sh")
+            (root / "docker").mkdir()
+            (root / "docker/compose.yaml").touch()
+            (root / "docker/.env.example").touch()
+            (root / "bin").mkdir()
+            log = root / "docker.log"
+            docker = root / "bin/docker"
+            docker.write_text('#!/bin/sh\nprintf "%s\\n" "$*" >> "$TEST_LOG"\n')
+            docker.chmod(0o755)
+            result = subprocess.run(
+                ["bash", str(root / "run.sh"), "stop"],
+                cwd=root,
+                env={
+                    **os.environ,
+                    "PATH": str(root / "bin") + ":" + os.environ["PATH"],
+                    "TEST_LOG": str(log),
+                },
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            calls = log.read_text().splitlines()
+            self.assertEqual(calls[0], "rm -f fuel-contour-cloudpub")
+            self.assertIn("stop web", calls[1])
 
     def test_run_reports_web_logs_when_public_service_is_not_ready(self):
         import shutil
@@ -219,8 +308,10 @@ class DependBootstrapContractTests(unittest.TestCase):
                 '#!/bin/sh\ncase "$*" in *"config --format json") '
                 'printf \'CONFIG\\n\' >> "$TEST_LOG"; printf \'%s\\n\' '
                 '\'{"services":{"web":{"environment":{"FUEL_HTTP_USER":"team","FUEL_HTTP_PASSWORD":"secret"}}}}\'; exit 0;; esac\n'
+                'if [ "$1" = create ]; then printf "%s\\n" frontend-export; fi\n'
+                'if [ "$1" = cp ]; then mkdir -p "$3"; : > "$3/index.html"; fi\n'
                 'printf "%s\\n" "$*" >> "$TEST_LOG"\n'
-                'case "$*" in *" up --build -d --wait") exit 9;; esac\n'
+                'case "$*" in *" up --no-build -d --wait") exit 9;; esac\n'
             )
             docker.chmod(0o755)
             result = subprocess.run(

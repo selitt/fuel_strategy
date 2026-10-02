@@ -1,0 +1,11 @@
+.supply-issue-summary{flex:0 0 auto;max-height:118px;overflow:auto;margin:0 0 8px;padding:8px 10px;border:1px solid #a16e4d;border-radius:4px;color:#edbe99;background:transparent;font-size:12px}
+.supply-issue-summary>strong{display:block;margin-bottom:4px}
+.supply-issue-summary>button{display:block;width:100%;padding:4px 0;border:0;background:transparent;text-align:left;color:inherit;font:inherit;cursor:pointer;overflow-wrap:anywhere}
+.supply-issue-summary>button:hover,.supply-issue-summary>button:focus-visible{text-decoration:underline}
+.supply-issue-summary>button>span:first-child{font-weight:600}
+.monthly-matrix input[aria-invalid=true],.monthly-matrix .month-cell[aria-invalid=true]{outline:1px solid #cf946b;outline-offset:-1px}
+.monthly-matrix .reserve-issues{max-width:235px;white-space:normal;margin-top:5px;color:#edbe99;font-weight:400;overflow-wrap:anywhere}
+.monthly-matrix .reserve-issues small,.monthly-matrix .batch-issue small{display:block}
+.monthly-matrix .batch-issue{grid-column:1/-1;color:#edbe99;white-space:normal;overflow-wrap:anywhere}
+.monthly-matrix .batch-id-field{min-width:100px;max-width:220px}
+.monthly-matrix .source-cost-help{font-size:11px;white-space:normal;text-align:left}

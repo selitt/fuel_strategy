@@ -4,6 +4,7 @@
 списывает потери строго 1 раз при приеме и обеспечивает приоритет критического спроса.
 """
 
+from datetime import date
 from typing import Dict, List, Any, Tuple
 from .calendar import PlanValidationError, normalize_plan
 from .models import (
@@ -13,13 +14,85 @@ from .models import (
     SourceScheduleRecord,
 )
 from .loader import CaseCatalog
+from .finance import reservation_payment
+
+
+_MONTH_LENGTHS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+
+
+def _day_of_year(value: date) -> int:
+    return sum(_MONTH_LENGTHS[: value.month - 1]) + value.day - 1
+
+
+def _date_for_model_day(years: List[int], model_day: int) -> date:
+    year_index, day_of_year = divmod(model_day, 365)
+    month = 1
+    for length in _MONTH_LENGTHS:
+        if day_of_year < length:
+            return date(years[year_index], month, day_of_year + 1)
+        day_of_year -= length
+        month += 1
+    raise AssertionError("invalid model day")
+
+
+def _emergency_arrival(
+    batch: Any,
+    emergency_source: Any,
+    years: List[int],
+) -> Tuple[int, date] | None:
+    lead = emergency_source.lead_time_max_value
+    if lead < 0 or not float(lead).is_integer():
+        raise ValueError("Emergency catalog max lead time must be a non-negative integer")
+    amount = int(lead)
+    unit = emergency_source.lead_time_unit.strip().lower()
+
+    if unit in {"week", "weeks"}:
+        arrival_day = batch.model_day + amount * 7
+    elif unit in {"day", "days"}:
+        arrival_day = batch.model_day + amount
+    elif unit in {"month", "months"}:
+        month_index = batch.delivery_date.year * 12 + batch.delivery_date.month - 1 + amount
+        arrival_year, zero_based_month = divmod(month_index, 12)
+        if arrival_year not in years:
+            return None
+        arrival_month = zero_based_month + 1
+        arrival_date = date(
+            arrival_year,
+            arrival_month,
+            min(batch.delivery_date.day, _MONTH_LENGTHS[arrival_month - 1]),
+        )
+        arrival_day = years.index(arrival_year) * 365 + _day_of_year(arrival_date)
+    else:
+        raise ValueError(
+            f"unsupported Emergency catalog lead time unit: {emergency_source.lead_time_unit}"
+        )
+
+    if not 0 <= arrival_day < len(years) * 365:
+        return None
+    return arrival_day, _date_for_model_day(years, arrival_day)
+
+
+def _rescue_batch_id(batch: Any, original_batch_ids: set[str]) -> str:
+    source_id = batch.source.source_id
+    parent_id = batch.batch_id
+    base = (
+        f"emergency-rescue:{len(source_id)}:{source_id}:"
+        f"{len(parent_id)}:{parent_id}"
+    )
+    candidate = base
+    suffix = 1
+    while candidate in original_batch_ids:
+        candidate = f"{base}:{suffix}"
+        suffix += 1
+    return candidate
 
 
 def simulate_daily(
     catalog: CaseCatalog,
     scenario_id: str,
     decisions: Dict[str, Any],
-    monte_carlo_failures: Dict[Tuple[int, str, Any], bool] = None,
+    monte_carlo_failures: Dict[Tuple[Any, ...], bool] = None,
+    emergency_enabled: bool = True,
 ) -> Tuple[List[YearlyBalanceRecord], List[SourceScheduleRecord], List[DailyTraceRecord], List[Dict[str, Any]], Dict[int, float]]:
     """
     Выполняет посуточное моделирование.
@@ -64,75 +137,207 @@ def simulate_daily(
             (batch.year, batch.source.source_id), []
         ).append(batch)
 
-    source_schedule_records: List[SourceScheduleRecord] = []
+    schedule_state: Dict[Tuple[int, str], Dict[str, Any]] = {}
+    for year in years:
+        for source in all_sources:
+            schedule_state[(year, source.source_id)] = {
+                "ordered_t": 0.0,
+                "delivered_t": 0.0,
+                "emergency_rescue_ordered_t": 0.0,
+                "batches": [],
+            }
 
-    for y_idx, year in enumerate(years):
-        for s_info in all_sources:
-            s_id = s_info.source_id
-            s_name = s_info.name
-            source_batches = batches_by_year_source.get((year, s_id), [])
-            ord_t = sum(batch.ordered_t for batch in source_batches)
-            res_t = reservations_map.get((year, s_id), 0.0)
+    batch_indexes: Dict[Tuple[int, str, str], int] = {}
+    for (year, source_id), source_batches in batches_by_year_source.items():
+        for index, batch in enumerate(source_batches):
+            batch_indexes[(year, source_id, batch.batch_id)] = index
 
-            # Фактическая доля поставки (для Луны в стрессе)
-            delivery_multiplier = catalog.multiplier(scenario_id, "actual_delivery_share", year, s_name)
+    emergency_source = unique_sources.get("E")
+    planned_emergency_by_year = {
+        year: sum(
+            batch.ordered_t
+            for batch in batches_by_year_source.get((year, "E"), [])
+        )
+        for year in years
+    }
+    remaining_emergency_reservation = {
+        year: max(
+            0.0,
+            reservations_map.get((year, "E"), 0.0)
+            - planned_emergency_by_year[year],
+        )
+        for year in years
+    }
+    remaining_emergency_capacity = {
+        year: max(
+            0.0,
+            (emergency_source.capacity_t_per_year if emergency_source else 0.0)
+            - planned_emergency_by_year[year],
+        )
+        for year in years
+    }
 
-            actual_deliv_t = 0.0
-            delivery_records: List[DeliveryScheduleRecord] = []
-            for batch_index, batch in enumerate(source_batches):
-                is_failed = bool(
-                    monte_carlo_failures.get((year, s_id, batch.batch_id), False)
-                    or monte_carlo_failures.get((year, s_id, batch_index), False)
-                )
-                delivered_t = 0.0 if is_failed else batch.ordered_t * delivery_multiplier
-                status = "failed" if is_failed else "delivered"
-                actual_deliv_t += delivered_t
-                delivery_records.append(
-                    DeliveryScheduleRecord(
-                        batch_id=batch.batch_id,
-                        source_id=s_id,
-                        source_name=s_name,
-                        year=year,
-                        order_date=batch.order_date.isoformat(),
-                        delivery_date=batch.delivery_date.isoformat(),
-                        ordered_t=round(batch.ordered_t, 2),
-                        delivered_t=round(delivered_t, 2),
-                        status=status,
-                    )
-                )
-                if delivered_t > 0:
-                    deliveries_calendar.setdefault(batch.model_day, []).append(
-                        {
-                            "source_id": s_id,
-                            "source_name": s_name,
-                            "volume": delivered_t,
-                        }
-                    )
-
-            # Take-or-pay объем
-            top_threshold = round(s_info.take_or_pay_share * res_t, 2)
-            payable_volume = max(ord_t, top_threshold)
-
-            # Переменная цена (в стрессе +25% для Core и Flex в 2038-2039)
-            price_mult = catalog.multiplier(scenario_id, "variable_price_multiplier", year, s_name)
-            unit_price = s_info.variable_cost_mln_per_t * price_mult
-
-            procurement_cost = round(payable_volume * unit_price, 2)
-            reservation_cost = round(res_t * s_info.reservation_rate, 2)
-
-            source_schedule_records.append(SourceScheduleRecord(
+    # Failure is observed at the original planned arrival. Allocation then follows
+    # calendar order, with IDs providing a stable tie-break independent of input order.
+    ordered_batches = sorted(
+        batches,
+        key=lambda batch: (batch.model_day, batch.source.source_id, batch.batch_id),
+    )
+    original_batch_ids = {batch.batch_id for batch in batches}
+    for batch in ordered_batches:
+        year = batch.year
+        source = batch.source
+        source_id = source.source_id
+        state = schedule_state[(year, source_id)]
+        batch_index = batch_indexes[(year, source_id, batch.batch_id)]
+        is_failed = bool(
+            monte_carlo_failures.get((year, source_id, batch.batch_id), False)
+            or monte_carlo_failures.get((year, source_id, batch_index), False)
+        )
+        delivery_multiplier = catalog.multiplier(
+            scenario_id,
+            "actual_delivery_share",
+            year,
+            source.name,
+        )
+        delivered_t = 0.0 if is_failed else batch.ordered_t * delivery_multiplier
+        state["ordered_t"] += batch.ordered_t
+        state["delivered_t"] += delivered_t
+        state["batches"].append(
+            DeliveryScheduleRecord(
+                batch_id=batch.batch_id,
+                source_id=source_id,
+                source_name=source.name,
                 year=year,
-                source_id=s_id,
-                source_name=s_name,
-                reserved_capacity_t=round(res_t, 2),
-                ordered_t=round(ord_t, 2),
-                delivered_t=round(actual_deliv_t, 2),
-                take_or_pay_threshold_t=top_threshold,
-                payable_volume_t=round(payable_volume, 2),
-                reservation_cost_mln=reservation_cost,
-                procurement_cost_mln=procurement_cost,
-                batches=delivery_records,
-            ))
+                order_date=batch.order_date.isoformat(),
+                delivery_date=batch.delivery_date.isoformat(),
+                ordered_t=round(batch.ordered_t, 2),
+                delivered_t=round(delivered_t, 2),
+                status="failed" if is_failed else "delivered",
+            )
+        )
+        if delivered_t > 0:
+            deliveries_calendar.setdefault(batch.model_day, []).append(
+                {
+                    "source_id": source_id,
+                    "source_name": source.name,
+                    "volume": delivered_t,
+                }
+            )
+
+        if (
+            not emergency_enabled
+            or not is_failed
+            or source_id == "E"
+            or emergency_source is None
+        ):
+            continue
+        arrival = _emergency_arrival(batch, emergency_source, years)
+        if arrival is None:
+            continue
+        arrival_day, arrival_date = arrival
+        arrival_year = arrival_date.year
+        dispatch_t = min(
+            batch.ordered_t,
+            remaining_emergency_reservation[arrival_year],
+            remaining_emergency_capacity[arrival_year],
+        )
+        if dispatch_t <= 0:
+            continue
+        remaining_emergency_reservation[arrival_year] -= dispatch_t
+        remaining_emergency_capacity[arrival_year] -= dispatch_t
+
+        rescue_failed = bool(
+            monte_carlo_failures.get(
+                ("emergency_rescue", year, source_id, batch.batch_id),
+                False,
+            )
+        )
+        rescue_multiplier = catalog.multiplier(
+            scenario_id,
+            "actual_delivery_share",
+            arrival_year,
+            emergency_source.name,
+        )
+        rescue_delivered_t = 0.0 if rescue_failed else dispatch_t * rescue_multiplier
+        emergency_state = schedule_state[(arrival_year, "E")]
+        emergency_state["ordered_t"] += dispatch_t
+        emergency_state["delivered_t"] += rescue_delivered_t
+        emergency_state["emergency_rescue_ordered_t"] += dispatch_t
+        emergency_state["batches"].append(
+            DeliveryScheduleRecord(
+                batch_id=_rescue_batch_id(batch, original_batch_ids),
+                source_id="E",
+                source_name=emergency_source.name,
+                year=arrival_year,
+                order_date=batch.delivery_date.isoformat(),
+                delivery_date=arrival_date.isoformat(),
+                ordered_t=round(dispatch_t, 2),
+                delivered_t=round(rescue_delivered_t, 2),
+                status="failed" if rescue_failed else "delivered",
+                parent_batch_id=batch.batch_id,
+            )
+        )
+        if rescue_delivered_t > 0:
+            deliveries_calendar.setdefault(arrival_day, []).append(
+                {
+                    "source_id": "E",
+                    "source_name": emergency_source.name,
+                    "volume": rescue_delivered_t,
+                }
+            )
+
+    source_schedule_records: List[SourceScheduleRecord] = []
+    for year in years:
+        for source in all_sources:
+            source_id = source.source_id
+            state = schedule_state[(year, source_id)]
+            ordered_t = state["ordered_t"]
+            delivered_t = state["delivered_t"]
+            reserved_t = reservations_map.get((year, source_id), 0.0)
+            take_or_pay_threshold = round(source.take_or_pay_share * reserved_t, 2)
+            payable_volume = max(ordered_t, take_or_pay_threshold)
+            price_multiplier = catalog.multiplier(
+                scenario_id,
+                "variable_price_multiplier",
+                year,
+                source.name,
+            )
+            procurement_cost = round(
+                payable_volume * source.variable_cost_mln_per_t * price_multiplier,
+                2,
+            )
+            source_schedule_records.append(
+                SourceScheduleRecord(
+                    year=year,
+                    source_id=source_id,
+                    source_name=source.name,
+                    reserved_capacity_t=round(reserved_t, 2),
+                    ordered_t=round(ordered_t, 2),
+                    delivered_t=round(delivered_t, 2),
+                    take_or_pay_threshold_t=take_or_pay_threshold,
+                    payable_volume_t=round(payable_volume, 2),
+                    reservation_cost_mln=reservation_payment(
+                        reserved_t,
+                        source.reservation_rate,
+                    ),
+                    procurement_cost_mln=procurement_cost,
+                    emergency_rescue_procurement_cost_mln=round(
+                        state["emergency_rescue_ordered_t"]
+                        * source.variable_cost_mln_per_t
+                        * price_multiplier,
+                        2,
+                    ),
+                    batches=sorted(
+                        state["batches"],
+                        key=lambda record: (
+                            record.delivery_date,
+                            record.parent_batch_id or "",
+                            record.batch_id,
+                        ),
+                    ),
+                )
+            )
 
     # 3. Посуточный цикл симуляции
     daily_trace: List[DailyTraceRecord] = []

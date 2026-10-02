@@ -107,26 +107,6 @@
   font-size: 13px;
 }
 
-.risk-entry > div {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 0 17px 12px;
-}
-
-.risk-entry p {
-  flex: 1;
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.risk-entry .button {
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
-
 .risk-panel {
   font-size: 13px;
 }
@@ -202,14 +182,6 @@
     margin-inline: 14px;
   }
 
-  .risk-entry > div {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .risk-entry .button {
-    align-self: flex-start;
-  }
 }
 .risk-histograms{display:grid;grid-template-columns:repeat(auto-fit,minmax(350px,1fr));gap:16px;margin:16px 0}
 .risk-histogram{min-width:0;margin:0;padding:8px 0;border-block:1px solid var(--border)}

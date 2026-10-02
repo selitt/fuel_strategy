@@ -1,0 +1,781 @@
+case_input_reference,classification,closing_inventory_t,failed_constraints,is_feasible,parameter_unit,scenario_id,service_level_critical,service_level_total,shortage_t,spill_t,strategy_id,strategy_name,total_cost_mln,value,variable,year,year_cost_mln
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,10802.06,6.0,earth_core_price,2035,753.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,10802.06,6.0,earth_core_price,2036,1110.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,10802.06,6.0,earth_core_price,2037,1244.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,10802.06,6.0,earth_core_price,2038,1789.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,10802.06,6.0,earth_core_price,2039,2529.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,10802.06,6.0,earth_core_price,2040,3373.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9820.17,6.0,earth_core_price,2035,753.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,9820.17,6.0,earth_core_price,2036,2163.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,9820.17,6.0,earth_core_price,2037,1425.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,9820.17,6.0,earth_core_price,2038,1294.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9820.17,6.0,earth_core_price,2039,1777.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,9820.17,6.0,earth_core_price,2040,2405.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10311.38,6.0,earth_core_price,2035,760.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10311.38,6.0,earth_core_price,2036,2723.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10311.38,6.0,earth_core_price,2037,1251.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,10311.38,6.0,earth_core_price,2038,1397.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10311.38,6.0,earth_core_price,2039,1856.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,10311.38,6.0,earth_core_price,2040,2320.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11477.12,6.0,earth_core_price,2035,886.5
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11477.12,6.0,earth_core_price,2036,1297.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11477.12,6.0,earth_core_price,2037,1362.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11477.12,6.0,earth_core_price,2038,1896.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11477.12,6.0,earth_core_price,2039,2711.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11477.12,6.0,earth_core_price,2040,3323.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12701.54,6.0,earth_core_price,2035,949.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12701.54,6.0,earth_core_price,2036,2836.18
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12701.54,6.0,earth_core_price,2037,1518.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,12701.54,6.0,earth_core_price,2038,2068.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,12701.54,6.0,earth_core_price,2039,2450.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,12701.54,6.0,earth_core_price,2040,2877.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11005.06,6.2,earth_core_price,2035,776.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11005.06,6.2,earth_core_price,2036,1138.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11005.06,6.2,earth_core_price,2037,1282.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11005.06,6.2,earth_core_price,2038,1827.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11005.06,6.2,earth_core_price,2039,2567.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11005.06,6.2,earth_core_price,2040,3411.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10011.17,6.2,earth_core_price,2035,776.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,10011.17,6.2,earth_core_price,2036,2191.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,10011.17,6.2,earth_core_price,2037,1463.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,10011.17,6.2,earth_core_price,2038,1320.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10011.17,6.2,earth_core_price,2039,1815.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,10011.17,6.2,earth_core_price,2040,2443.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,6.2,earth_core_price,2035,783.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10490.38,6.2,earth_core_price,2036,2751.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,6.2,earth_core_price,2037,1289.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,10490.38,6.2,earth_core_price,2038,1425.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,6.2,earth_core_price,2039,1886.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,10490.38,6.2,earth_core_price,2040,2352.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,6.2,earth_core_price,2035,913.1
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,6.2,earth_core_price,2036,1330.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,6.2,earth_core_price,2037,1400.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,6.2,earth_core_price,2038,1934.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,6.2,earth_core_price,2039,2749.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,6.2,earth_core_price,2040,3361.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,6.2,earth_core_price,2035,978.3
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,6.2,earth_core_price,2036,2866.88
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,6.2,earth_core_price,2037,1556.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,12912.74,6.2,earth_core_price,2038,2106.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,12912.74,6.2,earth_core_price,2039,2488.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,12912.74,6.2,earth_core_price,2040,2915.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11309.56,6.5,earth_core_price,2035,810.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11309.56,6.5,earth_core_price,2036,1180.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11309.56,6.5,earth_core_price,2037,1339.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11309.56,6.5,earth_core_price,2038,1884.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11309.56,6.5,earth_core_price,2039,2624.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11309.56,6.5,earth_core_price,2040,3468.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10297.67,6.5,earth_core_price,2035,810.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,10297.67,6.5,earth_core_price,2036,2233.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,10297.67,6.5,earth_core_price,2037,1520.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,10297.67,6.5,earth_core_price,2038,1359.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10297.67,6.5,earth_core_price,2039,1872.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,10297.67,6.5,earth_core_price,2040,2500.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10758.88,6.5,earth_core_price,2035,817.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10758.88,6.5,earth_core_price,2036,2793.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10758.88,6.5,earth_core_price,2037,1346.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,10758.88,6.5,earth_core_price,2038,1467.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10758.88,6.5,earth_core_price,2039,1931.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,10758.88,6.5,earth_core_price,2040,2400.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12006.12,6.5,earth_core_price,2035,953.0
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12006.12,6.5,earth_core_price,2036,1379.53
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12006.12,6.5,earth_core_price,2037,1457.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12006.12,6.5,earth_core_price,2038,1991.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12006.12,6.5,earth_core_price,2039,2806.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12006.12,6.5,earth_core_price,2040,3418.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13229.54,6.5,earth_core_price,2035,1021.05
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13229.54,6.5,earth_core_price,2036,2912.93
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13229.54,6.5,earth_core_price,2037,1613.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,13229.54,6.5,earth_core_price,2038,2163.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,13229.54,6.5,earth_core_price,2039,2545.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,13229.54,6.5,earth_core_price,2040,2972.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11817.06,7.0,earth_core_price,2035,868.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11817.06,7.0,earth_core_price,2036,1250.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11817.06,7.0,earth_core_price,2037,1434.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11817.06,7.0,earth_core_price,2038,1979.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11817.06,7.0,earth_core_price,2039,2719.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11817.06,7.0,earth_core_price,2040,3563.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10775.17,7.0,earth_core_price,2035,868.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,10775.17,7.0,earth_core_price,2036,2303.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,10775.17,7.0,earth_core_price,2037,1615.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,10775.17,7.0,earth_core_price,2038,1424.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10775.17,7.0,earth_core_price,2039,1967.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,10775.17,7.0,earth_core_price,2040,2595.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,11206.38,7.0,earth_core_price,2035,875.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,11206.38,7.0,earth_core_price,2036,2863.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,11206.38,7.0,earth_core_price,2037,1441.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,11206.38,7.0,earth_core_price,2038,1537.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,11206.38,7.0,earth_core_price,2039,2006.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,11206.38,7.0,earth_core_price,2040,2480.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12535.12,7.0,earth_core_price,2035,1019.5
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12535.12,7.0,earth_core_price,2036,1462.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12535.12,7.0,earth_core_price,2037,1552.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12535.12,7.0,earth_core_price,2038,2086.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12535.12,7.0,earth_core_price,2039,2901.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,12535.12,7.0,earth_core_price,2040,3513.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13757.54,7.0,earth_core_price,2035,1092.3
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13757.54,7.0,earth_core_price,2036,2989.68
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13757.54,7.0,earth_core_price,2037,1708.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,13757.54,7.0,earth_core_price,2038,2258.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,13757.54,7.0,earth_core_price,2039,2640.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,13757.54,7.0,earth_core_price,2040,3067.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,12324.56,7.5,earth_core_price,2035,925.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,12324.56,7.5,earth_core_price,2036,1320.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,12324.56,7.5,earth_core_price,2037,1529.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,12324.56,7.5,earth_core_price,2038,2074.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,12324.56,7.5,earth_core_price,2039,2814.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,12324.56,7.5,earth_core_price,2040,3658.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,11252.67,7.5,earth_core_price,2035,925.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,11252.67,7.5,earth_core_price,2036,2373.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,11252.67,7.5,earth_core_price,2037,1710.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,11252.67,7.5,earth_core_price,2038,1489.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,11252.67,7.5,earth_core_price,2039,2062.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,11252.67,7.5,earth_core_price,2040,2690.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,11653.88,7.5,earth_core_price,2035,932.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,11653.88,7.5,earth_core_price,2036,2933.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,11653.88,7.5,earth_core_price,2037,1536.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,11653.88,7.5,earth_core_price,2038,1607.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,11653.88,7.5,earth_core_price,2039,2081.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,11653.88,7.5,earth_core_price,2040,2560.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13064.12,7.5,earth_core_price,2035,1086.0
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13064.12,7.5,earth_core_price,2036,1544.53
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13064.12,7.5,earth_core_price,2037,1647.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13064.12,7.5,earth_core_price,2038,2181.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13064.12,7.5,earth_core_price,2039,2996.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13064.12,7.5,earth_core_price,2040,3608.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,14285.54,7.5,earth_core_price,2035,1163.55
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,14285.54,7.5,earth_core_price,2036,3066.43
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,14285.54,7.5,earth_core_price,2037,1803.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,14285.54,7.5,earth_core_price,2038,2353.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,14285.54,7.5,earth_core_price,2039,2735.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,14285.54,7.5,earth_core_price,2040,3162.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,12832.06,8.0,earth_core_price,2035,983.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,12832.06,8.0,earth_core_price,2036,1390.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,12832.06,8.0,earth_core_price,2037,1624.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,12832.06,8.0,earth_core_price,2038,2169.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,12832.06,8.0,earth_core_price,2039,2909.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,12832.06,8.0,earth_core_price,2040,3753.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,11730.17,8.0,earth_core_price,2035,983.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,11730.17,8.0,earth_core_price,2036,2443.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,11730.17,8.0,earth_core_price,2037,1805.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,11730.17,8.0,earth_core_price,2038,1554.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,11730.17,8.0,earth_core_price,2039,2157.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,11730.17,8.0,earth_core_price,2040,2785.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12101.38,8.0,earth_core_price,2035,990.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,12101.38,8.0,earth_core_price,2036,3003.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12101.38,8.0,earth_core_price,2037,1631.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,12101.38,8.0,earth_core_price,2038,1677.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12101.38,8.0,earth_core_price,2039,2156.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,12101.38,8.0,earth_core_price,2040,2640.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13593.12,8.0,earth_core_price,2035,1152.5
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13593.12,8.0,earth_core_price,2036,1627.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13593.12,8.0,earth_core_price,2037,1742.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13593.12,8.0,earth_core_price,2038,2276.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13593.12,8.0,earth_core_price,2039,3091.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,13593.12,8.0,earth_core_price,2040,3703.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,14813.54,8.0,earth_core_price,2035,1234.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,14813.54,8.0,earth_core_price,2036,3143.18
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,14813.54,8.0,earth_core_price,2037,1898.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,14813.54,8.0,earth_core_price,2038,2448.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,14813.54,8.0,earth_core_price,2039,2830.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,14813.54,8.0,earth_core_price,2040,3257.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,13339.56,8.5,earth_core_price,2035,1040.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,13339.56,8.5,earth_core_price,2036,1460.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,13339.56,8.5,earth_core_price,2037,1719.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,13339.56,8.5,earth_core_price,2038,2264.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,13339.56,8.5,earth_core_price,2039,3004.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,13339.56,8.5,earth_core_price,2040,3848.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,12207.67,8.5,earth_core_price,2035,1040.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,12207.67,8.5,earth_core_price,2036,2513.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,12207.67,8.5,earth_core_price,2037,1900.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,12207.67,8.5,earth_core_price,2038,1619.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,12207.67,8.5,earth_core_price,2039,2252.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,12207.67,8.5,earth_core_price,2040,2880.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12548.88,8.5,earth_core_price,2035,1047.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,12548.88,8.5,earth_core_price,2036,3073.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12548.88,8.5,earth_core_price,2037,1726.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,12548.88,8.5,earth_core_price,2038,1747.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12548.88,8.5,earth_core_price,2039,2231.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,12548.88,8.5,earth_core_price,2040,2720.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14122.12,8.5,earth_core_price,2035,1219.0
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14122.12,8.5,earth_core_price,2036,1709.53
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14122.12,8.5,earth_core_price,2037,1837.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14122.12,8.5,earth_core_price,2038,2371.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14122.12,8.5,earth_core_price,2039,3186.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14122.12,8.5,earth_core_price,2040,3798.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,15341.54,8.5,earth_core_price,2035,1306.05
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,15341.54,8.5,earth_core_price,2036,3219.93
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,15341.54,8.5,earth_core_price,2037,1993.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,15341.54,8.5,earth_core_price,2038,2543.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,15341.54,8.5,earth_core_price,2039,2925.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,15341.54,8.5,earth_core_price,2040,3352.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,13847.06,9.0,earth_core_price,2035,1098.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,13847.06,9.0,earth_core_price,2036,1530.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,13847.06,9.0,earth_core_price,2037,1814.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,13847.06,9.0,earth_core_price,2038,2359.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,13847.06,9.0,earth_core_price,2039,3099.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,13847.06,9.0,earth_core_price,2040,3943.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,12685.17,9.0,earth_core_price,2035,1098.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,12685.17,9.0,earth_core_price,2036,2583.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,12685.17,9.0,earth_core_price,2037,1995.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,12685.17,9.0,earth_core_price,2038,1684.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,12685.17,9.0,earth_core_price,2039,2347.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,12685.17,9.0,earth_core_price,2040,2975.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12996.38,9.0,earth_core_price,2035,1105.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,12996.38,9.0,earth_core_price,2036,3143.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12996.38,9.0,earth_core_price,2037,1821.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,12996.38,9.0,earth_core_price,2038,1817.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,12996.38,9.0,earth_core_price,2039,2306.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,12996.38,9.0,earth_core_price,2040,2800.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14651.12,9.0,earth_core_price,2035,1285.5
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14651.12,9.0,earth_core_price,2036,1792.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14651.12,9.0,earth_core_price,2037,1932.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14651.12,9.0,earth_core_price,2038,2466.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14651.12,9.0,earth_core_price,2039,3281.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,14651.12,9.0,earth_core_price,2040,3893.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,15869.54,9.0,earth_core_price,2035,1377.3
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,15869.54,9.0,earth_core_price,2036,3296.68
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,15869.54,9.0,earth_core_price,2037,2088.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,15869.54,9.0,earth_core_price,2038,2638.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,15869.54,9.0,earth_core_price,2039,3020.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,15869.54,9.0,earth_core_price,2040,3447.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,14354.56,9.5,earth_core_price,2035,1155.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,14354.56,9.5,earth_core_price,2036,1600.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,14354.56,9.5,earth_core_price,2037,1909.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,14354.56,9.5,earth_core_price,2038,2454.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,14354.56,9.5,earth_core_price,2039,3194.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,14354.56,9.5,earth_core_price,2040,4038.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,13162.67,9.5,earth_core_price,2035,1155.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,13162.67,9.5,earth_core_price,2036,2653.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,13162.67,9.5,earth_core_price,2037,2090.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,13162.67,9.5,earth_core_price,2038,1749.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,13162.67,9.5,earth_core_price,2039,2442.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,13162.67,9.5,earth_core_price,2040,3070.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,13443.88,9.5,earth_core_price,2035,1162.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,13443.88,9.5,earth_core_price,2036,3213.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,13443.88,9.5,earth_core_price,2037,1916.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,13443.88,9.5,earth_core_price,2038,1887.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,13443.88,9.5,earth_core_price,2039,2381.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,13443.88,9.5,earth_core_price,2040,2880.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15180.12,9.5,earth_core_price,2035,1352.0
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15180.12,9.5,earth_core_price,2036,1874.53
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15180.12,9.5,earth_core_price,2037,2027.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15180.12,9.5,earth_core_price,2038,2561.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15180.12,9.5,earth_core_price,2039,3376.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15180.12,9.5,earth_core_price,2040,3988.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,16397.54,9.5,earth_core_price,2035,1448.55
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,16397.54,9.5,earth_core_price,2036,3373.43
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,16397.54,9.5,earth_core_price,2037,2183.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,16397.54,9.5,earth_core_price,2038,2733.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,16397.54,9.5,earth_core_price,2039,3115.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,16397.54,9.5,earth_core_price,2040,3542.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,14862.06,10.0,earth_core_price,2035,1213.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,14862.06,10.0,earth_core_price,2036,1670.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,14862.06,10.0,earth_core_price,2037,2004.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,14862.06,10.0,earth_core_price,2038,2549.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,14862.06,10.0,earth_core_price,2039,3289.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,14862.06,10.0,earth_core_price,2040,4133.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,13640.17,10.0,earth_core_price,2035,1213.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,13640.17,10.0,earth_core_price,2036,2723.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,13640.17,10.0,earth_core_price,2037,2185.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,13640.17,10.0,earth_core_price,2038,1814.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,13640.17,10.0,earth_core_price,2039,2537.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,13640.17,10.0,earth_core_price,2040,3165.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,13891.38,10.0,earth_core_price,2035,1220.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,13891.38,10.0,earth_core_price,2036,3283.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,13891.38,10.0,earth_core_price,2037,2011.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,13891.38,10.0,earth_core_price,2038,1957.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,13891.38,10.0,earth_core_price,2039,2456.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,13891.38,10.0,earth_core_price,2040,2960.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15709.12,10.0,earth_core_price,2035,1418.5
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15709.12,10.0,earth_core_price,2036,1957.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15709.12,10.0,earth_core_price,2037,2122.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15709.12,10.0,earth_core_price,2038,2656.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15709.12,10.0,earth_core_price,2039,3471.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,15709.12,10.0,earth_core_price,2040,4083.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,16925.54,10.0,earth_core_price,2035,1519.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,16925.54,10.0,earth_core_price,2036,3450.18
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,16925.54,10.0,earth_core_price,2037,2278.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,16925.54,10.0,earth_core_price,2038,2828.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,16925.54,10.0,earth_core_price,2039,3210.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,16925.54,10.0,earth_core_price,2040,3637.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,15369.56,10.5,earth_core_price,2035,1270.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,15369.56,10.5,earth_core_price,2036,1740.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,15369.56,10.5,earth_core_price,2037,2099.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,15369.56,10.5,earth_core_price,2038,2644.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,15369.56,10.5,earth_core_price,2039,3384.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,15369.56,10.5,earth_core_price,2040,4228.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,14117.67,10.5,earth_core_price,2035,1270.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,14117.67,10.5,earth_core_price,2036,2793.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,14117.67,10.5,earth_core_price,2037,2280.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,14117.67,10.5,earth_core_price,2038,1879.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,14117.67,10.5,earth_core_price,2039,2632.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,14117.67,10.5,earth_core_price,2040,3260.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,14338.88,10.5,earth_core_price,2035,1277.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,14338.88,10.5,earth_core_price,2036,3353.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,14338.88,10.5,earth_core_price,2037,2106.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,14338.88,10.5,earth_core_price,2038,2027.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,14338.88,10.5,earth_core_price,2039,2531.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,14338.88,10.5,earth_core_price,2040,3040.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16238.12,10.5,earth_core_price,2035,1485.0
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16238.12,10.5,earth_core_price,2036,2039.53
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16238.12,10.5,earth_core_price,2037,2217.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16238.12,10.5,earth_core_price,2038,2751.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16238.12,10.5,earth_core_price,2039,3566.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16238.12,10.5,earth_core_price,2040,4178.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,17453.54,10.5,earth_core_price,2035,1591.05
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,17453.54,10.5,earth_core_price,2036,3526.93
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,17453.54,10.5,earth_core_price,2037,2373.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,17453.54,10.5,earth_core_price,2038,2923.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,17453.54,10.5,earth_core_price,2039,3305.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,17453.54,10.5,earth_core_price,2040,3732.2
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,15877.06,11.0,earth_core_price,2035,1328.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.51,RESERVE_45D,False,mln_units_per_t,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,15877.06,11.0,earth_core_price,2036,1810.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.39,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,15877.06,11.0,earth_core_price,2037,2194.95
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,15877.06,11.0,earth_core_price,2038,2739.42
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.04,RESERVE_45D,False,mln_units_per_t,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,15877.06,11.0,earth_core_price,2039,3479.83
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,15877.06,11.0,earth_core_price,2040,4323.61
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,14595.17,11.0,earth_core_price,2035,1328.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,5.46,RESERVE_45D,False,mln_units_per_t,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,14595.17,11.0,earth_core_price,2036,2863.59
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,14595.17,11.0,earth_core_price,2037,2375.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,14595.17,11.0,earth_core_price,2038,1944.79
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,3.69,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,14595.17,11.0,earth_core_price,2039,2727.14
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,14595.17,11.0,earth_core_price,2040,3355.33
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,10.5,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,14786.38,11.0,earth_core_price,2035,1335.45
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,9.3,RESERVE_45D,False,mln_units_per_t,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,14786.38,11.0,earth_core_price,2036,3423.84
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,7.02,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,14786.38,11.0,earth_core_price,2037,2201.78
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,mln_units_per_t,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,14786.38,11.0,earth_core_price,2038,2097.9
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,4.34,RESERVE_45D,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,14786.38,11.0,earth_core_price,2039,2606.6
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,0.0,RESERVE_45D,False,mln_units_per_t,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,14786.38,11.0,earth_core_price,2040,3120.81
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,27.69,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16767.12,11.0,earth_core_price,2035,1551.5
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,50.71,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16767.12,11.0,earth_core_price,2036,2122.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,56.33,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16767.12,11.0,earth_core_price,2037,2312.12
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,60.25,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16767.12,11.0,earth_core_price,2038,2846.8
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,66.29,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16767.12,11.0,earth_core_price,2039,3661.03
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,45.8,,True,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,16767.12,11.0,earth_core_price,2040,4273.64
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,37.12,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,17981.54,11.0,earth_core_price,2035,1662.3
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,48.78,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,17981.54,11.0,earth_core_price,2036,3603.68
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,71.2,,False,mln_units_per_t,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,17981.54,11.0,earth_core_price,2037,2468.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,17981.54,11.0,earth_core_price,2038,3018.87
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,17981.54,11.0,earth_core_price,2039,3400.62
+"{""case_input_control"": 6.2}",TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,mln_units_per_t,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,17981.54,11.0,earth_core_price,2040,3827.2
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,30.5,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11295.48,0.0,demand_interpolation,2035,783.67
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,56.82,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11295.48,0.0,demand_interpolation,2036,1162.92
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,92.54,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11295.48,0.0,demand_interpolation,2037,1330.7
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,107.97,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,31.57,earth_fortress,Земная крепость,11295.48,0.0,demand_interpolation,2038,1897.99
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,108.08,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,60.06,earth_fortress,Земная крепость,11295.48,0.0,demand_interpolation,2039,2637.71
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,105.47,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,66.05,earth_fortress,Земная крепость,11295.48,0.0,demand_interpolation,2040,3482.49
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,30.5,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10283.67,0.0,demand_interpolation,2035,783.67
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,52.2,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10283.67,0.0,demand_interpolation,2036,2215.41
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,87.92,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10283.67,0.0,demand_interpolation,2037,1509.42
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,110.68,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,24.24,lunar_pioneer,Лунный прорыв,10283.67,0.0,demand_interpolation,2038,1388.72
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,94.58,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,76.27,lunar_pioneer,Лунный прорыв,10283.67,0.0,demand_interpolation,2039,1875.68
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,99.85,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,68.04,lunar_pioneer,Лунный прорыв,10283.67,0.0,demand_interpolation,2040,2510.77
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,30.5,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10764.42,0.0,demand_interpolation,2035,790.67
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,56.82,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10764.42,0.0,demand_interpolation,2036,2776.08
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,92.54,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10764.42,0.0,demand_interpolation,2037,1337.71
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,110.68,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,28.86,balanced,Сбалансированный контур,10764.42,0.0,demand_interpolation,2038,1496.32
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,103.47,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,67.38,balanced,Сбалансированный контур,10764.42,0.0,demand_interpolation,2039,1948.24
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,102.05,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,74.73,balanced,Сбалансированный контур,10764.42,0.0,demand_interpolation,2040,2415.4
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,47.69,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11866.3,0.0,demand_interpolation,2035,920.32
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,98.71,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11866.3,0.0,demand_interpolation,2036,1354.54
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,112.92,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,29.41,base_builtin,Базовая,11866.3,0.0,demand_interpolation,2037,1441.05
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,110.68,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,56.15,base_builtin,Базовая,11866.3,0.0,demand_interpolation,2038,1972.36
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,108.08,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,72.65,base_builtin,Базовая,11866.3,0.0,demand_interpolation,2039,2781.03
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,105.47,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,60.12,base_builtin,Базовая,11866.3,0.0,demand_interpolation,2040,3397.0
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,57.12,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12992.1,0.0,demand_interpolation,2035,985.52
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,96.78,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12992.1,0.0,demand_interpolation,2036,2891.39
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,112.92,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,44.28,stress_builtin,Стресс-устойчивая,12992.1,0.0,demand_interpolation,2037,1593.2
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,110.68,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,143.1,stress_builtin,Стресс-устойчивая,12992.1,0.0,demand_interpolation,2038,2113.81
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,108.08,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,141.81,stress_builtin,Стресс-устойчивая,12992.1,0.0,demand_interpolation,2039,2490.58
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,105.47,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,140.15,stress_builtin,Стресс-устойчивая,12992.1,0.0,demand_interpolation,2040,2917.6
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,23.0,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11223.15,0.25,demand_interpolation,2035,780.96
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,38.82,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11223.15,0.25,demand_interpolation,2036,1153.73
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,60.29,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11223.15,0.25,demand_interpolation,2037,1312.59
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,79.17,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11223.15,0.25,demand_interpolation,2038,1870.64
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,103.33,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11223.15,0.25,demand_interpolation,2039,2626.44
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,96.41,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,26.48,earth_fortress,Земная крепость,11223.15,0.25,demand_interpolation,2040,3478.79
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,23.0,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10220.3,0.25,demand_interpolation,2035,780.96
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,34.2,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10220.3,0.25,demand_interpolation,2036,2206.22
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,55.67,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10220.3,0.25,demand_interpolation,2037,1491.32
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,74.55,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10220.3,0.25,demand_interpolation,2038,1361.64
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,88.56,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,10.15,lunar_pioneer,Лунный прорыв,10220.3,0.25,demand_interpolation,2039,1871.23
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,96.13,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,21.87,lunar_pioneer,Лунный прорыв,10220.3,0.25,demand_interpolation,2040,2508.93
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,23.0,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10701.22,0.25,demand_interpolation,2035,787.96
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,38.82,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10701.22,0.25,demand_interpolation,2036,2766.89
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,60.29,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10701.22,0.25,demand_interpolation,2037,1319.61
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,79.17,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10701.22,0.25,demand_interpolation,2038,1469.62
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,92.85,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,10.48,balanced,Сбалансированный контур,10701.22,0.25,demand_interpolation,2039,1944.11
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,95.04,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,27.25,balanced,Сбалансированный контур,10701.22,0.25,demand_interpolation,2040,2413.03
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,40.19,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11840.28,0.25,demand_interpolation,2035,917.61
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,80.71,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11840.28,0.25,demand_interpolation,2036,1345.35
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,110.08,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11840.28,0.25,demand_interpolation,2037,1430.29
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,109.38,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,26.5,base_builtin,Базовая,11840.28,0.25,demand_interpolation,2038,1971.45
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,106.4,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,37.02,base_builtin,Базовая,11840.28,0.25,demand_interpolation,2039,2779.93
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,103.42,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,16.61,base_builtin,Базовая,11840.28,0.25,demand_interpolation,2040,3395.65
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,49.62,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12969.44,0.25,demand_interpolation,2035,982.81
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,78.78,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12969.44,0.25,demand_interpolation,2036,2882.2
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,112.26,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,12.69,stress_builtin,Стресс-устойчивая,12969.44,0.25,demand_interpolation,2037,1585.74
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,109.38,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,115.62,stress_builtin,Стресс-устойчивая,12969.44,0.25,demand_interpolation,2038,2112.96
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,106.4,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,106.18,stress_builtin,Стресс-устойчивая,12969.44,0.25,demand_interpolation,2039,2489.48
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,103.42,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,96.64,stress_builtin,Стресс-устойчивая,12969.44,0.25,demand_interpolation,2040,2916.25
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,15.5,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11035.1,0.5,demand_interpolation,2035,778.25
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,20.82,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11035.1,0.5,demand_interpolation,2036,1144.54
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,28.04,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11035.1,0.5,demand_interpolation,2037,1294.49
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,18.79,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11035.1,0.5,demand_interpolation,2038,1837.26
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,6.95,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11035.1,0.5,demand_interpolation,2039,2569.97
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9637,0.9566,17.36,0.0,earth_fortress,Земная крепость,11035.1,0.5,demand_interpolation,2040,3410.59
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,15.5,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10034.84,0.5,demand_interpolation,2035,778.25
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,16.2,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10034.84,0.5,demand_interpolation,2036,2197.03
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,23.42,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10034.84,0.5,demand_interpolation,2037,1473.21
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,14.17,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10034.84,0.5,demand_interpolation,2038,1328.26
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,2.33,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10034.84,0.5,demand_interpolation,2039,1817.04
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9712,0.9697,12.1,0.0,lunar_pioneer,Лунный прорыв,10034.84,0.5,demand_interpolation,2040,2441.05
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,15.5,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10523.28,0.5,demand_interpolation,2035,785.25
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,20.82,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10523.28,0.5,demand_interpolation,2036,2757.7
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,28.04,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10523.28,0.5,demand_interpolation,2037,1301.5
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,18.79,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10523.28,0.5,demand_interpolation,2038,1436.25
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,6.95,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10523.28,0.5,demand_interpolation,2039,1891.35
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9816,0.9813,7.48,0.0,balanced,Сбалансированный контур,10523.28,0.5,demand_interpolation,2040,2351.23
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,32.69,,True,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11731.74,0.5,demand_interpolation,2035,914.91
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,62.71,,True,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11731.74,0.5,demand_interpolation,2036,1336.16
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,77.83,,True,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11731.74,0.5,demand_interpolation,2037,1412.19
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,75.5,,True,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11731.74,0.5,demand_interpolation,2038,1948.02
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,73.54,,True,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11731.74,0.5,demand_interpolation,2039,2757.12
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,43.3,,True,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11731.74,0.5,demand_interpolation,2040,3363.34
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,42.12,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12936.26,0.5,demand_interpolation,2035,980.11
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,60.78,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12936.26,0.5,demand_interpolation,2036,2873.01
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,92.7,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12936.26,0.5,demand_interpolation,2037,1568.94
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,108.07,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,69.25,stress_builtin,Стресс-устойчивая,12936.26,0.5,demand_interpolation,2038,2110.93
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,104.72,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,70.54,stress_builtin,Стресс-устойчивая,12936.26,0.5,demand_interpolation,2039,2488.37
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,101.38,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,53.13,stress_builtin,Стресс-устойчивая,12936.26,0.5,demand_interpolation,2040,2914.9
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,8.0,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,10994.76,0.75,demand_interpolation,2035,775.54
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,7.15,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9701,0.9698,4.33,0.0,earth_fortress,Земная крепость,10994.76,0.75,demand_interpolation,2036,1137.91
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,5.98,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9736,0.9699,5.86,0.0,earth_fortress,Земная крепость,10994.76,0.75,demand_interpolation,2037,1281.68
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,7.47,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8714,0.8633,38.87,0.0,earth_fortress,Земная крепость,10994.76,0.75,demand_interpolation,2038,1826.03
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8939,0.8891,40.37,0.0,earth_fortress,Земная крепость,10994.76,0.75,demand_interpolation,2039,2564.63
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.853,0.8463,68.18,0.0,earth_fortress,Земная крепость,10994.76,0.75,demand_interpolation,2040,3408.97
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,8.0,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9990.73,0.75,demand_interpolation,2035,775.54
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,4.42,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9575,0.9566,6.22,0.0,lunar_pioneer,Лунный прорыв,9990.73,0.75,demand_interpolation,2036,2190.52
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,4.2,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9667,0.965,6.81,0.0,lunar_pioneer,Лунный прорыв,9990.73,0.75,demand_interpolation,2037,1463.41
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.18,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8872,0.8827,33.36,0.0,lunar_pioneer,Лунный прорыв,9990.73,0.75,demand_interpolation,2038,1317.8
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8766,0.8691,47.66,0.0,lunar_pioneer,Лунный прорыв,9990.73,0.75,demand_interpolation,2039,1806.04
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8764,0.8686,58.3,0.0,lunar_pioneer,Лунный прорыв,9990.73,0.75,demand_interpolation,2040,2437.42
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,8.0,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10467.81,0.75,demand_interpolation,2035,782.54
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,6.65,BASE_CRITICAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9736,0.9733,3.83,0.0,balanced,Сбалансированный контур,10467.81,0.75,demand_interpolation,2036,2750.64
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,5.34,BASE_CRITICAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9746,0.9706,5.72,0.0,balanced,Сбалансированный контур,10467.81,0.75,demand_interpolation,2037,1288.55
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8927,0.8873,32.04,0.0,balanced,Сбалансированный контур,10467.81,0.75,demand_interpolation,2038,1423.8
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.875,0.8686,47.84,0.0,balanced,Сбалансированный контур,10467.81,0.75,demand_interpolation,2039,1877.96
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8757,0.8686,58.3,0.0,balanced,Сбалансированный контур,10467.81,0.75,demand_interpolation,2040,2344.32
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,25.19,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11588.1,0.75,demand_interpolation,2035,912.2
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,44.71,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11588.1,0.75,demand_interpolation,2036,1326.97
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,45.58,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11588.1,0.75,demand_interpolation,2037,1394.09
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,15.12,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11588.1,0.75,demand_interpolation,2038,1914.65
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,10.22,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9149,0.9092,33.06,0.0,base_builtin,Базовая,11588.1,0.75,demand_interpolation,2039,2711.12
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,10.09,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.842,0.8332,73.99,0.0,base_builtin,Базовая,11588.1,0.75,demand_interpolation,2040,3329.07
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,34.62,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12890.53,0.75,demand_interpolation,2035,977.4
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,42.78,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12890.53,0.75,demand_interpolation,2036,2863.82
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,60.45,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12890.53,0.75,demand_interpolation,2037,1550.83
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,106.75,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,10.18,stress_builtin,Стресс-устойчивая,12890.53,0.75,demand_interpolation,2038,2097.77
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,103.05,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,34.91,stress_builtin,Стресс-устойчивая,12890.53,0.75,demand_interpolation,2039,2487.26
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,99.34,STORAGE_OVERFLOW,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,9.63,stress_builtin,Стресс-устойчивая,12890.53,0.75,demand_interpolation,2040,2913.45
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,2.87,BASE_CRITICAL_SERVICE,False,interpolation_share_low_to_high,BASE,0.9796,0.9785,2.37,0.0,earth_fortress,Земная крепость,10987.33,1.0,demand_interpolation,2035,773.0
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,4.22,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8923,0.8894,17.03,0.0,earth_fortress,Земная крепость,10987.33,1.0,demand_interpolation,2036,1136.28
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,2.2,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9129,0.9079,19.26,0.0,earth_fortress,Земная крепость,10987.33,1.0,demand_interpolation,2037,1280.95
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,5.08,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.7852,0.7812,68.39,0.0,earth_fortress,Земная крепость,10987.33,1.0,demand_interpolation,2038,1825.43
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8118,0.8031,78.76,0.0,earth_fortress,Земная крепость,10987.33,1.0,demand_interpolation,2039,2563.43
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.7851,0.7701,112.06,0.0,earth_fortress,Земная крепость,10987.33,1.0,demand_interpolation,2040,3408.24
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,2.87,BASE_CRITICAL_SERVICE,False,interpolation_share_low_to_high,BASE,0.9796,0.9785,2.37,0.0,lunar_pioneer,Лунный прорыв,9982.35,1.0,demand_interpolation,2035,773.0
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,3.93,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8664,0.8613,21.36,0.0,lunar_pioneer,Лунный прорыв,9982.35,1.0,demand_interpolation,2036,2189.33
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9208,0.917,17.35,0.0,lunar_pioneer,Лунный прорыв,9982.35,1.0,demand_interpolation,2037,1462.38
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.7988,0.7904,65.5,0.0,lunar_pioneer,Лунный прорыв,9982.35,1.0,demand_interpolation,2038,1316.45
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.7941,0.7904,83.84,0.0,lunar_pioneer,Лунный прорыв,9982.35,1.0,demand_interpolation,2039,1804.87
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.806,0.7904,102.18,0.0,lunar_pioneer,Лунный прорыв,9982.35,1.0,demand_interpolation,2040,2436.32
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,2.87,BASE_CRITICAL_SERVICE,False,interpolation_share_low_to_high,BASE,0.9796,0.9785,2.37,0.0,balanced,Сбалансированный контур,10459.41,1.0,demand_interpolation,2035,780.0
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,4.22,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8936,0.8894,17.03,0.0,balanced,Сбалансированный контур,10459.41,1.0,demand_interpolation,2036,2748.78
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,2.3,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9122,0.9074,19.36,0.0,balanced,Сбалансированный контур,10459.41,1.0,demand_interpolation,2037,1287.95
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8071,0.7977,63.2,0.0,balanced,Сбалансированный контур,10459.41,1.0,demand_interpolation,2038,1422.9
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.794,0.7904,83.84,0.0,balanced,Сбалансированный контур,10459.41,1.0,demand_interpolation,2039,1876.79
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.7981,0.7904,102.18,0.0,balanced,Сбалансированный контур,10459.41,1.0,demand_interpolation,2040,2342.99
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,17.69,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11539.87,1.0,demand_interpolation,2035,909.49
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,26.71,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11539.87,1.0,demand_interpolation,2036,1317.78
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,13.33,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11539.87,1.0,demand_interpolation,2037,1375.98
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,6.68,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8425,0.8338,51.93,0.0,base_builtin,Базовая,11539.87,1.0,demand_interpolation,2038,1898.25
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,8.54,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.8169,0.8104,75.82,0.0,base_builtin,Базовая,11539.87,1.0,demand_interpolation,2039,2710.13
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,8.05,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.7616,0.759,117.5,0.0,base_builtin,Базовая,11539.87,1.0,demand_interpolation,2040,3328.24
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,27.12,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12745.05,1.0,demand_interpolation,2035,974.69
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,24.78,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12745.05,1.0,demand_interpolation,2036,2854.62
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,28.2,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12745.05,1.0,demand_interpolation,2037,1532.73
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,56.56,RESERVE_45D,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12745.05,1.0,demand_interpolation,2038,2065.1
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,51.76,,False,interpolation_share_low_to_high,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12745.05,1.0,demand_interpolation,2039,2452.2
+"{""case_input_endpoints"": [""low_total_t"", ""high_total_t""]}",TEAM_ASSUMPTION,14.83,RESERVE_45D,False,interpolation_share_low_to_high,BASE,0.9985,0.9979,1.03,0.0,stress_builtin,Стресс-устойчивая,12745.05,1.0,demand_interpolation,2040,2865.71
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11005.06,0.0,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,9.51,RESERVE_45D,False,delivered_share,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11005.06,0.0,lunar_actual_share,2036,1138.8
+{},TEAM_ASSUMPTION,7.39,RESERVE_45D,False,delivered_share,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11005.06,0.0,lunar_actual_share,2037,1282.95
+{},TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11005.06,0.0,lunar_actual_share,2038,1827.42
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,delivered_share,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11005.06,0.0,lunar_actual_share,2039,2567.83
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,delivered_share,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11005.06,0.0,lunar_actual_share,2040,3411.61
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9982.89,0.0,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,5.46,RESERVE_45D,False,delivered_share,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,9982.89,0.0,lunar_actual_share,2036,2191.59
+{},TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,9982.89,0.0,lunar_actual_share,2037,1463.87
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.5442,0.5378,115.55,0.0,lunar_pioneer,Лунный прорыв,9982.89,0.0,lunar_actual_share,2038,1313.87
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.624,0.6175,122.4,0.0,lunar_pioneer,Лунный прорыв,9982.89,0.0,lunar_actual_share,2039,1801.15
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.6895,0.684,123.24,0.0,lunar_pioneer,Лунный прорыв,9982.89,0.0,lunar_actual_share,2040,2435.96
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10460.24,0.0,lunar_actual_share,2035,783.45
+{},TEAM_ASSUMPTION,9.3,RESERVE_45D,False,delivered_share,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10460.24,0.0,lunar_actual_share,2036,2751.84
+{},TEAM_ASSUMPTION,7.02,RESERVE_45D,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10460.24,0.0,lunar_actual_share,2037,1289.78
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.6262,0.6209,94.78,0.0,balanced,Сбалансированный контур,10460.24,0.0,lunar_actual_share,2038,1420.75
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.6561,0.6484,112.52,0.0,balanced,Сбалансированный контур,10460.24,0.0,lunar_actual_share,2039,1873.8
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.6915,0.684,123.24,0.0,balanced,Сбалансированный контур,10460.24,0.0,lunar_actual_share,2040,2340.62
+{},TEAM_ASSUMPTION,27.69,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.0,lunar_actual_share,2035,913.1
+{},TEAM_ASSUMPTION,50.71,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.0,lunar_actual_share,2036,1330.03
+{},TEAM_ASSUMPTION,56.33,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.0,lunar_actual_share,2037,1400.12
+{},TEAM_ASSUMPTION,60.25,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.0,lunar_actual_share,2038,1934.8
+{},TEAM_ASSUMPTION,66.29,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.0,lunar_actual_share,2039,2749.03
+{},TEAM_ASSUMPTION,45.8,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.0,lunar_actual_share,2040,3361.64
+{},TEAM_ASSUMPTION,37.12,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12755.56,0.0,lunar_actual_share,2035,978.3
+{},TEAM_ASSUMPTION,48.78,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12755.56,0.0,lunar_actual_share,2036,2866.88
+{},TEAM_ASSUMPTION,71.2,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12755.56,0.0,lunar_actual_share,2037,1556.87
+{},TEAM_ASSUMPTION,43.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12755.56,0.0,lunar_actual_share,2038,2075.47
+{},TEAM_ASSUMPTION,8.19,BASE_CRITICAL_SERVICE,False,delivered_share,BASE,0.976,0.9749,8.04,0.0,stress_builtin,Стресс-устойчивая,12755.56,0.0,lunar_actual_share,2039,2429.16
+{},TEAM_ASSUMPTION,9.49,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.8521,0.8453,60.32,0.0,stress_builtin,Стресс-устойчивая,12755.56,0.0,lunar_actual_share,2040,2848.88
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11005.06,0.25,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,9.51,RESERVE_45D,False,delivered_share,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11005.06,0.25,lunar_actual_share,2036,1138.8
+{},TEAM_ASSUMPTION,7.39,RESERVE_45D,False,delivered_share,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11005.06,0.25,lunar_actual_share,2037,1282.95
+{},TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11005.06,0.25,lunar_actual_share,2038,1827.42
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,delivered_share,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11005.06,0.25,lunar_actual_share,2039,2567.83
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,delivered_share,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11005.06,0.25,lunar_actual_share,2040,3411.61
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9985.4,0.25,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,5.46,RESERVE_45D,False,delivered_share,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,9985.4,0.25,lunar_actual_share,2036,2191.59
+{},TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,9985.4,0.25,lunar_actual_share,2037,1463.87
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.6623,0.6564,85.91,0.0,lunar_pioneer,Лунный прорыв,9985.4,0.25,lunar_actual_share,2038,1314.58
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.7181,0.7101,92.76,0.0,lunar_pioneer,Лунный прорыв,9985.4,0.25,lunar_actual_share,2039,1802.39
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.7657,0.76,93.6,0.0,lunar_pioneer,Лунный прорыв,9985.4,0.25,lunar_actual_share,2040,2436.52
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10462.66,0.25,lunar_actual_share,2035,783.45
+{},TEAM_ASSUMPTION,9.3,RESERVE_45D,False,delivered_share,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10462.66,0.25,lunar_actual_share,2036,2751.84
+{},TEAM_ASSUMPTION,7.02,RESERVE_45D,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10462.66,0.25,lunar_actual_share,2037,1289.78
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.7254,0.7197,70.08,0.0,balanced,Сбалансированный контур,10462.66,0.25,lunar_actual_share,2038,1421.45
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.7376,0.7333,85.35,0.0,balanced,Сбалансированный контур,10462.66,0.25,lunar_actual_share,2039,1874.87
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.7651,0.76,93.6,0.0,balanced,Сбалансированный контур,10462.66,0.25,lunar_actual_share,2040,2341.27
+{},TEAM_ASSUMPTION,27.69,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.25,lunar_actual_share,2035,913.1
+{},TEAM_ASSUMPTION,50.71,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.25,lunar_actual_share,2036,1330.03
+{},TEAM_ASSUMPTION,56.33,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.25,lunar_actual_share,2037,1400.12
+{},TEAM_ASSUMPTION,60.25,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.25,lunar_actual_share,2038,1934.8
+{},TEAM_ASSUMPTION,66.29,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.25,lunar_actual_share,2039,2749.03
+{},TEAM_ASSUMPTION,45.8,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.25,lunar_actual_share,2040,3361.64
+{},TEAM_ASSUMPTION,37.12,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12822.98,0.25,lunar_actual_share,2035,978.3
+{},TEAM_ASSUMPTION,48.78,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12822.98,0.25,lunar_actual_share,2036,2866.88
+{},TEAM_ASSUMPTION,71.2,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12822.98,0.25,lunar_actual_share,2037,1556.87
+{},TEAM_ASSUMPTION,73.14,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12822.98,0.25,lunar_actual_share,2038,2086.26
+{},TEAM_ASSUMPTION,59.42,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12822.98,0.25,lunar_actual_share,2039,2460.65
+{},TEAM_ASSUMPTION,30.04,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12822.98,0.25,lunar_actual_share,2040,2874.02
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11005.06,0.5,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,9.51,RESERVE_45D,False,delivered_share,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11005.06,0.5,lunar_actual_share,2036,1138.8
+{},TEAM_ASSUMPTION,7.39,RESERVE_45D,False,delivered_share,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11005.06,0.5,lunar_actual_share,2037,1282.95
+{},TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11005.06,0.5,lunar_actual_share,2038,1827.42
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,delivered_share,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11005.06,0.5,lunar_actual_share,2039,2567.83
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,delivered_share,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11005.06,0.5,lunar_actual_share,2040,3411.61
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9988.75,0.5,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,5.46,RESERVE_45D,False,delivered_share,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,9988.75,0.5,lunar_actual_share,2036,2191.59
+{},TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,9988.75,0.5,lunar_actual_share,2037,1463.87
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.7812,0.7749,56.27,0.0,lunar_pioneer,Лунный прорыв,9988.75,0.5,lunar_actual_share,2038,1315.72
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.8073,0.8028,63.12,0.0,lunar_pioneer,Лунный прорыв,9988.75,0.5,lunar_actual_share,2039,1803.85
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.8418,0.836,63.96,0.0,lunar_pioneer,Лунный прорыв,9988.75,0.5,lunar_actual_share,2040,2437.27
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10466.02,0.5,lunar_actual_share,2035,783.45
+{},TEAM_ASSUMPTION,9.3,RESERVE_45D,False,delivered_share,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10466.02,0.5,lunar_actual_share,2036,2751.84
+{},TEAM_ASSUMPTION,7.02,RESERVE_45D,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10466.02,0.5,lunar_actual_share,2037,1289.78
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.8229,0.8185,45.38,0.0,balanced,Сбалансированный контур,10466.02,0.5,lunar_actual_share,2038,1422.36
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.8223,0.8182,58.18,0.0,balanced,Сбалансированный контур,10466.02,0.5,lunar_actual_share,2039,1876.2
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.8424,0.836,63.96,0.0,balanced,Сбалансированный контур,10466.02,0.5,lunar_actual_share,2040,2342.39
+{},TEAM_ASSUMPTION,27.69,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.5,lunar_actual_share,2035,913.1
+{},TEAM_ASSUMPTION,50.71,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.5,lunar_actual_share,2036,1330.03
+{},TEAM_ASSUMPTION,56.33,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.5,lunar_actual_share,2037,1400.12
+{},TEAM_ASSUMPTION,60.25,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.5,lunar_actual_share,2038,1934.8
+{},TEAM_ASSUMPTION,66.29,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.5,lunar_actual_share,2039,2749.03
+{},TEAM_ASSUMPTION,45.8,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.5,lunar_actual_share,2040,3361.64
+{},TEAM_ASSUMPTION,37.12,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12902.14,0.5,lunar_actual_share,2035,978.3
+{},TEAM_ASSUMPTION,48.78,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12902.14,0.5,lunar_actual_share,2036,2866.88
+{},TEAM_ASSUMPTION,71.2,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12902.14,0.5,lunar_actual_share,2037,1556.87
+{},TEAM_ASSUMPTION,102.78,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12902.14,0.5,lunar_actual_share,2038,2097.05
+{},TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,delivered_share,BASE,1.0,1.0,0.0,13.6,stress_builtin,Стресс-устойчивая,12902.14,0.5,lunar_actual_share,2039,2488.33
+{},TEAM_ASSUMPTION,100.71,STORAGE_OVERFLOW,False,delivered_share,BASE,1.0,1.0,0.0,4.64,stress_builtin,Стресс-устойчивая,12902.14,0.5,lunar_actual_share,2040,2914.71
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11005.06,0.75,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,9.51,RESERVE_45D,False,delivered_share,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11005.06,0.75,lunar_actual_share,2036,1138.8
+{},TEAM_ASSUMPTION,7.39,RESERVE_45D,False,delivered_share,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11005.06,0.75,lunar_actual_share,2037,1282.95
+{},TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11005.06,0.75,lunar_actual_share,2038,1827.42
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,delivered_share,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11005.06,0.75,lunar_actual_share,2039,2567.83
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,delivered_share,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11005.06,0.75,lunar_actual_share,2040,3411.61
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9993.97,0.75,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,5.46,RESERVE_45D,False,delivered_share,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,9993.97,0.75,lunar_actual_share,2036,2191.59
+{},TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,9993.97,0.75,lunar_actual_share,2037,1463.87
+{},TEAM_ASSUMPTION,0.31,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.8953,0.8923,26.93,0.0,lunar_pioneer,Лунный прорыв,9993.97,0.75,lunar_actual_share,2038,1317.69
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.8996,0.8963,33.17,0.0,lunar_pioneer,Лунный прорыв,9993.97,0.75,lunar_actual_share,2039,1805.95
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9162,0.912,34.32,0.0,lunar_pioneer,Лунный прорыв,9993.97,0.75,lunar_actual_share,2040,2438.42
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10472.16,0.75,lunar_actual_share,2035,783.45
+{},TEAM_ASSUMPTION,9.3,RESERVE_45D,False,delivered_share,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10472.16,0.75,lunar_actual_share,2036,2751.84
+{},TEAM_ASSUMPTION,7.02,RESERVE_45D,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10472.16,0.75,lunar_actual_share,2037,1289.78
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9224,0.9173,20.68,0.0,balanced,Сбалансированный контур,10472.16,0.75,lunar_actual_share,2038,1423.78
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9061,0.9031,31.01,0.0,balanced,Сбалансированный контур,10472.16,0.75,lunar_actual_share,2039,1878.87
+{},TEAM_ASSUMPTION,0.0,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9158,0.912,34.32,0.0,balanced,Сбалансированный контур,10472.16,0.75,lunar_actual_share,2040,2344.44
+{},TEAM_ASSUMPTION,27.69,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.75,lunar_actual_share,2035,913.1
+{},TEAM_ASSUMPTION,50.71,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.75,lunar_actual_share,2036,1330.03
+{},TEAM_ASSUMPTION,56.33,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.75,lunar_actual_share,2037,1400.12
+{},TEAM_ASSUMPTION,60.25,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.75,lunar_actual_share,2038,1934.8
+{},TEAM_ASSUMPTION,66.29,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.75,lunar_actual_share,2039,2749.03
+{},TEAM_ASSUMPTION,45.8,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,0.75,lunar_actual_share,2040,3361.64
+{},TEAM_ASSUMPTION,37.12,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12910.19,0.75,lunar_actual_share,2035,978.3
+{},TEAM_ASSUMPTION,48.78,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12910.19,0.75,lunar_actual_share,2036,2866.88
+{},TEAM_ASSUMPTION,71.2,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12910.19,0.75,lunar_actual_share,2037,1556.87
+{},TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,delivered_share,BASE,1.0,1.0,0.0,24.06,stress_builtin,Стресс-устойчивая,12910.19,0.75,lunar_actual_share,2038,2104.32
+{},TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,delivered_share,BASE,1.0,1.0,0.0,48.82,stress_builtin,Стресс-устойчивая,12910.19,0.75,lunar_actual_share,2039,2488.62
+{},TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,delivered_share,BASE,1.0,1.0,0.0,33.16,stress_builtin,Стресс-устойчивая,12910.19,0.75,lunar_actual_share,2040,2915.2
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11005.06,1.0,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,9.51,RESERVE_45D,False,delivered_share,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11005.06,1.0,lunar_actual_share,2036,1138.8
+{},TEAM_ASSUMPTION,7.39,RESERVE_45D,False,delivered_share,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11005.06,1.0,lunar_actual_share,2037,1282.95
+{},TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11005.06,1.0,lunar_actual_share,2038,1827.42
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,delivered_share,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11005.06,1.0,lunar_actual_share,2039,2567.83
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,delivered_share,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11005.06,1.0,lunar_actual_share,2040,3411.61
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,lunar_actual_share,2035,776.45
+{},TEAM_ASSUMPTION,5.46,RESERVE_45D,False,delivered_share,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,lunar_actual_share,2036,2191.59
+{},TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,lunar_actual_share,2037,1463.87
+{},TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,lunar_actual_share,2038,1320.79
+{},TEAM_ASSUMPTION,3.69,RESERVE_45D,False,delivered_share,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,lunar_actual_share,2039,1815.14
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,delivered_share,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,lunar_actual_share,2040,2443.33
+{},TEAM_ASSUMPTION,10.5,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,1.0,lunar_actual_share,2035,783.45
+{},TEAM_ASSUMPTION,9.3,RESERVE_45D,False,delivered_share,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10490.38,1.0,lunar_actual_share,2036,2751.84
+{},TEAM_ASSUMPTION,7.02,RESERVE_45D,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,1.0,lunar_actual_share,2037,1289.78
+{},TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,delivered_share,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,10490.38,1.0,lunar_actual_share,2038,1425.9
+{},TEAM_ASSUMPTION,4.34,RESERVE_45D,False,delivered_share,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,1.0,lunar_actual_share,2039,1886.6
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,delivered_share,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,10490.38,1.0,lunar_actual_share,2040,2352.81
+{},TEAM_ASSUMPTION,27.69,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,lunar_actual_share,2035,913.1
+{},TEAM_ASSUMPTION,50.71,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,lunar_actual_share,2036,1330.03
+{},TEAM_ASSUMPTION,56.33,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,lunar_actual_share,2037,1400.12
+{},TEAM_ASSUMPTION,60.25,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,lunar_actual_share,2038,1934.8
+{},TEAM_ASSUMPTION,66.29,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,lunar_actual_share,2039,2749.03
+{},TEAM_ASSUMPTION,45.8,,True,delivered_share,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,lunar_actual_share,2040,3361.64
+{},TEAM_ASSUMPTION,37.12,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,1.0,lunar_actual_share,2035,978.3
+{},TEAM_ASSUMPTION,48.78,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,1.0,lunar_actual_share,2036,2866.88
+{},TEAM_ASSUMPTION,71.2,,False,delivered_share,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,1.0,lunar_actual_share,2037,1556.87
+{},TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,delivered_share,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,12912.74,1.0,lunar_actual_share,2038,2106.87
+{},TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,delivered_share,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,12912.74,1.0,lunar_actual_share,2039,2488.62
+{},TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,delivered_share,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,12912.74,1.0,lunar_actual_share,2040,2915.2
+{},TEAM_ASSUMPTION,3.34,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9219,0.9216,7.84,0.0,earth_fortress,Земная крепость,10904.67,0.0,initial_stock_multiplier,2035,676.62
+{},TEAM_ASSUMPTION,9.51,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9462,0.9439,7.86,0.0,earth_fortress,Земная крепость,10904.67,0.0,initial_stock_multiplier,2036,1138.24
+{},TEAM_ASSUMPTION,7.39,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,10904.67,0.0,initial_stock_multiplier,2037,1282.95
+{},TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,10904.67,0.0,initial_stock_multiplier,2038,1827.42
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,10904.67,0.0,initial_stock_multiplier,2039,2567.83
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,10904.67,0.0,initial_stock_multiplier,2040,3411.61
+{},TEAM_ASSUMPTION,3.34,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9219,0.9216,7.84,0.0,lunar_pioneer,Лунный прорыв,9910.54,0.0,initial_stock_multiplier,2035,676.62
+{},TEAM_ASSUMPTION,5.46,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9408,0.9398,8.43,0.0,lunar_pioneer,Лунный прорыв,9910.54,0.0,initial_stock_multiplier,2036,2190.79
+{},TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,9910.54,0.0,initial_stock_multiplier,2037,1463.87
+{},TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,9910.54,0.0,initial_stock_multiplier,2038,1320.79
+{},TEAM_ASSUMPTION,3.69,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9910.54,0.0,initial_stock_multiplier,2039,1815.14
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,9910.54,0.0,initial_stock_multiplier,2040,2443.33
+{},TEAM_ASSUMPTION,3.34,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9219,0.9216,7.84,0.0,balanced,Сбалансированный контур,10389.71,0.0,initial_stock_multiplier,2035,683.62
+{},TEAM_ASSUMPTION,9.3,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9464,0.9454,7.64,0.0,balanced,Сбалансированный контур,10389.71,0.0,initial_stock_multiplier,2036,2751.0
+{},TEAM_ASSUMPTION,7.02,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10389.71,0.0,initial_stock_multiplier,2037,1289.78
+{},TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,10389.71,0.0,initial_stock_multiplier,2038,1425.9
+{},TEAM_ASSUMPTION,4.34,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10389.71,0.0,initial_stock_multiplier,2039,1886.6
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,10389.71,0.0,initial_stock_multiplier,2040,2352.81
+{},TEAM_ASSUMPTION,16.53,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9616,0.9616,3.84,0.0,base_builtin,Базовая,11547.43,0.0,initial_stock_multiplier,2035,812.01
+{},TEAM_ASSUMPTION,39.55,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11547.43,0.0,initial_stock_multiplier,2036,1321.99
+{},TEAM_ASSUMPTION,45.17,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11547.43,0.0,initial_stock_multiplier,2037,1392.08
+{},TEAM_ASSUMPTION,49.09,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11547.43,0.0,initial_stock_multiplier,2038,1926.76
+{},TEAM_ASSUMPTION,55.13,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11547.43,0.0,initial_stock_multiplier,2039,2740.99
+{},TEAM_ASSUMPTION,34.64,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11547.43,0.0,initial_stock_multiplier,2040,3353.6
+{},TEAM_ASSUMPTION,17.96,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9616,0.9616,3.84,0.0,stress_builtin,Стресс-устойчивая,12721.75,0.0,initial_stock_multiplier,2035,821.85
+{},TEAM_ASSUMPTION,29.62,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12721.75,0.0,initial_stock_multiplier,2036,2853.08
+{},TEAM_ASSUMPTION,52.04,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12721.75,0.0,initial_stock_multiplier,2037,1543.07
+{},TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,34.54,stress_builtin,Стресс-устойчивая,12721.75,0.0,initial_stock_multiplier,2038,2099.93
+{},TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,12721.75,0.0,initial_stock_multiplier,2039,2488.62
+{},TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,12721.75,0.0,initial_stock_multiplier,2040,2915.2
+{},TEAM_ASSUMPTION,3.34,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9972,0.9966,0.34,0.0,earth_fortress,Земная крепость,10952.61,0.5,initial_stock_multiplier,2035,724.56
+{},TEAM_ASSUMPTION,9.51,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9462,0.9439,7.86,0.0,earth_fortress,Земная крепость,10952.61,0.5,initial_stock_multiplier,2036,1138.24
+{},TEAM_ASSUMPTION,7.39,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,10952.61,0.5,initial_stock_multiplier,2037,1282.95
+{},TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,10952.61,0.5,initial_stock_multiplier,2038,1827.42
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,10952.61,0.5,initial_stock_multiplier,2039,2567.83
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,10952.61,0.5,initial_stock_multiplier,2040,3411.61
+{},TEAM_ASSUMPTION,3.34,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9972,0.9966,0.34,0.0,lunar_pioneer,Лунный прорыв,9958.48,0.5,initial_stock_multiplier,2035,724.56
+{},TEAM_ASSUMPTION,5.46,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9408,0.9398,8.43,0.0,lunar_pioneer,Лунный прорыв,9958.48,0.5,initial_stock_multiplier,2036,2190.79
+{},TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,9958.48,0.5,initial_stock_multiplier,2037,1463.87
+{},TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,9958.48,0.5,initial_stock_multiplier,2038,1320.79
+{},TEAM_ASSUMPTION,3.69,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,9958.48,0.5,initial_stock_multiplier,2039,1815.14
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,9958.48,0.5,initial_stock_multiplier,2040,2443.33
+{},TEAM_ASSUMPTION,3.34,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9972,0.9966,0.34,0.0,balanced,Сбалансированный контур,10437.65,0.5,initial_stock_multiplier,2035,731.56
+{},TEAM_ASSUMPTION,9.3,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9464,0.9454,7.64,0.0,balanced,Сбалансированный контур,10437.65,0.5,initial_stock_multiplier,2036,2751.0
+{},TEAM_ASSUMPTION,7.02,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10437.65,0.5,initial_stock_multiplier,2037,1289.78
+{},TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,10437.65,0.5,initial_stock_multiplier,2038,1425.9
+{},TEAM_ASSUMPTION,4.34,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10437.65,0.5,initial_stock_multiplier,2039,1886.6
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,10437.65,0.5,initial_stock_multiplier,2040,2352.81
+{},TEAM_ASSUMPTION,20.19,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11609.82,0.5,initial_stock_multiplier,2035,861.2
+{},TEAM_ASSUMPTION,43.21,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11609.82,0.5,initial_stock_multiplier,2036,1324.63
+{},TEAM_ASSUMPTION,48.83,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11609.82,0.5,initial_stock_multiplier,2037,1394.72
+{},TEAM_ASSUMPTION,52.75,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11609.82,0.5,initial_stock_multiplier,2038,1929.4
+{},TEAM_ASSUMPTION,58.79,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11609.82,0.5,initial_stock_multiplier,2039,2743.63
+{},TEAM_ASSUMPTION,38.3,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11609.82,0.5,initial_stock_multiplier,2040,3356.24
+{},TEAM_ASSUMPTION,25.62,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12812.77,0.5,initial_stock_multiplier,2035,898.72
+{},TEAM_ASSUMPTION,37.28,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12812.77,0.5,initial_stock_multiplier,2036,2858.6
+{},TEAM_ASSUMPTION,59.7,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12812.77,0.5,initial_stock_multiplier,2037,1548.59
+{},TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,42.2,stress_builtin,Стресс-устойчивая,12812.77,0.5,initial_stock_multiplier,2038,2103.04
+{},TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,12812.77,0.5,initial_stock_multiplier,2039,2488.62
+{},TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,12812.77,0.5,initial_stock_multiplier,2040,2915.2
+{},TEAM_ASSUMPTION,10.5,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11005.06,1.0,initial_stock_multiplier,2035,776.45
+{},TEAM_ASSUMPTION,9.51,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9971,0.9951,0.69,0.0,earth_fortress,Земная крепость,11005.06,1.0,initial_stock_multiplier,2036,1138.8
+{},TEAM_ASSUMPTION,7.39,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9992,0.16,0.0,earth_fortress,Земная крепость,11005.06,1.0,initial_stock_multiplier,2037,1282.95
+{},TEAM_ASSUMPTION,10.39,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9804,0.976,6.0,0.0,earth_fortress,Земная крепость,11005.06,1.0,initial_stock_multiplier,2038,1827.42
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9966,0.9922,2.48,0.0,earth_fortress,Земная крепость,11005.06,1.0,initial_stock_multiplier,2039,2567.83
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11005.06,1.0,initial_stock_multiplier,2040,3411.61
+{},TEAM_ASSUMPTION,10.5,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,initial_stock_multiplier,2035,776.45
+{},TEAM_ASSUMPTION,5.46,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9916,0.991,1.26,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,initial_stock_multiplier,2036,2191.59
+{},TEAM_ASSUMPTION,6.01,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.988,0.9851,2.83,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,initial_stock_multiplier,2037,1463.87
+{},TEAM_ASSUMPTION,7.53,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9863,0.9819,4.51,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,initial_stock_multiplier,2038,1320.79
+{},TEAM_ASSUMPTION,3.69,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,initial_stock_multiplier,2039,1815.14
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,10011.17,1.0,initial_stock_multiplier,2040,2443.33
+{},TEAM_ASSUMPTION,10.5,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,1.0,initial_stock_multiplier,2035,783.45
+{},TEAM_ASSUMPTION,9.3,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9973,0.9966,0.48,0.0,balanced,Сбалансированный контур,10490.38,1.0,initial_stock_multiplier,2036,2751.84
+{},TEAM_ASSUMPTION,7.02,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,1.0,initial_stock_multiplier,2037,1289.78
+{},TEAM_ASSUMPTION,8.18,BASE_CRITICAL_SERVICE|RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9884,0.9834,4.16,0.0,balanced,Сбалансированный контур,10490.38,1.0,initial_stock_multiplier,2038,1425.9
+{},TEAM_ASSUMPTION,4.34,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10490.38,1.0,initial_stock_multiplier,2039,1886.6
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9991,0.34,0.0,balanced,Сбалансированный контур,10490.38,1.0,initial_stock_multiplier,2040,2352.81
+{},TEAM_ASSUMPTION,27.69,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,initial_stock_multiplier,2035,913.1
+{},TEAM_ASSUMPTION,50.71,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,initial_stock_multiplier,2036,1330.03
+{},TEAM_ASSUMPTION,56.33,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,initial_stock_multiplier,2037,1400.12
+{},TEAM_ASSUMPTION,60.25,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,initial_stock_multiplier,2038,1934.8
+{},TEAM_ASSUMPTION,66.29,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,initial_stock_multiplier,2039,2749.03
+{},TEAM_ASSUMPTION,45.8,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11688.72,1.0,initial_stock_multiplier,2040,3361.64
+{},TEAM_ASSUMPTION,37.12,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,1.0,initial_stock_multiplier,2035,978.3
+{},TEAM_ASSUMPTION,48.78,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,1.0,initial_stock_multiplier,2036,2866.88
+{},TEAM_ASSUMPTION,71.2,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,12912.74,1.0,initial_stock_multiplier,2037,1556.87
+{},TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,53.7,stress_builtin,Стресс-устойчивая,12912.74,1.0,initial_stock_multiplier,2038,2106.87
+{},TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,12912.74,1.0,initial_stock_multiplier,2039,2488.62
+{},TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,12912.74,1.0,initial_stock_multiplier,2040,2915.2
+{},TEAM_ASSUMPTION,18.0,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11068.93,1.5,initial_stock_multiplier,2035,828.35
+{},TEAM_ASSUMPTION,16.32,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11068.93,1.5,initial_stock_multiplier,2036,1143.82
+{},TEAM_ASSUMPTION,14.04,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11068.93,1.5,initial_stock_multiplier,2037,1287.82
+{},TEAM_ASSUMPTION,11.04,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,earth_fortress,Земная крепость,11068.93,1.5,initial_stock_multiplier,2038,1829.44
+{},TEAM_ASSUMPTION,9.04,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.997,0.9943,1.84,0.0,earth_fortress,Земная крепость,11068.93,1.5,initial_stock_multiplier,2039,2567.89
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,0.9945,0.9858,5.52,0.0,earth_fortress,Земная крепость,11068.93,1.5,initial_stock_multiplier,2040,3411.61
+{},TEAM_ASSUMPTION,18.0,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10070.53,1.5,initial_stock_multiplier,2035,828.35
+{},TEAM_ASSUMPTION,11.7,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10070.53,1.5,initial_stock_multiplier,2036,2196.3
+{},TEAM_ASSUMPTION,9.42,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10070.53,1.5,initial_stock_multiplier,2037,1466.54
+{},TEAM_ASSUMPTION,7.53,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9956,1.11,0.0,lunar_pioneer,Лунный прорыв,10070.53,1.5,initial_stock_multiplier,2038,1320.87
+{},TEAM_ASSUMPTION,3.69,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,lunar_pioneer,Лунный прорыв,10070.53,1.5,initial_stock_multiplier,2039,1815.14
+{},TEAM_ASSUMPTION,0.0,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,0.9974,0.99,0.0,lunar_pioneer,Лунный прорыв,10070.53,1.5,initial_stock_multiplier,2040,2443.33
+{},TEAM_ASSUMPTION,18.0,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10559.11,1.5,initial_stock_multiplier,2035,835.35
+{},TEAM_ASSUMPTION,16.32,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10559.11,1.5,initial_stock_multiplier,2036,2756.98
+{},TEAM_ASSUMPTION,14.04,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10559.11,1.5,initial_stock_multiplier,2037,1294.83
+{},TEAM_ASSUMPTION,11.04,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10559.11,1.5,initial_stock_multiplier,2038,1428.42
+{},TEAM_ASSUMPTION,7.2,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10559.11,1.5,initial_stock_multiplier,2039,1888.66
+{},TEAM_ASSUMPTION,2.52,RESERVE_45D,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,balanced,Сбалансированный контур,10559.11,1.5,initial_stock_multiplier,2040,2354.87
+{},TEAM_ASSUMPTION,35.19,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11767.62,1.5,initial_stock_multiplier,2035,965.0
+{},TEAM_ASSUMPTION,58.21,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11767.62,1.5,initial_stock_multiplier,2036,1335.43
+{},TEAM_ASSUMPTION,63.83,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11767.62,1.5,initial_stock_multiplier,2037,1405.52
+{},TEAM_ASSUMPTION,67.75,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11767.62,1.5,initial_stock_multiplier,2038,1940.2
+{},TEAM_ASSUMPTION,73.79,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11767.62,1.5,initial_stock_multiplier,2039,2754.43
+{},TEAM_ASSUMPTION,53.3,,True,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,base_builtin,Базовая,11767.62,1.5,initial_stock_multiplier,2040,3367.04
+{},TEAM_ASSUMPTION,48.62,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13011.62,1.5,initial_stock_multiplier,2035,1057.88
+{},TEAM_ASSUMPTION,60.28,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13011.62,1.5,initial_stock_multiplier,2036,2875.16
+{},TEAM_ASSUMPTION,82.7,,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,0.0,stress_builtin,Стресс-устойчивая,13011.62,1.5,initial_stock_multiplier,2037,1565.15
+{},TEAM_ASSUMPTION,108.36,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,65.2,stress_builtin,Стресс-устойчивая,13011.62,1.5,initial_stock_multiplier,2038,2109.61
+{},TEAM_ASSUMPTION,105.1,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,78.46,stress_builtin,Стресс-устойчивая,13011.62,1.5,initial_stock_multiplier,2039,2488.62
+{},TEAM_ASSUMPTION,101.84,STORAGE_OVERFLOW,False,multiplier_of_plan_initial_stock,BASE,1.0,1.0,0.0,62.8,stress_builtin,Стресс-устойчивая,13011.62,1.5,initial_stock_multiplier,2040,2915.2

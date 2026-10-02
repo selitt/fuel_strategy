@@ -1,277 +1,109 @@
-"""Старые годовые примеры, сохранённые для импорта и миграции.
+"""Готовые решения команды: явные месячные партии из data/strategies/."""
 
-Положительные заказы намеренно не имеют дат. Движок блокирует их, пока
-оператор не назначит идентификаторы и даты партий. Эти примеры не являются
-готовыми рекомендациями или подтверждёнными оптимальными стратегиями.
-"""
+from typing import Dict, Any, List, Optional
+from decimal import Decimal
+import json
+from pathlib import Path
+from .loader import find_data_root
 
-from typing import Dict, Any
+
+BUILTIN_STRATEGY_KINDS = ("earth_fortress", "lunar_pioneer", "balanced", "base", "stress", "diversified")
 
 
-def get_earth_fortress_strategy() -> Dict[str, Any]:
-    """Оптимизированная стратегия «Земная крепость» с высокой устойчивостью по Монте-Карло."""
+def load_builtin_strategy_data(kind: str, data_root: Optional[Path] = None) -> Dict[str, Any]:
+    if kind not in BUILTIN_STRATEGY_KINDS:
+        raise ValueError('Unknown builtin strategy')
+    return json.loads(((data_root or find_data_root()) / 'strategies' / f'{kind}.json').read_text(encoding='utf-8'))
+
+
+def load_builtin_strategy(kind: str, monthly: bool = True, data_root: Optional[Path] = None) -> Dict[str, Any]:
+    data = load_builtin_strategy_data(kind, data_root)
+    orders = data['supply_orders']
+    if not monthly:
+        totals = {}
+        for row in orders:
+            key = (row['year'], row['source_id'])
+            totals[key] = totals.get(key, Decimal(0)) + Decimal(str(row['order_t']))
+        orders = [{'year': year, 'source_id': source, 'order_volume_t': float(volume)}
+                  for (year, source), volume in totals.items()]
     return {
-        "plan_id": "strategy_earth_fortress_optimized",
-        "description": "Оптимизированная стратегия «Земная крепость»",
-        "investments": [
-            {
-                "investment_id": "ZBO",
-                "commissioning_year": 2036
-            }
-        ],
-        "capacity_reservations": [
-            {
-                "year": 2035,
-                "source_id": "Earth-Core",
-                "reserved_capacity_t": 140.0
-            },
-            {
-                "year": 2036,
-                "source_id": "Earth-Core",
-                "reserved_capacity_t": 170.0
-            },
-            {
-                "year": 2037,
-                "source_id": "Earth-Core",
-                "reserved_capacity_t": 190.0
-            },
-            {
-                "year": 2037,
-                "source_id": "Earth-Flex",
-                "reserved_capacity_t": 31.6
-            },
-            {
-                "year": 2038,
-                "source_id": "Earth-Core",
-                "reserved_capacity_t": 190.0
-            },
-            {
-                "year": 2038,
-                "source_id": "Earth-Flex",
-                "reserved_capacity_t": 83.5
-            },
-            {
-                "year": 2039,
-                "source_id": "Earth-Core",
-                "reserved_capacity_t": 190.0
-            },
-            {
-                "year": 2039,
-                "source_id": "Earth-Flex",
-                "reserved_capacity_t": 110.0
-            },
-            {
-                "year": 2039,
-                "source_id": "Emergency",
-                "reserved_capacity_t": 32.0
-            },
-            {
-                "year": 2040,
-                "source_id": "Earth-Core",
-                "reserved_capacity_t": 190.0
-            },
-            {
-                "year": 2040,
-                "source_id": "Earth-Flex",
-                "reserved_capacity_t": 110.0
-            },
-            {
-                "year": 2040,
-                "source_id": "Emergency",
-                "reserved_capacity_t": 80.0
-            }
-        ],
-        "supply_orders": [
-            {
-                "year": 2035,
-                "source_id": "Earth-Core",
-                "order_volume_t": 124.4
-            },
-            {
-                "year": 2036,
-                "source_id": "Earth-Core",
-                "order_volume_t": 160.5
-            },
-            {
-                "year": 2037,
-                "source_id": "Earth-Core",
-                "order_volume_t": 188.5
-            },
-            {
-                "year": 2037,
-                "source_id": "Earth-Flex",
-                "order_volume_t": 21.6
-            },
-            {
-                "year": 2038,
-                "source_id": "Earth-Core",
-                "order_volume_t": 190.0
-            },
-            {
-                "year": 2038,
-                "source_id": "Earth-Flex",
-                "order_volume_t": 73.5
-            },
-            {
-                "year": 2039,
-                "source_id": "Earth-Core",
-                "order_volume_t": 190.0
-            },
-            {
-                "year": 2039,
-                "source_id": "Earth-Flex",
-                "order_volume_t": 106.6
-            },
-            {
-                "year": 2039,
-                "source_id": "Emergency",
-                "order_volume_t": 22.0
-            },
-            {
-                "year": 2040,
-                "source_id": "Earth-Core",
-                "order_volume_t": 190.0
-            },
-            {
-                "year": 2040,
-                "source_id": "Earth-Flex",
-                "order_volume_t": 108.2
-            },
-            {
-                "year": 2040,
-                "source_id": "Emergency",
-                "order_volume_t": 70.1
-            }
-        ],
-        "inventory_policy": {
-            "initial_inventory_t": 15.0
-        }
+        'plan_id': data['id'], 'description': data['description'],
+        'supply_orders': orders, 'capacity_reservations': data['capacity_reservations'],
+        'investments': data['investments'], 'inventory_policy': data['inventory_policy'],
     }
 
 
-def get_optimized_earth_fortress_strategy() -> Dict[str, Any]:
-    """Оптимизированная стратегия «Земная крепость» с высокой устойчивостью по Монте-Карло."""
-    return get_earth_fortress_strategy()
-
-
-def get_lunar_pioneer_strategy() -> Dict[str, Any]:
+def make_monthly_batches(
+    year: int,
+    source_id: str,
+    annual_volume_t: float,
+    start_month: int = 1,
+    batch_prefix: Optional[str] = None,
+) -> List[Dict[str, Any]]:
     """
-    Стратегия 2: «Лунный прорыв» (Агрессивная).
-    - Полное финансирование Lunar-ISRU (450 млн в 2036, 800 млн в 2037).
-    - Ввод ZBO в 2037 году.
-    - Максимальный выкуп дешевого топлива с Луны (по 3.0 млн/т) с 2038 года.
+    Разбивает годовой объём заказа на ежемесячные партии с датами 15-го числа.
+    Обеспечивает математически точное сохранение суммы (балансировка остатка в последнем месяце).
     """
-    orders = []
-    reservations = []
+    if annual_volume_t <= 1e-9:
+        return []
 
-    # 2035: спрос 100
-    orders.append({"year": 2035, "source_id": "Earth-Core", "order_volume_t": 100.0})
-    reservations.append({"year": 2035, "source_id": "Earth-Core", "reserved_capacity_t": 120.0})
+    months = list(range(start_month, 13))
+    num_months = len(months)
+    if num_months <= 0:
+        return []
 
-    # 2036: спрос 140
-    orders.append({"year": 2036, "source_id": "Earth-Core", "order_volume_t": 140.0})
-    reservations.append({"year": 2036, "source_id": "Earth-Core", "reserved_capacity_t": 150.0})
+    if not batch_prefix:
+        # Короткий префикс из названия канала
+        raw = source_id.lower().replace("earth-", "").replace("lunar-", "").replace(" ", "-")
+        batch_prefix = raw
 
-    # 2037: спрос 190
-    orders.append({"year": 2037, "source_id": "Earth-Core", "order_volume_t": 190.0})
-    reservations.append({"year": 2037, "source_id": "Earth-Core", "reserved_capacity_t": 190.0})
+    base_volume = round(annual_volume_t / num_months, 2)
+    if round(annual_volume_t - base_volume * (num_months - 1), 2) < 0:
+        # Tiny optimizer candidates can otherwise round eleven parts above the total.
+        base_volume = (int(Decimal(str(annual_volume_t)) * 100) // num_months) / 100
+    batches = []
+    accumulated = 0.0
 
-    # 2038: спрос 250 (Core 130 + Луна 120)
-    orders.append({"year": 2038, "source_id": "Earth-Core", "order_volume_t": 130.0})
-    reservations.append({"year": 2038, "source_id": "Earth-Core", "reserved_capacity_t": 140.0})
-    orders.append({"year": 2038, "source_id": "Lunar-ISRU", "order_volume_t": 120.0})
-    reservations.append({"year": 2038, "source_id": "Lunar-ISRU", "reserved_capacity_t": 120.0})
+    for idx, month in enumerate(months):
+        if idx == num_months - 1:
+            # Последняя партия впитывает остаток округления до 0.01 т
+            v = round(annual_volume_t - accumulated, 2)
+        else:
+            v = base_volume
+            accumulated += v
 
-    # 2039: спрос 320 (Core 190 + Луна 120 + Flex 10)
-    orders.append({"year": 2039, "source_id": "Earth-Core", "order_volume_t": 190.0})
-    reservations.append({"year": 2039, "source_id": "Earth-Core", "reserved_capacity_t": 190.0})
-    orders.append({"year": 2039, "source_id": "Lunar-ISRU", "order_volume_t": 120.0})
-    reservations.append({"year": 2039, "source_id": "Lunar-ISRU", "reserved_capacity_t": 120.0})
-    orders.append({"year": 2039, "source_id": "Earth-Flex", "order_volume_t": 10.0})
-    reservations.append({"year": 2039, "source_id": "Earth-Flex", "reserved_capacity_t": 20.0})
+        if v <= 0:
+            continue
+        batches.append({
+            "year": year,
+            "source_id": source_id,
+            "order_t": v,
+            "delivery_date": f"{year}-{month:02d}-15",
+            "batch_id": f"{batch_prefix}-{year}-{month:02d}",
+        })
 
-    # 2040: спрос 390 (Core 190 + Луна 120 + Flex 80)
-    orders.append({"year": 2040, "source_id": "Earth-Core", "order_volume_t": 190.0})
-    reservations.append({"year": 2040, "source_id": "Earth-Core", "reserved_capacity_t": 190.0})
-    orders.append({"year": 2040, "source_id": "Lunar-ISRU", "order_volume_t": 120.0})
-    reservations.append({"year": 2040, "source_id": "Lunar-ISRU", "reserved_capacity_t": 120.0})
-    orders.append({"year": 2040, "source_id": "Earth-Flex", "order_volume_t": 80.0})
-    reservations.append({"year": 2040, "source_id": "Earth-Flex", "reserved_capacity_t": 90.0})
-
-    return {
-        "plan_id": "strategy_lunar_pioneer",
-        "description": "Стратегия 2: «Лунный прорыв» (Фокус на добыче Луны)",
-        "investments": [
-            {"investment_id": "ZBO", "commissioning_year": 2037},
-            {"investment_id": "LUNAR_ISRU", "commissioning_year": 2038, "capex_schedule": {2036: 450.0, 2037: 800.0}}
-        ],
-        "capacity_reservations": reservations,
-        "supply_orders": orders,
-        "inventory_policy": {"initial_inventory_t": 15.0}
-    }
+    return batches
 
 
-def get_balanced_strategy() -> Dict[str, Any]:
-    """
-    Стратегия 3: «Сбалансированный дуальный контур» (Оптимальная).
-    - Луна ISRU (ввод 2038) + ZBO в 2036.
-    - Опцион Earth-New (опцион 2036, ввод 2038).
-    - Постоянная резервная бронь Emergency (20 т) для страхования от сбоя Луны.
-    """
-    orders = []
-    reservations = []
+def get_earth_fortress_strategy(monthly: bool = True) -> Dict[str, Any]:
+    return load_builtin_strategy("earth_fortress", monthly=monthly)
 
-    # 2035: спрос 100
-    orders.append({"year": 2035, "source_id": "Earth-Core", "order_volume_t": 100.0})
-    reservations.append({"year": 2035, "source_id": "Earth-Core", "reserved_capacity_t": 120.0})
-    reservations.append({"year": 2035, "source_id": "Emergency", "reserved_capacity_t": 20.0})
 
-    # 2036: спрос 140
-    orders.append({"year": 2036, "source_id": "Earth-Core", "order_volume_t": 140.0})
-    reservations.append({"year": 2036, "source_id": "Earth-Core", "reserved_capacity_t": 150.0})
-    reservations.append({"year": 2036, "source_id": "Emergency", "reserved_capacity_t": 20.0})
+def get_lunar_pioneer_strategy(monthly: bool = True) -> Dict[str, Any]:
+    return load_builtin_strategy("lunar_pioneer", monthly=monthly)
 
-    # 2037: спрос 190
-    orders.append({"year": 2037, "source_id": "Earth-Core", "order_volume_t": 190.0})
-    reservations.append({"year": 2037, "source_id": "Earth-Core", "reserved_capacity_t": 190.0})
-    reservations.append({"year": 2037, "source_id": "Emergency", "reserved_capacity_t": 20.0})
 
-    # 2038: спрос 250 (Core 140 + Луна 100 + Flex 10)
-    orders.append({"year": 2038, "source_id": "Earth-Core", "order_volume_t": 140.0})
-    reservations.append({"year": 2038, "source_id": "Earth-Core", "reserved_capacity_t": 150.0})
-    orders.append({"year": 2038, "source_id": "Lunar-ISRU", "order_volume_t": 100.0})
-    reservations.append({"year": 2038, "source_id": "Lunar-ISRU", "reserved_capacity_t": 110.0})
-    orders.append({"year": 2038, "source_id": "Earth-Flex", "order_volume_t": 10.0})
-    reservations.append({"year": 2038, "source_id": "Earth-Flex", "reserved_capacity_t": 20.0})
-    reservations.append({"year": 2038, "source_id": "Emergency", "reserved_capacity_t": 25.0})
+def get_balanced_strategy(monthly: bool = True) -> Dict[str, Any]:
+    return load_builtin_strategy("balanced", monthly=monthly)
 
-    # 2039: спрос 320 (Core 150 + Луна 110 + Earth-New 60)
-    orders.append({"year": 2039, "source_id": "Earth-Core", "order_volume_t": 150.0})
-    reservations.append({"year": 2039, "source_id": "Earth-Core", "reserved_capacity_t": 160.0})
-    orders.append({"year": 2039, "source_id": "Lunar-ISRU", "order_volume_t": 110.0})
-    reservations.append({"year": 2039, "source_id": "Lunar-ISRU", "reserved_capacity_t": 120.0})
-    orders.append({"year": 2039, "source_id": "Earth-New", "order_volume_t": 60.0})
-    reservations.append({"year": 2039, "source_id": "Earth-New", "reserved_capacity_t": 70.0})
-    reservations.append({"year": 2039, "source_id": "Emergency", "reserved_capacity_t": 25.0})
 
-    # 2040: спрос 390 (Core 160 + Луна 120 + Earth-New 110)
-    orders.append({"year": 2040, "source_id": "Earth-Core", "order_volume_t": 160.0})
-    reservations.append({"year": 2040, "source_id": "Earth-Core", "reserved_capacity_t": 170.0})
-    orders.append({"year": 2040, "source_id": "Lunar-ISRU", "order_volume_t": 120.0})
-    reservations.append({"year": 2040, "source_id": "Lunar-ISRU", "reserved_capacity_t": 120.0})
-    orders.append({"year": 2040, "source_id": "Earth-New", "order_volume_t": 110.0})
-    reservations.append({"year": 2040, "source_id": "Earth-New", "reserved_capacity_t": 120.0})
-    reservations.append({"year": 2040, "source_id": "Emergency", "reserved_capacity_t": 25.0})
+def get_optimal_resilient_strategy(monthly: bool = True) -> Dict[str, Any]:
+    return load_builtin_strategy("base", monthly=monthly)
 
-    return {
-        "plan_id": "strategy_balanced_dual",
-        "description": "Стратегия 3: «Сбалансированный дуальный контур» (Земля + Луна + New + Emergency)",
-        "investments": [
-            {"investment_id": "ZBO", "commissioning_year": 2036},
-            {"investment_id": "LUNAR_ISRU", "commissioning_year": 2038, "capex_schedule": {2036: 450.0, 2037: 800.0}},
-            {"investment_id": "EARTH_NEW", "option_year": 2036, "exercise_year": 2038}
-        ],
-        "capacity_reservations": reservations,
-        "supply_orders": orders,
-        "inventory_policy": {"initial_inventory_t": 15.0}
-    }
+
+def get_stress_resilient_strategy(monthly: bool = True) -> Dict[str, Any]:
+    return load_builtin_strategy("stress", monthly=monthly)
+
+
+def get_diversified_strategy(monthly: bool = True) -> Dict[str, Any]:
+    return load_builtin_strategy("diversified", monthly=monthly)

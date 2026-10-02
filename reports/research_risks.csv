@@ -1,0 +1,28 @@
+classification,failed_constraints,is_feasible,probability_of_all_constraints,probability_of_no_shortage,risk_id,scenario_id,selection_role,strategy_id,strategy_name,total_cost_mln,total_shortage_t
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|RESERVE_45D,False,,,lunar_zero_2038,,evaluated_candidate,earth_fortress,Земная крепость,11005.06,14.85
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,,,lunar_zero_2038,,evaluated_candidate,lunar_pioneer,Лунный прорыв,10000.27,128.16
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,,,lunar_zero_2038,,evaluated_candidate,balanced,Сбалансированный контур,10484.75,103.78
+TEAM_ASSUMPTION,,True,,,lunar_zero_2038,,cheapest_feasible_candidate,base_builtin,Базовая,11688.72,0.0
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,lunar_zero_2038,,evaluated_candidate,stress_builtin,Стресс-устойчивая,12863.45,0.0
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|RESERVE_45D,False,,,core_flex_price_1_25,,evaluated_candidate,earth_fortress,Земная крепость,13201.31,14.85
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|RESERVE_45D,False,,,core_flex_price_1_25,,evaluated_candidate,lunar_pioneer,Лунный прорыв,11691.67,9.59
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|RESERVE_45D,False,,,core_flex_price_1_25,,evaluated_candidate,balanced,Сбалансированный контур,11899.88,4.98
+TEAM_ASSUMPTION,,True,,,core_flex_price_1_25,,cheapest_feasible_candidate,base_builtin,Базовая,13984.99,0.0
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,core_flex_price_1_25,,evaluated_candidate,stress_builtin,Стресс-устойчивая,14783.17,0.0
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|RESERVE_45D,False,,,core_flex_price_1_50,,evaluated_candidate,earth_fortress,Земная крепость,15397.56,14.85
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|RESERVE_45D,False,,,core_flex_price_1_50,,evaluated_candidate,lunar_pioneer,Лунный прорыв,13372.17,9.59
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|RESERVE_45D,False,,,core_flex_price_1_50,,evaluated_candidate,balanced,Сбалансированный контур,13309.38,4.98
+TEAM_ASSUMPTION,,True,,,core_flex_price_1_50,,cheapest_feasible_candidate,base_builtin,Базовая,16281.27,0.0
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,core_flex_price_1_50,,evaluated_candidate,stress_builtin,Стресс-устойчивая,16653.59,0.0
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,,,zbo_loss_equals_base,,evaluated_candidate,earth_fortress,Земная крепость,10998.74,57.1
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,,,zbo_loss_equals_base,,diagnostic_cheapest_infeasible_candidate,lunar_pioneer,Лунный прорыв,10000.46,47.54
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|BASE_TOTAL_SERVICE|RESERVE_45D,False,,,zbo_loss_equals_base,,evaluated_candidate,balanced,Сбалансированный контур,10476.62,47.55
+TEAM_ASSUMPTION,BASE_CRITICAL_SERVICE|RESERVE_45D,False,,,zbo_loss_equals_base,,evaluated_candidate,base_builtin,Базовая,11624.06,9.45
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,zbo_loss_equals_base,,evaluated_candidate,stress_builtin,Стресс-устойчивая,12899.26,0.0
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,low_demand,,evaluated_candidate,earth_fortress,Земная крепость,11295.48,0.0
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,low_demand,,diagnostic_cheapest_infeasible_candidate,lunar_pioneer,Лунный прорыв,10283.67,0.0
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,low_demand,,evaluated_candidate,balanced,Сбалансированный контур,10764.42,0.0
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,low_demand,,evaluated_candidate,base_builtin,Базовая,11866.3,0.0
+TEAM_ASSUMPTION,STORAGE_OVERFLOW,False,,,low_demand,,evaluated_candidate,stress_builtin,Стресс-устойчивая,12992.1,0.0
+TEAM_ASSUMPTION,,stochastic_summary,0.92,0.94,monte_carlo_failures,BASE,cheapest_feasible_candidate,base_builtin,,12224.91,
+TEAM_ASSUMPTION,,stochastic_summary,0.91,1.0,monte_carlo_failures,MANDATORY_STRESS,cheapest_feasible_candidate,stress_builtin,,14281.38,

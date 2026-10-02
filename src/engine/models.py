@@ -117,6 +117,7 @@ class SourceScheduleRecord:
     reservation_cost_mln: float
     procurement_cost_mln: float
     batches: List["DeliveryScheduleRecord"] = field(default_factory=list)
+    emergency_rescue_procurement_cost_mln: float = 0.0
 
 
 @dataclass
@@ -130,6 +131,7 @@ class DeliveryScheduleRecord:
     ordered_t: float
     delivered_t: float
     status: str
+    parent_batch_id: Optional[str] = None
 
 
 @dataclass

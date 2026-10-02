@@ -1,0 +1,6427 @@
+[
+  {
+    "failed_constraints": [
+      "BASE_CRITICAL_SERVICE",
+      "RESERVE_45D"
+    ],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2036
+      }
+    ],
+    "is_feasible": false,
+    "plan_id": "strategy_earth_fortress",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 10.50 т при норме 45 дней 17.26 т",
+          "excess": 6.76,
+          "passed": false,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 9.51 т при норме 45 дней 23.42 т",
+          "excess": 13.91,
+          "passed": false,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 7.39 т при норме 45 дней 30.82 т",
+          "excess": 23.43,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 10.39 т при норме 45 дней 39.45 т",
+          "excess": 29.06,
+          "passed": false,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 9.04 т при норме 45 дней 48.08 т",
+          "excess": 39.04,
+          "passed": false,
+          "year": 2040
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (15.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 99.51% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 99.71% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 99.92% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 97.60% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 98.04% (норма >= 99.00%)",
+          "excess": 0.0096,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 99.22% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 99.66% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 98.58% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 99.45% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 180.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 180.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 9.45,
+          "opex": 0.0,
+          "procurement": 713.0,
+          "reservation": 54.0,
+          "total": 776.45,
+          "year": 2035
+        },
+        {
+          "capex": 180.0,
+          "holding": 6.8,
+          "opex": 12.0,
+          "procurement": 868.0,
+          "reservation": 72.0,
+          "total": 1138.8,
+          "year": 2036
+        },
+        {
+          "capex": 0.0,
+          "holding": 7.45,
+          "opex": 12.0,
+          "procurement": 1178.0,
+          "reservation": 85.5,
+          "total": 1282.95,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 7.42,
+          "opex": 12.0,
+          "procurement": 1712.0,
+          "reservation": 96.0,
+          "total": 1827.42,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 10.33,
+          "opex": 12.0,
+          "procurement": 2433.0,
+          "reservation": 112.5,
+          "total": 2567.83,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 8.61,
+          "opex": 12.0,
+          "procurement": 3261.0,
+          "reservation": 130.0,
+          "total": 3411.61,
+          "year": 2040
+        }
+      ],
+      "is_feasible": false,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_earth_fortress",
+      "scenario_id": "BASE",
+      "source_schedule": [
+        {
+          "delivered_t": 100.0,
+          "ordered_t": 100.0,
+          "payable_volume_t": 100.0,
+          "procurement_cost_mln": 620.0,
+          "reservation_cost_mln": 54.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 84.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 140.0,
+          "ordered_t": 140.0,
+          "payable_volume_t": 140.0,
+          "procurement_cost_mln": 868.0,
+          "reservation_cost_mln": 72.0,
+          "reserved_capacity_t": 160.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 112.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 60.0,
+          "ordered_t": 60.0,
+          "payable_volume_t": 60.0,
+          "procurement_cost_mln": 534.0,
+          "reservation_cost_mln": 10.5,
+          "reserved_capacity_t": 70.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 979.0,
+          "reservation_cost_mln": 16.5,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 20.0,
+          "ordered_t": 20.0,
+          "payable_volume_t": 20.0,
+          "procurement_cost_mln": 276.0,
+          "reservation_cost_mln": 10.5,
+          "reserved_capacity_t": 30.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 979.0,
+          "reservation_cost_mln": 16.5,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 80.0,
+          "ordered_t": 80.0,
+          "payable_volume_t": 80.0,
+          "procurement_cost_mln": 1104.0,
+          "reservation_cost_mln": 28.0,
+          "reserved_capacity_t": 80.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 11005.06,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 10.5,
+          "delivered_t": 100.0,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 4.5,
+          "opening_inventory_t": 15.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 9.51,
+          "delivered_t": 140.0,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 1.68,
+          "opening_inventory_t": 10.5,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 139.31,
+          "service_level_critical": 0.9971,
+          "service_level_total": 0.9951,
+          "shortage_t": 0.69,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 7.39,
+          "delivered_t": 190.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.28,
+          "opening_inventory_t": 9.51,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 189.84,
+          "service_level_critical": 1.0,
+          "service_level_total": 0.9992,
+          "shortage_t": 0.16,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 10.39,
+          "delivered_t": 250.0,
+          "demand_critical_t": 170.0,
+          "demand_total_t": 250.0,
+          "losses_t": 3.0,
+          "opening_inventory_t": 7.39,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 30.82,
+          "served_t": 244.0,
+          "service_level_critical": 0.9804,
+          "service_level_total": 0.976,
+          "shortage_t": 6.0,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 9.04,
+          "delivered_t": 320.0,
+          "demand_critical_t": 210.0,
+          "demand_total_t": 320.0,
+          "losses_t": 3.84,
+          "opening_inventory_t": 10.39,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 39.45,
+          "served_t": 317.52,
+          "service_level_critical": 0.9966,
+          "service_level_total": 0.9922,
+          "shortage_t": 2.48,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 380.0,
+          "demand_critical_t": 250.0,
+          "demand_total_t": 390.0,
+          "losses_t": 4.56,
+          "opening_inventory_t": 9.04,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 48.08,
+          "served_t": 384.48,
+          "service_level_critical": 0.9945,
+          "service_level_total": 0.9858,
+          "shortage_t": 5.52,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "BASE",
+    "strategy_id": "earth_fortress",
+    "strategy_name": "Земная крепость",
+    "total_cost_mln": 11005.06
+  },
+  {
+    "failed_constraints": [
+      "BASE_CRITICAL_SERVICE",
+      "RESERVE_45D"
+    ],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2037
+      },
+      {
+        "investment_id": "LUNAR_ISRU",
+        "year": 2036
+      }
+    ],
+    "is_feasible": false,
+    "plan_id": "strategy_lunar_pioneer",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 10.50 т при норме 45 дней 17.26 т",
+          "excess": 6.76,
+          "passed": false,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 5.46 т при норме 45 дней 23.42 т",
+          "excess": 17.96,
+          "passed": false,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 6.01 т при норме 45 дней 30.82 т",
+          "excess": 24.81,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 7.53 т при норме 45 дней 39.45 т",
+          "excess": 31.92,
+          "passed": false,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 3.69 т при норме 45 дней 48.08 т",
+          "excess": 44.39,
+          "passed": false,
+          "year": 2040
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (15.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 99.10% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 99.16% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 98.51% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 98.80% (норма >= 99.00%)",
+          "excess": 0.002,
+          "passed": false,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 98.19% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 98.63% (норма >= 99.00%)",
+          "excess": 0.0037,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 99.74% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 1430.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 1430.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 9.45,
+          "opex": 0.0,
+          "procurement": 713.0,
+          "reservation": 54.0,
+          "total": 776.45,
+          "year": 2035
+        },
+        {
+          "capex": 1250.0,
+          "holding": 6.09,
+          "opex": 0.0,
+          "procurement": 868.0,
+          "reservation": 67.5,
+          "total": 2191.59,
+          "year": 2036
+        },
+        {
+          "capex": 180.0,
+          "holding": 8.37,
+          "opex": 12.0,
+          "procurement": 1178.0,
+          "reservation": 85.5,
+          "total": 1463.87,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 9.79,
+          "opex": 82.0,
+          "procurement": 1166.0,
+          "reservation": 63.0,
+          "total": 1320.79,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 17.64,
+          "opex": 82.0,
+          "procurement": 1627.0,
+          "reservation": 88.5,
+          "total": 1815.14,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 12.33,
+          "opex": 82.0,
+          "procurement": 2250.0,
+          "reservation": 99.0,
+          "total": 2443.33,
+          "year": 2040
+        }
+      ],
+      "is_feasible": false,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_lunar_pioneer",
+      "scenario_id": "BASE",
+      "source_schedule": [
+        {
+          "delivered_t": 100.0,
+          "ordered_t": 100.0,
+          "payable_volume_t": 100.0,
+          "procurement_cost_mln": 620.0,
+          "reservation_cost_mln": 54.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 84.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 140.0,
+          "ordered_t": 140.0,
+          "payable_volume_t": 140.0,
+          "procurement_cost_mln": 868.0,
+          "reservation_cost_mln": 67.5,
+          "reserved_capacity_t": 150.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 105.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 130.0,
+          "ordered_t": 130.0,
+          "payable_volume_t": 130.0,
+          "procurement_cost_mln": 806.0,
+          "reservation_cost_mln": 63.0,
+          "reserved_capacity_t": 140.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 98.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 10.0,
+          "ordered_t": 10.0,
+          "payable_volume_t": 10.0,
+          "procurement_cost_mln": 89.0,
+          "reservation_cost_mln": 3.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 80.0,
+          "ordered_t": 80.0,
+          "payable_volume_t": 80.0,
+          "procurement_cost_mln": 712.0,
+          "reservation_cost_mln": 13.5,
+          "reserved_capacity_t": 90.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 10011.17,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 10.5,
+          "delivered_t": 100.0,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 4.5,
+          "opening_inventory_t": 15.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 5.46,
+          "delivered_t": 140.0,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 6.3,
+          "opening_inventory_t": 10.5,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 138.74,
+          "service_level_critical": 0.9916,
+          "service_level_total": 0.991,
+          "shortage_t": 1.26,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 6.01,
+          "delivered_t": 190.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.28,
+          "opening_inventory_t": 5.46,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 187.17,
+          "service_level_critical": 0.988,
+          "service_level_total": 0.9851,
+          "shortage_t": 2.83,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 7.53,
+          "delivered_t": 250.0,
+          "demand_critical_t": 170.0,
+          "demand_total_t": 250.0,
+          "losses_t": 3.0,
+          "opening_inventory_t": 6.01,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 30.82,
+          "served_t": 245.49,
+          "service_level_critical": 0.9863,
+          "service_level_total": 0.9819,
+          "shortage_t": 4.51,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 3.69,
+          "delivered_t": 320.0,
+          "demand_critical_t": 210.0,
+          "demand_total_t": 320.0,
+          "losses_t": 3.84,
+          "opening_inventory_t": 7.53,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 39.45,
+          "served_t": 320.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 390.0,
+          "demand_critical_t": 250.0,
+          "demand_total_t": 390.0,
+          "losses_t": 4.68,
+          "opening_inventory_t": 3.69,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 48.08,
+          "served_t": 389.01,
+          "service_level_critical": 1.0,
+          "service_level_total": 0.9974,
+          "shortage_t": 0.99,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "BASE",
+    "strategy_id": "lunar_pioneer",
+    "strategy_name": "Лунный прорыв",
+    "total_cost_mln": 10011.17
+  },
+  {
+    "failed_constraints": [
+      "BASE_CRITICAL_SERVICE",
+      "RESERVE_45D"
+    ],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2036
+      },
+      {
+        "investment_id": "LUNAR_ISRU",
+        "year": 2036
+      },
+      {
+        "investment_id": "EARTH_NEW",
+        "year": 2036
+      }
+    ],
+    "is_feasible": false,
+    "plan_id": "strategy_balanced_dual",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 10.50 т при норме 45 дней 17.26 т",
+          "excess": 6.76,
+          "passed": false,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 9.30 т при норме 45 дней 23.42 т",
+          "excess": 14.12,
+          "passed": false,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 7.02 т при норме 45 дней 30.82 т",
+          "excess": 23.8,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 8.18 т при норме 45 дней 39.45 т",
+          "excess": 31.27,
+          "passed": false,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 4.34 т при норме 45 дней 48.08 т",
+          "excess": 43.74,
+          "passed": false,
+          "year": 2040
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (15.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 99.66% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 99.73% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 98.34% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 98.84% (норма >= 99.00%)",
+          "excess": 0.0016,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 99.91% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 1790.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 1790.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 9.45,
+          "opex": 0.0,
+          "procurement": 713.0,
+          "reservation": 61.0,
+          "total": 783.45,
+          "year": 2035
+        },
+        {
+          "capex": 1790.0,
+          "holding": 7.34,
+          "opex": 12.0,
+          "procurement": 868.0,
+          "reservation": 74.5,
+          "total": 2751.84,
+          "year": 2036
+        },
+        {
+          "capex": 0.0,
+          "holding": 7.28,
+          "opex": 12.0,
+          "procurement": 1178.0,
+          "reservation": 92.5,
+          "total": 1289.78,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 7.65,
+          "opex": 82.0,
+          "procurement": 1257.0,
+          "reservation": 79.25,
+          "total": 1425.9,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 16.85,
+          "opex": 82.0,
+          "procurement": 1686.0,
+          "reservation": 101.75,
+          "total": 1886.6,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 16.56,
+          "opex": 82.0,
+          "procurement": 2133.0,
+          "reservation": 121.25,
+          "total": 2352.81,
+          "year": 2040
+        }
+      ],
+      "is_feasible": false,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_balanced_dual",
+      "scenario_id": "BASE",
+      "source_schedule": [
+        {
+          "delivered_t": 100.0,
+          "ordered_t": 100.0,
+          "payable_volume_t": 100.0,
+          "procurement_cost_mln": 620.0,
+          "reservation_cost_mln": 54.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 84.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 7.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 140.0,
+          "ordered_t": 140.0,
+          "payable_volume_t": 140.0,
+          "procurement_cost_mln": 868.0,
+          "reservation_cost_mln": 67.5,
+          "reserved_capacity_t": 150.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 105.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 7.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 7.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 140.0,
+          "ordered_t": 140.0,
+          "payable_volume_t": 140.0,
+          "procurement_cost_mln": 868.0,
+          "reservation_cost_mln": 67.5,
+          "reserved_capacity_t": 150.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 105.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 10.0,
+          "ordered_t": 10.0,
+          "payable_volume_t": 10.0,
+          "procurement_cost_mln": 89.0,
+          "reservation_cost_mln": 3.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 100.0,
+          "ordered_t": 100.0,
+          "payable_volume_t": 100.0,
+          "procurement_cost_mln": 300.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 8.75,
+          "reserved_capacity_t": 25.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 150.0,
+          "ordered_t": 150.0,
+          "payable_volume_t": 150.0,
+          "procurement_cost_mln": 930.0,
+          "reservation_cost_mln": 72.0,
+          "reserved_capacity_t": 160.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 112.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 60.0,
+          "ordered_t": 60.0,
+          "payable_volume_t": 60.0,
+          "procurement_cost_mln": 426.0,
+          "reservation_cost_mln": 21.0,
+          "reserved_capacity_t": 70.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 35.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 330.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 8.75,
+          "reserved_capacity_t": 25.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 160.0,
+          "ordered_t": 160.0,
+          "payable_volume_t": 160.0,
+          "procurement_cost_mln": 992.0,
+          "reservation_cost_mln": 76.5,
+          "reserved_capacity_t": 170.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 119.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 781.0,
+          "reservation_cost_mln": 36.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 60.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 8.75,
+          "reserved_capacity_t": 25.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 10490.38,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 10.5,
+          "delivered_t": 100.0,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 4.5,
+          "opening_inventory_t": 15.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 9.3,
+          "delivered_t": 140.0,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 1.68,
+          "opening_inventory_t": 10.5,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 139.52,
+          "service_level_critical": 0.9973,
+          "service_level_total": 0.9966,
+          "shortage_t": 0.48,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 7.02,
+          "delivered_t": 190.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.28,
+          "opening_inventory_t": 9.3,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 190.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 8.18,
+          "delivered_t": 250.0,
+          "demand_critical_t": 170.0,
+          "demand_total_t": 250.0,
+          "losses_t": 3.0,
+          "opening_inventory_t": 7.02,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 30.82,
+          "served_t": 245.84,
+          "service_level_critical": 0.9884,
+          "service_level_total": 0.9834,
+          "shortage_t": 4.16,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 4.34,
+          "delivered_t": 320.0,
+          "demand_critical_t": 210.0,
+          "demand_total_t": 320.0,
+          "losses_t": 3.84,
+          "opening_inventory_t": 8.18,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 39.45,
+          "served_t": 320.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 390.0,
+          "demand_critical_t": 250.0,
+          "demand_total_t": 390.0,
+          "losses_t": 4.68,
+          "opening_inventory_t": 4.34,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 48.08,
+          "served_t": 389.66,
+          "service_level_critical": 1.0,
+          "service_level_total": 0.9991,
+          "shortage_t": 0.34,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "BASE",
+    "strategy_id": "balanced",
+    "strategy_name": "Сбалансированный контур",
+    "total_cost_mln": 10490.38
+  },
+  {
+    "failed_constraints": [],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2036
+      }
+    ],
+    "is_feasible": true,
+    "plan_id": "strategy_optimal_resilient_mc90",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (15.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (27.69 т) соответствует норме 45 дней (17.26 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (50.71 т) соответствует норме 45 дней (23.42 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (56.33 т) соответствует норме 45 дней (30.82 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (60.25 т) соответствует норме 45 дней (39.45 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (66.29 т) соответствует норме 45 дней (48.08 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 180.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 180.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 15.7,
+          "opex": 0.0,
+          "procurement": 824.6,
+          "reservation": 72.8,
+          "total": 913.1,
+          "year": 2035
+        },
+        {
+          "capex": 180.0,
+          "holding": 28.73,
+          "opex": 12.0,
+          "procurement": 1023.0,
+          "reservation": 86.3,
+          "total": 1330.03,
+          "year": 2036
+        },
+        {
+          "capex": 0.0,
+          "holding": 39.12,
+          "opex": 12.0,
+          "procurement": 1249.2,
+          "reservation": 99.8,
+          "total": 1400.12,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 42.7,
+          "opex": 12.0,
+          "procurement": 1774.3,
+          "reservation": 105.8,
+          "total": 1934.8,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 46.53,
+          "opex": 12.0,
+          "procurement": 2571.0,
+          "reservation": 119.5,
+          "total": 2749.03,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 41.44,
+          "opex": 12.0,
+          "procurement": 3178.2,
+          "reservation": 130.0,
+          "total": 3361.64,
+          "year": 2040
+        }
+      ],
+      "is_feasible": true,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_optimal_resilient_mc90",
+      "scenario_id": "BASE",
+      "source_schedule": [
+        {
+          "delivered_t": 118.0,
+          "ordered_t": 118.0,
+          "payable_volume_t": 118.0,
+          "procurement_cost_mln": 731.6,
+          "reservation_cost_mln": 63.0,
+          "reserved_capacity_t": 140.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 98.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 165.0,
+          "ordered_t": 165.0,
+          "payable_volume_t": 165.0,
+          "procurement_cost_mln": 1023.0,
+          "reservation_cost_mln": 76.5,
+          "reserved_capacity_t": 170.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 119.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 8.0,
+          "ordered_t": 8.0,
+          "payable_volume_t": 8.0,
+          "procurement_cost_mln": 71.2,
+          "reservation_cost_mln": 4.5,
+          "reserved_capacity_t": 30.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 67.0,
+          "ordered_t": 67.0,
+          "payable_volume_t": 67.0,
+          "procurement_cost_mln": 596.3,
+          "reservation_cost_mln": 10.5,
+          "reserved_capacity_t": 70.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 979.0,
+          "reservation_cost_mln": 16.5,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 30.0,
+          "ordered_t": 30.0,
+          "payable_volume_t": 30.0,
+          "procurement_cost_mln": 414.0,
+          "reservation_cost_mln": 17.5,
+          "reserved_capacity_t": 50.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 979.0,
+          "reservation_cost_mln": 16.5,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 74.0,
+          "ordered_t": 74.0,
+          "payable_volume_t": 74.0,
+          "procurement_cost_mln": 1021.2,
+          "reservation_cost_mln": 28.0,
+          "reserved_capacity_t": 80.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 11688.72,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 27.69,
+          "delivered_t": 118.0,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 5.31,
+          "opening_inventory_t": 15.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 50.71,
+          "delivered_t": 165.0,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 1.98,
+          "opening_inventory_t": 27.69,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 140.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 56.33,
+          "delivered_t": 198.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.38,
+          "opening_inventory_t": 50.71,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 190.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 60.25,
+          "delivered_t": 257.0,
+          "demand_critical_t": 170.0,
+          "demand_total_t": 250.0,
+          "losses_t": 3.08,
+          "opening_inventory_t": 56.33,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 30.82,
+          "served_t": 250.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 66.29,
+          "delivered_t": 330.0,
+          "demand_critical_t": 210.0,
+          "demand_total_t": 320.0,
+          "losses_t": 3.96,
+          "opening_inventory_t": 60.25,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 39.45,
+          "served_t": 320.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 45.8,
+          "delivered_t": 374.0,
+          "demand_critical_t": 250.0,
+          "demand_total_t": 390.0,
+          "losses_t": 4.49,
+          "opening_inventory_t": 66.29,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 48.08,
+          "served_t": 390.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "BASE",
+    "strategy_id": "base_builtin",
+    "strategy_name": "Базовая",
+    "total_cost_mln": 11688.72
+  },
+  {
+    "failed_constraints": [
+      "STORAGE_OVERFLOW"
+    ],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2036
+      },
+      {
+        "investment_id": "LUNAR_ISRU",
+        "year": 2036
+      },
+      {
+        "investment_id": "EARTH_NEW",
+        "year": 2036
+      }
+    ],
+    "is_feasible": false,
+    "plan_id": "strategy_mandatory_stress_resilient",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "STORAGE_OVERFLOW",
+          "detail": "Переполнение бака 120.0 т (попытка залить 121.44 т)",
+          "excess": 1.44,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "STORAGE_OVERFLOW",
+          "detail": "Переполнение бака 120.0 т (попытка залить 129.01 т)",
+          "excess": 9.01,
+          "passed": false,
+          "year": 2039
+        },
+        {
+          "constraint_id": "STORAGE_OVERFLOW",
+          "detail": "Переполнение бака 120.0 т (попытка залить 127.59 т)",
+          "excess": 7.59,
+          "passed": false,
+          "year": 2040
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (23.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (37.12 т) соответствует норме 45 дней (17.26 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (48.78 т) соответствует норме 45 дней (23.42 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (71.20 т) соответствует норме 45 дней (30.82 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (108.36 т) соответствует норме 45 дней (39.45 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (105.10 т) соответствует норме 45 дней (48.08 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "BASE_TOTAL_SERVICE",
+          "detail": "Общий SL = 100.00% (норма >= 97.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "BASE_CRITICAL_SERVICE",
+          "detail": "Критический SL = 100.00% (норма >= 99.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 1790.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 1790.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 22.0,
+          "opex": 0.0,
+          "procurement": 883.5,
+          "reservation": 72.8,
+          "total": 978.3,
+          "year": 2035
+        },
+        {
+          "capex": 1790.0,
+          "holding": 31.38,
+          "opex": 12.0,
+          "procurement": 951.7,
+          "reservation": 81.8,
+          "total": 2866.88,
+          "year": 2036
+        },
+        {
+          "capex": 0.0,
+          "holding": 43.82,
+          "opex": 12.0,
+          "procurement": 1400.5,
+          "reservation": 100.55,
+          "total": 1556.87,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 73.32,
+          "opex": 82.0,
+          "procurement": 1849.5,
+          "reservation": 102.05,
+          "total": 2106.87,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 76.57,
+          "opex": 82.0,
+          "procurement": 2204.0,
+          "reservation": 126.05,
+          "total": 2488.62,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 74.4,
+          "opex": 82.0,
+          "procurement": 2621.5,
+          "reservation": 137.3,
+          "total": 2915.2,
+          "year": 2040
+        }
+      ],
+      "is_feasible": false,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_mandatory_stress_resilient",
+      "scenario_id": "BASE",
+      "source_schedule": [
+        {
+          "delivered_t": 119.5,
+          "ordered_t": 119.5,
+          "payable_volume_t": 119.5,
+          "procurement_cost_mln": 740.9,
+          "reservation_cost_mln": 63.0,
+          "reserved_capacity_t": 140.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 98.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 153.5,
+          "ordered_t": 153.5,
+          "payable_volume_t": 153.5,
+          "procurement_cost_mln": 951.7,
+          "reservation_cost_mln": 72.0,
+          "reserved_capacity_t": 160.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 112.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 25.0,
+          "ordered_t": 25.0,
+          "payable_volume_t": 25.0,
+          "procurement_cost_mln": 222.5,
+          "reservation_cost_mln": 5.25,
+          "reserved_capacity_t": 35.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 35.0,
+          "ordered_t": 35.0,
+          "payable_volume_t": 35.0,
+          "procurement_cost_mln": 311.5,
+          "reservation_cost_mln": 6.75,
+          "reserved_capacity_t": 45.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 15.0,
+          "ordered_t": 15.0,
+          "payable_volume_t": 15.0,
+          "procurement_cost_mln": 133.5,
+          "reservation_cost_mln": 3.75,
+          "reserved_capacity_t": 25.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 75.0,
+          "ordered_t": 75.0,
+          "payable_volume_t": 75.0,
+          "procurement_cost_mln": 532.5,
+          "reservation_cost_mln": 27.0,
+          "reserved_capacity_t": 90.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 45.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 30.0,
+          "ordered_t": 30.0,
+          "payable_volume_t": 30.0,
+          "procurement_cost_mln": 267.0,
+          "reservation_cost_mln": 6.0,
+          "reserved_capacity_t": 40.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 115.0,
+          "ordered_t": 115.0,
+          "payable_volume_t": 115.0,
+          "procurement_cost_mln": 816.5,
+          "reservation_cost_mln": 36.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 60.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 12912.74,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 37.12,
+          "delivered_t": 119.5,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 5.38,
+          "opening_inventory_t": 23.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 48.78,
+          "delivered_t": 153.5,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 1.84,
+          "opening_inventory_t": 37.12,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 140.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 71.2,
+          "delivered_t": 215.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.58,
+          "opening_inventory_t": 48.78,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 190.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 108.36,
+          "delivered_t": 345.0,
+          "demand_critical_t": 170.0,
+          "demand_total_t": 250.0,
+          "losses_t": 4.14,
+          "opening_inventory_t": 71.2,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 30.82,
+          "served_t": 250.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 53.7,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 105.1,
+          "delivered_t": 400.0,
+          "demand_critical_t": 210.0,
+          "demand_total_t": 320.0,
+          "losses_t": 4.8,
+          "opening_inventory_t": 108.36,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 39.45,
+          "served_t": 320.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 78.46,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 101.84,
+          "delivered_t": 455.0,
+          "demand_critical_t": 250.0,
+          "demand_total_t": 390.0,
+          "losses_t": 5.46,
+          "opening_inventory_t": 105.1,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 48.08,
+          "served_t": 390.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 62.8,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "BASE",
+    "strategy_id": "stress_builtin",
+    "strategy_name": "Стресс-устойчивая",
+    "total_cost_mln": 12912.74
+  },
+  {
+    "failed_constraints": [
+      "RESERVE_45D"
+    ],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2036
+      }
+    ],
+    "is_feasible": false,
+    "plan_id": "strategy_earth_fortress",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 10.50 т при норме 45 дней 17.26 т",
+          "excess": 6.76,
+          "passed": false,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 9.51 т при норме 45 дней 23.42 т",
+          "excess": 13.91,
+          "passed": false,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 7.39 т при норме 45 дней 35.45 т",
+          "excess": 28.06,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 7.21 т при норме 45 дней 45.37 т",
+          "excess": 38.16,
+          "passed": false,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 0.00 т при норме 45 дней 55.29 т",
+          "excess": 55.29,
+          "passed": false,
+          "year": 2040
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (15.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 180.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 180.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 9.45,
+          "opex": 0.0,
+          "procurement": 713.0,
+          "reservation": 54.0,
+          "total": 776.45,
+          "year": 2035
+        },
+        {
+          "capex": 180.0,
+          "holding": 6.8,
+          "opex": 12.0,
+          "procurement": 868.0,
+          "reservation": 72.0,
+          "total": 1138.8,
+          "year": 2036
+        },
+        {
+          "capex": 0.0,
+          "holding": 7.45,
+          "opex": 12.0,
+          "procurement": 1178.0,
+          "reservation": 85.5,
+          "total": 1282.95,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 5.99,
+          "opex": 12.0,
+          "procurement": 2140.0,
+          "reservation": 96.0,
+          "total": 2253.99,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 6.95,
+          "opex": 12.0,
+          "procurement": 2972.25,
+          "reservation": 112.5,
+          "total": 3103.7,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 5.87,
+          "opex": 12.0,
+          "procurement": 3261.0,
+          "reservation": 130.0,
+          "total": 3408.87,
+          "year": 2040
+        }
+      ],
+      "is_feasible": false,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_earth_fortress",
+      "scenario_id": "MANDATORY_STRESS",
+      "source_schedule": [
+        {
+          "delivered_t": 100.0,
+          "ordered_t": 100.0,
+          "payable_volume_t": 100.0,
+          "procurement_cost_mln": 620.0,
+          "reservation_cost_mln": 54.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 84.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 140.0,
+          "ordered_t": 140.0,
+          "payable_volume_t": 140.0,
+          "procurement_cost_mln": 868.0,
+          "reservation_cost_mln": 72.0,
+          "reserved_capacity_t": 160.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 112.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1472.5,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 60.0,
+          "ordered_t": 60.0,
+          "payable_volume_t": 60.0,
+          "procurement_cost_mln": 667.5,
+          "reservation_cost_mln": 10.5,
+          "reserved_capacity_t": 70.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1472.5,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 1223.75,
+          "reservation_cost_mln": 16.5,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 20.0,
+          "ordered_t": 20.0,
+          "payable_volume_t": 20.0,
+          "procurement_cost_mln": 276.0,
+          "reservation_cost_mln": 10.5,
+          "reserved_capacity_t": 30.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 979.0,
+          "reservation_cost_mln": 16.5,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 80.0,
+          "ordered_t": 80.0,
+          "payable_volume_t": 80.0,
+          "procurement_cost_mln": 1104.0,
+          "reservation_cost_mln": 28.0,
+          "reserved_capacity_t": 80.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 11964.76,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 10.5,
+          "delivered_t": 100.0,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 4.5,
+          "opening_inventory_t": 15.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 9.51,
+          "delivered_t": 140.0,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 1.68,
+          "opening_inventory_t": 10.5,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 139.31,
+          "service_level_critical": 0.9971,
+          "service_level_total": 0.9951,
+          "shortage_t": 0.69,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 7.39,
+          "delivered_t": 190.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.28,
+          "opening_inventory_t": 9.51,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 189.84,
+          "service_level_critical": 1.0,
+          "service_level_total": 0.9992,
+          "shortage_t": 0.16,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 7.21,
+          "delivered_t": 250.0,
+          "demand_critical_t": 195.5,
+          "demand_total_t": 287.5,
+          "losses_t": 3.0,
+          "opening_inventory_t": 7.39,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 35.45,
+          "served_t": 247.18,
+          "service_level_critical": 0.8628,
+          "service_level_total": 0.8598,
+          "shortage_t": 40.32,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 320.0,
+          "demand_critical_t": 241.5,
+          "demand_total_t": 368.0,
+          "losses_t": 3.84,
+          "opening_inventory_t": 7.21,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 45.37,
+          "served_t": 323.37,
+          "service_level_critical": 0.8838,
+          "service_level_total": 0.8787,
+          "shortage_t": 44.63,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 380.0,
+          "demand_critical_t": 287.5,
+          "demand_total_t": 448.5,
+          "losses_t": 4.56,
+          "opening_inventory_t": 0.0,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 55.29,
+          "served_t": 375.44,
+          "service_level_critical": 0.8499,
+          "service_level_total": 0.8371,
+          "shortage_t": 73.06,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "MANDATORY_STRESS",
+    "strategy_id": "earth_fortress",
+    "strategy_name": "Земная крепость",
+    "total_cost_mln": 11964.76
+  },
+  {
+    "failed_constraints": [
+      "RESERVE_45D"
+    ],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2037
+      },
+      {
+        "investment_id": "LUNAR_ISRU",
+        "year": 2036
+      }
+    ],
+    "is_feasible": false,
+    "plan_id": "strategy_lunar_pioneer",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 10.50 т при норме 45 дней 17.26 т",
+          "excess": 6.76,
+          "passed": false,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 5.46 т при норме 45 дней 23.42 т",
+          "excess": 17.96,
+          "passed": false,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 6.01 т при норме 45 дней 35.45 т",
+          "excess": 29.44,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 0.00 т при норме 45 дней 45.37 т",
+          "excess": 45.37,
+          "passed": false,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 0.00 т при норме 45 дней 55.29 т",
+          "excess": 55.29,
+          "passed": false,
+          "year": 2040
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (15.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 1430.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 1430.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 9.45,
+          "opex": 0.0,
+          "procurement": 713.0,
+          "reservation": 54.0,
+          "total": 776.45,
+          "year": 2035
+        },
+        {
+          "capex": 1250.0,
+          "holding": 6.09,
+          "opex": 0.0,
+          "procurement": 868.0,
+          "reservation": 67.5,
+          "total": 2191.59,
+          "year": 2036
+        },
+        {
+          "capex": 180.0,
+          "holding": 8.37,
+          "opex": 12.0,
+          "procurement": 1178.0,
+          "reservation": 85.5,
+          "total": 1463.87,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 3.89,
+          "opex": 82.0,
+          "procurement": 1367.5,
+          "reservation": 63.0,
+          "total": 1516.39,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 6.65,
+          "opex": 82.0,
+          "procurement": 1943.75,
+          "reservation": 88.5,
+          "total": 2120.9,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 6.26,
+          "opex": 82.0,
+          "procurement": 2250.0,
+          "reservation": 99.0,
+          "total": 2437.26,
+          "year": 2040
+        }
+      ],
+      "is_feasible": false,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_lunar_pioneer",
+      "scenario_id": "MANDATORY_STRESS",
+      "source_schedule": [
+        {
+          "delivered_t": 100.0,
+          "ordered_t": 100.0,
+          "payable_volume_t": 100.0,
+          "procurement_cost_mln": 620.0,
+          "reservation_cost_mln": 54.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 84.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 140.0,
+          "ordered_t": 140.0,
+          "payable_volume_t": 140.0,
+          "procurement_cost_mln": 868.0,
+          "reservation_cost_mln": 67.5,
+          "reserved_capacity_t": 150.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 105.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 130.0,
+          "ordered_t": 130.0,
+          "payable_volume_t": 130.0,
+          "procurement_cost_mln": 1007.5,
+          "reservation_cost_mln": 63.0,
+          "reserved_capacity_t": 140.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 98.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 66.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1472.5,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 10.0,
+          "ordered_t": 10.0,
+          "payable_volume_t": 10.0,
+          "procurement_cost_mln": 111.25,
+          "reservation_cost_mln": 3.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 90.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 80.0,
+          "ordered_t": 80.0,
+          "payable_volume_t": 80.0,
+          "procurement_cost_mln": 712.0,
+          "reservation_cost_mln": 13.5,
+          "reserved_capacity_t": 90.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 10506.46,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 10.5,
+          "delivered_t": 100.0,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 4.5,
+          "opening_inventory_t": 15.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 5.46,
+          "delivered_t": 140.0,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 6.3,
+          "opening_inventory_t": 10.5,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 138.74,
+          "service_level_critical": 0.9916,
+          "service_level_total": 0.991,
+          "shortage_t": 1.26,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 6.01,
+          "delivered_t": 190.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.28,
+          "opening_inventory_t": 5.46,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 187.17,
+          "service_level_critical": 0.988,
+          "service_level_total": 0.9851,
+          "shortage_t": 2.83,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 196.0,
+          "demand_critical_t": 195.5,
+          "demand_total_t": 287.5,
+          "losses_t": 2.35,
+          "opening_inventory_t": 6.01,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 35.45,
+          "served_t": 199.66,
+          "service_level_critical": 0.7015,
+          "service_level_total": 0.6945,
+          "shortage_t": 87.84,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 290.0,
+          "demand_critical_t": 241.5,
+          "demand_total_t": 368.0,
+          "losses_t": 3.48,
+          "opening_inventory_t": 0.0,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 45.37,
+          "served_t": 286.52,
+          "service_level_critical": 0.7844,
+          "service_level_total": 0.7786,
+          "shortage_t": 81.48,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 390.0,
+          "demand_critical_t": 287.5,
+          "demand_total_t": 448.5,
+          "losses_t": 4.68,
+          "opening_inventory_t": 0.0,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 55.29,
+          "served_t": 385.32,
+          "service_level_critical": 0.8633,
+          "service_level_total": 0.8591,
+          "shortage_t": 63.18,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "MANDATORY_STRESS",
+    "strategy_id": "lunar_pioneer",
+    "strategy_name": "Лунный прорыв",
+    "total_cost_mln": 10506.46
+  },
+  {
+    "failed_constraints": [
+      "RESERVE_45D"
+    ],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2036
+      },
+      {
+        "investment_id": "LUNAR_ISRU",
+        "year": 2036
+      },
+      {
+        "investment_id": "EARTH_NEW",
+        "year": 2036
+      }
+    ],
+    "is_feasible": false,
+    "plan_id": "strategy_balanced_dual",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 10.50 т при норме 45 дней 17.26 т",
+          "excess": 6.76,
+          "passed": false,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 9.30 т при норме 45 дней 23.42 т",
+          "excess": 14.12,
+          "passed": false,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 7.02 т при норме 45 дней 35.45 т",
+          "excess": 28.43,
+          "passed": false,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 0.00 т при норме 45 дней 45.37 т",
+          "excess": 45.37,
+          "passed": false,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 0.00 т при норме 45 дней 55.29 т",
+          "excess": 55.29,
+          "passed": false,
+          "year": 2040
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (15.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 1790.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 1790.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 9.45,
+          "opex": 0.0,
+          "procurement": 713.0,
+          "reservation": 61.0,
+          "total": 783.45,
+          "year": 2035
+        },
+        {
+          "capex": 1790.0,
+          "holding": 7.34,
+          "opex": 12.0,
+          "procurement": 868.0,
+          "reservation": 74.5,
+          "total": 2751.84,
+          "year": 2036
+        },
+        {
+          "capex": 0.0,
+          "holding": 7.28,
+          "opex": 12.0,
+          "procurement": 1178.0,
+          "reservation": 92.5,
+          "total": 1289.78,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 3.47,
+          "opex": 82.0,
+          "procurement": 1496.25,
+          "reservation": 79.25,
+          "total": 1660.97,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 6.5,
+          "opex": 82.0,
+          "procurement": 1918.5,
+          "reservation": 101.75,
+          "total": 2108.75,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 7.9,
+          "opex": 82.0,
+          "procurement": 2133.0,
+          "reservation": 121.25,
+          "total": 2344.15,
+          "year": 2040
+        }
+      ],
+      "is_feasible": false,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_balanced_dual",
+      "scenario_id": "MANDATORY_STRESS",
+      "source_schedule": [
+        {
+          "delivered_t": 100.0,
+          "ordered_t": 100.0,
+          "payable_volume_t": 100.0,
+          "procurement_cost_mln": 620.0,
+          "reservation_cost_mln": 54.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 84.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 7.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 140.0,
+          "ordered_t": 140.0,
+          "payable_volume_t": 140.0,
+          "procurement_cost_mln": 868.0,
+          "reservation_cost_mln": 67.5,
+          "reserved_capacity_t": 150.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 105.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 7.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 7.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 140.0,
+          "ordered_t": 140.0,
+          "payable_volume_t": 140.0,
+          "procurement_cost_mln": 1085.0,
+          "reservation_cost_mln": 67.5,
+          "reserved_capacity_t": 150.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 105.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 10.0,
+          "ordered_t": 10.0,
+          "payable_volume_t": 10.0,
+          "procurement_cost_mln": 111.25,
+          "reservation_cost_mln": 3.0,
+          "reserved_capacity_t": 20.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 55.0,
+          "ordered_t": 100.0,
+          "payable_volume_t": 100.0,
+          "procurement_cost_mln": 300.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 8.75,
+          "reserved_capacity_t": 25.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 150.0,
+          "ordered_t": 150.0,
+          "payable_volume_t": 150.0,
+          "procurement_cost_mln": 1162.5,
+          "reservation_cost_mln": 72.0,
+          "reserved_capacity_t": 160.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 112.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 60.0,
+          "ordered_t": 60.0,
+          "payable_volume_t": 60.0,
+          "procurement_cost_mln": 426.0,
+          "reservation_cost_mln": 21.0,
+          "reserved_capacity_t": 70.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 35.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 82.5,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 330.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 8.75,
+          "reserved_capacity_t": 25.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 160.0,
+          "ordered_t": 160.0,
+          "payable_volume_t": 160.0,
+          "procurement_cost_mln": 992.0,
+          "reservation_cost_mln": 76.5,
+          "reserved_capacity_t": 170.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 119.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 781.0,
+          "reservation_cost_mln": 36.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 60.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 8.75,
+          "reserved_capacity_t": 25.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 10938.94,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 10.5,
+          "delivered_t": 100.0,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 4.5,
+          "opening_inventory_t": 15.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 9.3,
+          "delivered_t": 140.0,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 1.68,
+          "opening_inventory_t": 10.5,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 139.52,
+          "service_level_critical": 0.9973,
+          "service_level_total": 0.9966,
+          "shortage_t": 0.48,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 7.02,
+          "delivered_t": 190.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.28,
+          "opening_inventory_t": 9.3,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 190.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 205.0,
+          "demand_critical_t": 195.5,
+          "demand_total_t": 287.5,
+          "losses_t": 2.46,
+          "opening_inventory_t": 7.02,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 35.45,
+          "served_t": 209.56,
+          "service_level_critical": 0.7348,
+          "service_level_total": 0.7289,
+          "shortage_t": 77.94,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 292.5,
+          "demand_critical_t": 241.5,
+          "demand_total_t": 368.0,
+          "losses_t": 3.51,
+          "opening_inventory_t": 0.0,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 45.37,
+          "served_t": 288.99,
+          "service_level_critical": 0.7913,
+          "service_level_total": 0.7853,
+          "shortage_t": 79.01,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 0.0,
+          "delivered_t": 390.0,
+          "demand_critical_t": 287.5,
+          "demand_total_t": 448.5,
+          "losses_t": 4.68,
+          "opening_inventory_t": 0.0,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 55.29,
+          "served_t": 385.32,
+          "service_level_critical": 0.8643,
+          "service_level_total": 0.8591,
+          "shortage_t": 63.18,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "MANDATORY_STRESS",
+    "strategy_id": "balanced",
+    "strategy_name": "Сбалансированный контур",
+    "total_cost_mln": 10938.94
+  },
+  {
+    "failed_constraints": [
+      "RESERVE_45D"
+    ],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2036
+      }
+    ],
+    "is_feasible": false,
+    "plan_id": "strategy_optimal_resilient_mc90",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 22.75 т при норме 45 дней 45.37 т",
+          "excess": 22.62,
+          "passed": false,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января 10.03 т при норме 45 дней 55.29 т",
+          "excess": 45.26,
+          "passed": false,
+          "year": 2040
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (15.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (27.69 т) соответствует норме 45 дней (17.26 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (50.71 т) соответствует норме 45 дней (23.42 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (56.33 т) соответствует норме 45 дней (35.45 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 180.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 180.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 15.7,
+          "opex": 0.0,
+          "procurement": 824.6,
+          "reservation": 72.8,
+          "total": 913.1,
+          "year": 2035
+        },
+        {
+          "capex": 180.0,
+          "holding": 28.73,
+          "opex": 12.0,
+          "procurement": 1023.0,
+          "reservation": 86.3,
+          "total": 1330.03,
+          "year": 2036
+        },
+        {
+          "capex": 0.0,
+          "holding": 39.12,
+          "opex": 12.0,
+          "procurement": 1249.2,
+          "reservation": 99.8,
+          "total": 1400.12,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 29.16,
+          "opex": 12.0,
+          "procurement": 2217.87,
+          "reservation": 105.8,
+          "total": 2364.83,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 9.63,
+          "opex": 12.0,
+          "procurement": 3110.25,
+          "reservation": 119.5,
+          "total": 3251.38,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 8.77,
+          "opex": 12.0,
+          "procurement": 3178.2,
+          "reservation": 130.0,
+          "total": 3328.97,
+          "year": 2040
+        }
+      ],
+      "is_feasible": false,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_optimal_resilient_mc90",
+      "scenario_id": "MANDATORY_STRESS",
+      "source_schedule": [
+        {
+          "delivered_t": 118.0,
+          "ordered_t": 118.0,
+          "payable_volume_t": 118.0,
+          "procurement_cost_mln": 731.6,
+          "reservation_cost_mln": 63.0,
+          "reserved_capacity_t": 140.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 98.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 165.0,
+          "ordered_t": 165.0,
+          "payable_volume_t": 165.0,
+          "procurement_cost_mln": 1023.0,
+          "reservation_cost_mln": 76.5,
+          "reserved_capacity_t": 170.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 119.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 8.0,
+          "ordered_t": 8.0,
+          "payable_volume_t": 8.0,
+          "procurement_cost_mln": 71.2,
+          "reservation_cost_mln": 4.5,
+          "reserved_capacity_t": 30.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1472.5,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 67.0,
+          "ordered_t": 67.0,
+          "payable_volume_t": 67.0,
+          "procurement_cost_mln": 745.37,
+          "reservation_cost_mln": 10.5,
+          "reserved_capacity_t": 70.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1472.5,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 1223.75,
+          "reservation_cost_mln": 16.5,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 30.0,
+          "ordered_t": 30.0,
+          "payable_volume_t": 30.0,
+          "procurement_cost_mln": 414.0,
+          "reservation_cost_mln": 17.5,
+          "reserved_capacity_t": 50.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 110.0,
+          "ordered_t": 110.0,
+          "payable_volume_t": 110.0,
+          "procurement_cost_mln": 979.0,
+          "reservation_cost_mln": 16.5,
+          "reserved_capacity_t": 110.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 74.0,
+          "ordered_t": 74.0,
+          "payable_volume_t": 74.0,
+          "procurement_cost_mln": 1021.2,
+          "reservation_cost_mln": 28.0,
+          "reserved_capacity_t": 80.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 12588.43,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 27.69,
+          "delivered_t": 118.0,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 5.31,
+          "opening_inventory_t": 15.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 50.71,
+          "delivered_t": 165.0,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 1.98,
+          "opening_inventory_t": 27.69,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 140.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 56.33,
+          "delivered_t": 198.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.38,
+          "opening_inventory_t": 50.71,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 190.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 22.75,
+          "delivered_t": 257.0,
+          "demand_critical_t": 195.5,
+          "demand_total_t": 287.5,
+          "losses_t": 3.08,
+          "opening_inventory_t": 56.33,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 35.45,
+          "served_t": 287.5,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 10.03,
+          "delivered_t": 330.0,
+          "demand_critical_t": 241.5,
+          "demand_total_t": 368.0,
+          "losses_t": 3.96,
+          "opening_inventory_t": 22.75,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 45.37,
+          "served_t": 338.76,
+          "service_level_critical": 0.9223,
+          "service_level_total": 0.9205,
+          "shortage_t": 29.24,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 9.87,
+          "delivered_t": 374.0,
+          "demand_critical_t": 287.5,
+          "demand_total_t": 448.5,
+          "losses_t": 4.49,
+          "opening_inventory_t": 10.03,
+          "reserve_45d_met": false,
+          "reserve_45d_target_t": 55.29,
+          "served_t": 369.67,
+          "service_level_critical": 0.8256,
+          "service_level_total": 0.8242,
+          "shortage_t": 78.83,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "MANDATORY_STRESS",
+    "strategy_id": "base_builtin",
+    "strategy_name": "Базовая",
+    "total_cost_mln": 12588.43
+  },
+  {
+    "failed_constraints": [],
+    "investments": [
+      {
+        "investment_id": "ZBO",
+        "year": 2036
+      },
+      {
+        "investment_id": "LUNAR_ISRU",
+        "year": 2036
+      },
+      {
+        "investment_id": "EARTH_NEW",
+        "year": 2036
+      }
+    ],
+    "is_feasible": true,
+    "plan_id": "strategy_mandatory_stress_resilient",
+    "result": {
+      "assumptions_reference": "docs/MODEL.md",
+      "constraint_checks": [
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (23.00 т) соответствует норме 45 дней (12.33 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2035
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (37.12 т) соответствует норме 45 дней (17.26 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2036
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (48.78 т) соответствует норме 45 дней (23.42 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (71.20 т) соответствует норме 45 дней (35.45 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2038
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (71.21 т) соответствует норме 45 дней (45.37 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2039
+        },
+        {
+          "constraint_id": "RESERVE_45D",
+          "detail": "Запас на 1 января (68.77 т) соответствует норме 45 дней (55.29 т)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "STRESS_LOSS_LIMIT",
+          "detail": "Доля потерь = 1.20% (норма <= 2.00%)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "CAPEX_2037",
+          "detail": "Накопленный CAPEX к концу 2037 года = 1790.00 млн (лимит 1800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2037
+        },
+        {
+          "constraint_id": "CAPEX_2040",
+          "detail": "Суммарный CAPEX за 2035–2040 гг. = 1790.00 млн (лимит 2800 млн)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        },
+        {
+          "constraint_id": "EMERGENCY_BASE_STREAK",
+          "detail": "Emergency использовался как базовый канал 0 лет подряд (норма <= 2)",
+          "excess": null,
+          "passed": true,
+          "year": 2040
+        }
+      ],
+      "financial_breakdown": [
+        {
+          "capex": 0.0,
+          "holding": 22.0,
+          "opex": 0.0,
+          "procurement": 883.5,
+          "reservation": 72.8,
+          "total": 978.3,
+          "year": 2035
+        },
+        {
+          "capex": 1790.0,
+          "holding": 31.38,
+          "opex": 12.0,
+          "procurement": 951.7,
+          "reservation": 81.8,
+          "total": 2866.88,
+          "year": 2036
+        },
+        {
+          "capex": 0.0,
+          "holding": 43.82,
+          "opex": 12.0,
+          "procurement": 1400.5,
+          "reservation": 100.55,
+          "total": 1556.87,
+          "year": 2037
+        },
+        {
+          "capex": 0.0,
+          "holding": 52.12,
+          "opex": 82.0,
+          "procurement": 2221.88,
+          "reservation": 102.05,
+          "total": 2458.05,
+          "year": 2038
+        },
+        {
+          "capex": 0.0,
+          "holding": 51.46,
+          "opex": 82.0,
+          "procurement": 2531.88,
+          "reservation": 126.05,
+          "total": 2791.39,
+          "year": 2039
+        },
+        {
+          "capex": 0.0,
+          "holding": 51.19,
+          "opex": 82.0,
+          "procurement": 2621.5,
+          "reservation": 137.3,
+          "total": 2891.99,
+          "year": 2040
+        }
+      ],
+      "is_feasible": true,
+      "omitted_large_fields": [
+        "inventory_trace",
+        "delivery_schedule",
+        "risk_register"
+      ],
+      "plan_id": "strategy_mandatory_stress_resilient",
+      "scenario_id": "MANDATORY_STRESS",
+      "source_schedule": [
+        {
+          "delivered_t": 119.5,
+          "ordered_t": 119.5,
+          "payable_volume_t": 119.5,
+          "procurement_cost_mln": 740.9,
+          "reservation_cost_mln": 63.0,
+          "reserved_capacity_t": 140.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 98.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2035
+        },
+        {
+          "delivered_t": 153.5,
+          "ordered_t": 153.5,
+          "payable_volume_t": 153.5,
+          "procurement_cost_mln": 951.7,
+          "reservation_cost_mln": 72.0,
+          "reserved_capacity_t": 160.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 112.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2036
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 25.0,
+          "ordered_t": 25.0,
+          "payable_volume_t": 25.0,
+          "procurement_cost_mln": 222.5,
+          "reservation_cost_mln": 5.25,
+          "reserved_capacity_t": 35.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2037
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1472.5,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 35.0,
+          "ordered_t": 35.0,
+          "payable_volume_t": 35.0,
+          "procurement_cost_mln": 389.38,
+          "reservation_cost_mln": 6.75,
+          "reserved_capacity_t": 45.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 0.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 66.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2038
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1472.5,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 15.0,
+          "ordered_t": 15.0,
+          "payable_volume_t": 15.0,
+          "procurement_cost_mln": 166.88,
+          "reservation_cost_mln": 3.75,
+          "reserved_capacity_t": 25.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 75.0,
+          "ordered_t": 75.0,
+          "payable_volume_t": 75.0,
+          "procurement_cost_mln": 532.5,
+          "reservation_cost_mln": 27.0,
+          "reserved_capacity_t": 90.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 45.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 90.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2039
+        },
+        {
+          "delivered_t": 190.0,
+          "ordered_t": 190.0,
+          "payable_volume_t": 190.0,
+          "procurement_cost_mln": 1178.0,
+          "reservation_cost_mln": 85.5,
+          "reserved_capacity_t": 190.0,
+          "source_id": "Earth-Core",
+          "take_or_pay_threshold_t": 133.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 30.0,
+          "ordered_t": 30.0,
+          "payable_volume_t": 30.0,
+          "procurement_cost_mln": 267.0,
+          "reservation_cost_mln": 6.0,
+          "reserved_capacity_t": 40.0,
+          "source_id": "Earth-Flex",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 115.0,
+          "ordered_t": 115.0,
+          "payable_volume_t": 115.0,
+          "procurement_cost_mln": 816.5,
+          "reservation_cost_mln": 36.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Earth-New",
+          "take_or_pay_threshold_t": 60.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 120.0,
+          "ordered_t": 120.0,
+          "payable_volume_t": 120.0,
+          "procurement_cost_mln": 360.0,
+          "reservation_cost_mln": 0.0,
+          "reserved_capacity_t": 120.0,
+          "source_id": "Lunar-ISRU",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        },
+        {
+          "delivered_t": 0.0,
+          "ordered_t": 0.0,
+          "payable_volume_t": 0.0,
+          "procurement_cost_mln": 0.0,
+          "reservation_cost_mln": 9.8,
+          "reserved_capacity_t": 28.0,
+          "source_id": "Emergency",
+          "take_or_pay_threshold_t": 0.0,
+          "year": 2040
+        }
+      ],
+      "total_cost_mln": 13543.48,
+      "units": {
+        "currency": "mln_units",
+        "fuel": "t"
+      },
+      "yearly_balance": [
+        {
+          "closing_inventory_t": 37.12,
+          "delivered_t": 119.5,
+          "demand_critical_t": 80.0,
+          "demand_total_t": 100.0,
+          "losses_t": 5.38,
+          "opening_inventory_t": 23.0,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 12.33,
+          "served_t": 100.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2035
+        },
+        {
+          "closing_inventory_t": 48.78,
+          "delivered_t": 153.5,
+          "demand_critical_t": 105.0,
+          "demand_total_t": 140.0,
+          "losses_t": 1.84,
+          "opening_inventory_t": 37.12,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 17.26,
+          "served_t": 140.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2036
+        },
+        {
+          "closing_inventory_t": 71.2,
+          "delivered_t": 215.0,
+          "demand_critical_t": 135.0,
+          "demand_total_t": 190.0,
+          "losses_t": 2.58,
+          "opening_inventory_t": 48.78,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 23.42,
+          "served_t": 190.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2037
+        },
+        {
+          "closing_inventory_t": 71.21,
+          "delivered_t": 291.0,
+          "demand_critical_t": 195.5,
+          "demand_total_t": 287.5,
+          "losses_t": 3.49,
+          "opening_inventory_t": 71.2,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 35.45,
+          "served_t": 287.5,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2038
+        },
+        {
+          "closing_inventory_t": 68.77,
+          "delivered_t": 370.0,
+          "demand_critical_t": 241.5,
+          "demand_total_t": 368.0,
+          "losses_t": 4.44,
+          "opening_inventory_t": 71.21,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 45.37,
+          "served_t": 368.0,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2039
+        },
+        {
+          "closing_inventory_t": 69.81,
+          "delivered_t": 455.0,
+          "demand_critical_t": 287.5,
+          "demand_total_t": 448.5,
+          "losses_t": 5.46,
+          "opening_inventory_t": 68.77,
+          "reserve_45d_met": true,
+          "reserve_45d_target_t": 55.29,
+          "served_t": 448.5,
+          "service_level_critical": 1.0,
+          "service_level_total": 1.0,
+          "shortage_t": 0.0,
+          "spill_t": 0.0,
+          "year": 2040
+        }
+      ]
+    },
+    "scenario_id": "MANDATORY_STRESS",
+    "strategy_id": "stress_builtin",
+    "strategy_name": "Стресс-устойчивая",
+    "total_cost_mln": 13543.48
+  }
+]

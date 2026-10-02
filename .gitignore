@@ -23,6 +23,7 @@ docker/.env
 Thumbs.db
 .codex/
 .local/
+.docker-frontend.*
 
 
 # Operator UI

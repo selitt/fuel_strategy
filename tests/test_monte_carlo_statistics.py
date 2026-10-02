@@ -7,6 +7,22 @@ import pytest
 from src.engine.monte_carlo import run_monte_carlo
 
 
+@pytest.fixture(autouse=True)
+def _isolate_statistic_tests_from_run_economics():
+    """These tests mock simulation and exercise only aggregation semantics."""
+    with (
+        patch(
+            "src.engine.monte_carlo.calculate_finances",
+            return_value=([], 0.0, 0.0),
+        ),
+        patch(
+            "src.engine.monte_carlo.audit_constraints",
+            return_value=([], True),
+        ),
+    ):
+        yield
+
+
 def _catalog(*, reliability: str | None = None):
     sources = {}
     if reliability is not None:

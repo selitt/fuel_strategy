@@ -4,6 +4,7 @@ from uuid import UUID
 from pydantic import (AwareDatetime, BaseModel, ConfigDict, Field,
                       StringConstraints, model_validator)
 from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
+from src.app.dto.error_dto import ErrorDTO
 
 
 class WebDTO(BaseModel):
@@ -49,10 +50,6 @@ class CatalogDTO(WebDTO):
     tables: list[ReferenceTableDTO]
     scenarios: list[dict[str, Any]]
     notes: list[str]
-
-
-class ErrorDTO(WebDTO):
-    detail: str | list[dict[str, Any]]
 
 
 ProjectName = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=140)]

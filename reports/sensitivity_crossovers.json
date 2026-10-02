@@ -1,0 +1,717 @@
+[
+  {
+    "comparison_rule": "costs_compared_only_when_both_candidates_feasible",
+    "cost_crossings": [],
+    "feasibility_transitions": [],
+    "monotonicity_assumed": false,
+    "no_cost_crossing_detected": true,
+    "no_feasibility_transition_detected": true,
+    "no_nominal_cost_crossing_detected": true,
+    "nominal_cost_crossings": [],
+    "nominal_endpoint_cost_deltas": [
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 981.89,
+        "strategy_ids": [
+          "earth_fortress",
+          "lunar_pioneer"
+        ],
+        "value": 6.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 1281.89,
+        "strategy_ids": [
+          "earth_fortress",
+          "lunar_pioneer"
+        ],
+        "value": 11.0
+      }
+    ],
+    "variable": "earth_core_price"
+  },
+  {
+    "comparison_rule": "costs_compared_only_when_both_candidates_feasible",
+    "cost_crossings": [],
+    "feasibility_transitions": [
+      {
+        "claim": "bracketed_feasibility_transition",
+        "lower": 0.42095947265625,
+        "lower_feasible": false,
+        "strategy_id": "base_builtin",
+        "tolerance": 6.103515625e-05,
+        "upper": 0.4210205078125
+      },
+      {
+        "claim": "bracketed_feasibility_transition",
+        "lower": 0.5595703125,
+        "lower_feasible": true,
+        "strategy_id": "base_builtin",
+        "tolerance": 6.103515625e-05,
+        "upper": 0.55963134765625
+      }
+    ],
+    "monotonicity_assumed": false,
+    "no_cost_crossing_detected": true,
+    "no_feasibility_transition_detected": false,
+    "no_nominal_cost_crossing_detected": true,
+    "nominal_cost_crossings": [],
+    "nominal_endpoint_cost_deltas": [
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1101.88,
+        "strategy_ids": [
+          "balanced",
+          "base_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1080.46,
+        "strategy_ids": [
+          "balanced",
+          "base_builtin"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -531.06,
+        "strategy_ids": [
+          "balanced",
+          "earth_fortress"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -527.92,
+        "strategy_ids": [
+          "balanced",
+          "earth_fortress"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 480.75,
+        "strategy_ids": [
+          "balanced",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 477.06,
+        "strategy_ids": [
+          "balanced",
+          "lunar_pioneer"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -2227.68,
+        "strategy_ids": [
+          "balanced",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -2285.64,
+        "strategy_ids": [
+          "balanced",
+          "stress_builtin"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 570.82,
+        "strategy_ids": [
+          "base_builtin",
+          "earth_fortress"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 552.54,
+        "strategy_ids": [
+          "base_builtin",
+          "earth_fortress"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 1582.63,
+        "strategy_ids": [
+          "base_builtin",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 1557.52,
+        "strategy_ids": [
+          "base_builtin",
+          "lunar_pioneer"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1125.8,
+        "strategy_ids": [
+          "base_builtin",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1205.18,
+        "strategy_ids": [
+          "base_builtin",
+          "stress_builtin"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 1011.81,
+        "strategy_ids": [
+          "earth_fortress",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 1004.98,
+        "strategy_ids": [
+          "earth_fortress",
+          "lunar_pioneer"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1696.62,
+        "strategy_ids": [
+          "earth_fortress",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1757.72,
+        "strategy_ids": [
+          "earth_fortress",
+          "stress_builtin"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -2708.43,
+        "strategy_ids": [
+          "lunar_pioneer",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -2762.7,
+        "strategy_ids": [
+          "lunar_pioneer",
+          "stress_builtin"
+        ],
+        "value": 1.0
+      }
+    ],
+    "variable": "demand_interpolation"
+  },
+  {
+    "comparison_rule": "costs_compared_only_when_both_candidates_feasible",
+    "cost_crossings": [],
+    "feasibility_transitions": [
+      {
+        "claim": "bracketed_feasibility_transition",
+        "lower": 0.2021484375,
+        "lower_feasible": false,
+        "strategy_id": "stress_builtin",
+        "tolerance": 6.103515625e-05,
+        "upper": 0.20220947265625
+      },
+      {
+        "claim": "bracketed_feasibility_transition",
+        "lower": 0.43157958984375,
+        "lower_feasible": true,
+        "strategy_id": "stress_builtin",
+        "tolerance": 6.103515625e-05,
+        "upper": 0.431640625
+      }
+    ],
+    "monotonicity_assumed": false,
+    "no_cost_crossing_detected": true,
+    "no_feasibility_transition_detected": false,
+    "no_nominal_cost_crossing_detected": true,
+    "nominal_cost_crossings": [],
+    "nominal_endpoint_cost_deltas": [
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1228.48,
+        "strategy_ids": [
+          "balanced",
+          "base_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1198.34,
+        "strategy_ids": [
+          "balanced",
+          "base_builtin"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -544.82,
+        "strategy_ids": [
+          "balanced",
+          "earth_fortress"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -514.68,
+        "strategy_ids": [
+          "balanced",
+          "earth_fortress"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 477.35,
+        "strategy_ids": [
+          "balanced",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 479.21,
+        "strategy_ids": [
+          "balanced",
+          "lunar_pioneer"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -2295.32,
+        "strategy_ids": [
+          "balanced",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -2422.36,
+        "strategy_ids": [
+          "balanced",
+          "stress_builtin"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 683.66,
+        "strategy_ids": [
+          "base_builtin",
+          "earth_fortress"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 683.66,
+        "strategy_ids": [
+          "base_builtin",
+          "earth_fortress"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 1705.83,
+        "strategy_ids": [
+          "base_builtin",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 1677.55,
+        "strategy_ids": [
+          "base_builtin",
+          "lunar_pioneer"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1066.84,
+        "strategy_ids": [
+          "base_builtin",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1224.02,
+        "strategy_ids": [
+          "base_builtin",
+          "stress_builtin"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 1022.17,
+        "strategy_ids": [
+          "earth_fortress",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 993.89,
+        "strategy_ids": [
+          "earth_fortress",
+          "lunar_pioneer"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1750.5,
+        "strategy_ids": [
+          "earth_fortress",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1907.68,
+        "strategy_ids": [
+          "earth_fortress",
+          "stress_builtin"
+        ],
+        "value": 1.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -2772.67,
+        "strategy_ids": [
+          "lunar_pioneer",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -2901.57,
+        "strategy_ids": [
+          "lunar_pioneer",
+          "stress_builtin"
+        ],
+        "value": 1.0
+      }
+    ],
+    "variable": "lunar_actual_share"
+  },
+  {
+    "comparison_rule": "costs_compared_only_when_both_candidates_feasible",
+    "cost_crossings": [],
+    "feasibility_transitions": [
+      {
+        "claim": "bracketed_feasibility_transition",
+        "lower": 0.8218994140625,
+        "lower_feasible": false,
+        "strategy_id": "base_builtin",
+        "tolerance": 0.0001220703125,
+        "upper": 0.822021484375
+      }
+    ],
+    "monotonicity_assumed": false,
+    "no_cost_crossing_detected": true,
+    "no_feasibility_transition_detected": false,
+    "no_nominal_cost_crossing_detected": true,
+    "nominal_cost_crossings": [],
+    "nominal_endpoint_cost_deltas": [
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1157.72,
+        "strategy_ids": [
+          "balanced",
+          "base_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1208.51,
+        "strategy_ids": [
+          "balanced",
+          "base_builtin"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -514.96,
+        "strategy_ids": [
+          "balanced",
+          "earth_fortress"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -509.82,
+        "strategy_ids": [
+          "balanced",
+          "earth_fortress"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 479.17,
+        "strategy_ids": [
+          "balanced",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 488.58,
+        "strategy_ids": [
+          "balanced",
+          "lunar_pioneer"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -2332.04,
+        "strategy_ids": [
+          "balanced",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -2452.51,
+        "strategy_ids": [
+          "balanced",
+          "stress_builtin"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 642.76,
+        "strategy_ids": [
+          "base_builtin",
+          "earth_fortress"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 698.69,
+        "strategy_ids": [
+          "base_builtin",
+          "earth_fortress"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 1636.89,
+        "strategy_ids": [
+          "base_builtin",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 1697.09,
+        "strategy_ids": [
+          "base_builtin",
+          "lunar_pioneer"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1174.32,
+        "strategy_ids": [
+          "base_builtin",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1244.0,
+        "strategy_ids": [
+          "base_builtin",
+          "stress_builtin"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": 994.13,
+        "strategy_ids": [
+          "earth_fortress",
+          "lunar_pioneer"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": 998.4,
+        "strategy_ids": [
+          "earth_fortress",
+          "lunar_pioneer"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -1817.08,
+        "strategy_ids": [
+          "earth_fortress",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -1942.69,
+        "strategy_ids": [
+          "earth_fortress",
+          "stress_builtin"
+        ],
+        "value": 1.5
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "lower_endpoint",
+        "nominal_cost_delta_mln": -2811.21,
+        "strategy_ids": [
+          "lunar_pioneer",
+          "stress_builtin"
+        ],
+        "value": 0.0
+      },
+      {
+        "both_feasible": false,
+        "endpoint": "upper_endpoint",
+        "nominal_cost_delta_mln": -2941.09,
+        "strategy_ids": [
+          "lunar_pioneer",
+          "stress_builtin"
+        ],
+        "value": 1.5
+      }
+    ],
+    "variable": "initial_stock_multiplier"
+  }
+]

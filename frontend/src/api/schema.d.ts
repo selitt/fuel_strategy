@@ -3,6 +3,7 @@
 export interface schemas {
   "Body_import_plan_api_plans_import_post": { "file": string; [key: string]: unknown; };
   "Body_import_project_api_projects_import_post": { "file": string; [key: string]: unknown; };
+  "BuiltinStrategyDTO": { "id": string; "name": string; "description": string; "plan": schemas["ParticipantPlanDTO"]; [key: string]: unknown; };
   "CalculationCommandDTO": { "expected_revision": number; };
   "CapacityReservationDTO": { "year": number; "source_id": string; "reserved_capacity_t": number; [key: string]: unknown; };
   "CatalogDTO": { "read_only"?: true; "tables": Array<schemas["ReferenceTableDTO"]>; "scenarios": Array<{ [key: string]: unknown; }>; "notes": Array<string>; };
@@ -12,14 +13,14 @@ export interface schemas {
   "ConstraintCheckDTO": { "constraint_id": string; "year": number; "passed": boolean; "detail": string; "excess"?: (number | null); [key: string]: unknown; };
   "DeliveryScheduleDTO": { "batch_id": string; "source_id": string; "year": number; "order_date": string; "delivery_date": string; "ordered_t": number; "delivered_t": number; "status": string; [key: string]: unknown; };
   "EngineInfoDTO": { "engine_id": string; "version": string; "status": "prototype" | "unverified" | "unavailable"; "model_verified"?: false; "limitations": Array<string>; };
-  "ErrorDTO": { "detail": (string | Array<{ [key: string]: unknown; }>); };
+  "ErrorDTO": { "detail": (string | Array<{ [key: string]: unknown; }>); "issues"?: (Array<schemas["ValidationIssueDTO"]> | null); };
   "ExportMetadataDTO": { "schema_version": 1; "project_id": string; "project_revision": number; "run_id": string; "input_revision": number; "input_hash": string; "plan_id": string; "scenario_id": string; "created_at": string; "units": { [key: string]: string; }; "assumptions_reference": (string | { [key: string]: unknown; }); "engine": schemas["EngineInfoDTO"]; "origin": "server" | "imported"; "table_rows": { [key: string]: number; }; "warnings": Array<string>; };
   "FinancialBreakdownDTO": { "year": number; "procurement": number; "reservation": number; "holding": number; "capex": number; "opex": number; "total": number; [key: string]: unknown; };
   "HealthDTO": { "status"?: "ok"; "api_version": string; "engine": schemas["EngineInfoDTO"]; };
   "InventoryPolicyDTO": { "initial_inventory_t"?: number; [key: string]: unknown; };
   "InvestmentDecisionDTO": { "investment_id": string; "year": number; [key: string]: unknown; };
   "MetaDTO": { "api_version": string; "engine": schemas["EngineInfoDTO"]; "plan_import_formats": Array<"json" | "csv" | "xlsx" | "xls">; "result_export_formats": Array<"json" | "csv">; "max_upload_bytes": number; "max_request_bytes": number; "background_jobs"?: boolean; "workspace_mode"?: "single_shared_local_workspace"; "warnings": Array<string>; };
-  "ParticipantPlanDTO": { "plan_id"?: string; "scenario_id"?: string; "decisions": schemas["PlanDecisionsDTO"]; [key: string]: unknown; };
+  "ParticipantPlanDTO": { "plan_id"?: string; "scenario_id"?: string; "decisions": schemas["PlanDecisionsDTO"]; "source_overrides"?: { [key: string]: schemas["SourceOverrideDTO"]; }; [key: string]: unknown; };
   "PlanDecisionsDTO": { "supply_orders"?: Array<schemas["SupplyOrderDTO"]>; "capacity_reservations"?: Array<schemas["CapacityReservationDTO"]>; "investments"?: Array<schemas["InvestmentDecisionDTO"]>; "inventory_policy"?: schemas["InventoryPolicyDTO"]; [key: string]: unknown; };
   "PlanValidationDTO": { "validation_scope"?: "structure_only"; "model_checked"?: false; "plan": schemas["ParticipantPlanDTO"]; "normalized": boolean; "warnings": Array<string>; };
   "ProjectCreateDTO": { "name": string; "plan": schemas["ParticipantPlanDTO"]; };
@@ -31,7 +32,9 @@ export interface schemas {
   "ResultDownloadDTO": { "scenario_id": string; "plan_id": string; "units"?: { [key: string]: string; }; "assumptions_reference"?: (string | { [key: string]: unknown; }); "yearly_balance"?: Array<schemas["YearlyBalanceDTO"]>; "source_schedule"?: Array<schemas["SourceScheduleDTO"]>; "inventory_trace"?: Array<{ [key: string]: unknown; }>; "delivery_schedule"?: Array<schemas["DeliveryScheduleDTO"]>; "financial_breakdown"?: Array<schemas["FinancialBreakdownDTO"]>; "constraint_checks"?: Array<schemas["ConstraintCheckDTO"]>; "risk_register"?: Array<{ [key: string]: unknown; }>; "is_feasible"?: boolean; "total_cost_mln"?: number; "_web_export": schemas["ExportMetadataDTO"]; [key: string]: unknown; };
   "ResultExportEnvelopeDTO": { "scenario_id": string; "plan_id": string; "units"?: { [key: string]: string; }; "assumptions_reference"?: (string | { [key: string]: unknown; }); "yearly_balance"?: Array<schemas["YearlyBalanceDTO"]>; "source_schedule"?: Array<schemas["SourceScheduleDTO"]>; "inventory_trace"?: Array<{ [key: string]: unknown; }>; "delivery_schedule"?: Array<schemas["DeliveryScheduleDTO"]>; "financial_breakdown"?: Array<schemas["FinancialBreakdownDTO"]>; "constraint_checks"?: Array<schemas["ConstraintCheckDTO"]>; "risk_register"?: Array<{ [key: string]: unknown; }>; "is_feasible"?: boolean; "total_cost_mln"?: number; [key: string]: unknown; };
   "RunRecordDTO": { "run_id": string; "input_revision": number; "input_hash": string; "plan_snapshot": schemas["ParticipantPlanDTO"]; "result": schemas["ResultExportEnvelopeDTO"]; "created_at": string; "duration_ms": number; "engine": schemas["EngineInfoDTO"]; "origin"?: "server" | "imported"; };
+  "SourceOverrideDTO": { "capacity_t_per_year"?: (number | null); "variable_cost_mln_per_t"?: (number | null); "reservation_rate_mln_per_t_year_capacity"?: (number | null); "take_or_pay_share"?: (number | null); "lead_time_min_value"?: (number | null); "lead_time_max_value"?: (number | null); "lead_time_unit"?: ("month" | "week" | "day" | null); "reliability_profile"?: (string | null); "available_from_year"?: (number | null); };
   "SourceScheduleDTO": { "year": number; "source_id": string; "reserved_capacity_t": number; "ordered_t": number; "delivered_t": number; [key: string]: unknown; };
   "SupplyOrderDTO": { "year": number; "source_id": string; "order_t": number; "delivery_date"?: (string | null); "batch_id"?: (string | null); [key: string]: unknown; };
+  "ValidationIssueDTO": { "code": string; "message": string; "loc": Array<(string | number)>; "source_id"?: (string | null); "year"?: (number | null); "actual"?: (number | null); "limit"?: (number | null); };
   "YearlyBalanceDTO": { "year": number; "opening_inventory_t": number; "delivered_t": number; "losses_t": number; "served_t": number; "closing_inventory_t": number; "shortage_t": number; "demand_total_t": number; "demand_critical_t": number; "service_level_total": number; "service_level_critical": number; "reserve_45d_target_t": number; "reserve_45d_met": boolean; [key: string]: unknown; };
 }

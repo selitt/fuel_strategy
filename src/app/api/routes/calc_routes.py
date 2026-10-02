@@ -3,6 +3,10 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 
 from src.app.dto.calc_dto import ParticipantPlanDTO, ResultExportEnvelopeDTO
+from src.app.dto.calc_dto import BuiltinStrategyDTO
+from src.app.api.deps import get_settings
+from src.app.config.config import Settings
+from src.engine.strategies import BUILTIN_STRATEGY_KINDS, load_builtin_strategy, load_builtin_strategy_data
 from src.app.api.deps import (
     CalculationBackend,
     call_calculation,
@@ -15,6 +19,21 @@ router = APIRouter(prefix="/api/calc", tags=["Моделирование сна�
 BackendDep = Annotated[CalculationBackend, Depends(get_calculation_service)]
 
 
+@router.get('/strategies', response_model=list[BuiltinStrategyDTO], summary='Готовые стратегии команды')
+def get_strategies(settings: Annotated[Settings, Depends(get_settings)]):
+    items = []
+    for kind in BUILTIN_STRATEGY_KINDS:
+        data = load_builtin_strategy_data(kind, settings.reference_dir)
+        decisions = load_builtin_strategy(kind, data_root=settings.reference_dir)
+        plan_id = decisions.pop('plan_id')
+        decisions.pop('description')
+        items.append(BuiltinStrategyDTO(
+            id=data['id'], name=data['name'], description=data['description'],
+            plan=ParticipantPlanDTO(plan_id=plan_id, scenario_id=data['scenario_id'], decisions=decisions),
+        ))
+    return items
+
+
 @router.get(
     "/template",
     response_model=ParticipantPlanDTO,
@@ -22,7 +41,7 @@ BackendDep = Annotated[CalculationBackend, Depends(get_calculation_service)]
     operation_id="get_template_api_calc_template_get",
 )
 def get_template(service: BackendDep):
-    """Возвращает предзаполненный шаблон плана оператора для быстрого старта."""
+    """Возвращает пустой план оператора для самостоятельного заполнения."""
     return call_template(service)
 
 

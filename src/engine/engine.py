@@ -117,6 +117,11 @@ class SimulationEngine:
                 "ordered_t": batch.ordered_t,
                 "delivered_t": batch.delivered_t,
                 "status": batch.status,
+                **(
+                    {"parent_batch_id": batch.parent_batch_id}
+                    if batch.parent_batch_id is not None
+                    else {}
+                ),
             }
             for source in source_sched
             for batch in source.batches

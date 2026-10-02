@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useStrategyUiState } from '../state/useStrategyUiState';
 import type { Workspace } from '../state/useWorkspace';
 import type { Result } from '../api/types';
 import { AnalyticsChart, FinanceChart, palette } from '../components/AnalyticsChart';
@@ -30,17 +31,16 @@ const dailyFields = [
   ['shortage_t', 'Дефицит', 'т'],
 ] as const;
 
-export function ResultPanel({ w, onDetails, onRisk }: {
+export function ResultPanel({ w, onDetails }: {
   w: Workspace;
   onDetails: () => void;
-  onRisk: () => void;
 }) {
-  const [chart, setChart] = useState<'inventory' | 'cost'>('inventory');
-  const [selectedModelDay, setSelectedModelDay] = useState(1);
-  const [timelineView, setTimelineView] = useState<'overview' | 'detail'>('overview');
-  const [dayDetailsOpen, setDayDetailsOpen] = useState(false);
-  const [infoModal, setInfoModal] = useState<'checks' | 'risk' | null>(null);
-  const [detailSide, setDetailSide] = useState<'primary' | 'other'>('primary');
+  const [chart, setChart] = useStrategyUiState<'inventory' | 'cost'>(w,'resultChart','inventory');
+  const [selectedModelDay, setSelectedModelDay] = useStrategyUiState(w,'resultDay',1);
+  const [timelineView, setTimelineView] = useStrategyUiState<'overview' | 'detail'>(w,'resultRange','overview');
+  const [dayDetailsOpen, setDayDetailsOpen] = useStrategyUiState(w,'dayDetails',false);
+  const [infoModal, setInfoModal] = useState<'checks' | null>(null);
+  const [detailSide, setDetailSide] = useStrategyUiState<'primary' | 'other'>(w,'resultSide','primary');
   const result = w.displayResult;
   const fresh = w.preview ? w.previewFresh : w.current;
   if (!result)
@@ -54,17 +54,18 @@ export function ResultPanel({ w, onDetails, onRisk }: {
   const balances = result.yearly_balance || [];
   const years = balances.map(balance => balance.year);
   const row = balances.find(balance => balance.year === year);
-  const financial = result.financial_breakdown?.find(entry => entry.year === year);
   const other = w.displayOther && supportedUnits(w.displayOther.units) ? w.displayOther : undefined;
   const otherRow = other?.yearly_balance?.find(balance => balance.year === year);
   const costSeries: Trace[] = other ? [
     { key: 'primary-cost', label: scenarioCode(result), color: palette.muted, values: years.map(value => valueAt(result, value)) },
     { key: 'other-cost', label: scenarioCode(other), color: palette.green, dashed: true, values: years.map(value => valueAt(other, value)) },
   ] : [];
-  const checks = result.constraint_checks || [];
+  const detailResult = detailSide === 'other' && other ? other : result;
+  const detailRow = detailResult.yearly_balance?.find(balance => balance.year === year);
+  const detailFinancial = detailResult.financial_breakdown?.find(entry => entry.year === year);
+  const checks = detailResult.constraint_checks || [];
   const failed = checks.filter(check => !check.passed);
   const yearFails = failed.filter(check => check.year === year);
-  const detailResult = detailSide === 'other' && other ? other : result;
   const detailOther = detailResult === result ? other : result;
   const detailRecord = timelineRecordAt(detailResult, selectedModelDay);
   const chartRange = timelineView === 'detail' ? detailTimelineRange(selectedModelDay) : undefined;
@@ -136,23 +137,17 @@ export function ResultPanel({ w, onDetails, onRisk }: {
     </div>}
     </div>
     {!row && <p className="inline-warning">Нет данных за {year}</p>}
-    <div className="timeline-annual-label">За год <strong>{year}</strong></div>
-    <div className="result-numbers"><div><span>Дефицит</span><strong className={(row?.shortage_t || 0) > 0 ? 'warning-text' : ''}>{number(row?.shortage_t)}<small> т</small></strong></div><div><span>Запас на конец</span><strong>{number(row?.closing_inventory_t)}<small> т</small></strong></div><div><span>Расходы за год</span><strong>{number(financial?.total)}<small> млн у.е.</small></strong></div></div>
+    <div className="timeline-annual-label">За год <strong>{year}</strong> · {scenarioCode(detailResult)}</div>
+    <div className="result-numbers"><div><span>Дефицит</span><strong className={(detailRow?.shortage_t || 0) > 0 ? 'warning-text' : ''}>{number(detailRow?.shortage_t)}<small> т</small></strong></div><div><span>Запас на конец</span><strong>{number(detailRow?.closing_inventory_t)}<small> т</small></strong></div><div><span>Расходы за год</span><strong>{number(detailFinancial?.total)}<small> млн у.е.</small></strong></div></div>
     <div className="result-actions">
-      <button className="result-action" type="button" data-testid="result-checks" onClick={() => setInfoModal('checks')}><Icon name={failed.length ? 'alert' : 'check'} size={15}/><span>{scenarioCode(result)} · {checks.length ? (failed.length ? `${failed.length} нарушений за горизонт` : 'Все проверки модели пройдены') : 'Проверки не переданы'}</span><Icon name="right" size={15}/></button>
-      <button className="result-action risk-entry" type="button" data-testid="risk-disclosure" onClick={() => setInfoModal('risk')}><span>Проверка сбоев поставок</span><Icon name="right" size={15}/></button>
+      <button className="result-action" type="button" data-testid="result-checks" onClick={() => setInfoModal('checks')}><Icon name={failed.length ? 'alert' : 'check'} size={15}/><span>{scenarioCode(detailResult)} · {checks.length ? (failed.length ? `${failed.length} нарушений за горизонт` : 'Все проверки модели пройдены') : 'Проверки не переданы'}</span><Icon name="right" size={15}/></button>
     </div>
-    {infoModal === 'checks' && <Modal title={`Проверки модели · ${scenarioCode(result)}`} wide onClose={() => setInfoModal(null)}>
+    {infoModal === 'checks' && <Modal title={`Проверки модели · ${scenarioCode(detailResult)}`} wide onClose={() => setInfoModal(null)}>
       <div className="compact-checks">
         {failed.length ? <div className="check-preview">{failed.map((check, checkIndex) => <p key={checkIndex} title={check.detail}><b>{check.year}</b><span>{checkLabels[check.constraint_id] || check.constraint_id}</span><small>{check.excess == null ? '' : number(check.excess)}</small></p>)}</div> : <p>{checks.length ? 'Нарушений в переданных проверках нет.' : 'Модель не передала проверки для этого результата.'}</p>}
         {yearFails.length > 0 && <p className="help">За выбранный {year} год: {yearFails.length}.</p>}
         <div className="modal-actions"><Button onClick={() => { setInfoModal(null); onDetails(); }}>Все показатели и значения</Button></div>
       </div>
-    </Modal>}
-    {infoModal === 'risk' && <Modal title="Проверка сбоев поставок" onClose={() => setInfoModal(null)}>
-      <p>Модель выполнит 100 случайных прогонов отказов поставок и покажет, как часто нет дефицита, нарушений начального резерва и переполнения.</p>
-      <p className="help">Это дополнительная оценка устойчивости текущего плана. Она запускается отдельно и не меняет введённые решения.</p>
-      <div className="modal-actions"><Button data-testid="run-risk-button" disabled={w.riskBusy || !!w.busy} onClick={() => { setInfoModal(null); onRisk(); }}>Запустить проверку сбоев</Button></div>
     </Modal>}
     {dayDetailsOpen && <Modal title={modelDayLabel(selectedModelDay)} wide onClose={() => setDayDetailsOpen(false)}>
       <div className="daily-detail" data-testid="daily-detail">

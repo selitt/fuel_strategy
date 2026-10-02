@@ -54,7 +54,6 @@ with sync_playwright() as p:
     expect(page.get_by_role('button',name='Сохранить',exact=True)).to_be_enabled(timeout=30000)
     page.reload()
     expect(page.get_by_role('button',name='Earth-Core, Янв 2035: 15 т, партий 2')).to_be_visible()
-    page.get_by_test_id('risk-disclosure').click()
     with page.expect_response(lambda r:r.url.endswith('/api/calc/risk'), timeout=120000) as risk_response:
         page.get_by_test_id('run-risk-button').click()
     assert risk_response.value.status == 200

@@ -29,6 +29,9 @@ def test_legacy_operations_and_payload_schemas_are_preserved(client):
     # Calendar v2 adds optional fields and intentionally starts new plans at zero.
     # Compare the entire legacy shape after removing ONLY those declared additions.
     components = live['components']['schemas']
+    overrides = components['ParticipantPlanDTO']['properties'].pop('source_overrides')
+    assert overrides['type'] == 'object'
+    assert 'source_overrides' not in components['ParticipantPlanDTO'].get('required', [])
     for field in ('delivery_date', 'batch_id'):
         prop = components['SupplyOrderDTO']['properties'].pop(field)
         assert prop.get('default') is None
